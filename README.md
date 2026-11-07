@@ -117,6 +117,13 @@ PROOFLAB_TEST_COURSES=calc1 uv run pytest tests/test_content.py
 > Also right-click the ProofLab folder in Finder → **Keep Downloaded** so source files are
 > never offloaded.
 
+## Live on Vercel
+
+The website and the checker deploy to Vercel from `main` (two projects, `frontend/` and
+`backend/`; see `SPEC.md` §18). The hosted copy has no progress database (progress stays in
+each browser) and reads only text files; run it locally for photo and PDF scanning and for
+progress shared between your devices.
+
 ## Run it with Docker
 
 ```bash

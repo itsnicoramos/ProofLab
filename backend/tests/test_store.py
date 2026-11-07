@@ -39,8 +39,12 @@ def test_reviews_are_idempotent_and_merge(store):
     assert store.apply(ops(review("a"), review("b", at=2000))) == 2
     assert store.apply(ops(review("a"), review("c", at=1500))) == 1  # "a" again is ignored
     assert [r["uid"] for r in store.snapshot()["reviews"]] == ["a", "c", "b"]
-    store.apply(ops({"op": "reset_reviews"}))
-    assert store.snapshot()["reviews"] == []
+    store.apply(ops({"op": "reset_reviews", "at": 1600}))
+    snap = store.snapshot()
+    assert [r["uid"] for r in snap["reviews"]] == ["b"]  # only reviews before the reset go
+    assert snap["reviews_reset_at"] == 1600
+    store.apply(ops({"op": "reset_reviews", "at": 900}))  # an older reset never moves it back
+    assert store.snapshot()["reviews_reset_at"] == 1600
 
 
 def test_progress_only_goes_up(store):
@@ -106,6 +110,15 @@ def test_store_endpoints(tmp_path):
     assert [x["uid"] for x in snap["reviews"]] == ["u2", "u1"]
     assert client.post("/store", json={"ops": [{"op": "nope"}]}).status_code == 422
     assert (tmp_path / "api.sqlite3").exists()
+
+
+def test_store_can_be_switched_off(tmp_path):
+    path = tmp_path / "off.sqlite3"
+    settings = Settings(isolate=False, db_path=str(path), store=False)
+    client = TestClient(create_app(settings, load_registry(courses=["proofs"])))
+    assert client.get("/store").status_code == 404
+    assert client.post("/store", json={"ops": []}).status_code == 404
+    assert not path.exists()
 
 
 def test_serving_problems_never_opens_the_database(tmp_path):

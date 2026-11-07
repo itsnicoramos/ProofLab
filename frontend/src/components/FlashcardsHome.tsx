@@ -14,6 +14,14 @@ import { randomSeed, testHref } from "@/lib/testUrl";
 /** Where the student's reviews are kept, and whether the latest ones have been saved there. */
 function SyncNote() {
   const { status } = useSyncStatus();
+  if (status === "local") {
+    return (
+      <p className="text-muted" aria-live="polite">
+        Your reviews, decks and test results are saved in this browser. (This copy of ProofLab
+        runs without the progress database, so each device keeps its own schedule.)
+      </p>
+    );
+  }
   return (
     <p className="text-muted" aria-live="polite">
       Your reviews, decks and test results are saved in ProofLab&apos;s database (SQLite) on your

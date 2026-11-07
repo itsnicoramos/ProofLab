@@ -6,7 +6,10 @@ browser keeps a copy for speed and offline use and syncs with ``GET``/``POST /st
 phone and a laptop share one schedule. Problems and concept cards stay JSON content files.
 
 Reviews are an append-only event log (idempotent by the browser's ``uid``), so reviews made on
-two devices merge without conflicts. Decks and test records are documents with an
+two devices merge without conflicts. A reset is itself recorded (``reviews_reset_at``): it
+removes the reviews made before it, and browsers drop their copies of exactly those. A review
+the database simply doesn't have (a new or replaced database file) is never treated as deleted:
+browsers send it again. Decks and test records are documents with an
 ``updated_at``: the newer write wins, and deletions leave a tombstone so other devices drop
 their copy. Best verdicts only ever go up.
 
@@ -101,6 +104,7 @@ class ReviewOp(_Op):
 
 class ResetReviewsOp(_Op):
     op: Literal["reset_reviews"]
+    at: Millis
 
 
 class ProgressOp(_Op):
@@ -214,7 +218,14 @@ class Store:
             )
             return cur.rowcount
         if isinstance(op, ResetReviewsOp):
-            return db.execute("DELETE FROM reviews").rowcount
+            removed = db.execute("DELETE FROM reviews WHERE at <= ?", (op.at,)).rowcount
+            db.execute(
+                "INSERT INTO meta (key, value) VALUES ('reviews_reset_at', ?) ON CONFLICT (key)"
+                " DO UPDATE SET value ="
+                " max(CAST(value AS INTEGER), CAST(excluded.value AS INTEGER))",
+                (str(op.at),),
+            )
+            return max(removed, 1)
         if isinstance(op, ProgressOp):
             row = db.execute(
                 "SELECT status FROM progress WHERE problem_id = ?", (op.problem_id,)
@@ -279,6 +290,8 @@ class Store:
         """Everything, for a browser to merge into its copy."""
         with self._lock:
             db = self._db
+            row = db.execute("SELECT value FROM meta WHERE key = 'reviews_reset_at'").fetchone()
+            reset_at = int(row["value"]) if row else None
             reviews = [
                 {k: r[k] for k in r.keys()}
                 for r in db.execute("SELECT * FROM reviews ORDER BY at, uid")
@@ -307,6 +320,7 @@ class Store:
             ]
         return {
             "schema": SCHEMA_VERSION,
+            "reviews_reset_at": reset_at,
             "now": int(time.time() * 1000),
             "reviews": reviews,
             "progress": progress,

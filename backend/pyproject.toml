@@ -38,3 +38,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
+
+# Vercel deployment (SPEC §18): the app object lives in index.py.
+[tool.vercel]
+entrypoint = "index:app"

@@ -1,10 +1,15 @@
 // Keeps this browser's copy of the student's progress in step with the SQLite progress
 // database on the Mac (SPEC §17). Push first (the outbox), then pull and merge:
 //
-// - reviews: union by uid (an append-only log, so devices never conflict);
+// - reviews: union by uid (an append-only log, so devices never conflict); a recorded reset
+//   removes the reviews made before it;
 // - best verdicts: the better one wins;
 // - notes decks and test records: the newer copy wins; a deletion on any device removes the
 //   copy everywhere; anything still waiting in the outbox is left alone.
+//
+// Nothing the database merely lacks is ever deleted here: a new, replaced or empty database
+// file just gets this browser's copy sent again. If the server keeps no database at all (the
+// Vercel deployment), progress simply stays in each browser.
 //
 // Nothing here decides anything about the math; it only moves the student's own records.
 
@@ -25,10 +30,11 @@ import {
 const FIRST_SYNC = "prooflab:v1:synced";
 const BATCH = 500;
 
-export type SyncStatus = "idle" | "syncing" | "saved" | "offline";
+export type SyncStatus = "idle" | "syncing" | "saved" | "offline" | "local";
 
 interface Snapshot {
   reviews: Review[];
+  reviews_reset_at: number | null;
   progress: Record<string, string>;
   decks: {
     id: string;
@@ -100,6 +106,9 @@ function seedOnce(): void {
   }
 }
 
+/** The server keeps no progress database (404 from /store): nothing to sync with. */
+class NoDatabase extends Error {}
+
 async function push(): Promise<boolean> {
   for (let guard = 0; guard < 50; guard++) {
     const batch = readOutbox().slice(0, BATCH);
@@ -109,6 +118,7 @@ async function push(): Promise<boolean> {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ ops: batch }),
     });
+    if (res.status === 404) throw new NoDatabase();
     if (res.status === 422) {
       dropSent(batch.length); // malformed changes would block the queue forever
       continue;
@@ -121,15 +131,36 @@ async function push(): Promise<boolean> {
 
 // ---------------------------------------------------------------- pull and merge
 
-function mergeReviews(server: Review[]): void {
+function mergeReviews(server: Review[], resetAt: number | null): void {
   const local = readReviews();
   const seen = new Set(local.map((r) => r.uid));
   const extra = server.filter((r) => !seen.has(r.uid));
-  // The database is the full log once our outbox is empty, so it also carries resets.
+  // A recorded reset removes the reviews made before it, on every device.
+  const kept = resetAt === null ? local : local.filter((r) => r.at > resetAt);
+  // Anything else the database lacks (a new or replaced file) is sent again, never dropped.
   const serverUids = new Set(server.map((r) => r.uid));
   const pending = new Set(readOutbox().flatMap((op) => (op.op === "review" ? [op.uid] : [])));
-  const kept = local.filter((r) => serverUids.has(r.uid) || pending.has(r.uid));
+  const missing = kept.filter((r) => !serverUids.has(r.uid) && !pending.has(r.uid));
+  if (missing.length) enqueue(...missing.map((r) => ({ op: "review" as const, ...r })));
   if (extra.length || kept.length !== local.length) writeReviews([...kept, ...extra]);
+}
+
+function mergeAllProgress(server: Record<string, string>): void {
+  mergeProgress(server as Parameters<typeof mergeProgress>[0]);
+  const rank: Record<string, number> = { invalid: 0, incorrect: 1, partial: 2, correct: 3 };
+  const better = Object.entries(readAllProgress()).filter(
+    ([id, s]) => !(id in server) || rank[s] > (rank[server[id]] ?? -1),
+  );
+  if (better.length) {
+    enqueue(
+      ...better.map(([problem_id, s]) => ({
+        op: "progress" as const,
+        problem_id,
+        status: s,
+        at: Date.now(),
+      })),
+    );
+  }
 }
 
 function mergeDecks(server: Snapshot["decks"]): void {
@@ -159,6 +190,9 @@ function mergeDecks(server: Snapshot["decks"]): void {
     }
   }
   if (changed) writeDecks([...local.values()]);
+  const known = new Set(server.map((d) => d.id));
+  const unsent = [...local.values()].filter((d) => !known.has(d.id) && !pending.has(`deck:${d.id}`));
+  if (unsent.length) enqueue(...unsent.map((d) => deckOp(d)));
 }
 
 function mergeTests(server: Snapshot["tests"]): void {
@@ -175,14 +209,29 @@ function mergeTests(server: Snapshot["tests"]): void {
       saveTestRecord(t.id, { ...t.record, updatedAt: t.updated_at }, { sync: false });
     }
   }
+  const known = new Set(server.map((t) => t.id));
+  const unsent = Object.entries(local).filter(
+    ([id]) => !known.has(id) && !pending.has(`test:${id}`),
+  );
+  if (unsent.length) {
+    enqueue(
+      ...unsent.map(([id, record]) => ({
+        op: "test" as const,
+        id,
+        record,
+        updated_at: recordTime(record),
+      })),
+    );
+  }
 }
 
 async function pull(): Promise<boolean> {
   const res = await fetch("/api/store", { headers: { accept: "application/json" } });
+  if (res.status === 404) throw new NoDatabase();
   if (!res.ok) return false;
   const snap = (await res.json()) as Snapshot;
-  mergeReviews(snap.reviews ?? []);
-  mergeProgress((snap.progress ?? {}) as Parameters<typeof mergeProgress>[0]);
+  mergeReviews(snap.reviews ?? [], snap.reviews_reset_at ?? null);
+  mergeAllProgress(snap.progress ?? {});
   mergeDecks(snap.decks ?? []);
   mergeTests(snap.tests ?? []);
   return true;
@@ -207,8 +256,14 @@ export function syncNow(): Promise<void> {
       // Only merge once our own changes are in: then the database is the full picture.
       const pulled = pushed ? await pull() : false;
       setStatus(pushed && pulled ? "saved" : "offline");
-    } catch {
-      setStatus("offline");
+    } catch (error) {
+      if (error instanceof NoDatabase) {
+        // Nothing will ever take the queue on this server; progress stays in this browser.
+        dropSent(readOutbox().length);
+        setStatus("local");
+      } else {
+        setStatus("offline");
+      }
     } finally {
       running = null;
       if (again) {

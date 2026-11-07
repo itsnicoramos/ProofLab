@@ -26,6 +26,8 @@ class Settings(BaseModel):
     busy_wait: float = Field(default=2.0, ge=0)
     # The student's progress database (SPEC §17). None = PROOFLAB_DB or the per-user default.
     db_path: str | None = None
+    # Off on hosts without a lasting disk (Vercel): progress then stays in each browser.
+    store: bool = True
 
     @classmethod
     def from_env(cls) -> Settings:
@@ -41,6 +43,8 @@ class Settings(BaseModel):
             values["max_concurrent_checks"] = int(slots)
         if db := env.get("PROOFLAB_DB"):
             values["db_path"] = db
+        if store := env.get("PROOFLAB_STORE"):
+            values["store"] = store.strip() not in {"0", "false", "no"}
         return cls.model_validate(values)
 
 

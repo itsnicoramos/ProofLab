@@ -769,3 +769,24 @@ Verified with two headless browsers (phone and laptop sizes) against a throwaway
 reviews and a notes deck made on the phone appear on the laptop, a deck deleted on the laptop
 disappears from the phone, and a card graded on the laptop reaches the phone.
 
+## 18. Deployment on Vercel
+
+Two Vercel projects deploy from the same GitHub repository (`itsnicoramos/ProofLab`, branch
+`main`); every push redeploys both.
+
+| Project | Root | What runs |
+|---|---|---|
+| `prooflab` | `frontend/` | the Next.js website |
+| `prooflab-api` | `backend/` | the FastAPI checker as a Python function (`index.py`, `[tool.vercel] entrypoint = "index:app"`) |
+
+The website's `PROOFLAB_API_URL` points at the checker's production URL; the browser never
+calls the checker directly.
+
+On Vercel the checker runs with `PROOFLAB_ISOLATE=0` (checks run in-process, no worker
+processes, and the function's 60 s limit is the backstop) and `PROOFLAB_STORE=0`: Vercel has no
+lasting disk, so there is no progress database there and progress stays in each browser
+(§17's sync agent sees the 404 and says so). There is no macOS either, so the reader reads text
+files only: photos, scanned PDFs and Word files need the checker running on the Mac. Everything
+else (checking, tests, quizzes, new versions, flashcards, cards from pasted notes) works the same.
+Locally nothing changes: `uvicorn prooflab.main:create_app --factory` with the full feature set.
+

@@ -431,5 +431,5 @@ export function formatInterval(ms: number): string {
 export function resetLearning(): void {
   writeRaw(KEY, "[]");
   emit();
-  enqueue({ op: "reset_reviews" });
+  enqueue({ op: "reset_reviews", at: Date.now() });
 }

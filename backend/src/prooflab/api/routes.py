@@ -367,7 +367,12 @@ def check_work(request: Request, body: CheckRequest) -> Verdict:
         slots.release()
 
 
+NO_STORE = "This ProofLab server keeps no progress database; progress stays in each browser."
+
+
 def _store(request: Request) -> Store:
+    if not request.app.state.settings.store:
+        raise HTTPException(status_code=404, detail=NO_STORE)
     return open_store(request.app.state.db_path or default_path())
 
 

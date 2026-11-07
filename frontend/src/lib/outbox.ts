@@ -19,7 +19,7 @@ export type StoreOp =
       grade: number;
       at: number;
     }
-  | { op: "reset_reviews" }
+  | { op: "reset_reviews"; at: number }
   | { op: "progress"; problem_id: string; status: string; at: number }
   | {
       op: "deck";
