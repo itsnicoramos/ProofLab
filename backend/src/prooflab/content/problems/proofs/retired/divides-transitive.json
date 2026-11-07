@@ -1,0 +1,121 @@
+{
+  "id": "proofs.divisibility.divides-transitive",
+  "course": "proofs",
+  "topic": "divisibility",
+  "kind": "divisibility_proof",
+  "title": "Divisibility is transitive",
+  "prompt": "Let $a$, $b$, $c$ be integers. Prove: if $a \\mid b$ and $b \\mid c$, then $a \\mid c$.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "direct proof",
+    "divisibility"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b",
+      "c"
+    ],
+    "hypotheses": [
+      {
+        "var": "b",
+        "divisor": "a"
+      },
+      {
+        "var": "c",
+        "divisor": "b"
+      }
+    ],
+    "target": "c",
+    "goal": {
+      "divisor": "a"
+    }
+  },
+  "mistakes": [],
+  "hints": [
+    "Write b in terms of a, and c in terms of b.",
+    "Substitute your expression for b into your expression for c."
+  ],
+  "solution": [
+    "Since $a \\mid b$, $b = aj$ for some integer $j$. Since $b \\mid c$, $c = bk$ for some integer $k$.",
+    "Then $c = bk = (aj)k = a(jk)$, and $jk$ is an integer, so $a \\mid c$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "sundstrom-mr3",
+    "section": "3.1 Direct Proofs",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "retired",
+    "notes": "Invented problem, retired 2026-11-06: MATH 123 proofs now map 1:1 to Book of Proof exercises."
+  },
+  "examples": [
+    {
+      "name": "substitute",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "b = aj"
+          },
+          {
+            "kind": "let",
+            "content": "c = bk"
+          },
+          {
+            "kind": "expr",
+            "content": "c"
+          },
+          {
+            "kind": "expr",
+            "content": "bk"
+          },
+          {
+            "kind": "expr",
+            "content": "(aj)k"
+          },
+          {
+            "kind": "expr",
+            "content": "a(jk)"
+          },
+          {
+            "kind": "witness",
+            "content": "jk"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "forgot to substitute for b",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "b = aj"
+          },
+          {
+            "kind": "let",
+            "content": "c = bk"
+          },
+          {
+            "kind": "witness",
+            "content": "k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "WITNESS_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

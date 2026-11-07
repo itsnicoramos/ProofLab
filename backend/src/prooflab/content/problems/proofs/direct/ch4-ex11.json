@@ -1,0 +1,111 @@
+{
+  "id": "proofs.direct.ch4-ex11",
+  "course": "proofs",
+  "topic": "direct",
+  "kind": "divisibility_proof",
+  "title": "Ex 4.11 · a | b and c | d give ac | bd",
+  "prompt": "Use a direct proof. Let $a, b, c, d$ be integers. Show that if $a \\mid b$ and $c \\mid d$, then $ac \\mid bd$.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch4"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "hypotheses": [
+      {
+        "var": "b",
+        "divisor": "a"
+      },
+      {
+        "var": "d",
+        "divisor": "c"
+      }
+    ],
+    "target": "b d",
+    "goal": {
+      "divisor": "a c"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Write b in terms of a and d in terms of c, with two different new letters.",
+    "Multiply: bd = (ac)·(something)."
+  ],
+  "solution": [
+    "Since $a \\mid b$ and $c \\mid d$, $b = aj$ and $d = ck$ for some integers $j, k$.",
+    "$bd = (aj)(ck) = ac(jk)$, and $jk$ is an integer, so $ac \\mid bd$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 4 exercises, #11 (p. 126)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 4.4 (divides)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "multiply",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "b = aj"
+          },
+          {
+            "kind": "let",
+            "content": "d = ck"
+          },
+          {
+            "kind": "expr",
+            "content": "a c j k"
+          },
+          {
+            "kind": "witness",
+            "content": "j k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "same letter for both",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "b = aj"
+          },
+          {
+            "kind": "let",
+            "content": "d = cj"
+          },
+          {
+            "kind": "witness",
+            "content": "j^2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "SAME_FRESH_VARIABLE"
+        ]
+      }
+    }
+  ]
+}

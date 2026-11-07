@@ -1,0 +1,82 @@
+{
+  "id": "proofs.divisibility.euler-polynomial",
+  "course": "proofs",
+  "topic": "divisibility",
+  "kind": "counterexample",
+  "title": "Disprove: n² + n + 41 is always prime",
+  "prompt": "Disprove: for every integer $n \\ge 0$, $n^2 + n + 41$ is prime. Give a counterexample.",
+  "answer_format": "A value like n = 5.",
+  "difficulty": 2,
+  "tags": [
+    "counterexample",
+    "primes"
+  ],
+  "data": {
+    "variables": {
+      "n": "nonnegative"
+    },
+    "conclusion": {
+      "op": "prime",
+      "args": [
+        "n^2 + n + 41"
+      ]
+    }
+  },
+  "answer": "n = 40",
+  "mistakes": [],
+  "hints": [
+    "Small values of n all give primes, so testing 0, 1, 2, ... by hand takes a while.",
+    "Look for an n that makes every term of n² + n + 41 share a common factor."
+  ],
+  "solution": [
+    "Take $n = 40$: $40^2 + 40 + 41 = 1681 = 41^2$, which is not prime.",
+    "(Also $n = 41$: $41^2 + 41 + 41 = 41 \\cdot 43$.) So the statement is false."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "9.1 Counterexamples",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "retired",
+    "notes": "Invented problem, retired 2026-11-06: MATH 123 proofs now map 1:1 to Book of Proof exercises."
+  },
+  "examples": [
+    {
+      "name": "n = 41",
+      "submission": {
+        "steps": [],
+        "answer": "n = 41"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "gives a prime",
+      "submission": {
+        "steps": [],
+        "answer": "n = 1"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "CONCLUSION_HOLDS"
+        ]
+      }
+    },
+    {
+      "name": "negative n",
+      "submission": {
+        "steps": [],
+        "answer": "n = -41"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "COUNTEREXAMPLE_DOMAIN"
+        ]
+      }
+    }
+  ]
+}

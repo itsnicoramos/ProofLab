@@ -1,0 +1,82 @@
+{
+  "id": "precalc.trig.identity-square-sum",
+  "course": "precalc",
+  "topic": "trig",
+  "kind": "trig_identity",
+  "title": "Square of a sum",
+  "prompt": "Prove that $(\\sin x + \\cos x)^2 = 1 + \\sin 2x$.",
+  "answer_format": "Steps only: start from one side, end at the other. No final answer needed.",
+  "difficulty": 1,
+  "tags": [
+    "identities",
+    "pythagorean",
+    "double angle"
+  ],
+  "data": {
+    "lhs": "(sin(x) + cos(x))^2",
+    "rhs": "1 + sin(2x)"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Expand the square first. Don't drop the middle term.",
+    "Which two terms add to 1?"
+  ],
+  "solution": [
+    "$(\\sin x + \\cos x)^2 = \\sin^2 x + 2\\sin x\\cos x + \\cos^2 x$.",
+    "$= 1 + 2\\sin x\\cos x = 1 + \\sin 2x$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "7.1 Solving Trigonometric Equations with Identities",
+    "note": "Original problem; uses the Pythagorean and double-angle identities."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "expand",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "sin^2 x + 2 sin x cos x + cos^2 x"
+          },
+          {
+            "kind": "expr",
+            "content": "1 + 2 sin x cos x"
+          },
+          {
+            "kind": "expr",
+            "content": "1 + sin(2x)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "dropped the middle term",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "sin^2 x + cos^2 x"
+          },
+          {
+            "kind": "expr",
+            "content": "1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0
+      }
+    }
+  ]
+}

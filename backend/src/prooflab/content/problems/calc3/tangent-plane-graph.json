@@ -1,0 +1,121 @@
+{
+  "id": "calc3.partials.tangent-plane-graph",
+  "course": "calc3",
+  "topic": "partials",
+  "kind": "tangent_plane",
+  "title": "Tangent plane to a graph",
+  "prompt": "Find an equation of the tangent plane to $z = x^2 + 2y^2$ at the point $(1, 1, 3)$.",
+  "answer_format": "An equation in x, y and z.",
+  "difficulty": 1,
+  "tags": [
+    "tangent plane"
+  ],
+  "data": {
+    "function": "x^2 + 2y^2",
+    "at": [
+      "1",
+      "1"
+    ]
+  },
+  "answer": "z = 2x + 4y - 3",
+  "mistakes": [],
+  "hints": [
+    "z − z₀ = f_x(x₀, y₀)(x − x₀) + f_y(x₀, y₀)(y − y₀)."
+  ],
+  "solution": [
+    "$f_x = 2x$, $f_y = 4y$, so $f_x(1,1) = 2$ and $f_y(1,1) = 4$.",
+    "$z - 3 = 2(x - 1) + 4(y - 1)$, i.e. $z = 2x + 4y - 3$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "4.4 Tangent Planes and Linear Approximations",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "point-normal form",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "f_x = 2x"
+          },
+          {
+            "kind": "expr",
+            "content": "f_y = 4y"
+          },
+          {
+            "kind": "expr",
+            "content": "f_x(1, 1) = 2"
+          },
+          {
+            "kind": "expr",
+            "content": "z - 3 = 2(x - 1) + 4(y - 1)"
+          }
+        ],
+        "answer": "z = 2x + 4y - 3"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "any equivalent form",
+      "submission": {
+        "steps": [],
+        "answer": "2x + 4y - z = 3"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "missing the constant",
+      "submission": {
+        "steps": [],
+        "answer": "z = 2x + 4y"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "PLANE_WRONG_POINT"
+        ]
+      }
+    },
+    {
+      "name": "wrong f_y",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "f_y = 2y"
+          }
+        ],
+        "answer": "z - 3 = 2(x - 1) + 2(y - 1)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "PLANE_WRONG_NORMAL"
+        ]
+      }
+    },
+    {
+      "name": "didn't evaluate the partials",
+      "submission": {
+        "steps": [],
+        "answer": "z - 3 = 2x(x - 1) + 4y(y - 1)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "NOT_A_PLANE"
+        ]
+      }
+    }
+  ]
+}

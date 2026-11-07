@@ -1,0 +1,70 @@
+{
+  "id": "proofs.disproof.ch9-ex02",
+  "course": "proofs",
+  "topic": "disproof",
+  "kind": "counterexample",
+  "title": "Ex 9.2 · Is 2n² − 4n + 31 always prime?",
+  "prompt": "Statement: for every natural number $n$, the integer $2n^2 - 4n + 31$ is prime. This statement is false. Disprove it with a counterexample.",
+  "answer_format": "Integer values for every variable, like a = 4, b = 2, c = 2.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch9",
+    "counterexample"
+  ],
+  "data": {
+    "variables": {
+      "n": "positive"
+    },
+    "conclusion": {
+      "op": "prime",
+      "args": [
+        "2n^2 - 4n + 31"
+      ]
+    }
+  },
+  "answer": "n = 31",
+  "mistakes": [],
+  "hints": [
+    "Trying n = 1, 2, 3, … gives primes for a while.",
+    "Pick n so that every term of 2n² − 4n + 31 shares a factor with 31."
+  ],
+  "solution": [
+    "Take $n = 31$: $2 \\cdot 31^2 - 4 \\cdot 31 + 31 = 31(62 - 4 + 1) = 31 \\cdot 59 = 1829$, which is not prime.",
+    "So the statement is false."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 9 exercises, #2 (p. 178)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses counterexamples (Section 9.1)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "n = 31",
+      "submission": {
+        "steps": [],
+        "answer": "n = 31"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "gives a prime",
+      "submission": {
+        "steps": [],
+        "answer": "n = 1"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "CONCLUSION_HOLDS"
+        ]
+      }
+    }
+  ]
+}

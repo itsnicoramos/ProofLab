@@ -1,0 +1,78 @@
+{
+  "id": "calc1.derivatives.chain-rule",
+  "course": "calc1",
+  "topic": "derivatives",
+  "kind": "derivative",
+  "title": "Chain rule",
+  "prompt": "Find $\\dfrac{dy}{dx}$ for $y = \\sin(3x^2 + 1)$.",
+  "answer_format": "An expression in x.",
+  "difficulty": 1,
+  "tags": [
+    "chain rule",
+    "trig"
+  ],
+  "data": {
+    "function": "sin(3x^2 + 1)",
+    "var": "x"
+  },
+  "answer": "6x cos(3x^2 + 1)",
+  "mistakes": [],
+  "hints": [
+    "The outside function is sin(u); the inside function is u = 3x² + 1."
+  ],
+  "solution": [
+    "Outside: $\\frac{d}{du}\\sin u = \\cos u$. Inside: $u = 3x^2 + 1$, $u' = 6x$.",
+    "$\\frac{dy}{dx} = \\cos(3x^2+1)\\cdot 6x$."
+  ],
+  "reference": {
+    "book": "openstax-calc1",
+    "section": "3.6 The Chain Rule",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "chain rule",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "dy/dx = cos(3x^2 + 1) * 6x"
+          }
+        ],
+        "answer": "6x cos(3x^2+1)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "forgot the inside derivative",
+      "submission": {
+        "steps": [],
+        "answer": "cos(3x^2 + 1)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "CHAIN_RULE"
+        ]
+      }
+    },
+    {
+      "name": "sign slip",
+      "submission": {
+        "steps": [],
+        "answer": "-6x cos(3x^2 + 1)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SIGN_ERROR"
+        ]
+      }
+    }
+  ]
+}

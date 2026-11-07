@@ -1,0 +1,99 @@
+{
+  "id": "proofs.direct.ch4-ex05",
+  "course": "proofs",
+  "topic": "direct",
+  "kind": "parity_proof",
+  "title": "Ex 4.5 · An even integer times any integer",
+  "prompt": "Use a direct proof. Let $x$ and $y$ be integers. Show that if $x$ is even, then $xy$ is even.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch4"
+  ],
+  "data": {
+    "variables": [
+      "x",
+      "y"
+    ],
+    "hypotheses": [
+      {
+        "var": "x",
+        "is": "even"
+      }
+    ],
+    "target": "x y",
+    "goal": "even"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Only x comes with an assumption. Rewrite x with the definition of even.",
+    "y is an integer, so it may appear inside your witness."
+  ],
+  "solution": [
+    "Since $x$ is even, $x = 2a$ for some integer $a$.",
+    "$xy = 2ay = 2(ay)$, and $ay$ is an integer, so $xy$ is even. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 4 exercises, #5 (p. 126)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 4.1 (even)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "direct proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a"
+          },
+          {
+            "kind": "expr",
+            "content": "2a y"
+          },
+          {
+            "kind": "witness",
+            "content": "a y"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "assumes y is even too",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a"
+          },
+          {
+            "kind": "let",
+            "content": "y = 2b"
+          },
+          {
+            "kind": "witness",
+            "content": "2a b"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "LET_WITHOUT_HYPOTHESIS"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "id": "precalc.exp_log.log-extraneous",
+  "course": "precalc",
+  "topic": "exp_log",
+  "kind": "equation",
+  "title": "Check for extraneous roots",
+  "prompt": "Solve $\\log(x) + \\log(x - 3) = 1$, where $\\log$ is the base-10 logarithm.",
+  "answer_format": "All real solutions, like x = 2 or x = -3 (or {2, -3}, or 'no solution').",
+  "difficulty": 2,
+  "tags": [
+    "logarithmic equations",
+    "extraneous solutions"
+  ],
+  "data": {
+    "equation": "log(x) + log(x - 3) = 1"
+  },
+  "answer": "x = 5",
+  "mistakes": [],
+  "hints": [
+    "Combine the logs into one, then rewrite in exponential form.",
+    "Plug each candidate back into the ORIGINAL equation. Logs need positive inputs."
+  ],
+  "solution": [
+    "$\\log\\big(x(x-3)\\big) = 1 \\Rightarrow x(x-3) = 10 \\Rightarrow x^2 - 3x - 10 = 0$.",
+    "$(x-5)(x+2) = 0$ gives candidates $x = 5$ and $x = -2$.",
+    "$x = -2$ makes $\\log(x)$ undefined, so it's extraneous. The only solution is $x = 5$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "6.6 Exponential and Logarithmic Equations",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "checked the candidates",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "log(x(x - 3)) = 1"
+          },
+          {
+            "kind": "expr",
+            "content": "x^2 - 3x = 10"
+          },
+          {
+            "kind": "expr",
+            "content": "(x - 5)(x + 2) = 0"
+          }
+        ],
+        "answer": "x = 5"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "kept the extraneous root",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "log(x(x - 3)) = 1"
+          },
+          {
+            "kind": "expr",
+            "content": "x^2 - 3x - 10 = 0"
+          },
+          {
+            "kind": "expr",
+            "content": "(x - 5)(x + 2) = 0"
+          }
+        ],
+        "answer": "x = 5 or x = -2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "EXTRANEOUS_SOLUTION",
+          "EXTRA_SOLUTIONS"
+        ]
+      }
+    },
+    {
+      "name": "exponential form slip",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "log(x(x - 3)) = 1"
+          },
+          {
+            "kind": "expr",
+            "content": "x^2 - 3x = 1"
+          }
+        ],
+        "answer": "x = (3 + sqrt(13))/2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1
+      }
+    }
+  ]
+}

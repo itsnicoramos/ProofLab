@@ -1,0 +1,100 @@
+{
+  "id": "calc3.multiple_integrals.reverse-order-parabola",
+  "course": "calc3",
+  "topic": "multiple_integrals",
+  "kind": "integral_setup",
+  "title": "Between a line and a parabola",
+  "prompt": "Rewrite $\\displaystyle\\int_0^2 \\int_{x^2}^{2x} x\\,dy\\,dx$ with the order $dx\\,dy$ (don't evaluate).",
+  "answer_format": "An iterated integral like int(int(f, y, a, b), x, c, d), inner integral first. Don't evaluate it.",
+  "difficulty": 2,
+  "tags": [
+    "double integrals",
+    "order of integration"
+  ],
+  "data": {
+    "integrand": "x",
+    "region": [
+      [
+        "y",
+        "x^2",
+        "2x"
+      ],
+      [
+        "x",
+        "0",
+        "2"
+      ]
+    ],
+    "order": [
+      "x",
+      "y"
+    ]
+  },
+  "answer": "int(int(x, x, y/2, sqrt(y)), y, 0, 4)",
+  "mistakes": [],
+  "hints": [
+    "The curves y = x² and y = 2x meet at (0, 0) and (2, 4).",
+    "Solve each curve for x: the line gives x = y/2 and the parabola gives x = √y. Which is on the left?"
+  ],
+  "solution": [
+    "The region lies between $y = x^2$ (below) and $y = 2x$ (above) for $0 \\le x \\le 2$, so $0 \\le y \\le 4$.",
+    "For fixed $y$, $x$ runs from the line $x = y/2$ to the parabola $x = \\sqrt{y}$: $\\int_0^4 \\int_{y/2}^{\\sqrt y} x\\,dx\\,dy$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "5.2 Double Integrals over General Regions",
+    "note": "Original problem; see changing the order of integration."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "solve each curve for x",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "4/3"
+          }
+        ],
+        "answer": "int(int(x, x, y/2, sqrt(y)), y, 0, 4)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "left and right swapped",
+      "submission": {
+        "steps": [],
+        "answer": "int(int(x, x, sqrt(y), y/2), y, 0, 4)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "LIMITS_BACKWARDS"
+        ]
+      }
+    },
+    {
+      "name": "wrong outer limit",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "2"
+          }
+        ],
+        "answer": "int(int(x, x, y/2, sqrt(y)), y, 0, 2)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "REGION_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "id": "proofs.counting.ch3-05-ex09",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.5 #9 · Lists of A to F with D before A",
+  "prompt": "Make lists of length 6 from the letters A, B, C, D, E, F with no letter repeated, so each list uses all six letters. In how many of these lists does D appear somewhere before A?",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "combinations",
+    "permutations"
+  ],
+  "data": {},
+  "answer": "binom(6, 2)*4!",
+  "mistakes": [
+    {
+      "answer": "6!",
+      "hint": "That counts every list, including the ones where A comes before D."
+    },
+    {
+      "answer": "binom(6, 2)",
+      "hint": "Choosing the two positions for D and A is only the first step: the other four letters still have to be placed."
+    },
+    {
+      "answer": "5!",
+      "hint": "D only has to come somewhere before A, not right next to it."
+    }
+  ],
+  "hints": [
+    "Pick the two positions that D and A will occupy. Is there any choice about which letter goes where?",
+    "D takes the earlier of the two positions and A the later. The other four letters fill the remaining positions in any order."
+  ],
+  "solution": [
+    "Choose 2 of the 6 positions for D and A: $\\binom{6}{2} = 15$ ways. D goes in the earlier one and A in the later one, so there is no further choice.",
+    "The remaining 4 letters fill the other 4 positions in $4! = 24$ ways.",
+    "So there are $15 \\cdot 24 = 360$ lists, exactly half of the $6! = 720$ lists, as symmetry suggests."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.5 exercises, #9 (p. 89)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses combinations (Section 3.5) and factorials (Section 3.4)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "360"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "binom(6, 2)"
+          },
+          {
+            "kind": "expr",
+            "content": "4!"
+          }
+        ],
+        "answer": "binom(6, 2)*4!"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "6!"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

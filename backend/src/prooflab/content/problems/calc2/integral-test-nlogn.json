@@ -1,0 +1,79 @@
+{
+  "id": "calc2.series.integral-test-nlogn",
+  "course": "calc2",
+  "topic": "series",
+  "kind": "series_convergence",
+  "title": "The integral test",
+  "prompt": "Does $\\displaystyle \\sum_{n=2}^{\\infty} \\frac{1}{n \\ln n}$ converge or diverge?",
+  "answer_format": "'converges' or 'diverges' (add 'absolutely' or 'conditionally' when the terms change sign).",
+  "difficulty": 3,
+  "tags": [
+    "integral test"
+  ],
+  "data": {
+    "term": "1/(n ln(n))",
+    "start": 2
+  },
+  "answer": "diverges",
+  "mistakes": [],
+  "hints": [
+    "f(x) = 1/(x ln x) is positive and decreasing for x ≥ 2.",
+    "Substitute u = ln x in ∫ dx/(x ln x)."
+  ],
+  "solution": [
+    "$\\int_2^b \\frac{dx}{x\\ln x} = \\ln(\\ln b) - \\ln(\\ln 2) \\to \\infty$.",
+    "By the integral test, the series diverges."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "5.3 The Divergence and Integral Tests",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "integral test",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "integral test"
+          },
+          {
+            "kind": "limit",
+            "content": "oo"
+          }
+        ],
+        "answer": "diverges"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "ratio test is inconclusive",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "ratio test"
+          },
+          {
+            "kind": "limit",
+            "content": "1"
+          }
+        ],
+        "answer": "converges"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "RATIO_TEST_INCONCLUSIVE",
+          "TERMS_TO_ZERO_NOT_ENOUGH"
+        ]
+      }
+    }
+  ]
+}

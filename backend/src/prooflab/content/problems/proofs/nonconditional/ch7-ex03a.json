@@ -1,0 +1,101 @@
+{
+  "id": "proofs.nonconditional.ch7-ex03a",
+  "course": "proofs",
+  "topic": "nonconditional",
+  "kind": "parity_proof",
+  "title": "Ex 7.3 (⇒, by contrapositive) · If a³ + a² + a is even, then a is even",
+  "prompt": "Let $a$ be an integer. Exercise 7.3 says $a^3 + a^2 + a$ is even if and only if $a$ is even. This problem is one direction of that if-and-only-if: prove that if $a^3 + a^2 + a$ is even, then $a$ is even. Use contrapositive proof: show that if $a$ is odd, then $a^3 + a^2 + a$ is odd. (The converse (⇐) direction is a separate problem.)",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch7",
+    "iff"
+  ],
+  "data": {
+    "variables": [
+      "a"
+    ],
+    "hypotheses": [
+      {
+        "var": "a",
+        "is": "odd"
+      }
+    ],
+    "target": "a^3 + a^2 + a",
+    "goal": "odd"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "The contrapositive is: if a is odd, then a³ + a² + a is odd.",
+    "Write a = 2n + 1 and expand. (2n + 1)³ = 8n³ + 12n² + 6n + 1.",
+    "The total is 8n³ + 16n² + 12n + 3. Write it as 2·(integer) + 1."
+  ],
+  "solution": [
+    "Contrapositive: if $a$ is odd, then $a^3 + a^2 + a$ is odd.",
+    "Suppose $a = 2n + 1$. Then $a^3 + a^2 + a = (8n^3 + 12n^2 + 6n + 1) + (4n^2 + 4n + 1) + (2n + 1) = 8n^3 + 16n^2 + 12n + 3 = 2(4n^3 + 8n^2 + 6n + 1) + 1$, which is odd.",
+    "So if $a^3 + a^2 + a$ is even, then $a$ is even. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 7 exercises, #3 (p. 155)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses if-and-only-if proof (Section 7.1): this is the forward (⇒) direction, by contrapositive (Section 5.1), with Definitions 4.1, 4.2 (even, odd)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "prove the contrapositive",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2n + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "(2n + 1)^3 + (2n + 1)^2 + (2n + 1)"
+          },
+          {
+            "kind": "expr",
+            "content": "8n^3 + 16n^2 + 12n + 3"
+          },
+          {
+            "kind": "witness",
+            "content": "4n^3 + 8n^2 + 6n + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "cubed 2n + 1 as 8n³ + 1",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2n + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "8n^3 + 1 + 4n^2 + 4n + 1 + 2n + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "NOT_EQUIVALENT"
+        ]
+      }
+    }
+  ]
+}

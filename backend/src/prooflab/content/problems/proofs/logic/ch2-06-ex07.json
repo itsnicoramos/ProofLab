@@ -1,0 +1,133 @@
+{
+  "id": "proofs.logic.ch2-06-ex07",
+  "course": "proofs",
+  "topic": "logic",
+  "kind": "logical_equivalence",
+  "title": "Ex 2.6 #7 · P ⇒ Q = (P ∧ ∼Q) ⇒ (Q ∧ ∼Q)",
+  "prompt": "Use a truth table to show that $P \\Rightarrow Q$ and $(P \\wedge \\sim Q) \\Rightarrow (Q \\wedge \\sim Q)$ are logically equivalent: they have the same truth value in every row.",
+  "answer_format": "No final answer box. Give the truth-table column of each statement as a column step (statement : T F T T, rows (P, Q) in the order TT, TF, FT, FF), or rewrite one statement into the other with expr steps, each equivalent to the one before.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch2",
+    "logical-equivalence"
+  ],
+  "data": {
+    "left": "P ⇒ Q",
+    "right": "(P ∧ ~Q) ⇒ (Q ∧ ~Q)"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Q ∧ ∼Q is false in every row, so the right side is an implication with a false conclusion.",
+    "An implication with a false conclusion is true exactly when its hypothesis is false."
+  ],
+  "solution": [
+    "$\\sim Q$ is F T F T, so $P \\wedge \\sim Q$ is F T F F, and $Q \\wedge \\sim Q$ is F F F F.",
+    "So $(P \\wedge \\sim Q) \\Rightarrow (Q \\wedge \\sim Q)$ is T F T T: it is false only in the row where $P \\wedge \\sim Q$ is true.",
+    "$P \\Rightarrow Q$ is also T F T T, so the statements are logically equivalent."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 2.6 exercises, #7 (p. 52)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses logical equivalence (Section 2.6)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "truth table",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "P ⇒ Q : T F T T"
+          },
+          {
+            "kind": "column",
+            "content": "(P ∧ ~Q) ⇒ (Q ∧ ~Q) : T F T T"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "rewrite chain",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(P ∧ ~Q) ⇒ (Q ∧ ~Q)"
+          },
+          {
+            "kind": "expr",
+            "content": "(P ∧ ~Q) ⇒ F"
+          },
+          {
+            "kind": "expr",
+            "content": "~(P ∧ ~Q)"
+          },
+          {
+            "kind": "expr",
+            "content": "~P ∨ Q"
+          },
+          {
+            "kind": "expr",
+            "content": "P ⇒ Q"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "only one column",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "P ⇒ Q : T F T T"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "LOGIC_INCOMPLETE"
+        ]
+      }
+    },
+    {
+      "name": "wrong right-hand column",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "P ⇒ Q : T F T T"
+          },
+          {
+            "kind": "column",
+            "content": "(P ∧ ~Q) ⇒ (Q ∧ ~Q) : F T F F"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "TT_COLUMN_WRONG",
+          "TT_ALL_FLIPPED"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "id": "calc4.diff_eq.integrating-factor",
+  "course": "calc4",
+  "topic": "diff_eq",
+  "kind": "ode_solution",
+  "title": "Integrating factor",
+  "prompt": "Solve $x\\,y' + 2y = 4x^2$ for $x > 0$, with $y(1) = 2$.",
+  "answer_format": "y = ... in terms of x.",
+  "difficulty": 2,
+  "tags": [
+    "first-order linear",
+    "integrating factor",
+    "IVP"
+  ],
+  "data": {
+    "ode": "x y' + 2y = 4x^2",
+    "ics": {
+      "y(1)": "2"
+    },
+    "variables": {
+      "x": "positive"
+    }
+  },
+  "answer": "y = x^2 + 1/x^2",
+  "mistakes": [],
+  "hints": [
+    "Divide by x to get the standard form y′ + P(x) y = Q(x).",
+    "The integrating factor is μ = e^(∫P dx) = x²."
+  ],
+  "solution": [
+    "Standard form: $y' + \\frac{2}{x}y = 4x$; $\\mu = e^{\\int 2/x\\,dx} = x^2$.",
+    "$(x^2 y)' = 4x^3 \\Rightarrow x^2 y = x^4 + C \\Rightarrow y = x^2 + \\frac{C}{x^2}$.",
+    "$y(1) = 1 + C = 2$ gives $C = 1$: $y = x^2 + \\frac{1}{x^2}$."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "4.5 First-order Linear Equations",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "general then IVP",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "y = x^2 + C/x^2"
+          }
+        ],
+        "answer": "y = x^2 + 1/x^2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "wrong constant",
+      "submission": {
+        "steps": [],
+        "answer": "y = x^2 + 2/x^2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "IC_NOT_SATISFIED"
+        ]
+      }
+    },
+    {
+      "name": "homogeneous solution only",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "y_h = C/x^2"
+          }
+        ],
+        "answer": "y = 2/x^2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "MISSING_PARTICULAR"
+        ]
+      }
+    }
+  ]
+}

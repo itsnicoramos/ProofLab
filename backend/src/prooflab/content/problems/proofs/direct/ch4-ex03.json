@@ -1,0 +1,107 @@
+{
+  "id": "proofs.direct.ch4-ex03",
+  "course": "proofs",
+  "topic": "direct",
+  "kind": "parity_proof",
+  "title": "Ex 4.3 · a² + 3a + 5 for odd a",
+  "prompt": "Use a direct proof. Let $a$ be an odd integer. Show that $a^2 + 3a + 5$ is odd.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch4"
+  ],
+  "data": {
+    "variables": [
+      "a"
+    ],
+    "hypotheses": [
+      {
+        "var": "a",
+        "is": "odd"
+      }
+    ],
+    "target": "a^2 + 3a + 5",
+    "goal": "odd"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Write a with the definition of odd, then substitute into a² + 3a + 5.",
+    "After expanding, aim for the shape 2·(integer) + 1."
+  ],
+  "solution": [
+    "Since $a$ is odd, $a = 2k + 1$ for some integer $k$.",
+    "$a^2 + 3a + 5 = (2k+1)^2 + 3(2k+1) + 5 = 4k^2 + 10k + 9 = 2(2k^2 + 5k + 4) + 1$.",
+    "$2k^2 + 5k + 4$ is an integer, so $a^2 + 3a + 5$ is odd. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 4 exercises, #3 (p. 126)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 4.2 (odd)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "direct proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "(2k+1)^2 + 3(2k+1) + 5"
+          },
+          {
+            "kind": "expr",
+            "content": "4k^2 + 10k + 9"
+          },
+          {
+            "kind": "expr",
+            "content": "2(2k^2 + 5k + 4) + 1"
+          },
+          {
+            "kind": "witness",
+            "content": "2k^2 + 5k + 4"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "witness off by the constant",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "4k^2 + 10k + 9"
+          },
+          {
+            "kind": "witness",
+            "content": "2k^2 + 5k + 9"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "WITNESS_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

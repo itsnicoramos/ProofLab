@@ -1,0 +1,80 @@
+{
+  "id": "proofs.sets.ch1-01-ex37",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.1 #37 · |{x ∈ ℕ : x² < 0}|",
+  "prompt": "Find the cardinality $|\\{x \\in \\mathbb{N} : x^2 < 0\\}|$: how many elements does the set have?",
+  "answer_format": "A whole number: how many elements the set has.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": {
+      "var": "x",
+      "domain": "N",
+      "where": [
+        "x^2 < 0"
+      ]
+    },
+    "ask": "cardinality"
+  },
+  "answer": "0",
+  "mistakes": [],
+  "hints": [
+    "Can a square ever be negative?",
+    "A set with no elements has cardinality 0."
+  ],
+  "solution": [
+    "No natural number has a negative square, so the set is ∅.",
+    "So the cardinality is $0$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.1 exercises, #37 (p. 8)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "0"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "listed first",
+      "submission": {
+        "steps": [
+          {
+            "kind": "note",
+            "content": "list the set, then count"
+          }
+        ],
+        "answer": "0"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "1"
+      },
+      "expect": {
+        "status": "incorrect"
+      }
+    }
+  ]
+}

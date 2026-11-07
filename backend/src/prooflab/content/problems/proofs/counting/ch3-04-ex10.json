@@ -1,0 +1,94 @@
+{
+  "id": "proofs.counting.ch3-04-ex10",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.4 #10 · Digit permutations alternating even and odd",
+  "prompt": "A permutation of the ten digits 0, 1, 2, …, 9 lists each digit exactly once (it may start with 0). How many of these permutations alternate between even and odd digits, like 0123456789 or 9078563412?",
+  "answer_format": "A whole number, or an expression for it like 26^4, 10!/7! or binom(10, 3). P(n, k) and C(n, k) work too.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "permutations",
+    "multiplication-principle"
+  ],
+  "data": {},
+  "answer": "2*5!*5!",
+  "mistakes": [
+    {
+      "answer": "5!*5!",
+      "hint": "That fixes which kind of digit comes first. An alternating permutation can start with an even digit or with an odd one."
+    },
+    {
+      "answer": "10!",
+      "hint": "That counts every permutation of the digits, alternating or not."
+    },
+    {
+      "answer": "2*5!",
+      "hint": "Both the even digits and the odd digits can be shuffled among their own positions."
+    }
+  ],
+  "hints": [
+    "First decide the pattern: even, odd, even, … or odd, even, odd, ….",
+    "Once the pattern is fixed, the five even digits fill the even slots in some order, and the five odd digits fill the odd slots."
+  ],
+  "solution": [
+    "There are 2 patterns: start with an even digit or start with an odd digit.",
+    "For either pattern, the five even digits fill their five positions in $5! = 120$ ways and the five odd digits fill theirs in $5! = 120$ ways.",
+    "So there are $2 \\cdot 5! \\cdot 5! = 2 \\cdot 14{,}400 = 28{,}800$ alternating permutations."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.4 exercises, #10 (p. 84)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses factorials and the multiplication principle (Section 3.4)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "28800"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "5!*5!"
+          },
+          {
+            "kind": "expr",
+            "content": "2*14400"
+          }
+        ],
+        "answer": "2*5!*5!"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "5!*5!"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

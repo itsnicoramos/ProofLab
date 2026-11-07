@@ -1,0 +1,132 @@
+{
+  "id": "proofs.induction.ch10-ex05",
+  "course": "proofs",
+  "topic": "induction",
+  "kind": "induction",
+  "title": "Ex 10.5 · Sum of powers of 2",
+  "prompt": "Prove by induction that $2^1 + 2^2 + 2^3 + \\cdots + 2^n = 2^{n+1} - 2$ for every $n \\in \\mathbb{N}$. Check $n = 1$, assume the formula for $n = k$, and deduce it for $n = k + 1$.",
+  "answer_format": "A structured proof: a base step (the case n = 1 with numbers only), an assume step (the formula for n = k), then expr steps for the n = k + 1 case, starting from the hypothesis plus the next term. Notes optional. No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch10",
+    "induction",
+    "sum-formula"
+  ],
+  "data": {
+    "base": 1,
+    "sum": {
+      "index": "i",
+      "term": "2^i",
+      "start": 1,
+      "rhs": "2^(n + 1) - 2"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Base case: for n = 1 the sum is 2¹ = 2, and 2² − 2 = 2.",
+    "The next term after 2^k is 2^(k + 1).",
+    "2^(k + 1) − 2 + 2^(k + 1) = 2·2^(k + 1) − 2, and 2·2^(k + 1) = 2^(k + 2)."
+  ],
+  "solution": [
+    "Base case: for $n = 1$ the left side is $2^1 = 2$ and the right side is $2^2 - 2 = 2$.",
+    "Inductive step: suppose $2^1 + 2^2 + \\cdots + 2^k = 2^{k+1} - 2$ for some $k \\ge 1$. Adding the next term gives $2^{k+1} - 2 + 2^{k+1} = 2 \\cdot 2^{k+1} - 2 = 2^{(k+1)+1} - 2$.",
+    "That is the formula for $n = k + 1$, so by induction it holds for every $n \\in \\mathbb{N}$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 10 exercises, #5 (p. 195)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses induction (Section 10.1); the book's ℕ starts at 1, so the base case is n = 1."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "induction proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "2^1 = 2^2 - 2"
+          },
+          {
+            "kind": "assume",
+            "content": "2^1 + 2^2 + ... + 2^k = 2^(k + 1) - 2"
+          },
+          {
+            "kind": "expr",
+            "content": "2^(k + 1) - 2 + 2^(k + 1)"
+          },
+          {
+            "kind": "expr",
+            "content": "2*2^(k + 1) - 2"
+          },
+          {
+            "kind": "expr",
+            "content": "2^(k + 2) - 2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "adds 2^k instead of 2^(k + 1)",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "2^1 = 2^2 - 2"
+          },
+          {
+            "kind": "assume",
+            "content": "2^1 + 2^2 + ... + 2^k = 2^(k + 1) - 2"
+          },
+          {
+            "kind": "expr",
+            "content": "2^(k + 1) - 2 + 2^k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "IND_STEP_WRONG"
+        ]
+      }
+    },
+    {
+      "name": "skips the hypothesis",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "2^1 = 2^2 - 2"
+          },
+          {
+            "kind": "assume",
+            "content": "2^1 + 2^2 + ... + 2^k = 2^(k + 1) - 2"
+          },
+          {
+            "kind": "expr",
+            "content": "2^(k + 2) - 2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "IND_USE_HYPOTHESIS"
+        ]
+      }
+    }
+  ]
+}

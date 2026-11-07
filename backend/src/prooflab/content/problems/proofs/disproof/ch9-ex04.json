@@ -1,0 +1,70 @@
+{
+  "id": "proofs.disproof.ch9-ex04",
+  "course": "proofs",
+  "topic": "disproof",
+  "kind": "counterexample",
+  "title": "Ex 9.4 · Is n² + 17n + 17 always prime?",
+  "prompt": "Statement: for every natural number $n$, the integer $n^2 + 17n + 17$ is prime. This statement is false. Disprove it with a counterexample.",
+  "answer_format": "Integer values for every variable, like a = 4, b = 2, c = 2.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch9",
+    "counterexample"
+  ],
+  "data": {
+    "variables": {
+      "n": "positive"
+    },
+    "conclusion": {
+      "op": "prime",
+      "args": [
+        "n^2 + 17n + 17"
+      ]
+    }
+  },
+  "answer": "n = 17",
+  "mistakes": [],
+  "hints": [
+    "Look for an n that makes all three terms share a factor.",
+    "17 divides two of the terms already. Can you make it divide the third?"
+  ],
+  "solution": [
+    "Take $n = 17$: $17^2 + 17 \\cdot 17 + 17 = 17 \\cdot 35 = 595$, which is not prime.",
+    "So the statement is false. (Small values like $n = 1$, giving $35$, also work.)"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 9 exercises, #4 (p. 179)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses counterexamples (Section 9.1)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "n = 17",
+      "submission": {
+        "steps": [],
+        "answer": "n = 17"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "gives a prime",
+      "submission": {
+        "steps": [],
+        "answer": "n = 4"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "CONCLUSION_HOLDS"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "id": "precalc.exp_log.exp-quadratic-form",
+  "course": "precalc",
+  "topic": "exp_log",
+  "kind": "equation",
+  "title": "An exponential equation in quadratic form",
+  "prompt": "Solve $e^{2x} - 5e^{x} + 6 = 0$.",
+  "answer_format": "All real solutions, like x = 2 or x = -3 (or {2, -3}, or 'no solution'). Exact values, e.g. ln(2).",
+  "difficulty": 2,
+  "tags": [
+    "exponential equations",
+    "quadratic form"
+  ],
+  "data": {
+    "equation": "e^(2x) - 5e^x + 6 = 0"
+  },
+  "answer": "x = ln(2) or x = ln(3)",
+  "mistakes": [
+    {
+      "answer": "2, 3",
+      "hint": "Those are the values of e^x. Now solve e^x = 2 and e^x = 3 for x."
+    }
+  ],
+  "hints": [
+    "Let u = eˣ. Then e²ˣ = u².",
+    "Once you have values of eˣ, take ln of both sides."
+  ],
+  "solution": [
+    "With $u = e^x$: $u^2 - 5u + 6 = (u-2)(u-3) = 0$.",
+    "$e^x = 2$ or $e^x = 3$, so $x = \\ln 2$ or $x = \\ln 3$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "6.6 Exponential and Logarithmic Equations",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "substitute u = e^x",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(e^x - 2)(e^x - 3) = 0"
+          },
+          {
+            "kind": "expr",
+            "content": "e^x = 2 or e^x = 3"
+          }
+        ],
+        "answer": "x = ln 2 or x = ln 3"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "stopped at e^x",
+      "submission": {
+        "steps": [],
+        "answer": "2, 3"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    },
+    {
+      "name": "decimals",
+      "submission": {
+        "steps": [],
+        "answer": "x = 0.6931 or x = 1.0986"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "INEXACT"
+        ]
+      }
+    }
+  ]
+}

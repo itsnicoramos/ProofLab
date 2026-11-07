@@ -1,0 +1,102 @@
+{
+  "id": "precalc.trig.trig-eq-quadratic-sine",
+  "course": "precalc",
+  "topic": "trig",
+  "kind": "trig_equation",
+  "title": "A quadratic in sine",
+  "prompt": "Solve $2\\sin^2 x - \\sin x - 1 = 0$ for $0 \\le x < 2\\pi$.",
+  "answer_format": "All solutions in [0, 2π), in radians, like x = pi/6 or x = 5pi/6.",
+  "difficulty": 2,
+  "tags": [
+    "trig equations",
+    "quadratic form"
+  ],
+  "data": {
+    "equation": "2 sin(x)^2 - sin(x) - 1 = 0"
+  },
+  "answer": "pi/2, 7pi/6, 11pi/6",
+  "mistakes": [],
+  "hints": [
+    "Let u = sin x. Then 2u² − u − 1 = 0 factors.",
+    "sin x = −1/2 has two solutions in [0, 2π)."
+  ],
+  "solution": [
+    "$(2\\sin x + 1)(\\sin x - 1) = 0$.",
+    "$\\sin x = 1$: $x = \\frac{\\pi}{2}$. $\\sin x = -\\frac12$: $x = \\frac{7\\pi}{6}, \\frac{11\\pi}{6}$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "7.5 Solving Trigonometric Equations",
+    "note": "Original problem; see equations in quadratic form."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "factor the quadratic",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(2 sin x + 1)(sin x - 1) = 0"
+          },
+          {
+            "kind": "expr",
+            "content": "sin x = -1/2 or sin x = 1"
+          }
+        ],
+        "answer": "x = pi/2 or x = 7pi/6 or x = 11pi/6"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "negative angle",
+      "submission": {
+        "steps": [],
+        "answer": "pi/2, -pi/6"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "OUTSIDE_INTERVAL",
+          "MISSING_SOLUTIONS"
+        ]
+      }
+    },
+    {
+      "name": "factoring slip",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(2 sin x - 1)(sin x + 1) = 0"
+          }
+        ],
+        "answer": "pi/6, 5pi/6, 3pi/2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "EXTRA_SOLUTIONS"
+        ]
+      }
+    },
+    {
+      "name": "degrees",
+      "submission": {
+        "steps": [],
+        "answer": "90, 210, 330"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "DEGREES_NOT_RADIANS"
+        ]
+      }
+    }
+  ]
+}

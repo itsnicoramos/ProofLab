@@ -1,0 +1,137 @@
+{
+  "id": "proofs.set-proofs.ch8-ex13",
+  "course": "proofs",
+  "topic": "set-proofs",
+  "kind": "set_identity",
+  "title": "Ex 8.13 · Removing a union",
+  "prompt": "Let $A$, $B$ and $C$ be any sets. Prove that $A - (B \\cup C) = (A - B) \\cap (A - C)$.",
+  "answer_format": "A chain of lines, each a set (like A ∪ (B ∩ C)) or a statement about an element x (like x ∈ A or x ∈ B). Each line must have exactly the same elements as the line before; start from the left side and end at the right side.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch8",
+    "set-identity",
+    "set-difference",
+    "de-morgan"
+  ],
+  "data": {
+    "sets": [
+      "A",
+      "B",
+      "C"
+    ],
+    "left": "A − (B ∪ C)",
+    "right": "(A − B) ∩ (A − C)",
+    "point": [
+      "x"
+    ]
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "x ∈ A − (B ∪ C) means x ∈ A and not (x ∈ B or x ∈ C).",
+    "De Morgan's law turns not (x ∈ B or x ∈ C) into x ∉ B and x ∉ C.",
+    "x ∈ A is the same as (x ∈ A and x ∈ A), so you can regroup into (x ∈ A and x ∉ B) and (x ∈ A and x ∉ C)."
+  ],
+  "solution": [
+    "Let $x$ be any element. Then $x \\in A - (B \\cup C)$ means $x \\in A \\land \\sim(x \\in B \\lor x \\in C)$, which by De Morgan's law is $x \\in A \\land x \\notin B \\land x \\notin C$.",
+    "Because $x \\in A$ is equivalent to $x \\in A \\land x \\in A$, we can regroup this as $(x \\in A \\land x \\notin B) \\land (x \\in A \\land x \\notin C)$.",
+    "That says $x \\in A - B$ and $x \\in A - C$, so $x \\in (A - B) \\cap (A - C)$.",
+    "Every step was an equivalence, so $A - (B \\cup C) = (A - B) \\cap (A - C)$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 8 exercises, #13 (p. 171)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Section 8.3 (proving A = B), the definitions of union, intersection and difference (Section 1.5) and the logic laws of Section 2.6."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "element chasing",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x ∈ A − (B ∪ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A and not (x ∈ B or x ∈ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A and (x ∉ B and x ∉ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(x ∈ A and x ∉ B) and (x ∈ A and x ∉ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A − B and x ∈ A − C"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ (A − B) ∩ (A − C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "De Morgan without switching 'or' to 'and'",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x ∈ A − (B ∪ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A and not (x ∈ B or x ∈ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A and (x ∉ B or x ∉ C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "SETID_STEP_DIFFERS"
+        ]
+      }
+    },
+    {
+      "name": "straight jump",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "A − (B ∪ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(A − B) ∩ (A − C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "SETID_NO_WORK"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "id": "proofs.counting.ch3-07-ex04c",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.7 #4(c) · 6-letter lists containing T, H, E in a row",
+  "prompt": "Make lists of 6 letters from T, H, E, O, R, Y, with repetition allowed. How many of these lists contain the letters T, H, E consecutively and in that order, as YTHEOO does?",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 3,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "inclusion-exclusion",
+    "multiplication-principle"
+  ],
+  "data": {},
+  "answer": "4*6^3 - 1",
+  "mistakes": [
+    {
+      "answer": "4*6^3",
+      "hint": "The list THETHE contains the pattern in two places, so it is counted twice when you add up the four starting positions."
+    },
+    {
+      "answer": "6^3",
+      "hint": "The block T, H, E doesn't have to start at the beginning: it can start in any of four places."
+    }
+  ],
+  "hints": [
+    "The block THE can start at position 1, 2, 3 or 4. Count the lists for each starting position.",
+    "Can one list contain THE in two different places? If so, it has been counted more than once."
+  ],
+  "solution": [
+    "Let $A_i$ be the set of lists with T, H, E starting at position $i$, for $i = 1, 2, 3, 4$. Each $|A_i| = 6^3 = 216$, since the other three positions are free.",
+    "Two blocks starting one or two places apart would force T to equal H or E, which is impossible. So the only overlap is $A_1 \\cap A_4$, which contains just THETHE.",
+    "By inclusion-exclusion there are $4 \\cdot 216 - 1 = 863$ lists."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.7 exercises, #4c (p. 95)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses the inclusion-exclusion principle (Section 3.7)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "863"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "6^3"
+          },
+          {
+            "kind": "expr",
+            "content": "4*216"
+          }
+        ],
+        "answer": "4*6^3 - 1"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "4*6^3"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

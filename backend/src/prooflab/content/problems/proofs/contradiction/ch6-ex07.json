@@ -1,0 +1,111 @@
+{
+  "id": "proofs.contradiction.ch6-ex07",
+  "course": "proofs",
+  "topic": "contradiction",
+  "kind": "impossibility_proof",
+  "title": "Ex 6.7 · a² − 4b − 3 is never 0",
+  "prompt": "Use proof by contradiction. Let $a$ and $b$ be integers. Prove that $a^2 - 4b - 3 \\neq 0$. If it were 0, it would be divisible by 4. Show instead that $a^2 - 4b - 3$ never leaves remainder 0 when divided by 4, splitting into cases on the parity of $a$.",
+  "answer_format": "A structured proof: let, case, expr and form steps (notes optional). No final answer box. Use case steps to split into possibilities.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch6",
+    "contradiction"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b"
+    ],
+    "target": "a^2 - 4b - 3",
+    "divisor": 4,
+    "forbidden": 0,
+    "conclusion": "$a^2 - 4b - 3$ always leaves remainder 1 or 2 when divided by 4, but 0 leaves remainder 0. So $a^2 - 4b - 3 = 0$ is impossible, and $a^2 - 4b - 3 \\neq 0$. ∎"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Suppose a² − 4b − 3 = 0. Then it would be a multiple of 4. Show it never is.",
+    "Use two case steps, a = 2k and a = 2k + 1, and write each result as 4·(integer) + r.",
+    "Careful when squaring: (2k + 1)² = 4k² + 4k + 1."
+  ],
+  "solution": [
+    "Suppose for the sake of contradiction that $a^2 - 4b - 3 = 0$, so it is divisible by 4.",
+    "Case $a = 2k$: $a^2 - 4b - 3 = 4k^2 - 4b - 3 = 4(k^2 - b - 1) + 1$, remainder 1.",
+    "Case $a = 2k + 1$: $a^2 - 4b - 3 = 4k^2 + 4k - 4b - 2 = 4(k^2 + k - b - 1) + 2$, remainder 2.",
+    "Neither remainder is 0, a contradiction. So $a^2 - 4b - 3 \\neq 0$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 6 exercises, #7 (p. 144)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses proof by contradiction (Section 6.1), cases on parity, and the division algorithm. The book's solution argues via parity instead; ProofLab checks the remainder mod 4."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "cases on a",
+      "submission": {
+        "steps": [
+          {
+            "kind": "case",
+            "content": "a = 2k"
+          },
+          {
+            "kind": "form",
+            "content": "4(k^2 - b - 1) + 1"
+          },
+          {
+            "kind": "case",
+            "content": "a = 2k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "4k^2 + 4k + 1 - 4b - 3"
+          },
+          {
+            "kind": "form",
+            "content": "4(k^2 + k - b - 1) + 2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "squared 2k + 1 as 4k² + 1",
+      "submission": {
+        "steps": [
+          {
+            "kind": "case",
+            "content": "a = 2k"
+          },
+          {
+            "kind": "form",
+            "content": "4(k^2 - b - 1) + 1"
+          },
+          {
+            "kind": "case",
+            "content": "a = 2k + 1"
+          },
+          {
+            "kind": "form",
+            "content": "4(k^2 - b - 1) + 2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 3,
+        "hint_codes": [
+          "FORM_NOT_EQUAL"
+        ]
+      }
+    }
+  ]
+}

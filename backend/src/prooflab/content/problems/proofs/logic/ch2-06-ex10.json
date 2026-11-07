@@ -1,0 +1,153 @@
+{
+  "id": "proofs.logic.ch2-06-ex10",
+  "course": "proofs",
+  "topic": "logic",
+  "kind": "logical_equivalence",
+  "title": "Ex 2.6 #10 · (P ⇒ Q) ∨ R vs ∼((P ∧ ∼Q) ∧ ∼R)",
+  "prompt": "Are $(P \\Rightarrow Q) \\vee R$ and $\\sim ((P \\wedge \\sim Q) \\wedge \\sim R)$ logically equivalent? Decide, and back up your answer with a truth table, a chain of known equivalences, or a row where the two statements differ.",
+  "answer_format": "equivalent or not equivalent. Steps are optional: truth-table columns, rewrite steps, or a row like P = T, Q = F where the two statements differ.",
+  "difficulty": 3,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch2",
+    "logical-equivalence",
+    "demorgan"
+  ],
+  "data": {
+    "left": "(P ⇒ Q) ∨ R",
+    "right": "~((P ∧ ~Q) ∧ ~R)",
+    "decide": true
+  },
+  "answer": "equivalent",
+  "mistakes": [],
+  "hints": [
+    "Push the outer ∼ of ∼((P ∧ ∼Q) ∧ ∼R) inside with DeMorgan's law.",
+    "∼(P ∧ ∼Q) is the same as P ⇒ Q: an implication fails only when P is true and Q is false."
+  ],
+  "solution": [
+    "By DeMorgan's law, $\\sim ((P \\wedge \\sim Q) \\wedge \\sim R) = \\sim (P \\wedge \\sim Q) \\vee \\sim \\sim R = \\sim (P \\wedge \\sim Q) \\vee R$.",
+    "Again by DeMorgan, $\\sim (P \\wedge \\sim Q) = \\sim P \\vee Q$, which is equivalent to $P \\Rightarrow Q$.",
+    "So the right statement equals $(P \\Rightarrow Q) \\vee R$: they are logically equivalent. (Both columns are T T T F T T T T.)"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 2.6 exercises, #10 (p. 52)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses logical equivalence (Section 2.6)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "equivalent",
+      "submission": {
+        "steps": [],
+        "answer": "equivalent"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "by rewriting",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(P ⇒ Q) ∨ R"
+          },
+          {
+            "kind": "expr",
+            "content": "(~P ∨ Q) ∨ R"
+          },
+          {
+            "kind": "expr",
+            "content": "~(P ∧ ~Q) ∨ R"
+          },
+          {
+            "kind": "expr",
+            "content": "~(P ∧ ~Q) ∨ ~~R"
+          },
+          {
+            "kind": "expr",
+            "content": "~((P ∧ ~Q) ∧ ~R)"
+          }
+        ],
+        "answer": "equivalent"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "by truth table",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "(P ⇒ Q) ∨ R : T T T F T T T T"
+          },
+          {
+            "kind": "column",
+            "content": "~((P ∧ ~Q) ∧ ~R) : T T T F T T T T"
+          }
+        ],
+        "answer": "equivalent"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "said not equivalent",
+      "submission": {
+        "steps": [],
+        "answer": "not equivalent"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "LOGIC_TRY_LAWS"
+        ]
+      }
+    },
+    {
+      "name": "DeMorgan slip, right answer",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(P ⇒ Q) ∨ R"
+          },
+          {
+            "kind": "expr",
+            "content": "(~P ∨ Q) ∨ R"
+          },
+          {
+            "kind": "expr",
+            "content": "~(P ∧ ~Q) ∨ R"
+          },
+          {
+            "kind": "expr",
+            "content": "~(P ∧ ~Q) ∨ ~~R"
+          },
+          {
+            "kind": "expr",
+            "content": "~((P ∧ ~Q) ∨ ~R)"
+          }
+        ],
+        "answer": "equivalent"
+      },
+      "expect": {
+        "status": "partial",
+        "first_error": 4,
+        "hint_codes": [
+          "LOGIC_STEP_NOT_EQUIVALENT",
+          "AND_OR_SWAPPED",
+          "STEP_ERRORS"
+        ]
+      }
+    }
+  ]
+}

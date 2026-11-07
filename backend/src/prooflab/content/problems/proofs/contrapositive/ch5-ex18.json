@@ -1,0 +1,92 @@
+{
+  "id": "proofs.contrapositive.ch5-ex18",
+  "course": "proofs",
+  "topic": "contrapositive",
+  "kind": "divisibility_proof",
+  "title": "Ex 5.18 · (a + b)³ ≡ a³ + b³ (mod 3)",
+  "prompt": "Let $a, b$ be integers. Prove that $(a + b)^3 \\equiv a^3 + b^3 \\pmod 3$, that is, $3 \\mid \\big((a+b)^3 - (a^3 + b^3)\\big)$.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch5",
+    "congruence"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b"
+    ],
+    "target": "(a + b)^3 - (a^3 + b^3)",
+    "goal": {
+      "divisor": 3
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "By the definition of congruence, you need 3 to divide the difference.",
+    "Expand (a + b)³; after subtracting a³ + b³, both remaining terms have a factor of 3."
+  ],
+  "solution": [
+    "$(a+b)^3 - (a^3 + b^3) = 3a^2b + 3ab^2 = 3(a^2b + ab^2)$.",
+    "$a^2b + ab^2$ is an integer, so $3$ divides the difference and $(a+b)^3 \\equiv a^3 + b^3 \\pmod 3$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 5 exercises, #18 (p. 136)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 5.1 (congruence)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "expand",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "a^3 + 3a^2 b + 3a b^2 + b^3 - a^3 - b^3"
+          },
+          {
+            "kind": "expr",
+            "content": "3a^2 b + 3a b^2"
+          },
+          {
+            "kind": "witness",
+            "content": "a^2 b + a b^2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "witness has an extra term",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "3a^2 b + 3a b^2"
+          },
+          {
+            "kind": "witness",
+            "content": "a^2 b + a b^2 + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "WITNESS_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

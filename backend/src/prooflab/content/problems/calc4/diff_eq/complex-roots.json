@@ -1,0 +1,85 @@
+{
+  "id": "calc4.diff_eq.complex-roots",
+  "course": "calc4",
+  "topic": "diff_eq",
+  "kind": "ode_solution",
+  "title": "Complex roots",
+  "prompt": "Find the general solution of $y'' + 2y' + 5y = 0$.",
+  "answer_format": "y = ... in terms of x. Use C (or C1, C2) for arbitrary constants.",
+  "difficulty": 2,
+  "tags": [
+    "second order",
+    "complex roots"
+  ],
+  "data": {
+    "ode": "y'' + 2y' + 5y = 0"
+  },
+  "answer": "y = e^(-x)(C1 cos(2x) + C2 sin(2x))",
+  "mistakes": [],
+  "hints": [
+    "Use the quadratic formula on r² + 2r + 5 = 0.",
+    "Roots α ± βi give e^(αx)(C₁ cos βx + C₂ sin βx)."
+  ],
+  "solution": [
+    "$r = \\frac{-2 \\pm \\sqrt{4 - 20}}{2} = -1 \\pm 2i$.",
+    "$y = e^{-x}\\left(C_1\\cos 2x + C_2 \\sin 2x\\right)$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "7.1 Second-Order Linear Equations",
+    "note": "Original problem; see complex roots."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "quadratic formula",
+      "submission": {
+        "steps": [
+          {
+            "kind": "roots",
+            "content": "r = -1 ± 2i"
+          }
+        ],
+        "answer": "y = e^(-x)(A cos(2x) + B sin(2x))"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "sign of the real part",
+      "submission": {
+        "steps": [],
+        "answer": "y = e^x (C1 cos(2x) + C2 sin(2x))"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "ROOT_SIGNS"
+        ]
+      }
+    },
+    {
+      "name": "wrong imaginary part",
+      "submission": {
+        "steps": [
+          {
+            "kind": "roots",
+            "content": "r = -1 ± 4i"
+          }
+        ],
+        "answer": "y = e^(-x)(C1 cos(4x) + C2 sin(4x))"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "CHARACTERISTIC_ROOTS",
+          "NOT_A_SOLUTION"
+        ]
+      }
+    }
+  ]
+}

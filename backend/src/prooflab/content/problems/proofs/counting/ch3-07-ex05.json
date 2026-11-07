@@ -1,0 +1,95 @@
+{
+  "id": "proofs.counting.ch3-07-ex05",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.7 #5 · 7-digit binary strings: start with 1, end with 1, or four 1's",
+  "prompt": "How many 7-digit binary strings (strings of seven 0's and 1's) begin with 1, or end with 1, or contain exactly four 1's?",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 3,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "inclusion-exclusion",
+    "binary-strings",
+    "combinations"
+  ],
+  "data": {},
+  "answer": "2^6 + 2^6 + binom(7, 4) - 2^5 - binom(6, 3) - binom(6, 3) + binom(5, 2)",
+  "mistakes": [
+    {
+      "answer": "2^6 + 2^6 + binom(7, 4)",
+      "hint": "These three sets overlap: a string can start with 1, end with 1 and have four 1's. Adding their sizes counts some strings two or three times."
+    },
+    {
+      "answer": "2^6 + 2^6 + binom(7, 4) - 2^5 - binom(6, 3) - binom(6, 3)",
+      "hint": "Subtracting all the pairwise overlaps removes the strings that lie in all three sets once too often. Add the triple overlap back."
+    }
+  ],
+  "hints": [
+    "Let A be the strings that begin with 1, B the strings that end with 1, and C the strings with exactly four 1's. You want |A ∪ B ∪ C|.",
+    "Use the inclusion-exclusion formula for three sets. For example, a string in A ∩ C has first digit 1 and exactly three 1's among its other six digits."
+  ],
+  "solution": [
+    "With $A$, $B$, $C$ as in the hint: $|A| = |B| = 2^6 = 64$ and $|C| = \\binom{7}{4} = 35$.",
+    "Pairwise overlaps: $|A \\cap B| = 2^5 = 32$ and $|A \\cap C| = |B \\cap C| = \\binom{6}{3} = 20$. Triple overlap: both ends are 1 and two of the middle five digits are 1, so $|A \\cap B \\cap C| = \\binom{5}{2} = 10$.",
+    "So $|A \\cup B \\cup C| = 64 + 64 + 35 - 32 - 20 - 20 + 10 = 101$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.7 exercises, #5 (p. 95)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses the inclusion-exclusion principle for three sets (Section 3.7)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "101"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "64 + 64 + 35"
+          },
+          {
+            "kind": "expr",
+            "content": "32 + 20 + 20"
+          },
+          {
+            "kind": "expr",
+            "content": "binom(5, 2)"
+          }
+        ],
+        "answer": "2^6 + 2^6 + binom(7, 4) - 2^5 - binom(6, 3) - binom(6, 3) + binom(5, 2)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "2^6 + 2^6 + binom(7, 4)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

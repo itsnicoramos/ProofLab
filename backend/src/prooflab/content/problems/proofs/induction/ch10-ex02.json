@@ -1,0 +1,107 @@
+{
+  "id": "proofs.induction.ch10-ex02",
+  "course": "proofs",
+  "topic": "induction",
+  "kind": "induction",
+  "title": "Ex 10.2 · Sum of the first n squares",
+  "prompt": "Prove by induction that $1^2 + 2^2 + 3^2 + \\cdots + n^2 = \\dfrac{n(n + 1)(2n + 1)}{6}$ for every positive integer $n$. Check $n = 1$, assume the formula for $n = k$, and deduce it for $n = k + 1$.",
+  "answer_format": "A structured proof: a base step (the case n = 1 with numbers only), an assume step (the formula for n = k), then expr steps for the n = k + 1 case, starting from the hypothesis plus the next term. Notes optional. No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch10",
+    "induction",
+    "sum-formula"
+  ],
+  "data": {
+    "base": 1,
+    "sum": {
+      "index": "i",
+      "term": "i^2",
+      "start": 1,
+      "rhs": "n(n + 1)(2n + 1)/6"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Base case: for n = 1 both sides are 1, since 1·2·3/6 = 1.",
+    "The hypothesis is about k, not n: assume 1² + 2² + ⋯ + k² = k(k + 1)(2k + 1)/6. The next term is (k + 1)².",
+    "In k(k + 1)(2k + 1)/6 + (k + 1)², factor out (k + 1)/6 to get (k + 1)(2k² + 7k + 6)/6, then factor the quadratic."
+  ],
+  "solution": [
+    "Base case: for $n = 1$ the left side is $1^2 = 1$ and the right side is $\\frac{1 \\cdot 2 \\cdot 3}{6} = 1$.",
+    "Inductive step: suppose $1^2 + 2^2 + \\cdots + k^2 = \\frac{k(k + 1)(2k + 1)}{6}$ for some $k \\ge 1$. Then the sum up to $(k + 1)^2$ is $\\frac{k(k + 1)(2k + 1)}{6} + (k + 1)^2 = \\frac{(k + 1)\\left(k(2k + 1) + 6(k + 1)\\right)}{6} = \\frac{(k + 1)(2k^2 + 7k + 6)}{6}$.",
+    "Since $2k^2 + 7k + 6 = (k + 2)(2k + 3)$, this is $\\frac{(k + 1)\\left((k + 1) + 1\\right)\\left(2(k + 1) + 1\\right)}{6}$, the formula for $n = k + 1$.",
+    "By induction the formula holds for every positive integer $n$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 10 exercises, #2 (p. 195)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses induction (Section 10.1); the book's ℕ starts at 1, so the base case is n = 1."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "induction proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "1^2 = 1(1 + 1)(2 + 1)/6"
+          },
+          {
+            "kind": "assume",
+            "content": "1^2 + 2^2 + ... + k^2 = k(k + 1)(2k + 1)/6"
+          },
+          {
+            "kind": "expr",
+            "content": "k(k + 1)(2k + 1)/6 + (k + 1)^2"
+          },
+          {
+            "kind": "expr",
+            "content": "(k + 1)(k(2k + 1) + 6(k + 1))/6"
+          },
+          {
+            "kind": "expr",
+            "content": "(k + 1)(2k^2 + 7k + 6)/6"
+          },
+          {
+            "kind": "expr",
+            "content": "(k + 1)(k + 2)(2k + 3)/6"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "hypothesis written with n",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "1^2 = 1(1 + 1)(2 + 1)/6"
+          },
+          {
+            "kind": "assume",
+            "content": "1^2 + 2^2 + ... + n^2 = n(n + 1)(2n + 1)/6"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "IND_ASSUME_USE_K"
+        ]
+      }
+    }
+  ]
+}

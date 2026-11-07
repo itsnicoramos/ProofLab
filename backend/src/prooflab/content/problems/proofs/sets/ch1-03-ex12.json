@@ -1,0 +1,70 @@
+{
+  "id": "proofs.sets.ch1-03-ex12",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.3 #12 · {X : X ⊆ {3, 2, a} and |X| = 1}",
+  "prompt": "Write the set $\\{X : X \\subseteq \\{3, 2, a\\} \\text{ and } |X| = 1\\}$ by listing its elements between braces.",
+  "answer_format": "A set of sets between braces, like {∅, {1}, {1, 2}}. Spaces are optional.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "atoms": [
+      "a"
+    ],
+    "compute": {
+      "var": "X",
+      "in": "P({3, 2, a})",
+      "where": [
+        "|X| = 1"
+      ]
+    }
+  },
+  "answer": "{{2}, {3}, {a}}",
+  "mistakes": [],
+  "hints": [
+    "The elements of this set are themselves sets: subsets of {3, 2, a}.",
+    "Keep only the subsets with exactly 1 element(s)."
+  ],
+  "solution": [
+    "These are the subsets of {3, 2, a} with exactly 1 element(s).",
+    "So the answer is $\\{\\{2\\}, \\{3\\}, \\{a\\}\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.3 exercises, #12 (p. 15)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{{2}, {3}, {a}}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{3, 2, a}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_EXTRA"
+        ]
+      }
+    }
+  ]
+}

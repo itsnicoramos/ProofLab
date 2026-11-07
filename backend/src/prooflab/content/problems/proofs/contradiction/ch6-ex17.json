@@ -1,0 +1,119 @@
+{
+  "id": "proofs.contradiction.ch6-ex17",
+  "course": "proofs",
+  "topic": "contradiction",
+  "kind": "impossibility_proof",
+  "title": "Ex 6.17 · 4 never divides n² + 2",
+  "prompt": "Use proof by contradiction. Prove that for every integer $n$, 4 does not divide $n^2 + 2$. Suppose instead that $4 \\mid (n^2 + 2)$ for some integer $n$. Show that $n^2 + 2$ never leaves remainder 0 when divided by 4, splitting into cases on the parity of $n$.",
+  "answer_format": "A structured proof: let, case, expr and form steps (notes optional). No final answer box. Use case steps to split into possibilities.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch6",
+    "contradiction"
+  ],
+  "data": {
+    "variables": [
+      "n"
+    ],
+    "target": "n^2 + 2",
+    "divisor": 4,
+    "forbidden": 0,
+    "conclusion": "$n^2 + 2$ always leaves remainder 2 or 3 when divided by 4, so $4 \\nmid (n^2 + 2)$, contradicting the assumption. ∎"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Nothing is known about n, so there is no let step here. Use case steps n = 2k and n = 2k + 1 instead.",
+    "In each case write n² + 2 as 4·(integer) + r. For n = 2k the remainder is 2."
+  ],
+  "solution": [
+    "Suppose for the sake of contradiction that $4 \\mid (n^2 + 2)$ for some integer $n$.",
+    "Case $n = 2k$: $n^2 + 2 = 4k^2 + 2$, remainder 2.",
+    "Case $n = 2k + 1$: $n^2 + 2 = 4k^2 + 4k + 3 = 4(k^2 + k) + 3$, remainder 3.",
+    "In neither case does 4 divide $n^2 + 2$, a contradiction. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 6 exercises, #17 (p. 144)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses proof by contradiction (Section 6.1), Definition 4.4 (divides), and cases on parity."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "cases on n",
+      "submission": {
+        "steps": [
+          {
+            "kind": "case",
+            "content": "n = 2k"
+          },
+          {
+            "kind": "form",
+            "content": "4k^2 + 2"
+          },
+          {
+            "kind": "case",
+            "content": "n = 2k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "4k^2 + 4k + 3"
+          },
+          {
+            "kind": "form",
+            "content": "4(k^2 + k) + 3"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "assumed n is even",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 2k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "LET_WITHOUT_HYPOTHESIS"
+        ]
+      }
+    },
+    {
+      "name": "only the odd case",
+      "submission": {
+        "steps": [
+          {
+            "kind": "case",
+            "content": "n = 2k + 1"
+          },
+          {
+            "kind": "form",
+            "content": "4(k^2 + k) + 3"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "CASES_NOT_EXHAUSTIVE"
+        ]
+      }
+    }
+  ]
+}

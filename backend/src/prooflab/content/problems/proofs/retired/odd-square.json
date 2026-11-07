@@ -1,0 +1,163 @@
+{
+  "id": "proofs.parity.odd-square",
+  "course": "proofs",
+  "topic": "parity",
+  "kind": "parity_proof",
+  "title": "The square of an odd integer",
+  "prompt": "Prove: if $n$ is an odd integer, then $n^2$ is odd.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "direct proof",
+    "parity"
+  ],
+  "data": {
+    "variables": [
+      "n"
+    ],
+    "hypotheses": [
+      {
+        "var": "n",
+        "is": "odd"
+      }
+    ],
+    "target": "n^2",
+    "goal": "odd"
+  },
+  "mistakes": [],
+  "hints": [
+    "Start from the definition: an odd integer is 2·(some integer) + 1. Write n that way with a new letter.",
+    "Expand n², then group it as 2·(something) + 1. The 'something' is your witness."
+  ],
+  "solution": [
+    "Since $n$ is odd, $n = 2k + 1$ for some integer $k$.",
+    "Then $n^2 = (2k+1)^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1$.",
+    "$2k^2 + 2k$ is an integer (integers are closed under $+$ and $\\times$), so $n^2$ is odd. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "sundstrom-mr3",
+    "section": "1.2 Constructing Direct Proofs",
+    "note": "Original problem; see the definitions of even and odd integers."
+  },
+  "review": {
+    "status": "retired",
+    "notes": "Invented problem, retired 2026-11-06: MATH 123 proofs now map 1:1 to Book of Proof exercises."
+  },
+  "examples": [
+    {
+      "name": "direct proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 2k + 1"
+          },
+          {
+            "kind": "note",
+            "content": "expand and regroup"
+          },
+          {
+            "kind": "expr",
+            "content": "n^2"
+          },
+          {
+            "kind": "expr",
+            "content": "(2k+1)^2"
+          },
+          {
+            "kind": "expr",
+            "content": "4k^2 + 4k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "2(2k^2 + 2k) + 1"
+          },
+          {
+            "kind": "witness",
+            "content": "m = 2k^2 + 2k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "k + 1 is not the definition of odd",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "(k+1)^2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "ODD_FORM"
+        ]
+      }
+    },
+    {
+      "name": "stops before the witness",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 2k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "(2k+1)^2"
+          },
+          {
+            "kind": "expr",
+            "content": "4k^2 + 4k + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "PROOF_INCOMPLETE"
+        ]
+      }
+    },
+    {
+      "name": "witness off by a factor",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 2k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "4k^2 + 4k + 1"
+          },
+          {
+            "kind": "witness",
+            "content": "k^2 + k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "WITNESS_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

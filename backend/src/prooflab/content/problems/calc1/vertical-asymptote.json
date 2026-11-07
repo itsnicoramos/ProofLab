@@ -1,0 +1,75 @@
+{
+  "id": "calc1.limits.vertical-asymptote",
+  "course": "calc1",
+  "topic": "limits",
+  "kind": "limit",
+  "title": "An infinite one-sided limit",
+  "prompt": "Evaluate $\\displaystyle \\lim_{x \\to 2^{+}} \\frac{1}{x - 2}$.",
+  "answer_format": "A number, oo, -oo, or DNE.",
+  "difficulty": 1,
+  "tags": [
+    "one-sided",
+    "infinite limits"
+  ],
+  "data": {
+    "expression": "1/(x - 2)",
+    "var": "x",
+    "point": "2",
+    "direction": "+"
+  },
+  "answer": "oo",
+  "mistakes": [],
+  "hints": [
+    "Try x = 2.1, 2.01, 2.001. What sign is x − 2?"
+  ],
+  "solution": [
+    "For $x$ slightly bigger than 2, $x - 2$ is a small positive number, so $\\frac{1}{x-2}$ is large and positive.",
+    "The limit is $+\\infty$."
+  ],
+  "reference": {
+    "book": "openstax-calc1",
+    "section": "2.2 The Limit of a Function",
+    "note": "Original problem; see infinite limits."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "infinity",
+      "submission": {
+        "steps": [],
+        "answer": "oo"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "DNE without saying how",
+      "submission": {
+        "steps": [],
+        "answer": "DNE"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "INFINITE_LIMIT"
+        ]
+      }
+    },
+    {
+      "name": "wrong sign",
+      "submission": {
+        "steps": [],
+        "answer": "-oo"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "LIMIT_SIGN"
+        ]
+      }
+    }
+  ]
+}

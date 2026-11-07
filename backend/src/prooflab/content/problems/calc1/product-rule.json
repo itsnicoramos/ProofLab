@@ -1,0 +1,89 @@
+{
+  "id": "calc1.derivatives.product-rule",
+  "course": "calc1",
+  "topic": "derivatives",
+  "kind": "derivative",
+  "title": "Product rule",
+  "prompt": "Find $f'(x)$ for $f(x) = x^2 \\sin x$.",
+  "answer_format": "An expression in x.",
+  "difficulty": 1,
+  "tags": [
+    "product rule",
+    "trig"
+  ],
+  "data": {
+    "function": "x^2 sin(x)",
+    "var": "x"
+  },
+  "answer": "2x sin(x) + x^2 cos(x)",
+  "mistakes": [],
+  "hints": [
+    "f is a product u·v with u = x² and v = sin x.",
+    "(uv)′ = u′v + uv′."
+  ],
+  "solution": [
+    "Let $u = x^2$, $v = \\sin x$, so $u' = 2x$ and $v' = \\cos x$.",
+    "$f'(x) = u'v + uv' = 2x\\sin x + x^2 \\cos x$."
+  ],
+  "reference": {
+    "book": "openstax-calc1",
+    "section": "3.3 Differentiation Rules",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "product rule",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "f'(x) = 2x sin(x) + x^2 cos(x)"
+          }
+        ],
+        "answer": "x(2 sin x + x cos x)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "multiplied the derivatives",
+      "submission": {
+        "steps": [],
+        "answer": "2x cos(x)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "PRODUCT_RULE"
+        ]
+      }
+    },
+    {
+      "name": "wrong step, right answer",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "2x cos(x)"
+          },
+          {
+            "kind": "expr",
+            "content": "2x sin(x) + x^2 cos(x)"
+          }
+        ],
+        "answer": "2x sin(x) + x^2 cos(x)"
+      },
+      "expect": {
+        "status": "partial",
+        "first_error": 0,
+        "hint_codes": [
+          "STEP_ERRORS"
+        ]
+      }
+    }
+  ]
+}

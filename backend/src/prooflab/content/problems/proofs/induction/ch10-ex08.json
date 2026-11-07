@@ -1,0 +1,112 @@
+{
+  "id": "proofs.induction.ch10-ex08",
+  "course": "proofs",
+  "topic": "induction",
+  "kind": "induction",
+  "title": "Ex 10.8 · A sum with factorials",
+  "prompt": "Prove by induction that $\\dfrac{1}{2!} + \\dfrac{2}{3!} + \\dfrac{3}{4!} + \\cdots + \\dfrac{n}{(n + 1)!} = 1 - \\dfrac{1}{(n + 1)!}$ for every $n \\in \\mathbb{N}$. Check $n = 1$, assume the formula for $n = k$, and deduce it for $n = k + 1$. (Type factorials as (k + 1)!.)",
+  "answer_format": "A structured proof: a base step (the case n = 1 with numbers only), an assume step (the formula for n = k), then expr steps for the n = k + 1 case, starting from the hypothesis plus the next term. Notes optional. No final answer box.",
+  "difficulty": 3,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch10",
+    "induction",
+    "sum-formula",
+    "factorial"
+  ],
+  "data": {
+    "base": 1,
+    "sum": {
+      "index": "i",
+      "term": "i/(i + 1)!",
+      "start": 1,
+      "rhs": "1 - 1/(n + 1)!"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Base case: for n = 1 the sum is 1/2!, and 1 − 1/2! is also 1/2.",
+    "The term added at step k + 1 is (k + 1)/(k + 2)!.",
+    "Use (k + 2)! = (k + 2)·(k + 1)! to write 1/(k + 1)! as (k + 2)/(k + 2)!. Then the two fractions combine into a single 1/(k + 2)!."
+  ],
+  "solution": [
+    "Base case: for $n = 1$ the left side is $\\frac{1}{2!} = \\frac{1}{2}$ and the right side is $1 - \\frac{1}{2!} = \\frac{1}{2}$.",
+    "Inductive step: suppose $\\frac{1}{2!} + \\cdots + \\frac{k}{(k + 1)!} = 1 - \\frac{1}{(k + 1)!}$ for some $k \\ge 1$. Adding the next term gives $1 - \\frac{1}{(k + 1)!} + \\frac{k + 1}{(k + 2)!}$.",
+    "Since $(k + 2)! = (k + 2)(k + 1)!$, we have $\\frac{1}{(k + 1)!} = \\frac{k + 2}{(k + 2)!}$, so the sum is $1 - \\frac{k + 2}{(k + 2)!} + \\frac{k + 1}{(k + 2)!} = 1 - \\frac{1}{(k + 2)!}$.",
+    "That is the formula for $n = k + 1$, so by induction it holds for every $n \\in \\mathbb{N}$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 10 exercises, #8 (p. 195)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses induction (Section 10.1); the book's ℕ starts at 1, so the base case is n = 1."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "induction proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "1/2! = 1 - 1/2!"
+          },
+          {
+            "kind": "assume",
+            "content": "1/2! + 2/3! + ... + k/(k + 1)! = 1 - 1/(k + 1)!"
+          },
+          {
+            "kind": "expr",
+            "content": "1 - 1/(k + 1)! + (k + 1)/(k + 2)!"
+          },
+          {
+            "kind": "expr",
+            "content": "1 - (k + 2)/(k + 2)! + (k + 1)/(k + 2)!"
+          },
+          {
+            "kind": "expr",
+            "content": "1 - 1/(k + 2)!"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "wrong common denominator",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "1/2! = 1 - 1/2!"
+          },
+          {
+            "kind": "assume",
+            "content": "1/2! + 2/3! + ... + k/(k + 1)! = 1 - 1/(k + 1)!"
+          },
+          {
+            "kind": "expr",
+            "content": "1 - 1/(k + 1)! + (k + 1)/(k + 2)!"
+          },
+          {
+            "kind": "expr",
+            "content": "1 - (k + 1)/(k + 2)! + (k + 1)/(k + 2)!"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 3,
+        "hint_codes": [
+          "IND_STEP_WRONG"
+        ]
+      }
+    }
+  ]
+}

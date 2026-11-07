@@ -1,0 +1,66 @@
+{
+  "id": "calc4.vector_calc.rotation-field",
+  "course": "calc4",
+  "topic": "vector_calc",
+  "kind": "potential_function",
+  "title": "Is it conservative?",
+  "prompt": "Find a potential function for $\\mathbf F(x,y) = \\langle y - 2x,\\ 3x \\rangle$, or explain that none exists.",
+  "answer_format": "An expression f(x, y), or 'not conservative'.",
+  "difficulty": 1,
+  "tags": [
+    "conservative fields"
+  ],
+  "data": {
+    "field": [
+      "y - 2x",
+      "3x"
+    ]
+  },
+  "answer": "not conservative",
+  "mistakes": [],
+  "hints": [
+    "In 2D, F = ⟨P, Q⟩ can only be conservative if ∂P/∂y = ∂Q/∂x."
+  ],
+  "solution": [
+    "$\\frac{\\partial P}{\\partial y} = 1$ but $\\frac{\\partial Q}{\\partial x} = 3$.",
+    "The cross-partials differ, so $\\mathbf F$ is not conservative and has no potential function."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "6.3 Conservative Vector Fields",
+    "note": "Original problem; see the cross-partial test."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "cross-partials differ",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "xy - x^2"
+          }
+        ],
+        "answer": "not conservative"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "forced a potential anyway",
+      "submission": {
+        "steps": [],
+        "answer": "xy - x^2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "NOT_CONSERVATIVE"
+        ]
+      }
+    }
+  ]
+}

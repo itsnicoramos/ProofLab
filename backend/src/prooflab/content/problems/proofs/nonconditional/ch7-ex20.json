@@ -1,0 +1,84 @@
+{
+  "id": "proofs.nonconditional.ch7-ex20",
+  "course": "proofs",
+  "topic": "nonconditional",
+  "kind": "existence",
+  "title": "Ex 7.20 · Some n has 11 | 2ⁿ − 1",
+  "prompt": "Prove that there is a natural number $n$ with $11 \\mid (2^n - 1)$. This is an existence statement, so one example proves it. In this book $\\mathbb{N} = \\{1, 2, 3, \\dots\\}$, so $n$ must be positive.",
+  "answer_format": "A value like n = 5. Steps are optional notes.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch7",
+    "existence"
+  ],
+  "data": {
+    "variables": {
+      "n": "positive"
+    },
+    "statement": {
+      "op": "divides",
+      "args": [
+        11,
+        "2^n - 1"
+      ]
+    }
+  },
+  "answer": "n = 10",
+  "mistakes": [],
+  "hints": [
+    "Compute 2ⁿ − 1 for n = 1, 2, 3, … and check which is a multiple of 11.",
+    "Working mod 11: 2⁵ = 32 ≡ −1, so 2¹⁰ ≡ 1."
+  ],
+  "solution": [
+    "Take $n = 10$: $2^{10} - 1 = 1023 = 11 \\cdot 93$, so $11 \\mid (2^{10} - 1)$.",
+    "So such an $n$ exists. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 7 exercises, #20 (p. 155)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses existence proof (Section 7.3) and Definition 4.4 (divides)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "n = 10",
+      "submission": {
+        "steps": [],
+        "answer": "n = 10"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "n = 5",
+      "submission": {
+        "steps": [],
+        "answer": "n = 5"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "EXISTS_FAILS"
+        ]
+      }
+    },
+    {
+      "name": "0 isn't a natural number here",
+      "submission": {
+        "steps": [],
+        "answer": "n = 0"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "COUNTEREXAMPLE_DOMAIN"
+        ]
+      }
+    }
+  ]
+}

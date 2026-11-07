@@ -1,0 +1,96 @@
+{
+  "id": "calc2.series.geometric-alternating",
+  "course": "calc2",
+  "topic": "series",
+  "kind": "series_convergence",
+  "title": "A geometric series",
+  "prompt": "Does $\\displaystyle \\sum_{n=0}^{\\infty} 5\\left(-\\frac{2}{3}\\right)^{n}$ converge or diverge? If it converges, say whether absolutely or conditionally.",
+  "answer_format": "'converges' or 'diverges' (add 'absolutely' or 'conditionally' when the terms change sign).",
+  "difficulty": 1,
+  "tags": [
+    "geometric series"
+  ],
+  "data": {
+    "term": "5 (-2/3)^n",
+    "start": 0
+  },
+  "answer": "converges absolutely",
+  "mistakes": [],
+  "hints": [
+    "What is the ratio between consecutive terms?"
+  ],
+  "solution": [
+    "This is geometric with $r = -\\tfrac23$. Since $|r| < 1$, it converges.",
+    "$\\sum |a_n| = \\sum 5\\left(\\tfrac23\\right)^n$ also converges, so the convergence is absolute."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "5.2 Infinite Series",
+    "note": "Original problem; see geometric series."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "geometric",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "geometric"
+          },
+          {
+            "kind": "limit",
+            "content": "r = -2/3"
+          }
+        ],
+        "answer": "converges absolutely"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "dropped the sign of r",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "geometric"
+          },
+          {
+            "kind": "limit",
+            "content": "r = 2/3"
+          }
+        ],
+        "answer": "converges absolutely"
+      },
+      "expect": {
+        "status": "partial",
+        "first_error": 1,
+        "hint_codes": [
+          "WRONG_TEST_LIMIT"
+        ]
+      }
+    },
+    {
+      "name": "didn't say how",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "geometric"
+          }
+        ],
+        "answer": "converges"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "SERIES_SPECIFY_TYPE"
+        ]
+      }
+    }
+  ]
+}

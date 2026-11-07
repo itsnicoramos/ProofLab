@@ -1,0 +1,102 @@
+{
+  "id": "proofs.logic.ch2-06-ex01",
+  "course": "proofs",
+  "topic": "logic",
+  "kind": "logical_equivalence",
+  "title": "Ex 2.6 #1 · P ∧ (Q ∨ R) = (P ∧ Q) ∨ (P ∧ R)",
+  "prompt": "Use a truth table to show that $P \\wedge (Q \\vee R)$ and $(P \\wedge Q) \\vee (P \\wedge R)$ are logically equivalent: they have the same truth value in every row.",
+  "answer_format": "No final answer box. Give the truth-table column of each statement as a column step (statement : T F T T, rows (P, Q, R) in the order TTT, TTF, TFT, TFF, FTT, FTF, FFT, FFF), or rewrite one statement into the other with expr steps, each equivalent to the one before.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch2",
+    "logical-equivalence",
+    "distributive"
+  ],
+  "data": {
+    "left": "P ∧ (Q ∨ R)",
+    "right": "(P ∧ Q) ∨ (P ∧ R)"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "With three letters the table has eight rows. Helper columns for Q ∨ R, P ∧ Q and P ∧ R help.",
+    "Both statements are false whenever P is false. So only the top four rows need any thought."
+  ],
+  "solution": [
+    "$Q \\vee R$ is T T T F T T T F, so $P \\wedge (Q \\vee R)$ is T T T F F F F F.",
+    "$P \\wedge Q$ is T T F F F F F F and $P \\wedge R$ is T F T F F F F F, so $(P \\wedge Q) \\vee (P \\wedge R)$ is T T T F F F F F.",
+    "The two columns agree in every row, so the statements are logically equivalent. This is a distributive law."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 2.6 exercises, #1 (p. 52)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses logical equivalence (Section 2.6)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "truth table",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "P ∧ (Q ∨ R) : T T T F F F F F"
+          },
+          {
+            "kind": "column",
+            "content": "(P ∧ Q) ∨ (P ∧ R) : T T T F F F F F"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "only one column",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "P ∧ (Q ∨ R) : T T T F F F F F"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "LOGIC_INCOMPLETE"
+        ]
+      }
+    },
+    {
+      "name": "wrong column",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "P ∧ (Q ∨ R) : T T T F F F F F"
+          },
+          {
+            "kind": "column",
+            "content": "(P ∧ Q) ∨ (P ∧ R) : T T T T F F F F"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "TT_COLUMN_WRONG"
+        ]
+      }
+    }
+  ]
+}

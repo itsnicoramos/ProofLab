@@ -1,0 +1,105 @@
+{
+  "id": "calc4.vector_calc.potential-3d",
+  "course": "calc4",
+  "topic": "vector_calc",
+  "kind": "potential_function",
+  "title": "Find a potential function",
+  "prompt": "Show that $\\mathbf F = \\langle 2xy + z^2,\\ x^2 + 2yz,\\ y^2 + 2xz \\rangle$ is conservative by finding $f$ with $\\nabla f = \\mathbf F$.",
+  "answer_format": "An expression f(x, y, z) (adding + C is fine), or 'not conservative'.",
+  "difficulty": 2,
+  "tags": [
+    "conservative fields",
+    "potential function"
+  ],
+  "data": {
+    "field": [
+      "2xy + z^2",
+      "x^2 + 2yz",
+      "y^2 + 2xz"
+    ]
+  },
+  "answer": "x^2 y + x z^2 + y^2 z",
+  "mistakes": [
+    {
+      "answer": "x^2 y + x z^2",
+      "hint": "That works for ∂f/∂x. Now differentiate it with respect to y and z and add the terms Q and R still need."
+    }
+  ],
+  "hints": [
+    "Integrate P = 2xy + z² with respect to x. The 'constant' of integration can depend on y and z.",
+    "Differentiate your f with respect to y and compare with Q to find the missing terms."
+  ],
+  "solution": [
+    "$f = \\int (2xy + z^2)\\,dx = x^2y + xz^2 + g(y, z)$.",
+    "$f_y = x^2 + g_y = x^2 + 2yz$, so $g = y^2 z + h(z)$.",
+    "$f_z = 2xz + y^2 + h'(z) = y^2 + 2xz$, so $h$ is constant: $f = x^2y + xz^2 + y^2z + C$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "6.3 Conservative Vector Fields",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "integrate then adjust",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x^2 y + x z^2"
+          },
+          {
+            "kind": "expr",
+            "content": "x^2 y + x z^2 + y^2 z"
+          }
+        ],
+        "answer": "x^2 y + x z^2 + y^2 z + C"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "stopped after integrating P",
+      "submission": {
+        "steps": [],
+        "answer": "x^2 y + x z^2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    },
+    {
+      "name": "integrated every component and added",
+      "submission": {
+        "steps": [],
+        "answer": "x^2 y + x z^2 + x^2 y + y^2 z + y^2 z + x z^2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "POTENTIAL_DOUBLE_COUNT"
+        ]
+      }
+    },
+    {
+      "name": "said not conservative",
+      "submission": {
+        "steps": [],
+        "answer": "not conservative"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "FIELD_IS_CONSERVATIVE"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "id": "precalc.functions.cubic-equation-lost-root",
+  "course": "precalc",
+  "topic": "functions",
+  "kind": "equation",
+  "title": "Don't divide by x",
+  "prompt": "Solve $x^3 = 4x$ over the real numbers.",
+  "answer_format": "All real solutions, like x = 2 or x = -3 (or {2, -3}, or 'no solution').",
+  "difficulty": 1,
+  "tags": [
+    "equations",
+    "factoring"
+  ],
+  "data": {
+    "equation": "x^3 = 4x"
+  },
+  "answer": "x = 0 or x = 2 or x = -2",
+  "mistakes": [],
+  "hints": [
+    "Move everything to one side and factor instead of dividing both sides by x."
+  ],
+  "solution": [
+    "$x^3 - 4x = 0 \\Rightarrow x(x^2 - 4) = 0 \\Rightarrow x(x-2)(x+2) = 0$.",
+    "So $x = 0$, $x = 2$ or $x = -2$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "2.5 Quadratic Equations",
+    "note": "Original problem; see solving by factoring."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "factor",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x^3 - 4x = 0"
+          },
+          {
+            "kind": "expr",
+            "content": "x(x - 2)(x + 2) = 0"
+          },
+          {
+            "kind": "expr",
+            "content": "x = 0 or x = 2 or x = -2"
+          }
+        ],
+        "answer": "x = 0, x = 2, x = -2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "divided by x",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x^2 = 4"
+          },
+          {
+            "kind": "expr",
+            "content": "x = 2 or x = -2"
+          }
+        ],
+        "answer": "x = 2 or x = -2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "LOST_SOLUTION",
+          "MISSING_SOLUTIONS"
+        ]
+      }
+    }
+  ]
+}

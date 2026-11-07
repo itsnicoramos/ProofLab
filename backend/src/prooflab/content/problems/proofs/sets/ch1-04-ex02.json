@@ -1,0 +1,61 @@
+{
+  "id": "proofs.sets.ch1-04-ex02",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.4 #2 · 𝒫({1, 2, 3, 4})",
+  "prompt": "Write $\\mathscr{P}(\\{1, 2, 3, 4\\})$ by listing its elements between braces.",
+  "answer_format": "A set of sets between braces, like {∅, {1}, {1, 2}}. Spaces are optional.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": "P({1, 2, 3, 4})"
+  },
+  "answer": "{∅, {1}, {2}, {3}, {4}, {1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4}, {1, 2, 3}, {1, 2, 4}, {1, 3, 4}, {2, 3, 4}, {1, 2, 3, 4}}",
+  "mistakes": [],
+  "hints": [
+    "Sort the subsets by size: 0, 1, 2, 3 and 4 elements.",
+    "The power set is the set of all subsets, including ∅ and the set itself. A set with k elements has 2ᵏ of them: here you need 16."
+  ],
+  "solution": [
+    "List every subset, from ∅ up to the whole set: 16 in all.",
+    "So the answer is $\\{\\emptyset, \\{1\\}, \\{2\\}, \\{3\\}, \\{4\\}, \\{1, 2\\}, \\{1, 3\\}, \\{1, 4\\}, \\{2, 3\\}, \\{2, 4\\}, \\{3, 4\\}, \\{1, 2, 3\\}, \\{1, 2, 4\\}, \\{1, 3, 4\\}, \\{2, 3, 4\\}, \\{1, 2, 3, 4\\}\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.4 exercises, #2 (p. 17)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{∅, {1}, {2}, {3}, {4}, {1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4}, {1, 2, 3}, {1, 2, 4}, {1, 3, 4}, {2, 3, 4}, {1, 2, 3, 4}}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{{1},{2},{3},{4},{1,2},{1,3},{1,4},{2,3},{2,4},{3,4},{1,2,3},{1,2,4},{1,3,4},{2,3,4},{1,2,3,4}}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_EMPTY_MISSING"
+        ]
+      }
+    }
+  ]
+}

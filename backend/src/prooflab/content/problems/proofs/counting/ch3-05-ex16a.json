@@ -1,0 +1,90 @@
+{
+  "id": "proofs.counting.ch3-05-ex16a",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.5 #16 (first question) · 6-element subsets with exactly three evens",
+  "prompt": "Let $A = \\{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\\}$. How many 6-element subsets of $A$ contain exactly three even numbers?",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "combinations",
+    "multiplication-principle"
+  ],
+  "data": {},
+  "answer": "binom(5, 3)*binom(5, 3)",
+  "mistakes": [
+    {
+      "answer": "binom(5, 3)",
+      "hint": "That chooses the three even elements, but the other three elements still have to be chosen."
+    },
+    {
+      "answer": "binom(5, 3) + binom(5, 3)",
+      "hint": "Each choice of even elements goes with each choice of odd elements: multiply, don't add."
+    },
+    {
+      "answer": "binom(10, 6)",
+      "hint": "That counts every 6-element subset, not just the ones with exactly three evens."
+    }
+  ],
+  "hints": [
+    "$A$ has five even elements and five odd elements.",
+    "A 6-element subset with exactly three evens is made of three evens and three odds."
+  ],
+  "solution": [
+    "$A$ has five even elements (0, 2, 4, 6, 8) and five odd elements (1, 3, 5, 7, 9). A 6-element subset with exactly three evens consists of 3 evens and 3 odds.",
+    "Choose the evens in $\\binom{5}{3} = 10$ ways and the odds in $\\binom{5}{3} = 10$ ways.",
+    "So there are $10 \\cdot 10 = 100$ such subsets."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.5 exercises, #16 (p. 89)",
+    "note": "This exact exercise (its first question), restated in ProofLab's words. Uses combinations (Section 3.5) and the multiplication principle."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "100"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "binom(5, 3)"
+          }
+        ],
+        "answer": "binom(5, 3)*binom(5, 3)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "binom(5, 3)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

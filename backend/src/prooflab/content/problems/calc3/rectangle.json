@@ -1,0 +1,103 @@
+{
+  "id": "calc3.multiple_integrals.rectangle",
+  "course": "calc3",
+  "topic": "multiple_integrals",
+  "kind": "iterated_integral",
+  "title": "Iterated integral over a rectangle",
+  "prompt": "Evaluate $\\displaystyle\\int_0^2 \\int_0^1 (x + 2y)\\,dy\\,dx$.",
+  "answer_format": "An exact number.",
+  "difficulty": 1,
+  "tags": [
+    "double integrals",
+    "rectangles"
+  ],
+  "data": {
+    "integrand": "x + 2y",
+    "bounds": [
+      [
+        "y",
+        "0",
+        "1"
+      ],
+      [
+        "x",
+        "0",
+        "2"
+      ]
+    ]
+  },
+  "answer": "4",
+  "mistakes": [],
+  "hints": [
+    "Do the inner integral first, treating x as a constant."
+  ],
+  "solution": [
+    "Inner: $\\int_0^1 (x + 2y)\\,dy = \\left[xy + y^2\\right]_0^1 = x + 1$.",
+    "Outer: $\\int_0^2 (x + 1)\\,dx = \\left[\\tfrac{x^2}{2} + x\\right]_0^2 = 4$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "5.1 Double Integrals over Rectangular Regions",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "inner then outer",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "4"
+          }
+        ],
+        "answer": "4"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "inner integral slip",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x + 2"
+          },
+          {
+            "kind": "expr",
+            "content": "6"
+          }
+        ],
+        "answer": "6"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "ITERATED_STEP_WRONG"
+        ]
+      }
+    },
+    {
+      "name": "left the integral in",
+      "submission": {
+        "steps": [],
+        "answer": "int(x + 1, x, 0, 2)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "ANSWER_HAS_INTEGRAL"
+        ]
+      }
+    }
+  ]
+}

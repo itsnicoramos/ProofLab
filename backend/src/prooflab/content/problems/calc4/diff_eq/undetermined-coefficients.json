@@ -1,0 +1,94 @@
+{
+  "id": "calc4.diff_eq.undetermined-coefficients",
+  "course": "calc4",
+  "topic": "diff_eq",
+  "kind": "ode_solution",
+  "title": "A nonhomogeneous equation",
+  "prompt": "Find the general solution of $y'' - y = 2x$.",
+  "answer_format": "y = ... in terms of x. Use C (or C1, C2) for arbitrary constants.",
+  "difficulty": 2,
+  "tags": [
+    "second order",
+    "nonhomogeneous",
+    "undetermined coefficients"
+  ],
+  "data": {
+    "ode": "y'' - y = 2x"
+  },
+  "answer": "y = C1 e^x + C2 e^(-x) - 2x",
+  "mistakes": [],
+  "hints": [
+    "General solution = y_h (solve with the right side 0) + one particular solution y_p.",
+    "Try y_p = Ax + B and match coefficients."
+  ],
+  "solution": [
+    "$y_h = C_1e^x + C_2e^{-x}$ (roots $r = \\pm1$).",
+    "$y_p = Ax + B$: $y_p'' - y_p = -Ax - B = 2x$, so $A = -2$, $B = 0$.",
+    "$y = C_1e^x + C_2e^{-x} - 2x$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "7.2 Nonhomogeneous Linear Equations",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "y_h + y_p",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "y_h = C1 e^x + C2 e^(-x)"
+          },
+          {
+            "kind": "expr",
+            "content": "y_p = -2x"
+          }
+        ],
+        "answer": "y = C1 e^x + C2 e^(-x) - 2x"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "forgot the particular solution",
+      "submission": {
+        "steps": [],
+        "answer": "y = C1 e^x + C2 e^(-x)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "MISSING_PARTICULAR"
+        ]
+      }
+    },
+    {
+      "name": "particular solution has the wrong sign",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "y_h = C1 e^x + C2 e^(-x)"
+          },
+          {
+            "kind": "expr",
+            "content": "y_p = 2x"
+          }
+        ],
+        "answer": "y = C1 e^x + C2 e^(-x) + 2x"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "NOT_A_SOLUTION"
+        ]
+      }
+    }
+  ]
+}

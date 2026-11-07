@@ -1,0 +1,98 @@
+{
+  "books": [
+    {
+      "id": "sundstrom-mr3",
+      "title": "Mathematical Reasoning: Writing and Proof",
+      "authors": [
+        "Ted Sundstrom"
+      ],
+      "edition": "Version 3",
+      "publisher": "Grand Valley State University (ScholarWorks@GVSU)",
+      "year": 2020,
+      "url": "https://scholarworks.gvsu.edu/books/24/",
+      "license": "CC BY-NC-SA 3.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    },
+    {
+      "id": "hammack-bop3",
+      "title": "Book of Proof",
+      "authors": [
+        "Richard Hammack"
+      ],
+      "edition": "3rd edition (Edition 3.4)",
+      "publisher": "Richard Hammack",
+      "year": 2018,
+      "url": "https://richardhammack.github.io/BookOfProof/",
+      "license": "CC BY-NC-ND 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-nd/4.0/"
+    },
+    {
+      "id": "openstax-precalc2e",
+      "title": "Precalculus 2e",
+      "authors": [
+        "Jay Abramson"
+      ],
+      "edition": "2nd edition",
+      "publisher": "OpenStax",
+      "year": 2021,
+      "url": "https://openstax.org/details/books/precalculus-2e",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    {
+      "id": "openstax-calc1",
+      "title": "Calculus Volume 1",
+      "authors": [
+        "Gilbert Strang",
+        "Edwin \"Jed\" Herman"
+      ],
+      "edition": null,
+      "publisher": "OpenStax",
+      "year": 2016,
+      "url": "https://openstax.org/details/books/calculus-volume-1",
+      "license": "CC BY-NC-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+    },
+    {
+      "id": "openstax-calc2",
+      "title": "Calculus Volume 2",
+      "authors": [
+        "Gilbert Strang",
+        "Edwin \"Jed\" Herman"
+      ],
+      "edition": null,
+      "publisher": "OpenStax",
+      "year": 2016,
+      "url": "https://openstax.org/details/books/calculus-volume-2",
+      "license": "CC BY-NC-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+    },
+    {
+      "id": "openstax-calc3",
+      "title": "Calculus Volume 3",
+      "authors": [
+        "Gilbert Strang",
+        "Edwin \"Jed\" Herman"
+      ],
+      "edition": null,
+      "publisher": "OpenStax",
+      "year": 2016,
+      "url": "https://openstax.org/details/books/calculus-volume-3",
+      "license": "CC BY-NC-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+    },
+    {
+      "id": "trench-de",
+      "title": "Elementary Differential Equations",
+      "authors": [
+        "William F. Trench"
+      ],
+      "edition": null,
+      "publisher": "Trinity University (Digital Commons)",
+      "year": 2013,
+      "url": "https://digitalcommons.trinity.edu/mono/8/",
+      "license": "CC BY-NC-SA 3.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+    }
+  ]
+}

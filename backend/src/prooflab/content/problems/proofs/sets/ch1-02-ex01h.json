@@ -1,0 +1,69 @@
+{
+  "id": "proofs.sets.ch1-02-ex01h",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.2 #1(h) · B³",
+  "prompt": "Let $A = \\{1, 2, 3, 4\\}$ and $B = \\{a, c\\}$. List the elements of $B^3$ between braces.",
+  "answer_format": "A set of tuples between braces, like {(1, a, 0), (2, b, 1)}. Steps are optional.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "sets": {
+      "A": "{1, 2, 3, 4}",
+      "B": "{a, c}"
+    },
+    "compute": "B^3",
+    "atoms": [
+      "a",
+      "c"
+    ]
+  },
+  "answer": "{(a, a, a), (a, a, c), (a, c, a), (a, c, c), (c, a, a), (c, a, c), (c, c, a), (c, c, c)}",
+  "mistakes": [],
+  "hints": [
+    "A product of three sets is a set of ordered triples (x, y, z), with no inner parentheses.",
+    "Each entry is chosen independently, so there are 8 triples."
+  ],
+  "solution": [
+    "Choose each entry of the triple independently from its factor.",
+    "So the answer is $\\{(a, a, a), (a, a, c), (a, c, a), (a, c, c), (c, a, a), (c, a, c), (c, c, a), (c, c, c)\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.2 exercises, #1h (p. 11)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{(a, a, a), (a, a, c), (a, c, a), (a, c, c), (c, a, a), (c, a, c), (c, c, a), (c, c, c)}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{(a,a),(a,c),(c,a),(c,c)}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_TUPLE_LENGTH"
+        ]
+      }
+    }
+  ]
+}

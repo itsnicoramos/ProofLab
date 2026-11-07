@@ -1,0 +1,113 @@
+{
+  "id": "calc1.limits.factor-cancel",
+  "course": "calc1",
+  "topic": "limits",
+  "kind": "limit",
+  "title": "Cancel a common factor",
+  "prompt": "Evaluate $\\displaystyle \\lim_{x \\to 3} \\frac{x^2 - 9}{x - 3}$.",
+  "answer_format": "A number, oo, -oo, or DNE.",
+  "difficulty": 1,
+  "tags": [
+    "0/0",
+    "factoring"
+  ],
+  "data": {
+    "expression": "(x^2 - 9)/(x - 3)",
+    "var": "x",
+    "point": "3"
+  },
+  "answer": "6",
+  "mistakes": [],
+  "hints": [
+    "Plugging in x = 3 gives 0/0. That means 'more work needed', not 'no limit'.",
+    "Factor the numerator as a difference of squares."
+  ],
+  "solution": [
+    "Direct substitution gives $\\frac{0}{0}$, an indeterminate form.",
+    "Factor: $\\frac{(x-3)(x+3)}{x-3} = x + 3$ for $x \\ne 3$.",
+    "The limit only depends on values near 3, so it is $3 + 3 = 6$."
+  ],
+  "reference": {
+    "book": "openstax-calc1",
+    "section": "2.3 The Limit Laws",
+    "note": "Original problem; see the examples on simplifying before evaluating."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "factor and cancel",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(x-3)(x+3)/(x-3)"
+          },
+          {
+            "kind": "expr",
+            "content": "x + 3"
+          },
+          {
+            "kind": "expr",
+            "content": "6"
+          }
+        ],
+        "answer": "6"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "says DNE because of 0/0",
+      "submission": {
+        "steps": [],
+        "answer": "DNE"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "INDETERMINATE_IS_NOT_DNE"
+        ]
+      }
+    },
+    {
+      "name": "answers 0/0",
+      "submission": {
+        "steps": [],
+        "answer": "0/0"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "INDETERMINATE_FORM"
+        ]
+      }
+    },
+    {
+      "name": "factoring slip",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(x-3)(x-3)/(x-3)"
+          },
+          {
+            "kind": "expr",
+            "content": "x - 3"
+          },
+          {
+            "kind": "expr",
+            "content": "0"
+          }
+        ],
+        "answer": "0"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0
+      }
+    }
+  ]
+}

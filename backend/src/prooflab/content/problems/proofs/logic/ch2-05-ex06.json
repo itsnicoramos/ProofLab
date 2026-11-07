@@ -1,0 +1,82 @@
+{
+  "id": "proofs.logic.ch2-05-ex06",
+  "course": "proofs",
+  "topic": "logic",
+  "kind": "truth_table",
+  "title": "Ex 2.5 #6 · Truth table for (P ∧ ∼P) ∧ Q",
+  "prompt": "Build a truth table for $(P \\wedge \\sim P) \\wedge Q$ and enter the truth value of the whole statement in each row.",
+  "answer_format": "Four T/F values, one per row, top to bottom, like T F T T. Rows (P, Q) go TT, TF, FT, FF, as in the book. Helper columns are optional steps, like ~P : F F T T.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch2",
+    "truth-table"
+  ],
+  "data": {
+    "formula": "(P ∧ ~P) ∧ Q"
+  },
+  "answer": "F F F F",
+  "mistakes": [],
+  "hints": [
+    "Look at P ∧ ∼P first. Can P and ∼P ever both be true?",
+    "An ∧ statement needs both parts true."
+  ],
+  "solution": [
+    "$P \\wedge \\sim P$ is false in every row.",
+    "An ∧ with a false part is false, so $(P \\wedge \\sim P) \\wedge Q$ is F F F F: it is never true."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 2.5 exercises, #6 (p. 50)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses the truth tables for ∧, ∨, ∼, ⇒ and ⇔ (Sections 2.2–2.5)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct column",
+      "submission": {
+        "steps": [],
+        "answer": "F F F F"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "with helper columns",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "~P : F F T T"
+          },
+          {
+            "kind": "column",
+            "content": "P ∧ ~P : F F F F"
+          }
+        ],
+        "answer": "F F F F"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "P ∧ ∼P read as P",
+      "submission": {
+        "steps": [],
+        "answer": "T F F F"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "TT_ROWS_WRONG",
+          "NEGATION_DROPPED"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "id": "proofs.set-proofs.ch8-ex08",
+  "course": "proofs",
+  "topic": "set-proofs",
+  "kind": "set_identity",
+  "title": "Ex 8.8 · Union distributes over intersection",
+  "prompt": "Let $A$, $B$ and $C$ be any sets. Prove the distributive law $A \\cup (B \\cap C) = (A \\cup B) \\cap (A \\cup C)$. Work one line at a time: unpack what it means for an element $x$ to be in the left side, rearrange that statement with a logic law, and repack it as membership in the right side.",
+  "answer_format": "A chain of lines, each a set (like A ∪ (B ∩ C)) or a statement about an element x (like x ∈ A or x ∈ B). Each line must have exactly the same elements as the line before; start from the left side and end at the right side.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch8",
+    "set-identity",
+    "distributive-law"
+  ],
+  "data": {
+    "sets": [
+      "A",
+      "B",
+      "C"
+    ],
+    "left": "A ∪ (B ∩ C)",
+    "right": "(A ∪ B) ∩ (A ∪ C)",
+    "point": [
+      "x"
+    ]
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Begin with x ∈ A ∪ (B ∩ C). By the definitions of ∪ and ∩ this says: x ∈ A, or (x ∈ B and x ∈ C).",
+    "Distribute the 'or' over the 'and': P ∨ (Q ∧ R) is the same as (P ∨ Q) ∧ (P ∨ R).",
+    "Now (x ∈ A or x ∈ B) is x ∈ A ∪ B, and (x ∈ A or x ∈ C) is x ∈ A ∪ C. Both hold, so x is in their intersection."
+  ],
+  "solution": [
+    "Let $x$ be any element. By the definitions of union and intersection, $x \\in A \\cup (B \\cap C)$ means $x \\in A \\lor (x \\in B \\land x \\in C)$.",
+    "By the distributive law $P \\lor (Q \\land R) = (P \\lor Q) \\land (P \\lor R)$, this is the same as $(x \\in A \\lor x \\in B) \\land (x \\in A \\lor x \\in C)$.",
+    "That says $x \\in A \\cup B$ and $x \\in A \\cup C$, which means $x \\in (A \\cup B) \\cap (A \\cup C)$.",
+    "Each step was an equivalence, so the two sets have exactly the same elements: $A \\cup (B \\cap C) = (A \\cup B) \\cap (A \\cup C)$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 8 exercises, #8 (p. 171)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Section 8.3 (proving A = B), the definitions of union, intersection and difference (Section 1.5) and the logic laws of Section 2.6."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "element chasing",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x ∈ A ∪ (B ∩ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A or (x ∈ B and x ∈ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(x ∈ A or x ∈ B) and (x ∈ A or x ∈ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A ∪ B and x ∈ A ∪ C"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ (A ∪ B) ∩ (A ∪ C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "distributes onto B only",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x ∈ A ∪ (B ∩ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A or (x ∈ B and x ∈ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(x ∈ A or x ∈ B) and x ∈ C"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "SETID_STEP_DIFFERS"
+        ]
+      }
+    },
+    {
+      "name": "straight jump",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "A ∪ (B ∩ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(A ∪ B) ∩ (A ∪ C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "SETID_NO_WORK"
+        ]
+      }
+    }
+  ]
+}

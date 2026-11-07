@@ -1,0 +1,83 @@
+{
+  "id": "proofs.logic.ch2-05-ex08",
+  "course": "proofs",
+  "topic": "logic",
+  "kind": "truth_table",
+  "title": "Ex 2.5 #8 · Truth table for P ∨ (Q ∧ ∼R)",
+  "prompt": "Build a truth table for $P \\vee (Q \\wedge \\sim R)$ and enter the truth value of the whole statement in each row.",
+  "answer_format": "Eight T/F values, one per row, top to bottom, like T T F T T F T T. Rows (P, Q, R) go TTT, TTF, TFT, TFF, FTT, FTF, FFT, FFF, as in the book. Helper columns are optional steps, like ~P : F F F F T T T T.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch2",
+    "truth-table"
+  ],
+  "data": {
+    "formula": "P ∨ (Q ∧ ~R)"
+  },
+  "answer": "T T T T F T F F",
+  "mistakes": [],
+  "hints": [
+    "Make helper columns for ∼R and then Q ∧ ∼R. Q ∧ ∼R is true only when Q is true and R is false.",
+    "Every row where P is true gets T. In the other rows, copy the column of Q ∧ ∼R."
+  ],
+  "solution": [
+    "$\\sim R$ is F T F T F T F T, and $Q \\wedge \\sim R$ is F T F F F T F F.",
+    "The top four rows have $P$ true, so they are T. The bottom four copy $Q \\wedge \\sim R$: F T F F.",
+    "So the column is T T T T F T F F."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 2.5 exercises, #8 (p. 50)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses the truth tables for ∧, ∨, ∼, ⇒ and ⇔ (Sections 2.2–2.5)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct column",
+      "submission": {
+        "steps": [],
+        "answer": "T T T T F T F F"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "with helper columns",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "~R : F T F T F T F T"
+          },
+          {
+            "kind": "column",
+            "content": "Q ∧ ~R : F T F F F T F F"
+          }
+        ],
+        "answer": "T T T T F T F F"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "∼R read as R",
+      "submission": {
+        "steps": [],
+        "answer": "T T T T T F F F"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "TT_ROWS_WRONG",
+          "NEGATION_DROPPED"
+        ]
+      }
+    }
+  ]
+}

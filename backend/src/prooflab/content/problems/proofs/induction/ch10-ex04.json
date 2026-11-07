@@ -1,0 +1,106 @@
+{
+  "id": "proofs.induction.ch10-ex04",
+  "course": "proofs",
+  "topic": "induction",
+  "kind": "induction",
+  "title": "Ex 10.4 · Sum of the products i(i + 1)",
+  "prompt": "Prove by induction that $1 \\cdot 2 + 2 \\cdot 3 + 3 \\cdot 4 + \\cdots + n(n + 1) = \\dfrac{n(n + 1)(n + 2)}{3}$ for every $n \\in \\mathbb{N}$. Check $n = 1$, assume the formula for $n = k$, and deduce it for $n = k + 1$.",
+  "answer_format": "A structured proof: a base step (the case n = 1 with numbers only), an assume step (the formula for n = k), then expr steps for the n = k + 1 case, starting from the hypothesis plus the next term. Notes optional. No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch10",
+    "induction",
+    "sum-formula"
+  ],
+  "data": {
+    "base": 1,
+    "sum": {
+      "index": "i",
+      "term": "i(i + 1)",
+      "start": 1,
+      "rhs": "n(n + 1)(n + 2)/3"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Base case: for n = 1 the sum is 1·2 = 2, and 1·2·3/3 = 2.",
+    "The term added at step k + 1 is (k + 1)(k + 2), not k(k + 1).",
+    "In k(k + 1)(k + 2)/3 + (k + 1)(k + 2), both pieces share the factor (k + 1)(k + 2)."
+  ],
+  "solution": [
+    "Base case: for $n = 1$ the left side is $1 \\cdot 2 = 2$ and the right side is $\\frac{1 \\cdot 2 \\cdot 3}{3} = 2$.",
+    "Inductive step: suppose $1 \\cdot 2 + 2 \\cdot 3 + \\cdots + k(k + 1) = \\frac{k(k + 1)(k + 2)}{3}$ for some $k \\ge 1$. Adding the next term $(k + 1)(k + 2)$ gives $\\frac{k(k + 1)(k + 2)}{3} + (k + 1)(k + 2) = \\frac{(k + 1)(k + 2)(k + 3)}{3}$.",
+    "That is $\\frac{(k + 1)\\left((k + 1) + 1\\right)\\left((k + 1) + 2\\right)}{3}$, the formula for $n = k + 1$. By induction it holds for every $n \\in \\mathbb{N}$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 10 exercises, #4 (p. 195)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses induction (Section 10.1); the book's ℕ starts at 1, so the base case is n = 1."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "induction proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "1*2 = 1*2*3/3"
+          },
+          {
+            "kind": "assume",
+            "content": "1*2 + 2*3 + ... + k(k + 1) = k(k + 1)(k + 2)/3"
+          },
+          {
+            "kind": "expr",
+            "content": "k(k + 1)(k + 2)/3 + (k + 1)(k + 2)"
+          },
+          {
+            "kind": "expr",
+            "content": "(k + 1)(k + 2)(k/3 + 1)"
+          },
+          {
+            "kind": "expr",
+            "content": "(k + 1)(k + 2)(k + 3)/3"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "adds the k-th term again",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "1*2 = 1*2*3/3"
+          },
+          {
+            "kind": "assume",
+            "content": "1*2 + 2*3 + ... + k(k + 1) = k(k + 1)(k + 2)/3"
+          },
+          {
+            "kind": "expr",
+            "content": "k(k + 1)(k + 2)/3 + k(k + 1)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "IND_STEP_WRONG"
+        ]
+      }
+    }
+  ]
+}

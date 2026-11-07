@@ -1,0 +1,82 @@
+{
+  "id": "precalc.exp_log.condense-log",
+  "course": "precalc",
+  "topic": "exp_log",
+  "kind": "log_rewrite",
+  "title": "Condense to a single logarithm",
+  "prompt": "Write $3\\ln x - 2\\ln y + \\ln z$ as a single logarithm. Assume $x, y, z > 0$.",
+  "answer_format": "A single logarithm, like ln(...).",
+  "difficulty": 1,
+  "tags": [
+    "logarithm properties"
+  ],
+  "data": {
+    "expression": "3 ln(x) - 2 ln(y) + ln(z)",
+    "form": "condensed"
+  },
+  "answer": "ln(x^3 z/y^2)",
+  "mistakes": [
+    {
+      "answer": "ln(x^3 y^2 z)",
+      "hint": "Subtracting logs divides their arguments: ln A − ln B = ln(A/B)."
+    }
+  ],
+  "hints": [
+    "Use the power rule to move the coefficients inside first."
+  ],
+  "solution": [
+    "$3\\ln x - 2\\ln y + \\ln z = \\ln x^3 - \\ln y^2 + \\ln z$.",
+    "$= \\ln\\frac{x^3 z}{y^2}$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "6.5 Logarithmic Properties",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "power then product/quotient",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "ln(x^3) - ln(y^2) + ln(z)"
+          }
+        ],
+        "answer": "ln(x^3 z / y^2)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "multiplied instead of divided",
+      "submission": {
+        "steps": [],
+        "answer": "ln(x^3 y^2 z)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    },
+    {
+      "name": "not a single log",
+      "submission": {
+        "steps": [],
+        "answer": "ln(x^3) - ln(y^2) + ln(z)"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "LOG_NOT_CONDENSED"
+        ]
+      }
+    }
+  ]
+}

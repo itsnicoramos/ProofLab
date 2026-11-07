@@ -1,0 +1,61 @@
+{
+  "id": "calc1.limits.abs-over-x",
+  "course": "calc1",
+  "topic": "limits",
+  "kind": "limit",
+  "title": "One side or both?",
+  "prompt": "Evaluate $\\displaystyle \\lim_{x \\to 0} \\frac{|x|}{x}$.",
+  "answer_format": "A number, oo, -oo, or DNE.",
+  "difficulty": 1,
+  "tags": [
+    "one-sided",
+    "absolute value"
+  ],
+  "data": {
+    "expression": "|x|/x",
+    "var": "x",
+    "point": "0"
+  },
+  "answer": "DNE",
+  "mistakes": [],
+  "hints": [
+    "What is |x|/x when x > 0? When x < 0?"
+  ],
+  "solution": [
+    "For $x > 0$, $\\frac{|x|}{x} = 1$; for $x < 0$, $\\frac{|x|}{x} = -1$.",
+    "The one-sided limits are $1$ and $-1$. They differ, so the limit does not exist."
+  ],
+  "reference": {
+    "book": "openstax-calc1",
+    "section": "2.2 The Limit of a Function",
+    "note": "Original problem; see one-sided limits."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "DNE",
+      "submission": {
+        "steps": [],
+        "answer": "does not exist"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "right-hand limit only",
+      "submission": {
+        "steps": [],
+        "answer": "1"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "ONE_SIDED_ONLY"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "id": "proofs.sets.ch1-04-ex11",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.4 #11 · {X ⊆ 𝒫({1, 2, 3}) : |X| ≤ 1}",
+  "prompt": "Write $\\{X \\subseteq \\mathscr{P}(\\{1, 2, 3\\}) : |X| \\le 1\\}$ by listing its elements between braces.",
+  "answer_format": "A set of sets between braces, like {∅, {1}, {1, 2}}. Spaces are optional.",
+  "difficulty": 3,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": {
+      "var": "X",
+      "in": "P(P({1, 2, 3}))",
+      "where": [
+        "|X| <= 1"
+      ]
+    }
+  },
+  "answer": "{∅, {∅}, {{1}}, {{2}}, {{3}}, {{1, 2}}, {{1, 3}}, {{2, 3}}, {{1, 2, 3}}}",
+  "mistakes": [
+    {
+      "answer": "{∅, {1}, {2}, {3}}",
+      "hint": "Those are the elements of 𝒫({1, 2, 3}) with at most one element. Here X ⊆ 𝒫({1, 2, 3}): each X is a set of subsets."
+    }
+  ],
+  "hints": [
+    "Here X is a subset of 𝒫({1, 2, 3}), so X is a set whose elements are subsets of {1, 2, 3}.",
+    "X has at most one element: either X = ∅, or X = {Y} for one subset Y of {1, 2, 3}."
+  ],
+  "solution": [
+    "X = ∅ works, and so does X = {Y} for each of the 8 subsets Y of {1, 2, 3}: 9 elements in all.",
+    "So the answer is $\\{\\emptyset, \\{\\emptyset\\}, \\{\\{1\\}\\}, \\{\\{2\\}\\}, \\{\\{3\\}\\}, \\{\\{1, 2\\}\\}, \\{\\{1, 3\\}\\}, \\{\\{2, 3\\}\\}, \\{\\{1, 2, 3\\}\\}\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.4 exercises, #11 (p. 17)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{∅, {∅}, {{1}}, {{2}}, {{3}}, {{1, 2}}, {{1, 3}}, {{2, 3}}, {{1, 2, 3}}}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{∅,{1},{2},{3}}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

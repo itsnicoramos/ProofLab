@@ -1,0 +1,75 @@
+{
+  "id": "precalc.functions.factor-cubic",
+  "course": "precalc",
+  "topic": "functions",
+  "kind": "expression",
+  "title": "Factor completely",
+  "prompt": "Factor $2x^3 - 8x$ completely.",
+  "answer_format": "A product of irreducible factors.",
+  "difficulty": 1,
+  "tags": [
+    "factoring"
+  ],
+  "data": {
+    "expression": "2x^3 - 8x",
+    "form": "factored"
+  },
+  "answer": "2x(x - 2)(x + 2)",
+  "mistakes": [],
+  "hints": [
+    "Start by pulling out the greatest common factor.",
+    "What's left is a difference of squares."
+  ],
+  "solution": [
+    "GCF: $2x^3 - 8x = 2x(x^2 - 4)$.",
+    "Difference of squares: $x^2 - 4 = (x-2)(x+2)$, so $2x(x-2)(x+2)$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "1.5 Factoring Polynomials",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "GCF then difference of squares",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "2x(x^2 - 4)"
+          }
+        ],
+        "answer": "2x(x-2)(x+2)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "stopped early",
+      "submission": {
+        "steps": [],
+        "answer": "2x(x^2 - 4)"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "FORM_NOT_FACTORED"
+        ]
+      }
+    },
+    {
+      "name": "wrong factors",
+      "submission": {
+        "steps": [],
+        "answer": "2x(x-2)^2"
+      },
+      "expect": {
+        "status": "incorrect"
+      }
+    }
+  ]
+}

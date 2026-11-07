@@ -1,0 +1,116 @@
+{
+  "id": "calc3.multiple_integrals.polar-quarter-disk",
+  "course": "calc3",
+  "topic": "multiple_integrals",
+  "kind": "integral_setup",
+  "title": "Convert to polar: a quarter disk",
+  "prompt": "Convert $\\displaystyle\\int_0^1 \\int_0^{\\sqrt{1 - x^2}} (x^2 + y^2)\\,dy\\,dx$ to polar coordinates, integrating $dr$ first, then $d\\theta$ (don't evaluate).",
+  "answer_format": "An iterated integral like int(int(f, y, a, b), x, c, d), inner integral first. Don't evaluate it. Use r and theta.",
+  "difficulty": 2,
+  "tags": [
+    "double integrals",
+    "polar coordinates"
+  ],
+  "data": {
+    "integrand": "x^2 + y^2",
+    "region": [
+      [
+        "y",
+        "0",
+        "sqrt(1 - x^2)"
+      ],
+      [
+        "x",
+        "0",
+        "1"
+      ]
+    ],
+    "order": [
+      "r",
+      "theta"
+    ],
+    "coordinates": "polar"
+  },
+  "answer": "int(int(r^3, r, 0, 1), theta, 0, pi/2)",
+  "mistakes": [],
+  "hints": [
+    "The region is the part of the unit disk in the first quadrant.",
+    "x² + y² = r², and dA = r dr dθ."
+  ],
+  "solution": [
+    "The region is the quarter disk $0 \\le r \\le 1$, $0 \\le \\theta \\le \\frac{\\pi}{2}$.",
+    "$x^2 + y^2 = r^2$ and $dA = r\\,dr\\,d\\theta$, so the integral is $\\int_0^{\\pi/2}\\int_0^1 r^2\\cdot r\\,dr\\,d\\theta$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "5.3 Double Integrals in Polar Coordinates",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "polar with Jacobian",
+      "submission": {
+        "steps": [],
+        "answer": "int(int(r^2 * r, r, 0, 1), theta, 0, pi/2)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "forgot the extra r",
+      "submission": {
+        "steps": [],
+        "answer": "int(int(r^2, r, 0, 1), theta, 0, pi/2)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "MISSING_JACOBIAN"
+        ]
+      }
+    },
+    {
+      "name": "half disk instead of a quarter",
+      "submission": {
+        "steps": [],
+        "answer": "int(int(r^3, r, 0, 1), theta, 0, pi)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "REGION_MISMATCH"
+        ]
+      }
+    },
+    {
+      "name": "integrand still in x and y",
+      "submission": {
+        "steps": [],
+        "answer": "int(int((x^2 + y^2) r, r, 0, 1), theta, 0, pi/2)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "INTEGRAND_NOT_CONVERTED"
+        ]
+      }
+    },
+    {
+      "name": "cartesian answer",
+      "submission": {
+        "steps": [],
+        "answer": "int(int(x^2 + y^2, y, 0, sqrt(1 - x^2)), x, 0, 1)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "WRONG_COORDINATES"
+        ]
+      }
+    }
+  ]
+}

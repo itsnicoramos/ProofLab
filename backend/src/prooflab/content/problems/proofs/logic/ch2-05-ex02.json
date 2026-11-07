@@ -1,0 +1,82 @@
+{
+  "id": "proofs.logic.ch2-05-ex02",
+  "course": "proofs",
+  "topic": "logic",
+  "kind": "truth_table",
+  "title": "Ex 2.5 #2 · Truth table for (Q ∨ R) ⇔ (R ∧ Q)",
+  "prompt": "Build a truth table for $(Q \\vee R) \\Leftrightarrow (R \\wedge Q)$ and enter the truth value of the whole statement in each row.",
+  "answer_format": "Four T/F values, one per row, top to bottom, like T F T T. Rows (Q, R) go TT, TF, FT, FF, as in the book. Helper columns are optional steps, like ~Q : F F T T.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch2",
+    "truth-table"
+  ],
+  "data": {
+    "formula": "(Q ∨ R) ⇔ (R ∧ Q)"
+  },
+  "answer": "T F F T",
+  "mistakes": [],
+  "hints": [
+    "Only the letters Q and R appear, so the table has four rows.",
+    "Make helper columns for Q ∨ R and R ∧ Q. A ⇔ statement is true exactly when its two sides have the same truth value, including when both are false."
+  ],
+  "solution": [
+    "The helper columns are $Q \\vee R$: T T T F and $R \\wedge Q$: T F F F.",
+    "The two sides agree in the first row (both true) and the last row (both false), and disagree in the middle two rows.",
+    "So the column is T F F T."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 2.5 exercises, #2 (p. 50)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses the truth tables for ∧, ∨, ∼, ⇒ and ⇔ (Sections 2.2–2.5)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct column",
+      "submission": {
+        "steps": [],
+        "answer": "T F F T"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "with helper columns",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "Q ∨ R : T T T F"
+          },
+          {
+            "kind": "column",
+            "content": "R ∧ Q : T F F F"
+          }
+        ],
+        "answer": "T F F T"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "F ⇔ F read as false",
+      "submission": {
+        "steps": [],
+        "answer": "T F F F"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "TT_ROWS_WRONG"
+        ]
+      }
+    }
+  ]
+}

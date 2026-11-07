@@ -1,0 +1,66 @@
+{
+  "id": "calc1.derivatives.second-derivative",
+  "course": "calc1",
+  "topic": "derivatives",
+  "kind": "derivative",
+  "title": "Second derivative",
+  "prompt": "Find $f''(x)$ for $f(x) = x^4 - 3x^2 + e^{2x}$.",
+  "answer_format": "An expression in x.",
+  "difficulty": 1,
+  "tags": [
+    "higher derivatives",
+    "exponential"
+  ],
+  "data": {
+    "function": "x^4 - 3x^2 + e^(2x)",
+    "var": "x",
+    "order": 2
+  },
+  "answer": "12x^2 - 6 + 4e^(2x)",
+  "mistakes": [],
+  "hints": [
+    "Differentiate once to get f′(x), then differentiate f′(x)."
+  ],
+  "solution": [
+    "$f'(x) = 4x^3 - 6x + 2e^{2x}$.",
+    "$f''(x) = 12x^2 - 6 + 4e^{2x}$."
+  ],
+  "reference": {
+    "book": "openstax-calc1",
+    "section": "3.2 The Derivative as a Function",
+    "note": "Original problem; see higher-order derivatives."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "twice",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "12x^2 - 6 + 4e^(2x)"
+          }
+        ],
+        "answer": "12x^2 - 6 + 4e^(2x)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "stopped after one derivative",
+      "submission": {
+        "steps": [],
+        "answer": "4x^3 - 6x + 2e^(2x)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "WRONG_ORDER"
+        ]
+      }
+    }
+  ]
+}

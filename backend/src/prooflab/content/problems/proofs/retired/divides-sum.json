@@ -1,0 +1,140 @@
+{
+  "id": "proofs.divisibility.divides-sum",
+  "course": "proofs",
+  "topic": "divisibility",
+  "kind": "divisibility_proof",
+  "title": "Divisibility of a sum",
+  "prompt": "Let $a$, $b$, $c$ be integers. Prove: if $a \\mid b$ and $a \\mid c$, then $a \\mid (b + c)$.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "direct proof",
+    "divisibility"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b",
+      "c"
+    ],
+    "hypotheses": [
+      {
+        "var": "b",
+        "divisor": "a"
+      },
+      {
+        "var": "c",
+        "divisor": "a"
+      }
+    ],
+    "target": "b + c",
+    "goal": {
+      "divisor": "a"
+    }
+  },
+  "mistakes": [],
+  "hints": [
+    "a | b means b = a·(some integer). Write b and c that way, with different new letters.",
+    "Factor a out of b + c."
+  ],
+  "solution": [
+    "Since $a \\mid b$ and $a \\mid c$, $b = aj$ and $c = ak$ for some integers $j, k$.",
+    "Then $b + c = aj + ak = a(j + k)$, and $j + k$ is an integer, so $a \\mid (b + c)$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "sundstrom-mr3",
+    "section": "3.1 Direct Proofs",
+    "note": "Original problem; see the definition of divides."
+  },
+  "review": {
+    "status": "retired",
+    "notes": "Invented problem, retired 2026-11-06: MATH 123 proofs now map 1:1 to Book of Proof exercises."
+  },
+  "examples": [
+    {
+      "name": "factor out a",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "b = aj"
+          },
+          {
+            "kind": "let",
+            "content": "c = ak"
+          },
+          {
+            "kind": "expr",
+            "content": "b + c"
+          },
+          {
+            "kind": "expr",
+            "content": "aj + ak"
+          },
+          {
+            "kind": "expr",
+            "content": "a(j + k)"
+          },
+          {
+            "kind": "witness",
+            "content": "j + k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "same letter for both",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "b = ak"
+          },
+          {
+            "kind": "let",
+            "content": "c = ak"
+          },
+          {
+            "kind": "expr",
+            "content": "2ak"
+          },
+          {
+            "kind": "witness",
+            "content": "2k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "SAME_FRESH_VARIABLE"
+        ]
+      }
+    },
+    {
+      "name": "divisor on the wrong side",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "b = j/a"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "BAD_REPRESENTATION"
+        ]
+      }
+    }
+  ]
+}

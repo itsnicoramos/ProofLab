@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    rect { fill: #1b1c1a; }
+    path { stroke: #f6f6f3; }
+    @media (prefers-color-scheme: dark) {
+      rect { fill: #ecece8; }
+      path { stroke: #111210; }
+    }
+  </style>
+  <!-- Σ: ProofLab's mark (summation sign) -->
+  <rect width="32" height="32" rx="7" />
+  <path d="M23 10.5V7H9.5L17 16L9.5 25H23V21.5" fill="none" stroke-width="3"
+        stroke-linecap="round" stroke-linejoin="round" />
+</svg>

@@ -1,0 +1,77 @@
+{
+  "id": "calc1.derivatives.quotient-rule",
+  "course": "calc1",
+  "topic": "derivatives",
+  "kind": "derivative",
+  "title": "Quotient rule",
+  "prompt": "Find $f'(x)$ for $f(x) = \\dfrac{x^2 + 1}{x - 1}$.",
+  "answer_format": "An expression in x.",
+  "difficulty": 2,
+  "tags": [
+    "quotient rule"
+  ],
+  "data": {
+    "function": "(x^2 + 1)/(x - 1)",
+    "var": "x"
+  },
+  "answer": "(x^2 - 2x - 1)/(x - 1)^2",
+  "mistakes": [],
+  "hints": [
+    "Use (u/v)′ = (u′v − uv′)/v² with u = x² + 1 and v = x − 1."
+  ],
+  "solution": [
+    "$u = x^2 + 1$, $u' = 2x$, $v = x - 1$, $v' = 1$.",
+    "$f'(x) = \\frac{2x(x-1) - (x^2+1)}{(x-1)^2} = \\frac{x^2 - 2x - 1}{(x-1)^2}$."
+  ],
+  "reference": {
+    "book": "openstax-calc1",
+    "section": "3.3 Differentiation Rules",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "quotient rule",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(2x(x-1) - (x^2+1))/(x-1)^2"
+          }
+        ],
+        "answer": "(x^2 - 2x - 1)/(x - 1)^2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "numerator in the wrong order",
+      "submission": {
+        "steps": [],
+        "answer": "((x^2+1) - 2x(x-1))/(x-1)^2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "QUOTIENT_RULE"
+        ]
+      }
+    },
+    {
+      "name": "divided the derivatives",
+      "submission": {
+        "steps": [],
+        "answer": "2x"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "QUOTIENT_RULE"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "id": "proofs.nonconditional.ch7-ex04b",
+  "course": "proofs",
+  "topic": "nonconditional",
+  "kind": "parity_proof",
+  "title": "Ex 7.4 (⇐) · If a is even, then a² + 4a + 5 is odd",
+  "prompt": "Let $a$ be an integer. Exercise 7.4 says $a^2 + 4a + 5$ is odd if and only if $a$ is even. This problem is one direction of that if-and-only-if: prove that if $a$ is even, then $a^2 + 4a + 5$ is odd. Use direct proof. (The forward (⇒) direction is a separate problem.)",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch7",
+    "iff"
+  ],
+  "data": {
+    "variables": [
+      "a"
+    ],
+    "hypotheses": [
+      {
+        "var": "a",
+        "is": "even"
+      }
+    ],
+    "target": "a^2 + 4a + 5",
+    "goal": "odd"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Write a = 2n with a let step.",
+    "4n² + 8n + 5 = 4n² + 8n + 4 + 1."
+  ],
+  "solution": [
+    "Suppose $a$ is even, so $a = 2n$ for some integer $n$.",
+    "Then $a^2 + 4a + 5 = 4n^2 + 8n + 5 = 2(2n^2 + 4n + 2) + 1$, which is odd. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 7 exercises, #4 (p. 155)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses if-and-only-if proof (Section 7.1): this is the converse (⇐) direction, by direct proof, with Definitions 4.1, 4.2 (even, odd)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "direct proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2n"
+          },
+          {
+            "kind": "expr",
+            "content": "4n^2 + 8n + 5"
+          },
+          {
+            "kind": "witness",
+            "content": "2n^2 + 4n + 2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "halved the 5",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2n"
+          },
+          {
+            "kind": "expr",
+            "content": "4n^2 + 8n + 5"
+          },
+          {
+            "kind": "witness",
+            "content": "2n^2 + 4n + 5/2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "WITNESS_NOT_INTEGER"
+        ]
+      }
+    }
+  ]
+}

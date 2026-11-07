@@ -1,0 +1,106 @@
+{
+  "id": "proofs.counting.ch3-02-ex03d",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.2 #3(d) · Length-3 lists with an A, repeats allowed",
+  "prompt": "Using the six symbols A, B, C, D, E, F, how many lists of length 3 can be made in which symbols may repeat and the letter A appears at least once?",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "multiplication-principle",
+    "subtraction-principle"
+  ],
+  "data": {},
+  "answer": "6^3 - 5^3",
+  "mistakes": [
+    {
+      "answer": "3*6^2",
+      "hint": "Fixing one A in a chosen position and filling the rest freely counts a list with two or three A's more than once: (A, A, B) is counted once for each of its A's."
+    },
+    {
+      "answer": "3*5^2",
+      "hint": "That counts only the lists with exactly one A. Lists with two or three A's also contain an A."
+    },
+    {
+      "answer": "6^3",
+      "hint": "That counts every length-3 list, including the ones with no A."
+    }
+  ],
+  "hints": [
+    "Counting directly is messy, since a list could contain one, two or three A's.",
+    "Count all length-3 lists, then the ones with no A at all, and subtract."
+  ],
+  "solution": [
+    "There are $6^3 = 216$ length-3 lists in all, and $5^3 = 125$ of them avoid A, since each entry is then one of B, C, D, E, F.",
+    "So $216 - 125 = 91$ lists contain at least one A."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.2 exercises, #3d (p. 73)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses the multiplication principle (Section 3.2)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "91"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "6^3"
+          },
+          {
+            "kind": "expr",
+            "content": "5^3"
+          }
+        ],
+        "answer": "6^3 - 5^3"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "3*6^2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    },
+    {
+      "name": "other wrong count",
+      "submission": {
+        "steps": [],
+        "answer": "50"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "COUNT_TOO_SMALL"
+        ]
+      }
+    }
+  ]
+}

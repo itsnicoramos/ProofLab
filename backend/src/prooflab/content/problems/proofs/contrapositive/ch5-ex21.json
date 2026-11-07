@@ -1,0 +1,101 @@
+{
+  "id": "proofs.contrapositive.ch5-ex21",
+  "course": "proofs",
+  "topic": "contrapositive",
+  "kind": "divisibility_proof",
+  "title": "Ex 5.21 · a ≡ b (mod n) gives a³ ≡ b³ (mod n)",
+  "prompt": "Let $a, b, n$ be integers with $n \\ge 1$. Prove that if $a \\equiv b \\pmod n$, then $a^3 \\equiv b^3 \\pmod n$, that is, $n \\mid (a^3 - b^3)$.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch5",
+    "congruence"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b",
+      "n"
+    ],
+    "hypotheses": [
+      {
+        "var": "a",
+        "divisor": "n",
+        "remainder": "b"
+      }
+    ],
+    "target": "a^3 - b^3",
+    "goal": {
+      "divisor": "n"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "a ≡ b (mod n) means n | (a − b), so a = nk + b for some integer k.",
+    "Substitute into a³ − b³: the b³ terms cancel and every remaining term has a factor of n."
+  ],
+  "solution": [
+    "Since $n \\mid (a - b)$, $a = nk + b$ for some integer $k$.",
+    "$a^3 - b^3 = (nk + b)^3 - b^3 = n^3k^3 + 3n^2k^2b + 3nkb^2 = n(n^2k^3 + 3nk^2b + 3kb^2)$.",
+    "The bracket is an integer, so $n \\mid (a^3 - b^3)$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 5 exercises, #21 (p. 136)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 5.1 (congruence)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "substitute and factor",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = nk + b"
+          },
+          {
+            "kind": "expr",
+            "content": "(nk + b)^3 - b^3"
+          },
+          {
+            "kind": "expr",
+            "content": "n^3 k^3 + 3n^2 k^2 b + 3n k b^2"
+          },
+          {
+            "kind": "witness",
+            "content": "n^2 k^3 + 3n k^2 b + 3k b^2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "lost b in the representation",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = nk"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "BAD_REPRESENTATION"
+        ]
+      }
+    }
+  ]
+}

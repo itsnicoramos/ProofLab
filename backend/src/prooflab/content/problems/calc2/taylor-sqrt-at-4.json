@@ -1,0 +1,82 @@
+{
+  "id": "calc2.series.taylor-sqrt-at-4",
+  "course": "calc2",
+  "topic": "series",
+  "kind": "taylor_polynomial",
+  "title": "A Taylor polynomial away from 0",
+  "prompt": "Find the Taylor polynomial of degree 2 for $f(x) = \\sqrt{x}$ centered at $a = 4$.",
+  "answer_format": "A polynomial in x. Powers of (x - 4) are fine.",
+  "difficulty": 2,
+  "tags": [
+    "Taylor polynomial"
+  ],
+  "data": {
+    "function": "sqrt(x)",
+    "center": "4",
+    "degree": 2,
+    "variables": {
+      "x": "positive"
+    }
+  },
+  "answer": "2 + (x - 4)/4 - (x - 4)^2/64",
+  "mistakes": [],
+  "hints": [
+    "Compute f(4), f′(4) and f″(4).",
+    "Use powers of (x − 4), and divide the second derivative term by 2!."
+  ],
+  "solution": [
+    "$f(4) = 2$, $f'(x) = \\frac{1}{2\\sqrt x}$ so $f'(4) = \\frac14$, $f''(x) = -\\frac{1}{4x^{3/2}}$ so $f''(4) = -\\frac{1}{32}$.",
+    "$p_2(x) = 2 + \\frac14(x-4) - \\frac{1}{32}\\cdot\\frac{(x-4)^2}{2} = 2 + \\frac{x-4}{4} - \\frac{(x-4)^2}{64}$."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "6.3 Taylor and Maclaurin Series",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "centered at 4",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "2 + (1/4)(x - 4) - (1/32)(x - 4)^2/2"
+          }
+        ],
+        "answer": "2 + (x-4)/4 - (x-4)^2/64"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "powers of x instead of x - 4",
+      "submission": {
+        "steps": [],
+        "answer": "2 + x/4 - x^2/64"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "WRONG_CENTER"
+        ]
+      }
+    },
+    {
+      "name": "forgot 2!",
+      "submission": {
+        "steps": [],
+        "answer": "2 + (x-4)/4 - (x-4)^2/32"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "MISSING_FACTORIALS"
+        ]
+      }
+    }
+  ]
+}

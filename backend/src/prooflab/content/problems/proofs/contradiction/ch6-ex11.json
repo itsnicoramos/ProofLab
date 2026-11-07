@@ -1,0 +1,81 @@
+{
+  "id": "proofs.contradiction.ch6-ex11",
+  "course": "proofs",
+  "topic": "contradiction",
+  "kind": "impossibility_proof",
+  "title": "Ex 6.11 · No integers with 18a + 6b = 1",
+  "prompt": "Use proof by contradiction. Prove that there are no integers $a$ and $b$ with $18a + 6b = 1$. Suppose such integers exist. Show that $18a + 6b$ is always even, while 1 is odd.",
+  "answer_format": "A structured proof: let, case, expr and form steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch6",
+    "contradiction"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b"
+    ],
+    "target": "18a + 6b",
+    "divisor": 2,
+    "forbidden": 1,
+    "conclusion": "$18a + 6b$ is even, but 1 is odd. So $18a + 6b = 1$ would make 1 even, a contradiction. No such integers exist. ∎"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "18 and 6 are both even.",
+    "Factor 2 out of 18a + 6b with a form step."
+  ],
+  "solution": [
+    "Suppose for the sake of contradiction that $18a + 6b = 1$ for some integers $a, b$.",
+    "Then $1 = 18a + 6b = 2(9a + 3b)$, and $9a + 3b$ is an integer, so 1 is even.",
+    "But 1 is odd, a contradiction. So no such integers exist. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 6 exercises, #11 (p. 144)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses proof by contradiction (Section 6.1) and Definitions 4.1, 4.2 (even, odd)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "factor out 2",
+      "submission": {
+        "steps": [
+          {
+            "kind": "form",
+            "content": "2(9a + 3b)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "factored 6b wrong",
+      "submission": {
+        "steps": [
+          {
+            "kind": "form",
+            "content": "2(9a + 6b)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "FORM_NOT_EQUAL"
+        ]
+      }
+    }
+  ]
+}

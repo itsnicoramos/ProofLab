@@ -1,0 +1,71 @@
+{
+  "id": "calc2.integrals.three-over-x",
+  "course": "calc2",
+  "topic": "integrals",
+  "kind": "antiderivative",
+  "title": "The natural log antiderivative",
+  "prompt": "Find $\\displaystyle \\int \\frac{3}{x}\\,dx$.",
+  "answer_format": "An antiderivative in x, including + C. Use ln(|...|) where needed.",
+  "difficulty": 1,
+  "tags": [
+    "logarithms"
+  ],
+  "data": {
+    "integrand": "3/x"
+  },
+  "answer": "3 ln(|x|) + C",
+  "mistakes": [],
+  "hints": [
+    "What function has derivative 1/x for every x ≠ 0, positive or negative?"
+  ],
+  "solution": [
+    "$\\frac{d}{dx}\\ln|x| = \\frac1x$ for all $x \\ne 0$.",
+    "So $\\int \\frac{3}{x}\\,dx = 3\\ln|x| + C$."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "1.6 Integrals Involving Exponential and Logarithmic Functions",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "with absolute value",
+      "submission": {
+        "steps": [],
+        "answer": "3 ln(|x|) + C"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "ln x only",
+      "submission": {
+        "steps": [],
+        "answer": "3 ln(x) + C"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "LOG_ABS"
+        ]
+      }
+    },
+    {
+      "name": "differentiated instead",
+      "submission": {
+        "steps": [],
+        "answer": "-3/x^2 + C"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "DIFFERENTIATED_INSTEAD"
+        ]
+      }
+    }
+  ]
+}

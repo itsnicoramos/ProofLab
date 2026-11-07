@@ -1,0 +1,81 @@
+{
+  "id": "precalc.functions.domain-log",
+  "course": "precalc",
+  "topic": "functions",
+  "kind": "domain",
+  "title": "Domain of a logarithm",
+  "prompt": "Find the domain of $g(x) = \\ln(4 - x^2)$.",
+  "answer_format": "Interval notation or inequalities.",
+  "difficulty": 1,
+  "tags": [
+    "domain",
+    "logarithms"
+  ],
+  "data": {
+    "function": "ln(4 - x^2)"
+  },
+  "answer": "(-2, 2)",
+  "mistakes": [],
+  "hints": [
+    "A logarithm needs a strictly positive input."
+  ],
+  "solution": [
+    "Need $4 - x^2 > 0$, i.e. $x^2 < 4$.",
+    "So $-2 < x < 2$: the domain is $(-2, 2)$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "6.3 Logarithmic Functions",
+    "note": "Original problem; see the domain of a logarithmic function."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "positive input",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "4 - x^2 > 0"
+          },
+          {
+            "kind": "expr",
+            "content": "x^2 < 4"
+          }
+        ],
+        "answer": "-2 < x < 2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "included endpoints",
+      "submission": {
+        "steps": [],
+        "answer": "[-2, 2]"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "ENDPOINTS"
+        ]
+      }
+    },
+    {
+      "name": "only positive x",
+      "submission": {
+        "steps": [],
+        "answer": "(0, 2)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "DOMAIN_TOO_SMALL"
+        ]
+      }
+    }
+  ]
+}

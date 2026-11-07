@@ -1,0 +1,87 @@
+{
+  "id": "proofs.logic.ch2-05-ex04",
+  "course": "proofs",
+  "topic": "logic",
+  "kind": "truth_table",
+  "title": "Ex 2.5 #4 · Truth table for ∼(P ∨ Q) ∨ (∼P)",
+  "prompt": "Build a truth table for $\\sim (P \\vee Q) \\vee (\\sim P)$ and enter the truth value of the whole statement in each row.",
+  "answer_format": "Four T/F values, one per row, top to bottom, like T F T T. Rows (P, Q) go TT, TF, FT, FF, as in the book. Helper columns are optional steps, like ~P : F F T T.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch2",
+    "truth-table"
+  ],
+  "data": {
+    "formula": "~(P ∨ Q) ∨ (~P)"
+  },
+  "answer": "F F T T",
+  "mistakes": [],
+  "hints": [
+    "The ∼ in front of (P ∨ Q) negates the whole disjunction. Find P ∨ Q first, then flip it.",
+    "Make a column for ∼P too, then combine the two pieces with ∨."
+  ],
+  "solution": [
+    "$P \\vee Q$ is T T T F, so $\\sim (P \\vee Q)$ is F F F T.",
+    "$\\sim P$ is F F T T.",
+    "Or-ing these two columns gives F F T T."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 2.5 exercises, #4 (p. 50)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses the truth tables for ∧, ∨, ∼, ⇒ and ⇔ (Sections 2.2–2.5)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct column",
+      "submission": {
+        "steps": [],
+        "answer": "F F T T"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "with helper columns",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "P ∨ Q : T T T F"
+          },
+          {
+            "kind": "column",
+            "content": "~(P ∨ Q) : F F F T"
+          },
+          {
+            "kind": "column",
+            "content": "~P : F F T T"
+          }
+        ],
+        "answer": "F F T T"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "∼(P ∨ Q) read as ∼P ∨ ∼Q",
+      "submission": {
+        "steps": [],
+        "answer": "F T T T"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "TT_ROWS_WRONG",
+          "DEMORGAN_CONNECTIVE"
+        ]
+      }
+    }
+  ]
+}

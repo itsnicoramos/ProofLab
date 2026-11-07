@@ -1,0 +1,67 @@
+{
+  "id": "proofs.sets.ch1-01-ex04",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.1 #4 · {x ∈ ℕ : −2 < x ≤ 7}",
+  "prompt": "Write the set $\\{x \\in \\mathbb{N} : -2 < x \\le 7\\}$ by listing its elements between braces.",
+  "answer_format": "A set listed between braces, like {1, 2, 3} (∅ for the empty set). Steps are optional.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": {
+      "var": "x",
+      "domain": "N",
+      "where": [
+        "-2 < x <= 7"
+      ]
+    }
+  },
+  "answer": "{1, 2, 3, 4, 5, 6, 7}",
+  "mistakes": [],
+  "hints": [
+    "Here x ranges over ℕ, not ℤ. What is the smallest natural number in Book of Proof?",
+    "Then keep every natural number up to the upper bound, checking whether 7 itself is allowed."
+  ],
+  "solution": [
+    "In Book of Proof ℕ = {1, 2, 3, …}, so the lower bound −2 < x adds nothing. The upper bound x ≤ 7 includes 7.",
+    "So the answer is $\\{1, 2, 3, 4, 5, 6, 7\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.1 exercises, #4 (p. 7)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{1, 2, 3, 4, 5, 6, 7}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{0, 1, 2, 3, 4, 5, 6, 7}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_NATURALS_ZERO"
+        ]
+      }
+    }
+  ]
+}

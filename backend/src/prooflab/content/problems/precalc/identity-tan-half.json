@@ -1,0 +1,124 @@
+{
+  "id": "precalc.trig.identity-tan-half",
+  "course": "precalc",
+  "topic": "trig",
+  "kind": "trig_identity",
+  "title": "A double-angle identity",
+  "prompt": "Prove that $\\dfrac{1 - \\cos 2x}{\\sin 2x} = \\tan x$.",
+  "answer_format": "Steps only: start from one side, end at the other. No final answer needed.",
+  "difficulty": 2,
+  "tags": [
+    "identities",
+    "double angle"
+  ],
+  "data": {
+    "lhs": "(1 - cos(2x))/sin(2x)",
+    "rhs": "tan(x)"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Rewrite cos 2x with the version of the double-angle formula that cancels the 1.",
+    "sin 2x = 2 sin x cos x."
+  ],
+  "solution": [
+    "$\\cos 2x = 1 - 2\\sin^2 x$, so the numerator is $2\\sin^2 x$.",
+    "$\\sin 2x = 2\\sin x\\cos x$, so the left side is $\\frac{2\\sin^2 x}{2\\sin x\\cos x} = \\frac{\\sin x}{\\cos x} = \\tan x$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "7.3 Double-Angle, Half-Angle, and Reduction Formulas",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "double-angle formulas",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(1 - (1 - 2sin^2 x))/(2 sin x cos x)"
+          },
+          {
+            "kind": "expr",
+            "content": "(2 sin^2 x)/(2 sin x cos x)"
+          },
+          {
+            "kind": "expr",
+            "content": "sin x / cos x"
+          },
+          {
+            "kind": "expr",
+            "content": "tan x"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "wrong double-angle formula",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(1 - (2sin^2 x - 1))/(2 sin x cos x)"
+          },
+          {
+            "kind": "expr",
+            "content": "tan x"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "NOT_EQUIVALENT"
+        ]
+      }
+    },
+    {
+      "name": "stopped too early",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(1 - cos(2x))/(2 sin x cos x)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "IDENTITY_INCOMPLETE"
+        ]
+      }
+    },
+    {
+      "name": "no work",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "tan x"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "IDENTITY_NO_WORK"
+        ]
+      }
+    }
+  ]
+}

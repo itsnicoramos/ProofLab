@@ -1,0 +1,89 @@
+{
+  "id": "precalc.trig.trig-eq-factor",
+  "course": "precalc",
+  "topic": "trig",
+  "kind": "trig_equation",
+  "title": "Factor, don't divide",
+  "prompt": "Solve $2\\sin x\\cos x = \\cos x$ for $0 \\le x < 2\\pi$.",
+  "answer_format": "All solutions in [0, 2π), in radians, like x = pi/6 or x = 5pi/6.",
+  "difficulty": 2,
+  "tags": [
+    "trig equations",
+    "factoring"
+  ],
+  "data": {
+    "equation": "2 sin(x) cos(x) = cos(x)"
+  },
+  "answer": "pi/6, pi/2, 5pi/6, 3pi/2",
+  "mistakes": [],
+  "hints": [
+    "Dividing both sides by cos x would throw away the solutions where cos x = 0.",
+    "Move everything to one side and factor out cos x."
+  ],
+  "solution": [
+    "$2\\sin x\\cos x - \\cos x = 0 \\Rightarrow \\cos x\\,(2\\sin x - 1) = 0$.",
+    "$\\cos x = 0$: $x = \\frac{\\pi}{2}, \\frac{3\\pi}{2}$. $\\sin x = \\frac12$: $x = \\frac{\\pi}{6}, \\frac{5\\pi}{6}$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "7.5 Solving Trigonometric Equations",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "factor",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "cos(x)(2 sin x - 1) = 0"
+          },
+          {
+            "kind": "expr",
+            "content": "cos x = 0 or sin x = 1/2"
+          }
+        ],
+        "answer": "x = pi/6 or x = pi/2 or x = 5pi/6 or x = 3pi/2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "divided by cos x",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "2 sin x = 1"
+          }
+        ],
+        "answer": "pi/6, 5pi/6"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "LOST_SOLUTION",
+          "MISSING_SOLUTIONS"
+        ]
+      }
+    },
+    {
+      "name": "degrees",
+      "submission": {
+        "steps": [],
+        "answer": "30, 90, 150, 270"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "DEGREES_NOT_RADIANS"
+        ]
+      }
+    }
+  ]
+}

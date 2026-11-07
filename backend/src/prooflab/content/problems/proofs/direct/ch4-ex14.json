@@ -1,0 +1,105 @@
+{
+  "id": "proofs.direct.ch4-ex14",
+  "course": "proofs",
+  "topic": "direct",
+  "kind": "parity_proof",
+  "title": "Ex 4.14 · 5n² + 3n + 7 is odd",
+  "prompt": "Prove that for every integer $n$, the number $5n^2 + 3n + 7$ is odd. (The book suggests cases.)",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch4",
+    "cases"
+  ],
+  "data": {
+    "variables": [
+      "n"
+    ],
+    "target": "5n^2 + 3n + 7",
+    "goal": "odd"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Nothing is assumed about n, so split into cases: n even and n odd.",
+    "In each case, write 5n² + 3n + 7 as 2·(integer) + 1 and give that integer as the case's witness."
+  ],
+  "solution": [
+    "Case $n = 2k$: $5n^2 + 3n + 7 = 20k^2 + 6k + 7 = 2(10k^2 + 3k + 3) + 1$, which is odd.",
+    "Case $n = 2k + 1$: $5n^2 + 3n + 7 = 20k^2 + 26k + 15 = 2(10k^2 + 13k + 7) + 1$, which is odd.",
+    "Every integer is even or odd, so $5n^2 + 3n + 7$ is always odd. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 4 exercises, #14 (p. 126)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definitions 4.1 and 4.2, and proof by cases (Section 4.4)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "two cases",
+      "submission": {
+        "steps": [
+          {
+            "kind": "case",
+            "content": "n = 2k"
+          },
+          {
+            "kind": "expr",
+            "content": "20k^2 + 6k + 7"
+          },
+          {
+            "kind": "witness",
+            "content": "10k^2 + 3k + 3"
+          },
+          {
+            "kind": "case",
+            "content": "n = 2k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "20k^2 + 26k + 15"
+          },
+          {
+            "kind": "witness",
+            "content": "10k^2 + 13k + 7"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "only the even case",
+      "submission": {
+        "steps": [
+          {
+            "kind": "case",
+            "content": "n = 2k"
+          },
+          {
+            "kind": "expr",
+            "content": "20k^2 + 6k + 7"
+          },
+          {
+            "kind": "witness",
+            "content": "10k^2 + 3k + 3"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "CASES_NOT_EXHAUSTIVE"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "id": "proofs.sets.ch1-04-ex10",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.4 #10 · {X ∈ 𝒫({1, 2, 3}) : |X| ≤ 1}",
+  "prompt": "Write $\\{X \\in \\mathscr{P}(\\{1, 2, 3\\}) : |X| \\le 1\\}$ by listing its elements between braces.",
+  "answer_format": "A set of sets between braces, like {∅, {1}, {1, 2}}. Spaces are optional.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": {
+      "var": "X",
+      "in": "P({1, 2, 3})",
+      "where": [
+        "|X| <= 1"
+      ]
+    }
+  },
+  "answer": "{∅, {1}, {2}, {3}}",
+  "mistakes": [],
+  "hints": [
+    "X runs over the subsets of {1, 2, 3}.",
+    "Keep the subsets with at most one element; ∅ has zero elements."
+  ],
+  "solution": [
+    "The subsets of {1, 2, 3} with at most one element are ∅, {1}, {2} and {3}.",
+    "So the answer is $\\{\\emptyset, \\{1\\}, \\{2\\}, \\{3\\}\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.4 exercises, #10 (p. 17)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{∅, {1}, {2}, {3}}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{{1},{2},{3}}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_EMPTY_MISSING"
+        ]
+      }
+    }
+  ]
+}

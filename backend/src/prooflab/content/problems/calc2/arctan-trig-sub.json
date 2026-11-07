@@ -1,0 +1,99 @@
+{
+  "id": "calc2.integrals.arctan-trig-sub",
+  "course": "calc2",
+  "topic": "integrals",
+  "kind": "antiderivative",
+  "title": "A tangent substitution",
+  "prompt": "Find $\\displaystyle \\int \\frac{1}{x^2 + 4}\\,dx$.",
+  "answer_format": "An antiderivative in x, including + C.",
+  "difficulty": 2,
+  "tags": [
+    "trig substitution",
+    "inverse trig"
+  ],
+  "data": {
+    "integrand": "1/(x^2 + 4)"
+  },
+  "answer": "atan(x/2)/2 + C",
+  "mistakes": [],
+  "hints": [
+    "Try x = 2 tan t, or recall ∫ du/(u² + a²) = (1/a) arctan(u/a) + C."
+  ],
+  "solution": [
+    "Let $x = 2\\tan t$, $dx = 2\\sec^2 t\\,dt$, and $x^2 + 4 = 4\\sec^2 t$.",
+    "$\\int \\frac{2\\sec^2 t}{4\\sec^2 t}\\,dt = \\frac{t}{2} + C = \\frac12\\arctan\\frac{x}{2} + C$."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "3.3 Trigonometric Substitution",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "x = 2 tan t",
+      "submission": {
+        "steps": [
+          {
+            "kind": "sub",
+            "content": "x = 2 tan(t)"
+          },
+          {
+            "kind": "sub",
+            "content": "dx = 2 sec(t)^2 dt"
+          },
+          {
+            "kind": "expr",
+            "content": "int(1/2, t)"
+          },
+          {
+            "kind": "expr",
+            "content": "t/2 + C"
+          }
+        ],
+        "answer": "arctan(x/2)/2 + C"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "dropped the 1/a",
+      "submission": {
+        "steps": [],
+        "answer": "arctan(x/2) + C"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "INTEGRAL_FACTOR"
+        ]
+      }
+    },
+    {
+      "name": "wrong differential",
+      "submission": {
+        "steps": [
+          {
+            "kind": "sub",
+            "content": "x = 2 tan(t)"
+          },
+          {
+            "kind": "sub",
+            "content": "dx = sec(t)^2 dt"
+          }
+        ],
+        "answer": "arctan(x) + C"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "INTEGRAL_DIFFERENTIAL_WRONG"
+        ]
+      }
+    }
+  ]
+}

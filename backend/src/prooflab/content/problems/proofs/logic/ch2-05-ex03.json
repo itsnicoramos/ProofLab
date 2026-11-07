@@ -1,0 +1,78 @@
+{
+  "id": "proofs.logic.ch2-05-ex03",
+  "course": "proofs",
+  "topic": "logic",
+  "kind": "truth_table",
+  "title": "Ex 2.5 #3 · Truth table for ∼(P ⇒ Q)",
+  "prompt": "Build a truth table for $\\sim (P \\Rightarrow Q)$ and enter the truth value of the whole statement in each row.",
+  "answer_format": "Four T/F values, one per row, top to bottom, like T F T T. Rows (P, Q) go TT, TF, FT, FF, as in the book. Helper columns are optional steps, like ~P : F F T T.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch2",
+    "truth-table"
+  ],
+  "data": {
+    "formula": "~(P ⇒ Q)"
+  },
+  "answer": "F T F F",
+  "mistakes": [],
+  "hints": [
+    "First find the column of P ⇒ Q, then negate every value.",
+    "P ⇒ Q is false in just one row: P true and Q false."
+  ],
+  "solution": [
+    "The column of $P \\Rightarrow Q$ is T F T T.",
+    "Negating each value gives the column of $\\sim (P \\Rightarrow Q)$: F T F F."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 2.5 exercises, #3 (p. 50)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses the truth tables for ∧, ∨, ∼, ⇒ and ⇔ (Sections 2.2–2.5)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct column",
+      "submission": {
+        "steps": [],
+        "answer": "F T F F"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "with helper columns",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "P ⇒ Q : T F T T"
+          }
+        ],
+        "answer": "F T F F"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "forgot the negation",
+      "submission": {
+        "steps": [],
+        "answer": "T F T T"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "TT_ROWS_WRONG",
+          "TT_ALL_FLIPPED"
+        ]
+      }
+    }
+  ]
+}

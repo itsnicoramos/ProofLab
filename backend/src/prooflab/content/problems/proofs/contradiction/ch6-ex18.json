@@ -1,0 +1,111 @@
+{
+  "id": "proofs.contradiction.ch6-ex18",
+  "course": "proofs",
+  "topic": "contradiction",
+  "kind": "impossibility_proof",
+  "title": "Ex 6.18 · If 4 | a² + b², then a and b aren't both odd",
+  "prompt": "Use proof by contradiction. Let $a$ and $b$ be integers with $4 \\mid (a^2 + b^2)$. Prove that $a$ and $b$ are not both odd. Suppose, for the sake of contradiction, that both are odd. Show that then $a^2 + b^2$ leaves a nonzero remainder when divided by 4.",
+  "answer_format": "A structured proof: let, case, expr and form steps (notes optional). No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch6",
+    "contradiction"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b"
+    ],
+    "hypotheses": [
+      {
+        "var": "a",
+        "is": "odd"
+      },
+      {
+        "var": "b",
+        "is": "odd"
+      }
+    ],
+    "target": "a^2 + b^2",
+    "divisor": 4,
+    "forbidden": 0,
+    "conclusion": "with $a$ and $b$ both odd, $a^2 + b^2$ leaves remainder 2 when divided by 4, so $4 \\nmid (a^2 + b^2)$. That contradicts the hypothesis, so $a$ and $b$ are not both odd. ∎"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Assume the opposite of the conclusion: a and b are both odd. Write each with a let step, using different new letters.",
+    "Expand a² + b² and write it as 4·(integer) + 2."
+  ],
+  "solution": [
+    "Suppose for the sake of contradiction that $4 \\mid (a^2 + b^2)$ and $a, b$ are both odd, say $a = 2m + 1$ and $b = 2n + 1$.",
+    "Then $a^2 + b^2 = 4m^2 + 4m + 4n^2 + 4n + 2 = 4(m^2 + m + n^2 + n) + 2$, which leaves remainder 2 when divided by 4.",
+    "So $4 \\nmid (a^2 + b^2)$, a contradiction. Hence $a$ and $b$ are not both odd. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 6 exercises, #18 (p. 144)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses proof by contradiction (Section 6.2), Definitions 4.2 (odd) and 4.4 (divides)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "both odd",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2m + 1"
+          },
+          {
+            "kind": "let",
+            "content": "b = 2n + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "4m^2 + 4m + 4n^2 + 4n + 2"
+          },
+          {
+            "kind": "form",
+            "content": "4(m^2 + m + n^2 + n) + 2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "squared without the middle term",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2m + 1"
+          },
+          {
+            "kind": "let",
+            "content": "b = 2n + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "4m^2 + 1 + 4n^2 + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "NOT_EQUIVALENT"
+        ]
+      }
+    }
+  ]
+}

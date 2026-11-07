@@ -1,0 +1,121 @@
+{
+  "id": "calc2.series.limit-comparison",
+  "course": "calc2",
+  "topic": "series",
+  "kind": "series_convergence",
+  "title": "Limit comparison",
+  "prompt": "Does $\\displaystyle \\sum_{n=1}^{\\infty} \\frac{n + 1}{n^3 + 2}$ converge or diverge?",
+  "answer_format": "'converges' or 'diverges' (add 'absolutely' or 'conditionally' when the terms change sign).",
+  "difficulty": 2,
+  "tags": [
+    "limit comparison test",
+    "comparison test"
+  ],
+  "data": {
+    "term": "(n + 1)/(n^3 + 2)"
+  },
+  "answer": "converges",
+  "mistakes": [],
+  "hints": [
+    "For large n the terms behave like n/n³. Compare with that.",
+    "Use bₙ = 1/n² in the limit comparison test."
+  ],
+  "solution": [
+    "Compare with $b_n = \\frac{1}{n^2}$: $\\lim \\frac{a_n}{b_n} = \\lim \\frac{n^3 + n^2}{n^3 + 2} = 1$, a positive finite number.",
+    "$\\sum \\frac1{n^2}$ converges ($p = 2$), so the series converges."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "5.4 Comparison Tests",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "LCT with 1/n^2",
+      "submission": {
+        "steps": [
+          {
+            "kind": "compare",
+            "content": "b_n = 1/n^2"
+          },
+          {
+            "kind": "test",
+            "content": "limit comparison test"
+          },
+          {
+            "kind": "limit",
+            "content": "1"
+          }
+        ],
+        "answer": "converges"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "direct comparison with 2/n^2",
+      "submission": {
+        "steps": [
+          {
+            "kind": "compare",
+            "content": "2/n^2"
+          },
+          {
+            "kind": "test",
+            "content": "comparison"
+          }
+        ],
+        "answer": "converges"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "compared with 1/n",
+      "submission": {
+        "steps": [
+          {
+            "kind": "compare",
+            "content": "1/n"
+          },
+          {
+            "kind": "test",
+            "content": "comparison"
+          }
+        ],
+        "answer": "converges"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "COMPARISON_WRONG_DIRECTION",
+          "SERIES_NO_CONCLUSIVE_TEST"
+        ]
+      }
+    },
+    {
+      "name": "forgot the comparison series",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "limit comparison"
+          }
+        ],
+        "answer": "converges"
+      },
+      "expect": {
+        "status": "partial",
+        "first_error": 0,
+        "hint_codes": [
+          "SERIES_COMPARE_MISSING"
+        ]
+      }
+    }
+  ]
+}

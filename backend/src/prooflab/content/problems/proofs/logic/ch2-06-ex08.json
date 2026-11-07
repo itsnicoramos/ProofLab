@@ -1,0 +1,133 @@
+{
+  "id": "proofs.logic.ch2-06-ex08",
+  "course": "proofs",
+  "topic": "logic",
+  "kind": "logical_equivalence",
+  "title": "Ex 2.6 #8 · ∼P ⇔ Q = (P ⇒ ∼Q) ∧ (∼Q ⇒ P)",
+  "prompt": "Use a truth table to show that $\\sim P \\Leftrightarrow Q$ and $(P \\Rightarrow \\sim Q) \\wedge (\\sim Q \\Rightarrow P)$ are logically equivalent: they have the same truth value in every row.",
+  "answer_format": "No final answer box. Give the truth-table column of each statement as a column step (statement : T F T T, rows (P, Q) in the order TT, TF, FT, FF), or rewrite one statement into the other with expr steps, each equivalent to the one before.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch2",
+    "logical-equivalence"
+  ],
+  "data": {
+    "left": "~P ⇔ Q",
+    "right": "(P ⇒ ~Q) ∧ (~Q ⇒ P)"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "On the left, ∼ applies only to P: the statement is (∼P) ⇔ Q.",
+    "Make helper columns for ∼P, ∼Q, P ⇒ ∼Q and ∼Q ⇒ P."
+  ],
+  "solution": [
+    "$\\sim P$ is F F T T, so $\\sim P \\Leftrightarrow Q$ is F T T F.",
+    "$P \\Rightarrow \\sim Q$ is F T T T and $\\sim Q \\Rightarrow P$ is T T T F, so their conjunction is F T T F.",
+    "The columns agree in every row, so the statements are logically equivalent."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 2.6 exercises, #8 (p. 52)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses logical equivalence (Section 2.6)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "truth table",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "~P ⇔ Q : F T T F"
+          },
+          {
+            "kind": "column",
+            "content": "(P ⇒ ~Q) ∧ (~Q ⇒ P) : F T T F"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "rewrite chain",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "~P ⇔ Q"
+          },
+          {
+            "kind": "expr",
+            "content": "(~P ⇒ Q) ∧ (Q ⇒ ~P)"
+          },
+          {
+            "kind": "expr",
+            "content": "(~Q ⇒ P) ∧ (Q ⇒ ~P)"
+          },
+          {
+            "kind": "expr",
+            "content": "(~Q ⇒ P) ∧ (P ⇒ ~Q)"
+          },
+          {
+            "kind": "expr",
+            "content": "(P ⇒ ~Q) ∧ (~Q ⇒ P)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "only one column",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "~P ⇔ Q : F T T F"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "LOGIC_INCOMPLETE"
+        ]
+      }
+    },
+    {
+      "name": "∼ applied to the whole ⇔",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "~P ⇔ Q : F T T F"
+          },
+          {
+            "kind": "column",
+            "content": "(P ⇒ ~Q) ∧ (~Q ⇒ P) : T F F T"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "TT_COLUMN_WRONG",
+          "TT_ALL_FLIPPED"
+        ]
+      }
+    }
+  ]
+}

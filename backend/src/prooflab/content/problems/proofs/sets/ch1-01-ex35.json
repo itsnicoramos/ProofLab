@@ -1,0 +1,80 @@
+{
+  "id": "proofs.sets.ch1-01-ex35",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.1 #35 · |{x ∈ ℤ : x² < 10}|",
+  "prompt": "Find the cardinality $|\\{x \\in \\mathbb{Z} : x^2 < 10\\}|$: how many elements does the set have?",
+  "answer_format": "A whole number: how many elements the set has.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": {
+      "var": "x",
+      "domain": "Z",
+      "where": [
+        "x^2 < 10"
+      ]
+    },
+    "ask": "cardinality"
+  },
+  "answer": "7",
+  "mistakes": [],
+  "hints": [
+    "Which integers have a square less than 10?",
+    "Remember the negative integers: (−3)² = 9."
+  ],
+  "solution": [
+    "The set is {−3, −2, −1, 0, 1, 2, 3}, since 4² = 16 is already too big.",
+    "So the cardinality is $7$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.1 exercises, #35 (p. 8)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "7"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "listed first",
+      "submission": {
+        "steps": [
+          {
+            "kind": "note",
+            "content": "list the set, then count"
+          }
+        ],
+        "answer": "7"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "3"
+      },
+      "expect": {
+        "status": "incorrect"
+      }
+    }
+  ]
+}

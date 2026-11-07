@@ -1,0 +1,118 @@
+{
+  "id": "proofs.parity.sum-of-evens",
+  "course": "proofs",
+  "topic": "parity",
+  "kind": "parity_proof",
+  "title": "The sum of two even integers",
+  "prompt": "Prove: if $m$ and $n$ are even integers, then $m + n$ is even.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "direct proof",
+    "parity"
+  ],
+  "data": {
+    "variables": [
+      "m",
+      "n"
+    ],
+    "hypotheses": [
+      {
+        "var": "m",
+        "is": "even"
+      },
+      {
+        "var": "n",
+        "is": "even"
+      }
+    ],
+    "target": "m + n",
+    "goal": "even"
+  },
+  "mistakes": [],
+  "hints": [
+    "Write m and n using the definition of even. Do they have to be twice the same integer?",
+    "Factor a 2 out of m + n."
+  ],
+  "solution": [
+    "Since $m$ and $n$ are even, $m = 2j$ and $n = 2k$ for some integers $j$ and $k$.",
+    "Then $m + n = 2j + 2k = 2(j + k)$, and $j + k$ is an integer, so $m + n$ is even. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "sundstrom-mr3",
+    "section": "1.2 Constructing Direct Proofs",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "retired",
+    "notes": "Invented problem, retired 2026-11-06: MATH 123 proofs now map 1:1 to Book of Proof exercises."
+  },
+  "examples": [
+    {
+      "name": "two different letters",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "m = 2j"
+          },
+          {
+            "kind": "let",
+            "content": "n = 2k"
+          },
+          {
+            "kind": "expr",
+            "content": "m + n"
+          },
+          {
+            "kind": "expr",
+            "content": "2j + 2k"
+          },
+          {
+            "kind": "expr",
+            "content": "2(j + k)"
+          },
+          {
+            "kind": "witness",
+            "content": "j + k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "same letter for both",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "m = 2k"
+          },
+          {
+            "kind": "let",
+            "content": "n = 2k"
+          },
+          {
+            "kind": "expr",
+            "content": "4k"
+          },
+          {
+            "kind": "witness",
+            "content": "2k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "SAME_FRESH_VARIABLE"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "id": "proofs.contrapositive.ch5-ex17",
+  "course": "proofs",
+  "topic": "contrapositive",
+  "kind": "divisibility_proof",
+  "title": "Ex 5.17 · If n is odd, 8 | (n² − 1)",
+  "prompt": "Prove (directly or by contrapositive): if $n$ is an odd integer, then $8 \\mid (n^2 - 1)$.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 3,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch5",
+    "cases"
+  ],
+  "data": {
+    "variables": [
+      "n"
+    ],
+    "hypotheses": [
+      {
+        "var": "n",
+        "divisor": 2,
+        "remainder": 1
+      }
+    ],
+    "target": "n^2 - 1",
+    "goal": {
+      "divisor": 8
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "With n = 2k + 1 you get n² − 1 = 4k(k + 1), so you still need k(k + 1) to be even.",
+    "Instead, split the odd numbers by their remainder mod 4: n = 4k + 1 or n = 4k + 3."
+  ],
+  "solution": [
+    "Case $n = 4k + 1$: $n^2 - 1 = 16k^2 + 8k = 8(2k^2 + k)$.",
+    "Case $n = 4k + 3$: $n^2 - 1 = 16k^2 + 24k + 8 = 8(2k^2 + 3k + 1)$.",
+    "Every odd integer is of one of these forms, so $8 \\mid (n^2 - 1)$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 5 exercises, #17 (p. 136)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 4.4 and proof by cases."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "cases mod 4",
+      "submission": {
+        "steps": [
+          {
+            "kind": "case",
+            "content": "n = 4k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "16k^2 + 8k"
+          },
+          {
+            "kind": "witness",
+            "content": "2k^2 + k"
+          },
+          {
+            "kind": "case",
+            "content": "n = 4k + 3"
+          },
+          {
+            "kind": "expr",
+            "content": "16k^2 + 24k + 8"
+          },
+          {
+            "kind": "witness",
+            "content": "2k^2 + 3k + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "divides by 2 without a reason",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 2k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "4k^2 + 4k"
+          },
+          {
+            "kind": "witness",
+            "content": "(k^2 + k)/2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "WITNESS_NOT_INTEGER"
+        ]
+      }
+    }
+  ]
+}

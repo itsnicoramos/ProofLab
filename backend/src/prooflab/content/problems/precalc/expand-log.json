@@ -1,0 +1,86 @@
+{
+  "id": "precalc.exp_log.expand-log",
+  "course": "precalc",
+  "topic": "exp_log",
+  "kind": "log_rewrite",
+  "title": "Expand a logarithm",
+  "prompt": "Use the properties of logarithms to expand $\\ln\\!\\left(\\dfrac{x^2\\sqrt{y}}{z^3}\\right)$ completely. Assume $x, y, z > 0$.",
+  "answer_format": "A sum/difference of multiples of ln x, ln y, ln z.",
+  "difficulty": 1,
+  "tags": [
+    "logarithm properties"
+  ],
+  "data": {
+    "expression": "ln(x^2 sqrt(y)/z^3)",
+    "form": "expanded"
+  },
+  "answer": "2 ln(x) + ln(y)/2 - 3 ln(z)",
+  "mistakes": [
+    {
+      "answer": "2 ln(x) + ln(y)/2 + 3 ln(z)",
+      "hint": "Division turns into subtraction: ln(A/B) = ln A − ln B."
+    },
+    {
+      "answer": "2 ln(x) + 2 ln(y) - 3 ln(z)",
+      "hint": "√y = y^(1/2), so its coefficient is 1/2."
+    }
+  ],
+  "hints": [
+    "Quotient rule first, then product rule, then the power rule on each piece."
+  ],
+  "solution": [
+    "$\\ln\\frac{x^2\\sqrt y}{z^3} = \\ln x^2 + \\ln y^{1/2} - \\ln z^3$.",
+    "$= 2\\ln x + \\tfrac12 \\ln y - 3\\ln z$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "6.5 Logarithmic Properties",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "all three rules",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "ln(x^2) + ln(sqrt(y)) - ln(z^3)"
+          }
+        ],
+        "answer": "2ln x + (1/2) ln y - 3 ln z"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "sign on the quotient",
+      "submission": {
+        "steps": [],
+        "answer": "2 ln x + ln(y)/2 + 3 ln z"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    },
+    {
+      "name": "power rule not applied",
+      "submission": {
+        "steps": [],
+        "answer": "ln(x^2) + ln(sqrt(y)) - ln(z^3)"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "LOG_NOT_EXPANDED"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "id": "proofs.counting.ch3-05-ex12",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.5 #12 · Splitting 21 people into teams of 10 and 11",
+  "prompt": "Twenty-one people are split into a Red Team of 10 people and a Blue Team of 11 people. In how many ways can this be done?",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "combinations"
+  ],
+  "data": {},
+  "answer": "binom(21, 10)",
+  "mistakes": [
+    {
+      "answer": "binom(21, 10) + binom(21, 11)",
+      "hint": "Choosing the Red Team already decides the Blue Team (it's everyone else), so there is nothing extra to count."
+    },
+    {
+      "answer": "21!/11!",
+      "hint": "The order in which the Red Team members are picked doesn't matter."
+    },
+    {
+      "answer": "binom(21, 10)/2",
+      "hint": "The teams have different names and different sizes, so no split is counted twice. There is nothing to divide out."
+    }
+  ],
+  "hints": [
+    "Once you know who is on the Red Team, is there any further choice to make?",
+    "Count the ways to choose the 10 Red Team members from the 21 people."
+  ],
+  "solution": [
+    "A split is determined by the Red Team: choose its 10 members, and the other 11 people form the Blue Team.",
+    "So there are $\\binom{21}{10} = 352{,}716$ splits. (Choosing the Blue Team first gives $\\binom{21}{11}$, the same number.)"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.5 exercises, #12 (p. 89)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses combinations (Section 3.5)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "352716"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [],
+        "answer": "binom(21, 10)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "binom(21, 10) + binom(21, 11)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

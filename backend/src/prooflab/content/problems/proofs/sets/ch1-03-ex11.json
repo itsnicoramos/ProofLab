@@ -1,0 +1,70 @@
+{
+  "id": "proofs.sets.ch1-03-ex11",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.3 #11 · {X : X ⊆ {3, 2, a} and |X| = 4}",
+  "prompt": "Write the set $\\{X : X \\subseteq \\{3, 2, a\\} \\text{ and } |X| = 4\\}$ by listing its elements between braces.",
+  "answer_format": "A set of sets between braces, like {∅, {1}, {1, 2}}. Spaces are optional.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "atoms": [
+      "a"
+    ],
+    "compute": {
+      "var": "X",
+      "in": "P({3, 2, a})",
+      "where": [
+        "|X| = 4"
+      ]
+    }
+  },
+  "answer": "∅",
+  "mistakes": [],
+  "hints": [
+    "The elements of this set are themselves sets: subsets of {3, 2, a}.",
+    "Keep only the subsets with exactly 4 element(s)."
+  ],
+  "solution": [
+    "{3, 2, a} has only three elements, so none of its subsets has four elements: the set is empty.",
+    "So the answer is $\\emptyset$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.3 exercises, #11 (p. 15)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "∅"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{{3, 2, a}}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_EXTRA"
+        ]
+      }
+    }
+  ]
+}

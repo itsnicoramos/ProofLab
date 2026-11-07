@@ -1,0 +1,108 @@
+{
+  "id": "proofs.logic.ch2-06-ex09",
+  "course": "proofs",
+  "topic": "logic",
+  "kind": "logical_equivalence",
+  "title": "Ex 2.6 #9 · P ∧ Q vs ∼(∼P ∨ ∼Q)",
+  "prompt": "Are $P \\wedge Q$ and $\\sim (\\sim P \\vee \\sim Q)$ logically equivalent? Decide, and back up your answer with a truth table, a chain of known equivalences, or a row where the two statements differ.",
+  "answer_format": "equivalent or not equivalent. Steps are optional: truth-table columns, rewrite steps, or a row like P = T, Q = F where the two statements differ.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch2",
+    "logical-equivalence",
+    "demorgan"
+  ],
+  "data": {
+    "left": "P ∧ Q",
+    "right": "~(~P ∨ ~Q)",
+    "decide": true
+  },
+  "answer": "equivalent",
+  "mistakes": [],
+  "hints": [
+    "Apply DeMorgan's law to ∼(∼P ∨ ∼Q): the ∼ moves inside and ∨ turns into ∧.",
+    "Two negations cancel: ∼∼P means the same as P."
+  ],
+  "solution": [
+    "By DeMorgan's law, $\\sim (\\sim P \\vee \\sim Q) = (\\sim \\sim P) \\wedge (\\sim \\sim Q)$.",
+    "Double negations cancel, so this is $P \\wedge Q$.",
+    "So the statements are logically equivalent. (Both columns are T F F F.)"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 2.6 exercises, #9 (p. 52)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses logical equivalence (Section 2.6)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "equivalent",
+      "submission": {
+        "steps": [],
+        "answer": "equivalent"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "by DeMorgan",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "P ∧ Q"
+          },
+          {
+            "kind": "expr",
+            "content": "~~P ∧ ~~Q"
+          },
+          {
+            "kind": "expr",
+            "content": "~(~P ∨ ~Q)"
+          }
+        ],
+        "answer": "equivalent"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "by truth table",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "P ∧ Q : T F F F"
+          },
+          {
+            "kind": "column",
+            "content": "~(~P ∨ ~Q) : T F F F"
+          }
+        ],
+        "answer": "equivalent"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "said not equivalent",
+      "submission": {
+        "steps": [],
+        "answer": "not equivalent"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "LOGIC_TRY_LAWS"
+        ]
+      }
+    }
+  ]
+}

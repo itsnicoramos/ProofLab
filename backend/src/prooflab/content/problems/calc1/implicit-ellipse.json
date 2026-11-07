@@ -1,0 +1,64 @@
+{
+  "id": "calc1.derivatives.implicit-ellipse",
+  "course": "calc1",
+  "topic": "derivatives",
+  "kind": "implicit_derivative",
+  "title": "Implicit differentiation",
+  "prompt": "The curve $x^2 + xy + y^2 = 7$ defines $y$ implicitly as a function of $x$. Find $\\dfrac{dy}{dx}$.",
+  "answer_format": "An expression in x and y.",
+  "difficulty": 2,
+  "tags": [
+    "implicit differentiation"
+  ],
+  "data": {
+    "equation": "x^2 + x y + y^2 = 7"
+  },
+  "answer": "-(2x + y)/(x + 2y)",
+  "mistakes": [],
+  "hints": [
+    "Differentiate both sides with respect to x. The term xy needs the product rule.",
+    "Collect the dy/dx terms on one side and factor dy/dx out."
+  ],
+  "solution": [
+    "$2x + \\left(y + x\\frac{dy}{dx}\\right) + 2y\\frac{dy}{dx} = 0$.",
+    "$(x + 2y)\\frac{dy}{dx} = -(2x + y)$, so $\\frac{dy}{dx} = -\\frac{2x + y}{x + 2y}$."
+  ],
+  "reference": {
+    "book": "openstax-calc1",
+    "section": "3.8 Implicit Differentiation",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "solved for dy/dx",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "dy/dx = -(2x+y)/(x+2y)"
+          }
+        ],
+        "answer": "(-2x - y)/(x + 2y)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "upside down",
+      "submission": {
+        "steps": [],
+        "answer": "-(x + 2y)/(2x + y)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "INVERTED_RATIO"
+        ]
+      }
+    }
+  ]
+}

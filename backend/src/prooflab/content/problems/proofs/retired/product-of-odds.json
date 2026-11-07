@@ -1,0 +1,154 @@
+{
+  "id": "proofs.parity.product-of-odds",
+  "course": "proofs",
+  "topic": "parity",
+  "kind": "parity_proof",
+  "title": "The product of two odd integers",
+  "prompt": "Prove: if $m$ and $n$ are odd integers, then $mn$ is odd.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "direct proof",
+    "parity"
+  ],
+  "data": {
+    "variables": [
+      "m",
+      "n"
+    ],
+    "hypotheses": [
+      {
+        "var": "m",
+        "is": "odd"
+      },
+      {
+        "var": "n",
+        "is": "odd"
+      }
+    ],
+    "target": "m n",
+    "goal": "odd"
+  },
+  "mistakes": [],
+  "hints": [
+    "Use a different new letter for m and for n.",
+    "After expanding (2j + 1)(2k + 1), every term but one has a factor of 2."
+  ],
+  "solution": [
+    "$m = 2j + 1$ and $n = 2k + 1$ for some integers $j, k$.",
+    "$mn = (2j+1)(2k+1) = 4jk + 2j + 2k + 1 = 2(2jk + j + k) + 1$.",
+    "$2jk + j + k$ is an integer, so $mn$ is odd. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "sundstrom-mr3",
+    "section": "1.2 Constructing Direct Proofs",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "retired",
+    "notes": "Invented problem, retired 2026-11-06: MATH 123 proofs now map 1:1 to Book of Proof exercises."
+  },
+  "examples": [
+    {
+      "name": "expand and regroup",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "m = 2j + 1"
+          },
+          {
+            "kind": "let",
+            "content": "n = 2k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "(2j+1)(2k+1)"
+          },
+          {
+            "kind": "expr",
+            "content": "4jk + 2j + 2k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "2(2jk + j + k) + 1"
+          },
+          {
+            "kind": "witness",
+            "content": "2jk + j + k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "dropped the constant term",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "m = 2j + 1"
+          },
+          {
+            "kind": "let",
+            "content": "n = 2k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "(2j+1)(2k+1)"
+          },
+          {
+            "kind": "expr",
+            "content": "4jk + 2j + 2k"
+          },
+          {
+            "kind": "witness",
+            "content": "2jk + j + k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 3,
+        "hint_codes": [
+          "NOT_EQUIVALENT"
+        ]
+      }
+    },
+    {
+      "name": "writes m with the same letter",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "m = 2k + 1"
+          },
+          {
+            "kind": "let",
+            "content": "n = 2k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "(2k+1)^2"
+          },
+          {
+            "kind": "witness",
+            "content": "2k^2 + 2k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "SAME_FRESH_VARIABLE"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "id": "proofs.direct.ch4-ex19",
+  "course": "proofs",
+  "topic": "direct",
+  "kind": "divisibility_proof",
+  "title": "Ex 4.19 · a² | b and b³ | c give a⁶ | c",
+  "prompt": "Use a direct proof. Let $a, b, c$ be integers. Show that if $a^2 \\mid b$ and $b^3 \\mid c$, then $a^6 \\mid c$.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch4"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b",
+      "c"
+    ],
+    "hypotheses": [
+      {
+        "var": "b",
+        "divisor": "a^2"
+      },
+      {
+        "var": "c",
+        "divisor": "b^3"
+      }
+    ],
+    "target": "c",
+    "goal": {
+      "divisor": "a^6"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Write b as a²·(integer) and c as b³·(integer).",
+    "Substitute your expression for b into your expression for c."
+  ],
+  "solution": [
+    "Since $a^2 \\mid b$, $b = a^2 j$; since $b^3 \\mid c$, $c = b^3 k$ (for integers $j, k$).",
+    "$c = (a^2 j)^3 k = a^6 (j^3 k)$, and $j^3 k$ is an integer, so $a^6 \\mid c$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 4 exercises, #19 (p. 126)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 4.4 (divides)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "substitute",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "b = a^2 j"
+          },
+          {
+            "kind": "let",
+            "content": "c = b^3 k"
+          },
+          {
+            "kind": "expr",
+            "content": "(a^2 j)^3 k"
+          },
+          {
+            "kind": "expr",
+            "content": "a^6 j^3 k"
+          },
+          {
+            "kind": "witness",
+            "content": "j^3 k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "forgot to substitute for b",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "b = a^2 j"
+          },
+          {
+            "kind": "let",
+            "content": "c = b^3 k"
+          },
+          {
+            "kind": "witness",
+            "content": "k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "WITNESS_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

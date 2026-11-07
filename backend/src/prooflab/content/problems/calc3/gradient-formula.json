@@ -1,0 +1,94 @@
+{
+  "id": "calc3.partials.gradient-formula",
+  "course": "calc3",
+  "topic": "partials",
+  "kind": "gradient",
+  "title": "The gradient vector",
+  "prompt": "Find $\\nabla f$ for $f(x, y) = x^2 y + \\ln y$, where $y > 0$.",
+  "answer_format": "A vector like <a, b>.",
+  "difficulty": 1,
+  "tags": [
+    "gradient"
+  ],
+  "data": {
+    "function": "x^2 y + ln(y)",
+    "variables": {
+      "x": "real",
+      "y": "positive"
+    }
+  },
+  "answer": "<2x y, x^2 + 1/y>",
+  "mistakes": [],
+  "hints": [
+    "∇f = ⟨∂f/∂x, ∂f/∂y⟩. Find each partial derivative separately."
+  ],
+  "solution": [
+    "$f_x = 2xy$ and $f_y = x^2 + \\frac{1}{y}$.",
+    "$\\nabla f = \\left\\langle 2xy,\\ x^2 + \\frac{1}{y}\\right\\rangle$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "4.6 Directional Derivatives and the Gradient",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "both partials",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "f_x = 2xy"
+          },
+          {
+            "kind": "expr",
+            "content": "f_y = x^2 + 1/y"
+          }
+        ],
+        "answer": "∇f = <2xy, x^2 + 1/y>"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "components in the wrong order",
+      "submission": {
+        "steps": [],
+        "answer": "<x^2 + 1/y, 2xy>"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "COMPONENTS_SWAPPED"
+        ]
+      }
+    },
+    {
+      "name": "forgot d/dy of ln y",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "f_x = 2xy"
+          },
+          {
+            "kind": "expr",
+            "content": "f_y = x^2"
+          }
+        ],
+        "answer": "<2xy, x^2>"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "VECTOR_COMPONENT"
+        ]
+      }
+    }
+  ]
+}

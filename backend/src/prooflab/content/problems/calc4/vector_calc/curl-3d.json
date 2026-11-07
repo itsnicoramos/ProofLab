@@ -1,0 +1,82 @@
+{
+  "id": "calc4.vector_calc.curl-3d",
+  "course": "calc4",
+  "topic": "vector_calc",
+  "kind": "curl",
+  "title": "Curl of a 3D field",
+  "prompt": "Find $\\operatorname{curl}\\mathbf F$ for $\\mathbf F(x,y,z) = \\langle xy,\\ yz,\\ zx \\rangle$.",
+  "answer_format": "A vector <a, b, c>.",
+  "difficulty": 2,
+  "tags": [
+    "curl"
+  ],
+  "data": {
+    "field": [
+      "x y",
+      "y z",
+      "z x"
+    ]
+  },
+  "answer": "<-y, -z, -x>",
+  "mistakes": [],
+  "hints": [
+    "curl F = ⟨R_y − Q_z, P_z − R_x, Q_x − P_y⟩.",
+    "Expanding the determinant with rows i j k / ∂x ∂y ∂z / P Q R gives the same formula."
+  ],
+  "solution": [
+    "$P = xy$, $Q = yz$, $R = zx$.",
+    "$R_y - Q_z = 0 - y$, $P_z - R_x = 0 - z$, $Q_x - P_y = 0 - x$.",
+    "$\\operatorname{curl}\\mathbf F = \\langle -y, -z, -x \\rangle$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "6.5 Divergence and Curl",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "component by component",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "<0 - y, 0 - z, 0 - x>"
+          }
+        ],
+        "answer": "<-y, -z, -x>"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "every difference subtracted the wrong way",
+      "submission": {
+        "steps": [],
+        "answer": "<y, z, x>"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "CURL_SIGN"
+        ]
+      }
+    },
+    {
+      "name": "computed the divergence instead",
+      "submission": {
+        "steps": [],
+        "answer": "y + z + x"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "DIV_NOT_CURL"
+        ]
+      }
+    }
+  ]
+}

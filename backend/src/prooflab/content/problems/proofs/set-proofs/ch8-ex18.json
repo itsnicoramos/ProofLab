@@ -1,0 +1,139 @@
+{
+  "id": "proofs.set-proofs.ch8-ex18",
+  "course": "proofs",
+  "topic": "set-proofs",
+  "kind": "set_identity",
+  "title": "Ex 8.18 · Product distributes over difference",
+  "prompt": "Let $A$, $B$ and $C$ be any sets. Prove that $A \\times (B - C) = (A \\times B) - (A \\times C)$. The elements of these sets are ordered pairs, so follow a pair $(x, y)$.",
+  "answer_format": "A chain of lines, each a set (like A × (B ∪ C)) or a statement about an ordered pair (x, y) (like x ∈ A and y ∈ B, or (x, y) ∈ A × B). Each line must have exactly the same elements as the line before; start from the left side and end at the right side.",
+  "difficulty": 3,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch8",
+    "set-identity",
+    "cartesian-product",
+    "set-difference",
+    "de-morgan"
+  ],
+  "data": {
+    "sets": [
+      "A",
+      "B",
+      "C"
+    ],
+    "left": "A × (B − C)",
+    "right": "(A × B) − (A × C)",
+    "point": [
+      "x",
+      "y"
+    ]
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "(x, y) ∈ A × (B − C) means x ∈ A and y ∈ B and y ∉ C.",
+    "On the right, (x, y) ∉ A × C means not (x ∈ A and y ∈ C), which by De Morgan's law is x ∉ A or y ∉ C.",
+    "When x ∈ A is true, 'x ∉ A or y ∉ C' says the same thing as y ∉ C. So x ∈ A and y ∈ B and y ∉ C matches (x ∈ A and y ∈ B) and (x ∉ A or y ∉ C)."
+  ],
+  "solution": [
+    "Let $(x, y)$ be any ordered pair. Then $(x, y) \\in A \\times (B - C)$ means $x \\in A \\land (y \\in B \\land y \\notin C)$.",
+    "Whenever $x \\in A$ is true, $y \\notin C$ is equivalent to $x \\notin A \\lor y \\notin C$. So the statement is $(x \\in A \\land y \\in B) \\land (x \\notin A \\lor y \\notin C)$.",
+    "By De Morgan's law the second part is $\\sim(x \\in A \\land y \\in C)$, which says $(x, y) \\notin A \\times C$; the first part says $(x, y) \\in A \\times B$.",
+    "So $(x, y) \\in (A \\times B) - (A \\times C)$. Every step was an equivalence, so $A \\times (B - C) = (A \\times B) - (A \\times C)$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 8 exercises, #18 (p. 171)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Section 8.3 (proving A = B), the Cartesian product (Section 1.2) and the logic laws of Section 2.6."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "pair chasing",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(x, y) ∈ A × (B − C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A and (y ∈ B and y ∉ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(x ∈ A and y ∈ B) and (x ∉ A or y ∉ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(x ∈ A and y ∈ B) and not (x ∈ A and y ∈ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(x, y) ∈ A × B and (x, y) ∉ A × C"
+          },
+          {
+            "kind": "expr",
+            "content": "(x, y) ∈ (A × B) − (A × C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "De Morgan without switching 'and' to 'or'",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(x, y) ∈ A × (B − C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A and (y ∈ B and y ∉ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(x ∈ A and y ∈ B) and (x ∉ A and y ∉ C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "SETID_STEP_DIFFERS"
+        ]
+      }
+    },
+    {
+      "name": "straight jump",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "A × (B − C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(A × B) − (A × C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "SETID_NO_WORK"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "id": "precalc.functions.inverse-square-root",
+  "course": "precalc",
+  "topic": "functions",
+  "kind": "inverse_function",
+  "title": "Inverse of a square-root function",
+  "prompt": "Let $f(x) = \\sqrt{x - 2}$ for $x \\ge 2$, so its range is $[0, \\infty)$. Find $f^{-1}(x)$ for $x \\ge 0$.",
+  "answer_format": "An expression in x.",
+  "difficulty": 2,
+  "tags": [
+    "inverse functions",
+    "radicals"
+  ],
+  "data": {
+    "function": "sqrt(x - 2)",
+    "domain": "real[2, 7]",
+    "range": "real[0, 2.2]"
+  },
+  "answer": "x^2 + 2",
+  "mistakes": [
+    {
+      "answer": "x^2 - 2",
+      "hint": "Undo the steps of f in reverse order: f subtracts 2 and then takes a square root, so the inverse squares and then adds 2."
+    }
+  ],
+  "hints": [
+    "Swap x and y in y = √(x − 2), then square both sides."
+  ],
+  "solution": [
+    "$y = \\sqrt{x-2}$. Swap: $x = \\sqrt{y - 2}$ with $x \\ge 0$.",
+    "Square: $x^2 = y - 2$, so $f^{-1}(x) = x^2 + 2$ for $x \\ge 0$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "3.7 Inverse Functions",
+    "note": "Original problem; see restricting the domain."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "swap and square",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "y = sqrt(x - 2)"
+          },
+          {
+            "kind": "expr",
+            "content": "x = sqrt(y - 2)"
+          },
+          {
+            "kind": "expr",
+            "content": "x^2 = y - 2"
+          }
+        ],
+        "answer": "x^2 + 2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "wrong sign",
+      "submission": {
+        "steps": [],
+        "answer": "x^2 - 2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    },
+    {
+      "name": "not swapped",
+      "submission": {
+        "steps": [],
+        "answer": "sqrt(x - 2)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "INVERSE_NOT_SWAPPED"
+        ]
+      }
+    }
+  ]
+}

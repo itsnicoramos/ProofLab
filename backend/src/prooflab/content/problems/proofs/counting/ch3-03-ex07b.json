@@ -1,0 +1,94 @@
+{
+  "id": "proofs.counting.ch3-03-ex07b",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.3 #7 (second question) · Passwords mixing upper and lower case",
+  "prompt": "A password has exactly 5 characters, and each character is a letter of the alphabet in upper or lower case (52 possible characters). How many passwords mix the two cases, using at least one upper-case letter and at least one lower-case letter?",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "subtraction-principle",
+    "addition-principle"
+  ],
+  "data": {},
+  "answer": "52^5 - 2*26^5",
+  "mistakes": [
+    {
+      "answer": "52^5 - 26^5",
+      "hint": "That removes only the all-lower-case passwords. The all-upper-case ones don't mix the cases either."
+    },
+    {
+      "answer": "52^5",
+      "hint": "That counts every password, including the ones written entirely in one case."
+    },
+    {
+      "answer": "2*26^5",
+      "hint": "That's the number of single-case passwords: the ones to exclude, not keep."
+    }
+  ],
+  "hints": [
+    "It's easier to count the passwords that fail: those written in only one case.",
+    "There are 26^5 all-lower-case passwords and just as many all-upper-case ones. Remove both groups from the total."
+  ],
+  "solution": [
+    "With 52 characters available there are $52^5 = 380{,}204{,}032$ passwords in all.",
+    "A password fails to mix cases exactly when it is all lower case ($26^5$ of them) or all upper case (another $26^5$). These groups don't overlap, so $2 \\cdot 26^5 = 23{,}762{,}752$ passwords fail.",
+    "So $52^5 - 2 \\cdot 26^5 = 356{,}441{,}280$ passwords mix the cases."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.3 exercises, #7 (p. 77)",
+    "note": "This exact exercise (its second question), restated in ProofLab's words. Uses the subtraction and addition principles (Section 3.3)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "356441280"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "52^5"
+          },
+          {
+            "kind": "expr",
+            "content": "2*26^5"
+          }
+        ],
+        "answer": "52^5 - 2*26^5"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "52^5 - 26^5"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

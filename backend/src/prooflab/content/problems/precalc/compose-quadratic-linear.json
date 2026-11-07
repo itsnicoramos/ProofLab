@@ -1,0 +1,114 @@
+{
+  "id": "precalc.functions.compose-quadratic-linear",
+  "course": "precalc",
+  "topic": "functions",
+  "kind": "expression",
+  "title": "Compose two functions",
+  "prompt": "Let $f(x) = x^2 + 3$ and $g(x) = 2x + 1$. Find $(f \\circ g)(x)$ and expand it.",
+  "answer_format": "An expression in x. Expand completely.",
+  "difficulty": 1,
+  "tags": [
+    "composition"
+  ],
+  "data": {
+    "compose": [
+      "x^2 + 3",
+      "2x + 1"
+    ],
+    "form": "expanded"
+  },
+  "answer": "4x^2 + 4x + 4",
+  "mistakes": [
+    {
+      "answer": "2x^2 + 7",
+      "hint": "That's g(f(x)). (f ∘ g)(x) means f(g(x)): put g(x) inside f."
+    },
+    {
+      "answer": "2x^3 + x^2 + 6x + 3",
+      "hint": "Composition isn't multiplication. Replace the x in f with g(x)."
+    }
+  ],
+  "hints": [
+    "(f ∘ g)(x) = f(g(x)): replace every x in f with 2x + 1.",
+    "Expand (2x + 1)² carefully: it has a middle term."
+  ],
+  "solution": [
+    "$(f\\circ g)(x) = f(2x+1) = (2x+1)^2 + 3$.",
+    "$= 4x^2 + 4x + 1 + 3 = 4x^2 + 4x + 4$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "3.4 Composition of Functions",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "substitute and expand",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(2x+1)^2 + 3"
+          },
+          {
+            "kind": "expr",
+            "content": "4x^2 + 4x + 1 + 3"
+          }
+        ],
+        "answer": "4x^2 + 4x + 4"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "wrong order",
+      "submission": {
+        "steps": [],
+        "answer": "2x^2 + 7"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    },
+    {
+      "name": "not expanded",
+      "submission": {
+        "steps": [],
+        "answer": "(2x+1)^2 + 3"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "FORM_NOT_EXPANDED"
+        ]
+      }
+    },
+    {
+      "name": "expansion slip",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(2x+1)^2 + 3"
+          },
+          {
+            "kind": "expr",
+            "content": "4x^2 + 1 + 3"
+          }
+        ],
+        "answer": "4x^2 + 4"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1
+      }
+    }
+  ]
+}

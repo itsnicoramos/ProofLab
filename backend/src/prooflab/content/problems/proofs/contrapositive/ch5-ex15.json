@@ -1,0 +1,104 @@
+{
+  "id": "proofs.contrapositive.ch5-ex15",
+  "course": "proofs",
+  "topic": "contrapositive",
+  "kind": "parity_proof",
+  "title": "Ex 5.15 · If x³ − 1 is even, x is odd",
+  "prompt": "Use contrapositive proof. Let $x$ be an integer. Show that if $x^3 - 1$ is even, then $x$ is odd. Write the proof of the contrapositive with the steps below.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch5",
+    "contrapositive"
+  ],
+  "data": {
+    "variables": [
+      "x"
+    ],
+    "hypotheses": [
+      {
+        "var": "x",
+        "is": "even"
+      }
+    ],
+    "target": "x^3 - 1",
+    "goal": "odd"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Contrapositive: if x is even, then x³ − 1 is odd.",
+    "With x = 2a, rewrite 8a³ − 1 as 2·(integer) + 1."
+  ],
+  "solution": [
+    "Contrapositive: if $x$ is even, then $x^3 - 1$ is odd.",
+    "Suppose $x = 2a$. Then $x^3 - 1 = 8a^3 - 1 = 2(4a^3 - 1) + 1$, which is odd.",
+    "So the original statement is true. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 5 exercises, #15 (p. 136)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses contrapositive proof (Section 5.1) and Definitions 4.1–4.2."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "prove the contrapositive",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a"
+          },
+          {
+            "kind": "expr",
+            "content": "8a^3 - 1"
+          },
+          {
+            "kind": "expr",
+            "content": "2(4a^3 - 1) + 1"
+          },
+          {
+            "kind": "witness",
+            "content": "4a^3 - 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "witness off by one",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a"
+          },
+          {
+            "kind": "expr",
+            "content": "8a^3 - 1"
+          },
+          {
+            "kind": "witness",
+            "content": "4a^3"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "WITNESS_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

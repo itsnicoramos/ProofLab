@@ -1,0 +1,93 @@
+{
+  "id": "proofs.logic.ch2-05-ex10",
+  "course": "proofs",
+  "topic": "logic",
+  "kind": "truth_table",
+  "title": "Ex 2.5 #10 · Make ((P ∧ Q) ∨ R) ⇒ (R ∨ S) false",
+  "prompt": "The statement $((P \\wedge Q) \\vee R) \\Rightarrow (R \\vee S)$ is false. Find the truth values of $P$, $Q$, $R$ and $S$. You can reason this out without a full truth table.",
+  "answer_format": "Truth values for P, Q, R and S, like P = T, Q = F, R = T, S = F.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch2",
+    "truth-table"
+  ],
+  "data": {
+    "ask": "values",
+    "constraints": [
+      {
+        "formula": "((P ∧ Q) ∨ R) ⇒ (R ∨ S)",
+        "value": false
+      }
+    ]
+  },
+  "answer": "P = T, Q = T, R = F, S = F",
+  "mistakes": [],
+  "hints": [
+    "An implication is false in only one situation: its hypothesis is true and its conclusion is false.",
+    "Start with the conclusion R ∨ S being false. What does that say about R and S? Then use the hypothesis."
+  ],
+  "solution": [
+    "For the implication to be false, $(P \\wedge Q) \\vee R$ must be true and $R \\vee S$ must be false.",
+    "$R \\vee S$ is false only when $R$ and $S$ are both false.",
+    "With $R$ false, $(P \\wedge Q) \\vee R$ can only be true if $P \\wedge Q$ is true, so $P$ and $Q$ are both true.",
+    "So P = T, Q = T, R = F, S = F."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 2.5 exercises, #10 (p. 50)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses the truth tables for ∧, ∨, ∼, ⇒ and ⇔ (Sections 2.2–2.5)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct values",
+      "submission": {
+        "steps": [],
+        "answer": "P = T, Q = T, R = F, S = F"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "written in words",
+      "submission": {
+        "steps": [],
+        "answer": "P is true, Q is true, R is false and S is false"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "R true makes the conclusion true",
+      "submission": {
+        "steps": [],
+        "answer": "P = T, Q = T, R = T, S = F"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "LOGIC_VALUES_WRONG"
+        ]
+      }
+    },
+    {
+      "name": "missing letters",
+      "submission": {
+        "steps": [],
+        "answer": "R = F, S = F"
+      },
+      "expect": {
+        "status": "invalid",
+        "hint_codes": [
+          "LOGIC_VALUES_MISSING"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "id": "calc4.vector_calc.work-helix",
+  "course": "calc4",
+  "topic": "vector_calc",
+  "kind": "line_integral",
+  "title": "Work along a helix",
+  "prompt": "Compute $\\displaystyle\\int_C \\mathbf F\\cdot d\\mathbf r$ for $\\mathbf F = \\langle -y,\\ x,\\ z \\rangle$ along the helix $\\mathbf r(t) = \\langle \\cos t, \\sin t, t \\rangle$, $0 \\le t \\le 2\\pi$.",
+  "answer_format": "An exact number (use pi).",
+  "difficulty": 2,
+  "tags": [
+    "line integrals",
+    "helix"
+  ],
+  "data": {
+    "field": [
+      "-y",
+      "x",
+      "z"
+    ],
+    "curve": [
+      "cos(t)",
+      "sin(t)",
+      "t"
+    ],
+    "bounds": [
+      "0",
+      "2pi"
+    ]
+  },
+  "answer": "2pi + 2pi^2",
+  "mistakes": [],
+  "hints": [
+    "r′(t) = ⟨−sin t, cos t, 1⟩.",
+    "sin²t + cos²t = 1 simplifies the dot product a lot."
+  ],
+  "solution": [
+    "$\\mathbf F(\\mathbf r(t)) = \\langle -\\sin t, \\cos t, t \\rangle$, $\\mathbf r'(t) = \\langle -\\sin t, \\cos t, 1 \\rangle$.",
+    "$\\mathbf F\\cdot\\mathbf r' = \\sin^2 t + \\cos^2 t + t = 1 + t$.",
+    "$\\int_0^{2\\pi}(1 + t)\\,dt = 2\\pi + 2\\pi^2$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "6.2 Line Integrals",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "integral in t",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "int(1 + t, t, 0, 2pi)"
+          }
+        ],
+        "answer": "2pi + 2pi^2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "wrong interval",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "int(1 + t, t, 0, pi)"
+          }
+        ],
+        "answer": "2pi + 2pi^2"
+      },
+      "expect": {
+        "status": "partial",
+        "first_error": 0,
+        "hint_codes": [
+          "LINE_INTEGRAL_BOUNDS",
+          "STEP_ERRORS"
+        ]
+      }
+    },
+    {
+      "name": "opposite orientation",
+      "submission": {
+        "steps": [],
+        "answer": "-2pi - 2pi^2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SIGN_ERROR"
+        ]
+      }
+    }
+  ]
+}

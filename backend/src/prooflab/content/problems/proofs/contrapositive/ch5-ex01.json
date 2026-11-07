@@ -1,0 +1,93 @@
+{
+  "id": "proofs.contrapositive.ch5-ex01",
+  "course": "proofs",
+  "topic": "contrapositive",
+  "kind": "parity_proof",
+  "title": "Ex 5.1 · If n² is even, n is even",
+  "prompt": "Use contrapositive proof. Let $n$ be an integer. Show that if $n^2$ is even, then $n$ is even. Write the proof of the contrapositive with the steps below.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch5",
+    "contrapositive"
+  ],
+  "data": {
+    "variables": [
+      "n"
+    ],
+    "hypotheses": [
+      {
+        "var": "n",
+        "is": "odd"
+      }
+    ],
+    "target": "n^2",
+    "goal": "odd"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "The contrapositive of 'if P then Q' is 'if not Q then not P'. Here: if n is not even (odd), then n² is not even (odd).",
+    "So assume n is odd, write it with the definition, and show n² is odd."
+  ],
+  "solution": [
+    "Contrapositive: if $n$ is odd, then $n^2$ is odd.",
+    "Suppose $n$ is odd, so $n = 2a + 1$. Then $n^2 = 4a^2 + 4a + 1 = 2(2a^2 + 2a) + 1$, which is odd.",
+    "The contrapositive is true, so the original statement is true. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 5 exercises, #1 (p. 136)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses contrapositive proof (Section 5.1) and Definition 4.2."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "prove the contrapositive",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 2a + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "(2a+1)^2"
+          },
+          {
+            "kind": "expr",
+            "content": "4a^2 + 4a + 1"
+          },
+          {
+            "kind": "witness",
+            "content": "2a^2 + 2a"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "tries to start from n² directly",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n^2 = 2a"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0
+      }
+    }
+  ]
+}

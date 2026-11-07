@@ -1,0 +1,102 @@
+{
+  "id": "calc2.series.p-series-root-n",
+  "course": "calc2",
+  "topic": "series",
+  "kind": "series_convergence",
+  "title": "A p-series",
+  "prompt": "Does $\\displaystyle \\sum_{n=1}^{\\infty} \\frac{1}{\\sqrt{n}}$ converge or diverge?",
+  "answer_format": "'converges' or 'diverges' (add 'absolutely' or 'conditionally' when the terms change sign).",
+  "difficulty": 1,
+  "tags": [
+    "p-series",
+    "divergence test"
+  ],
+  "data": {
+    "term": "1/sqrt(n)"
+  },
+  "answer": "diverges",
+  "mistakes": [],
+  "hints": [
+    "Write 1/√n as 1/nᵖ. What is p?",
+    "A p-series converges exactly when p > 1."
+  ],
+  "solution": [
+    "$\\frac{1}{\\sqrt n} = \\frac{1}{n^{1/2}}$ is a p-series with $p = \\tfrac12 \\le 1$.",
+    "So the series diverges."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "5.3 The Divergence and Integral Tests",
+    "note": "Original problem; see p-series."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "p-series",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "p-series test"
+          },
+          {
+            "kind": "limit",
+            "content": "p = 1/2"
+          }
+        ],
+        "answer": "diverges"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "terms go to zero",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "divergence test"
+          },
+          {
+            "kind": "limit",
+            "content": "0"
+          }
+        ],
+        "answer": "converges"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "DIVERGENCE_TEST_INCONCLUSIVE",
+          "TERMS_TO_ZERO_NOT_ENOUGH"
+        ]
+      }
+    },
+    {
+      "name": "wrong p",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "p-series"
+          },
+          {
+            "kind": "limit",
+            "content": "p = 2"
+          }
+        ],
+        "answer": "diverges"
+      },
+      "expect": {
+        "status": "partial",
+        "first_error": 1,
+        "hint_codes": [
+          "WRONG_TEST_LIMIT"
+        ]
+      }
+    }
+  ]
+}

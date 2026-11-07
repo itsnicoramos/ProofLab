@@ -1,0 +1,83 @@
+{
+  "id": "calc2.series.geometric-sum",
+  "course": "calc2",
+  "topic": "series",
+  "kind": "series_sum",
+  "title": "Sum of a geometric series",
+  "prompt": "Find $\\displaystyle \\sum_{n=1}^{\\infty} \\frac{5}{4^{n}}$.",
+  "answer_format": "An exact number.",
+  "difficulty": 1,
+  "tags": [
+    "geometric series"
+  ],
+  "data": {
+    "term": "5/4^n"
+  },
+  "answer": "5/3",
+  "mistakes": [],
+  "hints": [
+    "The first term is a = 5/4 and the ratio is r = 1/4.",
+    "Sum = a/(1 − r)."
+  ],
+  "solution": [
+    "First term $a = \\tfrac54$, ratio $r = \\tfrac14$.",
+    "Sum $= \\frac{5/4}{1 - 1/4} = \\frac{5/4}{3/4} = \\frac53$."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "5.2 Infinite Series",
+    "note": "Original problem; see geometric series."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "a/(1-r)",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(5/4)/(1 - 1/4)"
+          }
+        ],
+        "answer": "5/3"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "started at n = 0",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "5/(1 - 1/4)"
+          }
+        ],
+        "answer": "20/3"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "START_INDEX"
+        ]
+      }
+    },
+    {
+      "name": "decimal",
+      "submission": {
+        "steps": [],
+        "answer": "1.6667"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "INEXACT"
+        ]
+      }
+    }
+  ]
+}

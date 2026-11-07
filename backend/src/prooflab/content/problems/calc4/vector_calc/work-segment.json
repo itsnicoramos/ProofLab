@@ -1,0 +1,105 @@
+{
+  "id": "calc4.vector_calc.work-segment",
+  "course": "calc4",
+  "topic": "vector_calc",
+  "kind": "line_integral",
+  "title": "Work along a segment",
+  "prompt": "Compute $\\displaystyle\\int_C \\mathbf F\\cdot d\\mathbf r$ for $\\mathbf F = \\langle y,\\ x + z,\\ x \\rangle$ along the segment $\\mathbf r(t) = \\langle t, 2t, 3t \\rangle$, $0 \\le t \\le 1$.",
+  "answer_format": "An exact number.",
+  "difficulty": 1,
+  "tags": [
+    "line integrals",
+    "work"
+  ],
+  "data": {
+    "field": [
+      "y",
+      "x + z",
+      "x"
+    ],
+    "curve": [
+      "t",
+      "2t",
+      "3t"
+    ],
+    "bounds": [
+      "0",
+      "1"
+    ]
+  },
+  "answer": "13/2",
+  "mistakes": [],
+  "hints": [
+    "Write F(r(t)) and r′(t), then integrate their dot product from t = 0 to 1."
+  ],
+  "solution": [
+    "$\\mathbf F(\\mathbf r(t)) = \\langle 2t, 4t, t \\rangle$ and $\\mathbf r'(t) = \\langle 1, 2, 3 \\rangle$.",
+    "$\\mathbf F\\cdot\\mathbf r' = 2t + 8t + 3t = 13t$.",
+    "$\\int_0^1 13t\\,dt = \\frac{13}{2}$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "6.2 Line Integrals",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "dot product then integrate",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "2t + 8t + 3t"
+          },
+          {
+            "kind": "expr",
+            "content": "13t^2/2"
+          },
+          {
+            "kind": "expr",
+            "content": "13/2"
+          }
+        ],
+        "answer": "13/2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "forgot r'(t)",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "2t + 4t + t"
+          }
+        ],
+        "answer": "7/2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "MISSING_DERIVATIVE"
+        ]
+      }
+    },
+    {
+      "name": "decimal",
+      "submission": {
+        "steps": [],
+        "answer": "6.5"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "INEXACT"
+        ]
+      }
+    }
+  ]
+}

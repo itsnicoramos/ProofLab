@@ -1,0 +1,108 @@
+{
+  "id": "calc3.multiple_integrals.sine-region",
+  "course": "calc3",
+  "topic": "multiple_integrals",
+  "kind": "iterated_integral",
+  "title": "Under a sine arch",
+  "prompt": "Evaluate $\\displaystyle\\int_0^{\\pi} \\int_0^{\\sin x} y\\,dy\\,dx$.",
+  "answer_format": "An exact number.",
+  "difficulty": 2,
+  "tags": [
+    "double integrals",
+    "general regions",
+    "trig"
+  ],
+  "data": {
+    "integrand": "y",
+    "bounds": [
+      [
+        "y",
+        "0",
+        "sin(x)"
+      ],
+      [
+        "x",
+        "0",
+        "pi"
+      ]
+    ]
+  },
+  "answer": "pi/4",
+  "mistakes": [],
+  "hints": [
+    "After the inner integral you'll need ∫ sin²x dx. Use sin²x = (1 − cos 2x)/2."
+  ],
+  "solution": [
+    "Inner: $\\int_0^{\\sin x} y\\,dy = \\frac{\\sin^2 x}{2}$.",
+    "Outer: $\\int_0^\\pi \\frac{\\sin^2 x}{2}\\,dx = \\frac{1}{2}\\cdot\\frac{\\pi}{2} = \\frac{\\pi}{4}$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "5.2 Double Integrals over General Regions",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "half-angle identity",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "sin(x)^2/2"
+          },
+          {
+            "kind": "expr",
+            "content": "(1 - cos(2x))/4"
+          },
+          {
+            "kind": "expr",
+            "content": "pi/4"
+          }
+        ],
+        "answer": "pi/4"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "decimal",
+      "submission": {
+        "steps": [],
+        "answer": "0.7854"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "INEXACT"
+        ]
+      }
+    },
+    {
+      "name": "dropped the 1/2",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "sin(x)^2"
+          },
+          {
+            "kind": "expr",
+            "content": "pi/2"
+          }
+        ],
+        "answer": "pi/2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "CONSTANT_FACTOR"
+        ]
+      }
+    }
+  ]
+}

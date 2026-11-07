@@ -1,0 +1,201 @@
+{
+  "id": "proofs.disproof.ch9-ex12",
+  "course": "proofs",
+  "topic": "disproof",
+  "kind": "counterexample",
+  "title": "Ex 9.12 · Same-parity products, same-parity numbers?",
+  "prompt": "Statement: for all natural numbers $a, b, c$, if $ab$, $bc$ and $ac$ all have the same parity, then $a$, $b$ and $c$ all have the same parity. This statement is false. Disprove it with a counterexample.",
+  "answer_format": "Integer values for every variable, like a = 4, b = 2, c = 2.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch9",
+    "counterexample"
+  ],
+  "data": {
+    "variables": {
+      "a": "positive",
+      "b": "positive",
+      "c": "positive"
+    },
+    "hypothesis": {
+      "op": "or",
+      "args": [
+        {
+          "op": "and",
+          "args": [
+            {
+              "op": "even",
+              "args": [
+                "a b"
+              ]
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "even",
+                  "args": [
+                    "b c"
+                  ]
+                },
+                {
+                  "op": "even",
+                  "args": [
+                    "a c"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "and",
+          "args": [
+            {
+              "op": "odd",
+              "args": [
+                "a b"
+              ]
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "odd",
+                  "args": [
+                    "b c"
+                  ]
+                },
+                {
+                  "op": "odd",
+                  "args": [
+                    "a c"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "conclusion": {
+      "op": "or",
+      "args": [
+        {
+          "op": "and",
+          "args": [
+            {
+              "op": "even",
+              "args": [
+                "a"
+              ]
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "even",
+                  "args": [
+                    "b"
+                  ]
+                },
+                {
+                  "op": "even",
+                  "args": [
+                    "c"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "op": "and",
+          "args": [
+            {
+              "op": "odd",
+              "args": [
+                "a"
+              ]
+            },
+            {
+              "op": "and",
+              "args": [
+                {
+                  "op": "odd",
+                  "args": [
+                    "b"
+                  ]
+                },
+                {
+                  "op": "odd",
+                  "args": [
+                    "c"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "answer": "a = 1, b = 2, c = 2",
+  "mistakes": [],
+  "hints": [
+    "If at least two of a, b, c are even, every product ab, bc, ac is even.",
+    "Now make the third number odd."
+  ],
+  "solution": [
+    "Take $a = 1$, $b = 2$, $c = 2$: $ab = 2$, $bc = 4$, $ac = 2$ are all even.",
+    "But $a$ is odd while $b$ and $c$ are even, so the conclusion fails."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 9 exercises, #12 (p. 179)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses counterexamples (Section 9.1) and Definition 4.3 (same parity)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "one odd, two even",
+      "submission": {
+        "steps": [],
+        "answer": "a = 1, b = 2, c = 2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "all even",
+      "submission": {
+        "steps": [],
+        "answer": "a = 2, b = 2, c = 2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "CONCLUSION_HOLDS"
+        ]
+      }
+    },
+    {
+      "name": "products differ in parity",
+      "submission": {
+        "steps": [],
+        "answer": "a = 1, b = 2, c = 3"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "HYPOTHESIS_NOT_MET"
+        ]
+      }
+    }
+  ]
+}

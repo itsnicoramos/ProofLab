@@ -1,0 +1,66 @@
+{
+  "id": "calc2.integrals.improper-converges",
+  "course": "calc2",
+  "topic": "integrals",
+  "kind": "definite_integral",
+  "title": "A convergent improper integral",
+  "prompt": "Evaluate $\\displaystyle \\int_1^{\\infty} \\frac{1}{x^2}\\,dx$, or say that it diverges.",
+  "answer_format": "An exact number (fractions, sqrt, pi, ln ...), or 'diverges'.",
+  "difficulty": 2,
+  "tags": [
+    "improper integrals"
+  ],
+  "data": {
+    "integrand": "1/x^2",
+    "lower": "1",
+    "upper": "oo"
+  },
+  "answer": "1",
+  "mistakes": [],
+  "hints": [
+    "Compute ∫₁ᵇ x⁻² dx, then let b → ∞."
+  ],
+  "solution": [
+    "$\\int_1^b x^{-2}\\,dx = \\left[-\\tfrac1x\\right]_1^b = 1 - \\tfrac1b$.",
+    "As $b \\to \\infty$ this tends to $1$."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "3.7 Improper Integrals",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "limit of proper integrals",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "-1/x"
+          },
+          {
+            "kind": "expr",
+            "content": "0 - (-1)"
+          }
+        ],
+        "answer": "1"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "says it diverges",
+      "submission": {
+        "steps": [],
+        "answer": "diverges"
+      },
+      "expect": {
+        "status": "incorrect"
+      }
+    }
+  ]
+}

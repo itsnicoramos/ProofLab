@@ -1,0 +1,67 @@
+{
+  "id": "proofs.sets.ch1-01-ex13",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.1 #13 · {x ∈ ℤ : |6x| < 5}",
+  "prompt": "Write the set $\\{x \\in \\mathbb{Z} : |6x| < 5\\}$ by listing its elements between braces.",
+  "answer_format": "A set listed between braces, like {1, 2, 3} (∅ for the empty set). Steps are optional.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": {
+      "var": "x",
+      "domain": "Z",
+      "where": [
+        "|6x| < 5"
+      ]
+    }
+  },
+  "answer": "{0}",
+  "mistakes": [],
+  "hints": [
+    "Rewrite |6x| < 5 as −5/6 < x < 5/6.",
+    "How many integers lie strictly between −5/6 and 5/6?"
+  ],
+  "solution": [
+    "|6x| < 5 means −5/6 < x < 5/6, and the only integer in that range is 0.",
+    "So the answer is $\\{0\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.1 exercises, #13 (p. 7)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{0}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "∅"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_MISSING"
+        ]
+      }
+    }
+  ]
+}

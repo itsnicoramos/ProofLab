@@ -1,0 +1,83 @@
+{
+  "id": "calc4.vector_calc.mass-of-helix",
+  "course": "calc4",
+  "topic": "vector_calc",
+  "kind": "line_integral",
+  "title": "Scalar line integral",
+  "prompt": "Compute $\\displaystyle\\int_C z\\,ds$ where $C$ is the helix $\\mathbf r(t) = \\langle \\cos t, \\sin t, t \\rangle$, $0 \\le t \\le 2\\pi$.",
+  "answer_format": "An exact number (use pi and sqrt).",
+  "difficulty": 2,
+  "tags": [
+    "line integrals",
+    "arc length"
+  ],
+  "data": {
+    "scalar": "z",
+    "curve": [
+      "cos(t)",
+      "sin(t)",
+      "t"
+    ],
+    "bounds": [
+      "0",
+      "2pi"
+    ]
+  },
+  "answer": "2sqrt(2) pi^2",
+  "mistakes": [],
+  "hints": [
+    "ds = |r′(t)| dt. Compute the length of r′(t) first."
+  ],
+  "solution": [
+    "$|\\mathbf r'(t)| = \\sqrt{\\sin^2 t + \\cos^2 t + 1} = \\sqrt 2$.",
+    "$\\int_0^{2\\pi} t\\sqrt2\\,dt = \\sqrt2\\cdot 2\\pi^2$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "6.2 Line Integrals",
+    "note": "Original problem; see scalar line integrals."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "with the speed factor",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "sqrt(2) t"
+          },
+          {
+            "kind": "expr",
+            "content": "sqrt(2) t^2/2"
+          }
+        ],
+        "answer": "2 sqrt(2) pi^2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "forgot |r'(t)|",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "t"
+          }
+        ],
+        "answer": "2pi^2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "MISSING_DERIVATIVE"
+        ]
+      }
+    }
+  ]
+}

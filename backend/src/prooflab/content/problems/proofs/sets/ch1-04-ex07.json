@@ -1,0 +1,65 @@
+{
+  "id": "proofs.sets.ch1-04-ex07",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.4 #7 · 𝒫({a, b}) × 𝒫({0, 1})",
+  "prompt": "Write $\\mathscr{P}(\\{a, b\\}) \\times \\mathscr{P}(\\{0, 1\\})$ by listing its elements between braces.",
+  "answer_format": "A set of ordered pairs between braces, like {(1, a), (2, b)}. Spaces are optional. Steps are optional.",
+  "difficulty": 3,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": "P({a, b}) × P({0, 1})",
+    "atoms": [
+      "a",
+      "b"
+    ]
+  },
+  "answer": "{(∅, ∅), (∅, {0}), (∅, {1}), (∅, {0, 1}), ({a}, ∅), ({a}, {0}), ({a}, {1}), ({a}, {0, 1}), ({b}, ∅), ({b}, {0}), ({b}, {1}), ({b}, {0, 1}), ({a, b}, ∅), ({a, b}, {0}), ({a, b}, {1}), ({a, b}, {0, 1})}",
+  "mistakes": [],
+  "hints": [
+    "Find both power sets first (4 elements each); then form all 16 pairs.",
+    "The answer is a set of 16 ordered pairs (X, Y) of sets."
+  ],
+  "solution": [
+    "Pair each subset from the first power set with each subset from the second: 16 ordered pairs.",
+    "So the answer is $\\{(\\emptyset, \\emptyset), (\\emptyset, \\{0\\}), (\\emptyset, \\{1\\}), (\\emptyset, \\{0, 1\\}), (\\{a\\}, \\emptyset), (\\{a\\}, \\{0\\}), (\\{a\\}, \\{1\\}), (\\{a\\}, \\{0, 1\\}), (\\{b\\}, \\emptyset), (\\{b\\}, \\{0\\}), (\\{b\\}, \\{1\\}), (\\{b\\}, \\{0, 1\\}), (\\{a, b\\}, \\emptyset), (\\{a, b\\}, \\{0\\}), (\\{a, b\\}, \\{1\\}), (\\{a, b\\}, \\{0, 1\\})\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.4 exercises, #7 (p. 17)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{(∅, ∅), (∅, {0}), (∅, {1}), (∅, {0, 1}), ({a}, ∅), ({a}, {0}), ({a}, {1}), ({a}, {0, 1}), ({b}, ∅), ({b}, {0}), ({b}, {1}), ({b}, {0, 1}), ({a, b}, ∅), ({a, b}, {0}), ({a, b}, {1}), ({a, b}, {0, 1})}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{(∅,{0}),(∅,{1}),(∅,{0,1}),({a},∅),({a},{0}),({a},{1}),({a},{0,1}),({b},∅),({b},{0}),({b},{1}),({b},{0,1}),({a,b},∅),({a,b},{0}),({a,b},{1}),({a,b},{0,1})}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_MISSING"
+        ]
+      }
+    }
+  ]
+}

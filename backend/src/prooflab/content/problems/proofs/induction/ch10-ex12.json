@@ -1,0 +1,113 @@
+{
+  "id": "proofs.induction.ch10-ex12",
+  "course": "proofs",
+  "topic": "induction",
+  "kind": "induction",
+  "title": "Ex 10.12 · 9 divides 4^(3n) + 8",
+  "prompt": "Prove by induction that $9 \\mid (4^{3n} + 8)$ for every integer $n \\ge 0$. Check $n = 0$, assume $4^{3k} + 8 = 9m$ for an integer $m$ (the case $n = k$), and show that $4^{3(k+1)} + 8$ is $9$ times an integer.",
+  "answer_format": "A structured proof: a base step (the case n = 0 with numbers only), an assume step (f(k) = d·m for an integer m), expr steps for the n = k + 1 case, and a witness step (the integer w with f(k + 1) = d·w). Notes optional. No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch10",
+    "induction",
+    "divisibility"
+  ],
+  "data": {
+    "base": 0,
+    "divides": {
+      "divisor": 9,
+      "expr": "4^(3n) + 8"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Base case: for n = 0, 4⁰ + 8 = 1 + 8 = 9. (Remember 4⁰ is 1, not 0.)",
+    "4^(3(k + 1)) = 64·4^(3k). Rewrite 64·4^(3k) + 8 so that the block 4^(3k) + 8 appears.",
+    "64·4^(3k) + 8 = 64(4^(3k) + 8) − 504 = 64·9m − 504, and 504 = 9·56."
+  ],
+  "solution": [
+    "Base case: for $n = 0$, $4^{0} + 8 = 9 = 9 \\cdot 1$.",
+    "Inductive step: suppose $9 \\mid (4^{3k} + 8)$ for some $k \\ge 0$, so $4^{3k} + 8 = 9m$ for an integer $m$.",
+    "Then $4^{3(k+1)} + 8 = 64 \\cdot 4^{3k} + 8 = 64(4^{3k} + 8) - 504 = 64 \\cdot 9m - 9 \\cdot 56 = 9(64m - 56)$, and $64m - 56$ is an integer.",
+    "So $9 \\mid (4^{3(k+1)} + 8)$, and by induction $9 \\mid (4^{3n} + 8)$ for every integer $n \\ge 0$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 10 exercises, #12 (p. 195)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses induction (Section 10.1) with base case n = 0, as the exercise asks for every integer n ≥ 0, and the definition of divisibility (Definition 4.4)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "induction proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "4^0 + 8 = 9 = 9*1"
+          },
+          {
+            "kind": "assume",
+            "content": "4^(3k) + 8 = 9m"
+          },
+          {
+            "kind": "expr",
+            "content": "64*4^(3k) + 8"
+          },
+          {
+            "kind": "expr",
+            "content": "64(4^(3k) + 8) - 504"
+          },
+          {
+            "kind": "expr",
+            "content": "64*9m - 504"
+          },
+          {
+            "kind": "witness",
+            "content": "64m - 56"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "treats 4^0 as 0",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "4^0 + 8 = 0 + 8 = 8"
+          },
+          {
+            "kind": "assume",
+            "content": "4^(3k) + 8 = 9m"
+          },
+          {
+            "kind": "expr",
+            "content": "64(4^(3k) + 8) - 504"
+          },
+          {
+            "kind": "witness",
+            "content": "64m - 56"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "IND_BASE_UNEQUAL"
+        ]
+      }
+    }
+  ]
+}

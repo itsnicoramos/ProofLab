@@ -1,0 +1,85 @@
+{
+  "id": "proofs.counting.ch3-08-ex11",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.8 #11 · w + x + y + z = 100 with lower bounds",
+  "prompt": "How many integer solutions does $w + x + y + z = 100$ have with $w \\ge 4$, $x \\ge 2$, $y \\ge 0$ and $z \\ge 0$?",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "multisets",
+    "stars-and-bars"
+  ],
+  "data": {},
+  "answer": "binom(97, 3)",
+  "mistakes": [
+    {
+      "answer": "binom(103, 3)",
+      "hint": "That ignores the lower bounds on w and x and counts all the non-negative solutions."
+    },
+    {
+      "answer": "binom(94, 3)",
+      "hint": "After setting aside 4 for w and 2 for x, the remaining 94 units are pictured as 94 stars and 3 bars: choose the bar positions among all 97 symbols."
+    }
+  ],
+  "hints": [
+    "Give w its 4 and x its 2 up front. How much is left to share out?",
+    "Sharing the rest among four non-negative variables is a stars-and-bars count with 3 bars."
+  ],
+  "solution": [
+    "Write $w = 4 + w'$ and $x = 2 + x'$ with $w', x' \\ge 0$. Then $w' + x' + y + z = 94$, with all four variables non-negative.",
+    "Each such solution is a row of 94 stars and 3 bars, so there are $\\binom{97}{3} = 147{,}440$ solutions."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.8 exercises, #11 (p. 103)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses stars and bars (Section 3.8)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "147440"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "100 - 4 - 2"
+          }
+        ],
+        "answer": "binom(97, 3)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "binom(103, 3)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

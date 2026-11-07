@@ -1,0 +1,112 @@
+{
+  "id": "calc1.derivatives.tangent-cubic",
+  "course": "calc1",
+  "topic": "derivatives",
+  "kind": "tangent_line",
+  "title": "Tangent line to a cubic",
+  "prompt": "Find the equation of the tangent line to $f(x) = x^3 - 2x$ at $x = 1$.",
+  "answer_format": "An equation like y = mx + b.",
+  "difficulty": 1,
+  "tags": [
+    "tangent line"
+  ],
+  "data": {
+    "function": "x^3 - 2x",
+    "var": "x",
+    "at": "1"
+  },
+  "answer": "y = x - 2",
+  "mistakes": [],
+  "hints": [
+    "You need a point (1, f(1)) and a slope f′(1).",
+    "Point-slope form: y − f(a) = f′(a)(x − a)."
+  ],
+  "solution": [
+    "$f(1) = 1 - 2 = -1$, so the point is $(1, -1)$.",
+    "$f'(x) = 3x^2 - 2$, so the slope is $f'(1) = 1$.",
+    "$y - (-1) = 1(x - 1)$, i.e. $y = x - 2$."
+  ],
+  "reference": {
+    "book": "openstax-calc1",
+    "section": "3.1 Defining the Derivative",
+    "note": "Original problem; see tangent lines."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "point-slope",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "f'(x) = 3x^2 - 2"
+          },
+          {
+            "kind": "expr",
+            "content": "f'(1) = 1"
+          },
+          {
+            "kind": "expr",
+            "content": "f(1) = -1"
+          },
+          {
+            "kind": "expr",
+            "content": "y + 1 = 1(x - 1)"
+          }
+        ],
+        "answer": "y = x - 2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "slope only",
+      "submission": {
+        "steps": [],
+        "answer": "1"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SLOPE_ONLY"
+        ]
+      }
+    },
+    {
+      "name": "wrong point",
+      "submission": {
+        "steps": [],
+        "answer": "y = x + 1"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "WRONG_POINT"
+        ]
+      }
+    },
+    {
+      "name": "wrong derivative",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "f'(x) = 3x^2"
+          },
+          {
+            "kind": "expr",
+            "content": "f'(1) = 3"
+          }
+        ],
+        "answer": "y = 3x - 4"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "id": "proofs.sets.ch1-01-ex05",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.1 #5 · {x ∈ ℝ : x² = 3}",
+  "prompt": "Write the set $\\{x \\in \\mathbb{R} : x^2 = 3\\}$ by listing its elements between braces.",
+  "answer_format": "A set listed between braces, like {1, 2, 3} (∅ for the empty set). Steps are optional.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": {
+      "var": "x",
+      "domain": "R",
+      "where": [
+        "x^2 = 3"
+      ]
+    }
+  },
+  "answer": "{-sqrt(3), sqrt(3)}",
+  "mistakes": [],
+  "hints": [
+    "The elements are the real solutions of the equation.",
+    "x² = 3 has two real solutions; don't forget the negative one."
+  ],
+  "solution": [
+    "The equation x² = 3 has exactly two real solutions, x = √3 and x = −√3.",
+    "So the answer is $\\{- \\sqrt{3}, \\sqrt{3}\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.1 exercises, #5 (p. 7)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{-sqrt(3), sqrt(3)}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{sqrt(3)}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_MISSING"
+        ]
+      }
+    }
+  ]
+}

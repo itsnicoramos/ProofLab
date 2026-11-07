@@ -1,0 +1,141 @@
+{
+  "id": "calc2.series.alternating-harmonic",
+  "course": "calc2",
+  "topic": "series",
+  "kind": "series_convergence",
+  "title": "The alternating harmonic series",
+  "prompt": "Does $\\displaystyle \\sum_{n=1}^{\\infty} \\frac{(-1)^{n+1}}{n}$ converge absolutely, converge conditionally, or diverge?",
+  "answer_format": "'converges' or 'diverges' (add 'absolutely' or 'conditionally' when the terms change sign).",
+  "difficulty": 2,
+  "tags": [
+    "alternating series",
+    "conditional convergence"
+  ],
+  "data": {
+    "term": "(-1)^(n+1)/n"
+  },
+  "answer": "converges conditionally",
+  "mistakes": [],
+  "hints": [
+    "Check the alternating series test, then separately check Σ|aₙ|."
+  ],
+  "solution": [
+    "$\\frac1n$ decreases to $0$, so the series converges by the alternating series test.",
+    "But $\\sum \\left|\\frac{(-1)^{n+1}}{n}\\right| = \\sum \\frac1n$ is the harmonic series, which diverges.",
+    "So the series converges conditionally."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "5.5 Alternating Series",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "AST plus harmonic",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "alternating series test"
+          },
+          {
+            "kind": "test",
+            "content": "p-series"
+          },
+          {
+            "kind": "limit",
+            "content": "p = 1"
+          }
+        ],
+        "answer": "converges conditionally"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "didn't classify",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "AST"
+          }
+        ],
+        "answer": "converges"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "SERIES_SPECIFY_TYPE"
+        ]
+      }
+    },
+    {
+      "name": "claims absolute",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "AST"
+          }
+        ],
+        "answer": "converges absolutely"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SERIES_CONVERGENCE_TYPE"
+        ]
+      }
+    },
+    {
+      "name": "only showed sum |a_n| diverges",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "integral"
+          }
+        ],
+        "answer": "diverges"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SERIES_ABS_DIVERGES_ONLY"
+        ]
+      }
+    },
+    {
+      "name": "geometric doesn't apply",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "geometric"
+          },
+          {
+            "kind": "test",
+            "content": "AST"
+          },
+          {
+            "kind": "test",
+            "content": "p-series"
+          }
+        ],
+        "answer": "converges conditionally"
+      },
+      "expect": {
+        "status": "partial",
+        "first_error": 0,
+        "hint_codes": [
+          "SERIES_TEST_DOES_NOT_APPLY"
+        ]
+      }
+    }
+  ]
+}

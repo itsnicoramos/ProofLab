@@ -1,0 +1,126 @@
+{
+  "id": "proofs.logic.ch2-06-ex06",
+  "course": "proofs",
+  "topic": "logic",
+  "kind": "logical_equivalence",
+  "title": "Ex 2.6 #6 · ∼(P ∧ Q ∧ R) = (∼P) ∨ (∼Q) ∨ (∼R)",
+  "prompt": "Use a truth table to show that $\\sim (P \\wedge Q \\wedge R)$ and $(\\sim P) \\vee (\\sim Q) \\vee (\\sim R)$ are logically equivalent: they have the same truth value in every row.",
+  "answer_format": "No final answer box. Give the truth-table column of each statement as a column step (statement : T F T T, rows (P, Q, R) in the order TTT, TTF, TFT, TFF, FTT, FTF, FFT, FFF), or rewrite one statement into the other with expr steps, each equivalent to the one before.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch2",
+    "logical-equivalence",
+    "demorgan"
+  ],
+  "data": {
+    "left": "~(P ∧ Q ∧ R)",
+    "right": "(~P) ∨ (~Q) ∨ (~R)"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "P ∧ Q ∧ R is true in only one row. Which one?",
+    "(∼P) ∨ (∼Q) ∨ (∼R) is true as soon as one of P, Q, R is false."
+  ],
+  "solution": [
+    "$P \\wedge Q \\wedge R$ is true only in the first row, so $\\sim (P \\wedge Q \\wedge R)$ is F T T T T T T T.",
+    "$(\\sim P) \\vee (\\sim Q) \\vee (\\sim R)$ is false only when $P$, $Q$ and $R$ are all true: F T T T T T T T.",
+    "The columns agree in every row, so the statements are logically equivalent."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 2.6 exercises, #6 (p. 52)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses logical equivalence (Section 2.6)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "truth table",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "~(P ∧ Q ∧ R) : F T T T T T T T"
+          },
+          {
+            "kind": "column",
+            "content": "(~P) ∨ (~Q) ∨ (~R) : F T T T T T T T"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "rewrite chain",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "~(P ∧ Q ∧ R)"
+          },
+          {
+            "kind": "expr",
+            "content": "~(P ∧ Q) ∨ ~R"
+          },
+          {
+            "kind": "expr",
+            "content": "(~P ∨ ~Q) ∨ ~R"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "only one column",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "~(P ∧ Q ∧ R) : F T T T T T T T"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "LOGIC_INCOMPLETE"
+        ]
+      }
+    },
+    {
+      "name": "forgot to negate",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "~(P ∧ Q ∧ R) : T F F F F F F F"
+          },
+          {
+            "kind": "column",
+            "content": "(~P) ∨ (~Q) ∨ (~R) : F T T T T T T T"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "TT_COLUMN_WRONG",
+          "TT_ALL_FLIPPED"
+        ]
+      }
+    }
+  ]
+}

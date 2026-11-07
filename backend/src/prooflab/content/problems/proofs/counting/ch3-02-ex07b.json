@@ -1,0 +1,79 @@
+{
+  "id": "proofs.counting.ch3-02-ex07b",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.2 #7(b) · 4-letter codes, no letter twice in a row",
+  "prompt": "A code is a list of 4 letters from A to Z, and letters may repeat. How many codes have no two consecutive letters the same? For example, ABAB is allowed but ABBC is not.",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "multiplication-principle"
+  ],
+  "data": {},
+  "answer": "26*25^3",
+  "mistakes": [
+    {
+      "answer": "26*25*24*23",
+      "hint": "That forbids any letter from appearing twice anywhere. Only consecutive letters must differ: a letter may come back later, as in ABAB."
+    },
+    {
+      "answer": "26^4",
+      "hint": "That counts every 4-letter code, including ones like AABC with two equal letters side by side."
+    }
+  ],
+  "hints": [
+    "Fill the code from left to right. How many choices are there for the first letter?",
+    "Each later letter only has to differ from the letter just before it."
+  ],
+  "solution": [
+    "The first letter can be any of the 26. Each of the next three letters must differ from the letter just before it, which leaves 25 choices each time.",
+    "So there are $26 \\cdot 25 \\cdot 25 \\cdot 25 = 406{,}250$ codes."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.2 exercises, #7b (p. 73)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses the multiplication principle (Section 3.2)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "406250"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [],
+        "answer": "26*25^3"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "26*25*24*23"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

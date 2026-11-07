@@ -1,0 +1,88 @@
+{
+  "id": "calc2.integrals.ftc-sine",
+  "course": "calc2",
+  "topic": "integrals",
+  "kind": "definite_integral",
+  "title": "Fundamental Theorem of Calculus",
+  "prompt": "Evaluate $\\displaystyle \\int_0^{\\pi} \\sin x\\,dx$.",
+  "answer_format": "An exact number (fractions, sqrt, pi, ln ...), or 'diverges'.",
+  "difficulty": 1,
+  "tags": [
+    "FTC",
+    "trig"
+  ],
+  "data": {
+    "integrand": "sin(x)",
+    "lower": "0",
+    "upper": "pi"
+  },
+  "answer": "2",
+  "mistakes": [],
+  "hints": [
+    "An antiderivative of sin x is −cos x. Evaluate F(π) − F(0)."
+  ],
+  "solution": [
+    "$\\int_0^\\pi \\sin x\\,dx = [-\\cos x]_0^\\pi = -\\cos\\pi + \\cos 0 = 1 + 1 = 2$."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "1.3 The Fundamental Theorem of Calculus",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "FTC",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "-cos(x)"
+          },
+          {
+            "kind": "expr",
+            "content": "-cos(pi) + cos(0)"
+          }
+        ],
+        "answer": "2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "sign error",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "cos(x)"
+          }
+        ],
+        "answer": "-2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "SIGN_ERROR"
+        ]
+      }
+    },
+    {
+      "name": "stopped at the antiderivative",
+      "submission": {
+        "steps": [],
+        "answer": "-cos(x)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "INTEGRAL_NEEDS_VALUE"
+        ]
+      }
+    }
+  ]
+}

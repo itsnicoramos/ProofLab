@@ -1,0 +1,65 @@
+{
+  "id": "proofs.sets.ch1-02-ex02g",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.2 #2(g) · A × (B × B)",
+  "prompt": "Let $A = \\{\\pi, e, 0\\}$ and $B = \\{0, 1\\}$. List the elements of $A \\times (B \\times B)$ between braces.",
+  "answer_format": "A set of ordered pairs between braces, like {(1, a), (2, b)}. Spaces are optional. Steps are optional.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "sets": {
+      "A": "{pi, e, 0}",
+      "B": "{0, 1}"
+    },
+    "compute": "A × (B × B)"
+  },
+  "answer": "{(0, (0, 0)), (0, (0, 1)), (0, (1, 0)), (0, (1, 1)), (e, (0, 0)), (e, (0, 1)), (e, (1, 0)), (e, (1, 1)), (pi, (0, 0)), (pi, (0, 1)), (pi, (1, 0)), (pi, (1, 1))}",
+  "mistakes": [],
+  "hints": [
+    "Each element is a pair whose second entry is itself a pair from B × B.",
+    "Write elements like (1, (a, c)): the inner pair comes second. You need 12 of them."
+  ],
+  "solution": [
+    "Pair each element of A with each element of B × B; each element looks like (x, (y, z)).",
+    "So the answer is $\\{(0, (0, 0)), (0, (0, 1)), (0, (1, 0)), (0, (1, 1)), (e, (0, 0)), (e, (0, 1)), (e, (1, 0)), (e, (1, 1)), (\\pi, (0, 0)), (\\pi, (0, 1)), (\\pi, (1, 0)), (\\pi, (1, 1))\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.2 exercises, #2g (p. 11)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{(0, (0, 0)), (0, (0, 1)), (0, (1, 0)), (0, (1, 1)), (e, (0, 0)), (e, (0, 1)), (e, (1, 0)), (e, (1, 1)), (pi, (0, 0)), (pi, (0, 1)), (pi, (1, 0)), (pi, (1, 1))}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{(0,0,0),(0,0,1),(0,1,0),(0,1,1),(e,0,0),(e,0,1),(e,1,0),(e,1,1),(pi,0,0),(pi,0,1),(pi,1,0),(pi,1,1)}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_TUPLE_GROUPING"
+        ]
+      }
+    }
+  ]
+}

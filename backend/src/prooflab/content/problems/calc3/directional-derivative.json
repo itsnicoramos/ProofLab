@@ -1,0 +1,126 @@
+{
+  "id": "calc3.partials.directional-derivative",
+  "course": "calc3",
+  "topic": "partials",
+  "kind": "directional_derivative",
+  "title": "Directional derivative",
+  "prompt": "Find the directional derivative of $f(x, y) = x^2 + 3xy$ at $(1, 2)$ in the direction of $\\mathbf{v} = \\langle 3, 4\\rangle$.",
+  "answer_format": "An exact number.",
+  "difficulty": 2,
+  "tags": [
+    "directional derivative",
+    "gradient"
+  ],
+  "data": {
+    "function": "x^2 + 3x y",
+    "variables": [
+      "x",
+      "y"
+    ],
+    "at": [
+      "1",
+      "2"
+    ],
+    "direction": [
+      "3",
+      "4"
+    ]
+  },
+  "answer": "36/5",
+  "mistakes": [],
+  "hints": [
+    "D_u f = ∇f · u, where u is a UNIT vector.",
+    "|⟨3, 4⟩| = 5."
+  ],
+  "solution": [
+    "$\\nabla f = \\langle 2x + 3y,\\ 3x\\rangle$, so $\\nabla f(1, 2) = \\langle 8, 3\\rangle$.",
+    "$\\mathbf{u} = \\frac{\\mathbf{v}}{|\\mathbf{v}|} = \\langle \\tfrac{3}{5}, \\tfrac{4}{5}\\rangle$.",
+    "$D_{\\mathbf{u}}f = 8\\cdot\\tfrac{3}{5} + 3\\cdot\\tfrac{4}{5} = \\tfrac{36}{5}$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "4.6 Directional Derivatives and the Gradient",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "unit vector first",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "<2x + 3y, 3x>"
+          },
+          {
+            "kind": "expr",
+            "content": "<8, 3>"
+          },
+          {
+            "kind": "expr",
+            "content": "<3/5, 4/5>"
+          },
+          {
+            "kind": "expr",
+            "content": "24/5 + 12/5"
+          }
+        ],
+        "answer": "36/5"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "forgot to normalize",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "<8, 3>"
+          },
+          {
+            "kind": "expr",
+            "content": "24 + 12"
+          }
+        ],
+        "answer": "36"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "NOT_UNIT_VECTOR"
+        ]
+      }
+    },
+    {
+      "name": "gave the maximum rate",
+      "submission": {
+        "steps": [],
+        "answer": "sqrt(73)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "MAX_RATE_INSTEAD"
+        ]
+      }
+    },
+    {
+      "name": "decimal",
+      "submission": {
+        "steps": [],
+        "answer": "7.2"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "INEXACT"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "id": "proofs.set-proofs.ch8-ex11",
+  "course": "proofs",
+  "topic": "set-proofs",
+  "kind": "set_identity",
+  "title": "Ex 8.11 · Complement of a union",
+  "prompt": "Let $A$ and $B$ be sets inside a universal set $U$, and write $\\overline{X} = U - X$ for the complement of a set $X$. Prove De Morgan's law $\\overline{A \\cup B} = \\overline{A} \\cap \\overline{B}$. (Type the complement of $A$ as A'.)",
+  "answer_format": "A chain of lines, each a set (like A ∪ (B ∩ C)) or a statement about an element x (like x ∈ A or x ∈ B). Each line must have exactly the same elements as the line before; start from the left side and end at the right side. Type the complement of A as A' (the universal set is U).",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch8",
+    "set-identity",
+    "de-morgan",
+    "complement"
+  ],
+  "data": {
+    "sets": [
+      "A",
+      "B"
+    ],
+    "left": "(A ∪ B)'",
+    "right": "A' ∩ B'",
+    "point": [
+      "x"
+    ],
+    "universe": true
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "x ∈ (A ∪ B)' says x is not in A ∪ B, that is, not (x ∈ A or x ∈ B).",
+    "Use De Morgan's law for logic: ∼(P ∨ Q) is the same as ∼P ∧ ∼Q. Note that the 'or' turns into an 'and'.",
+    "x ∉ A is the same as x ∈ A', so x ∉ A and x ∉ B becomes x ∈ A' ∩ B'."
+  ],
+  "solution": [
+    "Let $x \\in U$. Then $x \\in \\overline{A \\cup B}$ means $x \\notin A \\cup B$, that is, $\\sim(x \\in A \\lor x \\in B)$.",
+    "By De Morgan's law, $\\sim(P \\lor Q) = \\,\\sim P \\land \\sim Q$, this is $x \\notin A \\land x \\notin B$.",
+    "Since $x \\in U$, that says $x \\in \\overline{A}$ and $x \\in \\overline{B}$, so $x \\in \\overline{A} \\cap \\overline{B}$.",
+    "Every step was an equivalence, so $\\overline{A \\cup B} = \\overline{A} \\cap \\overline{B}$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 8 exercises, #11 (p. 171)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Section 8.3 (proving A = B), the complement (Section 1.6) and De Morgan's laws for logic (Section 2.6)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "element chasing",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x ∈ (A ∪ B)'"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ U and x ∉ A ∪ B"
+          },
+          {
+            "kind": "expr",
+            "content": "not (x ∈ A or x ∈ B)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∉ A and x ∉ B"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A' and x ∈ B'"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A' ∩ B'"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "set differences from U",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(A ∪ B)'"
+          },
+          {
+            "kind": "expr",
+            "content": "U − (A ∪ B)"
+          },
+          {
+            "kind": "expr",
+            "content": "(U − A) ∩ (U − B)"
+          },
+          {
+            "kind": "expr",
+            "content": "A' ∩ B'"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "De Morgan without switching 'or' to 'and'",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x ∈ (A ∪ B)'"
+          },
+          {
+            "kind": "expr",
+            "content": "not (x ∈ A or x ∈ B)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∉ A or x ∉ B"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "SETID_STEP_DIFFERS"
+        ]
+      }
+    }
+  ]
+}

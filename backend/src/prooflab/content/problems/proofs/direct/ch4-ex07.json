@@ -1,0 +1,101 @@
+{
+  "id": "proofs.direct.ch4-ex07",
+  "course": "proofs",
+  "topic": "direct",
+  "kind": "divisibility_proof",
+  "title": "Ex 4.7 · a | b gives a² | b²",
+  "prompt": "Use a direct proof. Let $a, b$ be integers. Show that if $a \\mid b$, then $a^2 \\mid b^2$.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch4"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b"
+    ],
+    "hypotheses": [
+      {
+        "var": "b",
+        "divisor": "a"
+      }
+    ],
+    "target": "b^2",
+    "goal": {
+      "divisor": "a^2"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Write b = a·k for some integer k.",
+    "Square both sides. What times a² is b²?"
+  ],
+  "solution": [
+    "Since $a \\mid b$, $b = ak$ for some integer $k$.",
+    "$b^2 = a^2k^2 = a^2(k^2)$, and $k^2$ is an integer, so $a^2 \\mid b^2$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 4 exercises, #7 (p. 126)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 4.4 (divides)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "square it",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "b = ak"
+          },
+          {
+            "kind": "expr",
+            "content": "a^2 k^2"
+          },
+          {
+            "kind": "witness",
+            "content": "k^2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "witness for a, not a²",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "b = ak"
+          },
+          {
+            "kind": "expr",
+            "content": "a^2 k^2"
+          },
+          {
+            "kind": "witness",
+            "content": "a k^2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "WITNESS_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

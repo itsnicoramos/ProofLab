@@ -1,0 +1,173 @@
+{
+  "id": "proofs.divisibility.cube-minus-n",
+  "course": "proofs",
+  "topic": "divisibility",
+  "kind": "divisibility_proof",
+  "title": "3 divides n³ − n",
+  "prompt": "Prove: for every integer $n$, $3 \\mid (n^3 - n)$.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box. Use case steps to split into possibilities.",
+  "difficulty": 3,
+  "tags": [
+    "cases",
+    "divisibility",
+    "remainders"
+  ],
+  "data": {
+    "variables": [
+      "n"
+    ],
+    "target": "n^3 - n",
+    "goal": {
+      "divisor": 3
+    }
+  },
+  "mistakes": [],
+  "hints": [
+    "Every integer leaves remainder 0, 1 or 2 when divided by 3.",
+    "Write one case for each remainder: n = 3k, n = 3k + 1, n = 3k + 2. Expand and factor out 3 in each."
+  ],
+  "solution": [
+    "Case $n = 3k$: $n^3 - n = 27k^3 - 3k = 3(9k^3 - k)$.",
+    "Case $n = 3k + 1$: $n^3 - n = 27k^3 + 27k^2 + 6k = 3(9k^3 + 9k^2 + 2k)$.",
+    "Case $n = 3k + 2$: $n^3 - n = 27k^3 + 54k^2 + 33k + 6 = 3(9k^3 + 18k^2 + 11k + 2)$.",
+    "The three cases cover every integer, so $3 \\mid (n^3 - n)$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "sundstrom-mr3",
+    "section": "3.5 The Division Algorithm and Congruence",
+    "note": "Original problem; see proofs using the possible remainders."
+  },
+  "review": {
+    "status": "retired",
+    "notes": "Invented problem, retired 2026-11-06: MATH 123 proofs now map 1:1 to Book of Proof exercises."
+  },
+  "examples": [
+    {
+      "name": "three cases",
+      "submission": {
+        "steps": [
+          {
+            "kind": "case",
+            "content": "n = 3k"
+          },
+          {
+            "kind": "expr",
+            "content": "27k^3 - 3k"
+          },
+          {
+            "kind": "witness",
+            "content": "9k^3 - k"
+          },
+          {
+            "kind": "case",
+            "content": "n = 3k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "27k^3 + 27k^2 + 6k"
+          },
+          {
+            "kind": "witness",
+            "content": "9k^3 + 9k^2 + 2k"
+          },
+          {
+            "kind": "case",
+            "content": "n = 3k + 2"
+          },
+          {
+            "kind": "expr",
+            "content": "27k^3 + 54k^2 + 33k + 6"
+          },
+          {
+            "kind": "witness",
+            "content": "9k^3 + 18k^2 + 11k + 2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "missed a remainder",
+      "submission": {
+        "steps": [
+          {
+            "kind": "case",
+            "content": "n = 3k"
+          },
+          {
+            "kind": "witness",
+            "content": "9k^3 - k"
+          },
+          {
+            "kind": "case",
+            "content": "n = 3k + 1"
+          },
+          {
+            "kind": "witness",
+            "content": "9k^3 + 9k^2 + 2k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "CASES_NOT_EXHAUSTIVE"
+        ]
+      }
+    },
+    {
+      "name": "mixed up the cases",
+      "submission": {
+        "steps": [
+          {
+            "kind": "case",
+            "content": "n = 3k"
+          },
+          {
+            "kind": "witness",
+            "content": "9k^3 - k"
+          },
+          {
+            "kind": "case",
+            "content": "n = 2k + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "CASE_MISMATCH"
+        ]
+      }
+    },
+    {
+      "name": "expansion slip",
+      "submission": {
+        "steps": [
+          {
+            "kind": "case",
+            "content": "n = 3k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "27k^3 + 9k^2 + 6k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "NOT_EQUIVALENT"
+        ]
+      }
+    }
+  ]
+}

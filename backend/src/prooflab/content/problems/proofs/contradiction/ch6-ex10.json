@@ -1,0 +1,81 @@
+{
+  "id": "proofs.contradiction.ch6-ex10",
+  "course": "proofs",
+  "topic": "contradiction",
+  "kind": "impossibility_proof",
+  "title": "Ex 6.10 · No integers with 21a + 30b = 1",
+  "prompt": "Use proof by contradiction. Prove that there are no integers $a$ and $b$ with $21a + 30b = 1$. Suppose such integers exist. Show that $21a + 30b$ always leaves remainder 0 when divided by 3, which 1 does not.",
+  "answer_format": "A structured proof: let, case, expr and form steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch6",
+    "contradiction"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b"
+    ],
+    "target": "21a + 30b",
+    "divisor": 3,
+    "forbidden": 1,
+    "conclusion": "$21a + 30b$ is a multiple of 3, but 1 is not. So $21a + 30b = 1$ would make 1 a multiple of 3, a contradiction. No such integers exist. ∎"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Both 21 and 30 are multiples of 3.",
+    "Factor 3 out of 21a + 30b with a form step."
+  ],
+  "solution": [
+    "Suppose for the sake of contradiction that $21a + 30b = 1$ for some integers $a, b$.",
+    "Then $1 = 21a + 30b = 3(7a + 10b)$, and $7a + 10b$ is an integer, so $3 \\mid 1$.",
+    "But 3 does not divide 1, a contradiction. So no such integers exist. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 6 exercises, #10 (p. 144)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses proof by contradiction (Section 6.1) and Definition 4.4 (divides)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "factor out 3",
+      "submission": {
+        "steps": [
+          {
+            "kind": "form",
+            "content": "3(7a + 10b)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "forgot to divide 30 by 3",
+      "submission": {
+        "steps": [
+          {
+            "kind": "form",
+            "content": "3(7a + 30b)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "FORM_NOT_EQUAL"
+        ]
+      }
+    }
+  ]
+}

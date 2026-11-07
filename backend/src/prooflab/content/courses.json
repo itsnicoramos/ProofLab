@@ -1,0 +1,64 @@
+{
+  "courses": [
+    {
+      "id": "proofs",
+      "note": "Topics are the 14 chapters of Book of Proof (3rd ed.), in book order. Retired topics are only allowed on retired problems.",
+      "topics": [
+        "sets",
+        "logic",
+        "counting",
+        "direct",
+        "contrapositive",
+        "contradiction",
+        "nonconditional",
+        "set-proofs",
+        "disproof",
+        "induction",
+        "relations",
+        "functions",
+        "calculus-proofs",
+        "cardinality"
+      ],
+      "retired_topics": [
+        "parity",
+        "divisibility"
+      ]
+    },
+    {
+      "id": "precalc",
+      "topics": [
+        "functions",
+        "trig",
+        "exp_log"
+      ]
+    },
+    {
+      "id": "calc1",
+      "topics": [
+        "limits",
+        "derivatives"
+      ]
+    },
+    {
+      "id": "calc2",
+      "topics": [
+        "integrals",
+        "series"
+      ]
+    },
+    {
+      "id": "calc3",
+      "topics": [
+        "partials",
+        "multiple_integrals"
+      ]
+    },
+    {
+      "id": "calc4",
+      "topics": [
+        "vector_calc",
+        "diff_eq"
+      ]
+    }
+  ]
+}

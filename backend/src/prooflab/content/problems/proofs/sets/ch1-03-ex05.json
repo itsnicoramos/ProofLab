@@ -1,0 +1,61 @@
+{
+  "id": "proofs.sets.ch1-03-ex05",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.3 #5 · Subsets of {∅}",
+  "prompt": "List all the subsets of $\\{\\emptyset\\}$. Enter them together as one set of sets between outer braces, like $\\{\\emptyset, \\{1\\}\\}$.",
+  "answer_format": "A set of sets between braces, like {∅, {1}, {1, 2}}. Spaces are optional.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": "P({∅})"
+  },
+  "answer": "{∅, {∅}}",
+  "mistakes": [],
+  "hints": [
+    "This set has exactly one element, namely ∅.",
+    "A set with k elements has 2ᵏ subsets, including ∅ and the set itself: here that's 2."
+  ],
+  "solution": [
+    "The set has 1 element(s), so it has 2 subset(s), from ∅ up to the whole set.",
+    "So the answer is $\\{\\emptyset, \\{\\emptyset\\}\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.3 exercises, #5 (p. 15)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{∅, {∅}}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{∅}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_MISSING"
+        ]
+      }
+    }
+  ]
+}

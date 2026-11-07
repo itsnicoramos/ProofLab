@@ -1,0 +1,95 @@
+{
+  "id": "proofs.contrapositive.ch5-ex20",
+  "course": "proofs",
+  "topic": "contrapositive",
+  "kind": "divisibility_proof",
+  "title": "Ex 5.20 · a ≡ 1 (mod 5) gives a² ≡ 1 (mod 5)",
+  "prompt": "Let $a$ be an integer with $a \\equiv 1 \\pmod 5$. Prove that $a^2 \\equiv 1 \\pmod 5$.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch5",
+    "congruence"
+  ],
+  "data": {
+    "variables": [
+      "a"
+    ],
+    "hypotheses": [
+      {
+        "var": "a",
+        "divisor": 5,
+        "remainder": 1
+      }
+    ],
+    "target": "a^2",
+    "goal": {
+      "divisor": 5,
+      "remainder": 1
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "a ≡ 1 (mod 5) means 5 | (a − 1), so a = 5k + 1 for some integer k.",
+    "Show a² = 5·(integer) + 1."
+  ],
+  "solution": [
+    "Since $5 \\mid (a - 1)$, $a = 5k + 1$ for some integer $k$.",
+    "$a^2 = 25k^2 + 10k + 1 = 5(5k^2 + 2k) + 1$, so $5 \\mid (a^2 - 1)$, that is, $a^2 \\equiv 1 \\pmod 5$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 5 exercises, #20 (p. 136)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 5.1 (congruence)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "direct proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 5k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "25k^2 + 10k + 1"
+          },
+          {
+            "kind": "witness",
+            "content": "5k^2 + 2k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "forgot the remainder",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 5k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "BAD_REPRESENTATION"
+        ]
+      }
+    }
+  ]
+}

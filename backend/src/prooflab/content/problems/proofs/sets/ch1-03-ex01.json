@@ -1,0 +1,61 @@
+{
+  "id": "proofs.sets.ch1-03-ex01",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.3 #1 · Subsets of {1, 2, 3, 4}",
+  "prompt": "List all the subsets of $\\{1, 2, 3, 4\\}$. Enter them together as one set of sets between outer braces, like $\\{\\emptyset, \\{1\\}\\}$.",
+  "answer_format": "A set of sets between braces, like {∅, {1}, {1, 2}}. Spaces are optional.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": "P({1, 2, 3, 4})"
+  },
+  "answer": "{∅, {1}, {2}, {3}, {4}, {1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4}, {1, 2, 3}, {1, 2, 4}, {1, 3, 4}, {2, 3, 4}, {1, 2, 3, 4}}",
+  "mistakes": [],
+  "hints": [
+    "Sort the subsets by size: the empty set, then one element, two, three, and all four.",
+    "A set with k elements has 2ᵏ subsets, including ∅ and the set itself: here that's 16."
+  ],
+  "solution": [
+    "The set has 4 element(s), so it has 16 subset(s), from ∅ up to the whole set.",
+    "So the answer is $\\{\\emptyset, \\{1\\}, \\{2\\}, \\{3\\}, \\{4\\}, \\{1, 2\\}, \\{1, 3\\}, \\{1, 4\\}, \\{2, 3\\}, \\{2, 4\\}, \\{3, 4\\}, \\{1, 2, 3\\}, \\{1, 2, 4\\}, \\{1, 3, 4\\}, \\{2, 3, 4\\}, \\{1, 2, 3, 4\\}\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.3 exercises, #1 (p. 15)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{∅, {1}, {2}, {3}, {4}, {1, 2}, {1, 3}, {1, 4}, {2, 3}, {2, 4}, {3, 4}, {1, 2, 3}, {1, 2, 4}, {1, 3, 4}, {2, 3, 4}, {1, 2, 3, 4}}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{{1},{2},{3},{4},{1,2},{1,3},{1,4},{2,3},{2,4},{3,4},{1,2,3},{1,2,4},{1,3,4},{2,3,4},{1,2,3,4}}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_EMPTY_MISSING"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "id": "calc2.series.ratio-factorial",
+  "course": "calc2",
+  "topic": "series",
+  "kind": "series_convergence",
+  "title": "Ratio test with factorials",
+  "prompt": "Does $\\displaystyle \\sum_{n=1}^{\\infty} \\frac{3^n}{n!}$ converge or diverge?",
+  "answer_format": "'converges' or 'diverges' (add 'absolutely' or 'conditionally' when the terms change sign).",
+  "difficulty": 2,
+  "tags": [
+    "ratio test",
+    "factorials"
+  ],
+  "data": {
+    "term": "3^n/n!"
+  },
+  "answer": "converges",
+  "mistakes": [],
+  "hints": [
+    "Factorials suggest the ratio test.",
+    "(n+1)! = (n+1)·n!, so most of the ratio cancels."
+  ],
+  "solution": [
+    "$\\left|\\frac{a_{n+1}}{a_n}\\right| = \\frac{3^{n+1}}{(n+1)!}\\cdot\\frac{n!}{3^n} = \\frac{3}{n+1} \\to 0$.",
+    "$L = 0 < 1$, so the series converges (absolutely)."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "5.6 Ratio and Root Tests",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "ratio test",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "ratio test"
+          },
+          {
+            "kind": "limit",
+            "content": "L = 0"
+          }
+        ],
+        "answer": "converges"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "wrong limit",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "ratio"
+          },
+          {
+            "kind": "limit",
+            "content": "L = 3"
+          }
+        ],
+        "answer": "converges"
+      },
+      "expect": {
+        "status": "partial",
+        "first_error": 1,
+        "hint_codes": [
+          "WRONG_TEST_LIMIT"
+        ]
+      }
+    },
+    {
+      "name": "wrong conclusion",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "ratio"
+          },
+          {
+            "kind": "limit",
+            "content": "0"
+          }
+        ],
+        "answer": "diverges"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SERIES_CONCLUSION_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

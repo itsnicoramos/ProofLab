@@ -1,0 +1,1083 @@
+{
+  "course": "proofs",
+  "cards": [
+    {
+      "id": "proofs.sets.def-set",
+      "topic": "sets",
+      "type": "definition",
+      "front": "Set",
+      "back": "A collection of things, which are called its elements. We write $a \\in A$ when $a$ belongs to $A$ and $a \\notin A$ when it does not. Two of these collections are equal precisely when they have the same elements, in any order.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 1.1 (p. 3)"
+      }
+    },
+    {
+      "id": "proofs.sets.def-cardinality",
+      "topic": "sets",
+      "type": "definition",
+      "front": "Cardinality",
+      "back": "For a finite set $A$, the number of elements it contains, written $|A|$. For example, $|\\{2, 4, 6, 8\\}| = 4$. The same bars mean absolute value when the thing inside is a number, so read them from context.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 1.1 (pp. 4, 6)"
+      }
+    },
+    {
+      "id": "proofs.sets.def-empty-set",
+      "topic": "sets",
+      "type": "definition",
+      "front": "Empty set",
+      "back": "The set $\\emptyset = \\{\\}$ that has no elements at all, so $|\\emptyset| = 0$. It is a subset of every set (Fact 1.2), and it is not the same as $\\{\\emptyset\\}$, which has one element.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 1.1 (p. 4); Fact 1.2, Section 1.3 (p. 12)"
+      }
+    },
+    {
+      "id": "proofs.sets.notation-set-builder",
+      "topic": "sets",
+      "type": "notation",
+      "front": "Set-builder notation",
+      "back": "Writing a set as $\\{\\text{expression} : \\text{rule}\\}$, meaning every value of the expression allowed by the rule; the colon is read \"such that\". For instance, $\\{2n : n \\in \\mathbb{Z}\\}$ is the set of even integers.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 1.1 (p. 5)"
+      }
+    },
+    {
+      "id": "proofs.sets.def-cartesian-product",
+      "topic": "sets",
+      "type": "definition",
+      "front": "Cartesian product",
+      "back": "For sets $A$ and $B$, the set $A \\times B = \\{(a, b) : a \\in A, b \\in B\\}$ of all ordered pairs whose first entry comes from $A$ and second entry from $B$. When both are finite, $|A \\times B| = |A| \\cdot |B|$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 1.2 and Fact 1.1, Section 1.2 (pp. 8-9)"
+      }
+    },
+    {
+      "id": "proofs.sets.def-subset",
+      "topic": "sets",
+      "type": "definition",
+      "front": "Subset",
+      "back": "$A \\subseteq B$ means everything in $A$ belongs to $B$ as well. Writing $A \\not\\subseteq B$ means at least one element of $A$ is missing from $B$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 1.3, Section 1.3 (p. 12)"
+      }
+    },
+    {
+      "id": "proofs.sets.def-power-set",
+      "topic": "sets",
+      "type": "definition",
+      "front": "Power set",
+      "back": "For a set $A$, the set $\\mathscr{P}(A) = \\{X : X \\subseteq A\\}$, whose elements are all the subsets of $A$. If $A$ is finite, then $|\\mathscr{P}(A)| = 2^{|A|}$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 1.4 and Fact 1.4, Section 1.4 (p. 15)"
+      }
+    },
+    {
+      "id": "proofs.sets.def-union",
+      "topic": "sets",
+      "type": "definition",
+      "front": "Union",
+      "back": "$A \\cup B = \\{x : x \\in A \\text{ or } x \\in B\\}$, the set of things lying in $A$, in $B$, or in both.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 1.5, Section 1.5 (p. 18)"
+      }
+    },
+    {
+      "id": "proofs.sets.def-intersection",
+      "topic": "sets",
+      "type": "definition",
+      "front": "Intersection",
+      "back": "$A \\cap B = \\{x : x \\in A \\text{ and } x \\in B\\}$, the set of things that belong to $A$ and to $B$ at the same time.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 1.5, Section 1.5 (p. 18)"
+      }
+    },
+    {
+      "id": "proofs.sets.def-difference",
+      "topic": "sets",
+      "type": "definition",
+      "front": "Difference",
+      "back": "$A - B = \\{x : x \\in A \\text{ and } x \\notin B\\}$, the things in $A$ that are not in $B$. In general $A - B$ and $B - A$ are not equal.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 1.5, Section 1.5 (p. 18)"
+      }
+    },
+    {
+      "id": "proofs.sets.def-complement",
+      "topic": "sets",
+      "type": "definition",
+      "front": "Complement",
+      "back": "Given a universal set $U$ that contains $A$, the set $\\overline{A} = U - A$ of everything in $U$ that is not in $A$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 1.6, Section 1.6 (p. 20)"
+      }
+    },
+    {
+      "id": "proofs.sets.fact-division-algorithm",
+      "topic": "sets",
+      "type": "fact",
+      "front": "Division algorithm",
+      "back": "For integers $a$ and $b$ with $b > 0$, there is exactly one pair of integers $q$ and $r$ with $a = qb + r$ and $0 \\le r < b$. Here $q$ is the quotient and $r$ the remainder; for example $17 = 5 \\cdot 3 + 2$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Fact 1.5, Section 1.9 (p. 30); restated in Section 4.2 (p. 117)"
+      }
+    },
+    {
+      "id": "proofs.logic.def-statement",
+      "topic": "logic",
+      "type": "definition",
+      "front": "Statement",
+      "back": "A sentence or piece of mathematical notation whose truth value is settled: it is certainly true or certainly false, even if no one yet knows which (as with the Goldbach conjecture). \"Add 5 to both sides\" does not qualify.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 2.1 (pp. 35, 37)"
+      }
+    },
+    {
+      "id": "proofs.logic.def-open-sentence",
+      "topic": "logic",
+      "type": "definition",
+      "front": "Open sentence",
+      "back": "A sentence with one or more variables whose truth or falsity depends on what values those variables take, such as \"the integer $x$ is even\". Without a value for $x$ it is neither true nor false.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 2.1 (p. 36)"
+      }
+    },
+    {
+      "id": "proofs.logic.notation-or",
+      "topic": "logic",
+      "type": "notation",
+      "front": "$P \\vee Q$",
+      "back": "The statement \"$P$ or $Q$\". It is true when at least one of $P$ and $Q$ is true, and false only when both are false. In mathematics this \"or\" is inclusive, so both being true is allowed.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 2.2 (p. 40)"
+      }
+    },
+    {
+      "id": "proofs.logic.notation-not",
+      "topic": "logic",
+      "type": "notation",
+      "front": "$\\sim P$",
+      "back": "The negation of $P$, read \"not $P$\". It is true exactly when $P$ is false and false exactly when $P$ is true.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 2.2 (p. 41)"
+      }
+    },
+    {
+      "id": "proofs.logic.notation-conditional",
+      "topic": "logic",
+      "type": "notation",
+      "front": "$P \\Rightarrow Q$",
+      "back": "The conditional \"if $P$, then $Q$\", also read \"$P$ implies $Q$\", \"$P$ only if $Q$\" or \"$Q$ is necessary for $P$\". It is false only when $P$ is true and $Q$ is false; in the other three cases it is true.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 2.3 (pp. 42-44)"
+      }
+    },
+    {
+      "id": "proofs.logic.def-converse",
+      "topic": "logic",
+      "type": "definition",
+      "front": "Converse",
+      "back": "For the conditional $P \\Rightarrow Q$, the reversed statement $Q \\Rightarrow P$. The two are not logically equivalent: a true conditional can have a false reversal.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 2.4 (p. 46)"
+      }
+    },
+    {
+      "id": "proofs.logic.notation-biconditional",
+      "topic": "logic",
+      "type": "notation",
+      "front": "$P \\Leftrightarrow Q$",
+      "back": "The biconditional \"$P$ if and only if $Q$\", which means $(P \\Rightarrow Q) \\wedge (Q \\Rightarrow P)$. It is true exactly when $P$ and $Q$ have the same truth value.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 2.4 (pp. 46-47)"
+      }
+    },
+    {
+      "id": "proofs.logic.def-logical-equivalence",
+      "topic": "logic",
+      "type": "definition",
+      "front": "Logical equivalence",
+      "back": "The relationship between two statements whose truth values agree in every row of a truth table; the book writes it with $=$. Example: $P \\Rightarrow Q$ and $(\\sim Q) \\Rightarrow (\\sim P)$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 2.6 (p. 51)"
+      }
+    },
+    {
+      "id": "proofs.logic.fact-demorgan",
+      "topic": "logic",
+      "type": "fact",
+      "front": "DeMorgan's laws",
+      "back": "$\\sim(P \\wedge Q) = (\\sim P) \\vee (\\sim Q)$ and $\\sim(P \\vee Q) = (\\sim P) \\wedge (\\sim Q)$. Negating an \"and\" produces an \"or\" of the negations, and negating an \"or\" produces an \"and\" of the negations.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Fact 2.1, Section 2.6 (p. 51)"
+      }
+    },
+    {
+      "id": "proofs.logic.notation-quantifiers",
+      "topic": "logic",
+      "type": "notation",
+      "front": "$\\forall$ and $\\exists$",
+      "back": "The quantifier symbols. The universal one is read \"for all\" (or \"for every\"); the existential one is read \"there exists\" (or \"there is a\"). So $\\forall x \\in X, P(x)$ claims $P(x)$ for each $x$ in $X$, and $\\exists x \\in X, P(x)$ claims it for at least one.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 2.1, Section 2.7 (pp. 53-54)"
+      }
+    },
+    {
+      "id": "proofs.logic.fact-negate-quantifiers",
+      "topic": "logic",
+      "type": "fact",
+      "front": "Negating a quantified statement",
+      "back": "$\\sim(\\forall x \\in X, P(x)) = \\exists x \\in X, \\sim P(x)$ and $\\sim(\\exists x \\in X, P(x)) = \\forall x \\in X, \\sim P(x)$. The negation swaps the kind of quantifier and negates what follows it.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 2.10 (p. 60)"
+      }
+    },
+    {
+      "id": "proofs.logic.fact-negate-conditional",
+      "topic": "logic",
+      "type": "fact",
+      "front": "Negating a conditional",
+      "back": "$\\sim(P \\Rightarrow Q) = P \\wedge \\sim Q$. An if-then claim fails exactly when its hypothesis holds but its conclusion does not.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 2.10 (p. 61)"
+      }
+    },
+    {
+      "id": "proofs.counting.fact-multiplication-principle",
+      "topic": "counting",
+      "type": "fact",
+      "front": "Multiplication principle",
+      "back": "If a list of length $n$ is built with $a_1$ options for its first entry, $a_2$ options for its second, and so on up to $a_n$ options for its last, then $a_1 \\cdot a_2 \\cdots a_n$ different lists are possible.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Fact 3.1, Section 3.2 (p. 69)"
+      }
+    },
+    {
+      "id": "proofs.counting.fact-addition-principle",
+      "topic": "counting",
+      "type": "fact",
+      "front": "Addition principle",
+      "back": "If a finite set $X$ is split into pieces $X_1, X_2, \\ldots, X_n$ and no two pieces share an element, then $|X| = |X_1| + |X_2| + \\cdots + |X_n|$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Fact 3.2, Section 3.3 (p. 74)"
+      }
+    },
+    {
+      "id": "proofs.counting.fact-subtraction-principle",
+      "topic": "counting",
+      "type": "fact",
+      "front": "Subtraction principle",
+      "back": "For a finite set $U$ and any $X \\subseteq U$, $|U - X| = |U| - |X|$, that is, $|\\overline{X}| = |U| - |X|$. It helps when the unwanted cases are easier to count than the wanted ones.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Fact 3.3, Section 3.3 (p. 76)"
+      }
+    },
+    {
+      "id": "proofs.counting.notation-factorial",
+      "topic": "counting",
+      "type": "notation",
+      "front": "$n!$",
+      "back": "For an integer $n \\ge 0$, how many ways $n$ distinct symbols can be arranged into a list of length $n$ with no repeats. So $0! = 1$, $1! = 1$, and for $n > 1$ it equals $n(n-1)(n-2) \\cdots 3 \\cdot 2 \\cdot 1$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 3.1, Section 3.4 (p. 78)"
+      }
+    },
+    {
+      "id": "proofs.counting.notation-permutations",
+      "topic": "counting",
+      "type": "notation",
+      "front": "$P(n, k)$",
+      "back": "How many $k$-permutations an $n$-element set has, where a $k$-permutation is a length-$k$ list of distinct entries taken from the set. It equals $n(n-1)\\cdots(n-k+1)$, which is $\\frac{n!}{(n-k)!}$ when $0 \\le k \\le n$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Fact 3.4, Section 3.4 (p. 83)"
+      }
+    },
+    {
+      "id": "proofs.counting.notation-binomial-coefficient",
+      "topic": "counting",
+      "type": "notation",
+      "front": "$\\binom{n}{k}$",
+      "back": "Read \"$n$ choose $k$\": the number of $k$-element subsets of an $n$-element set. When $0 \\le k \\le n$ it equals $\\frac{n!}{k!(n-k)!}$, and for every other $k$ it is $0$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 3.2 and Fact 3.5, Section 3.5 (pp. 85, 87)"
+      }
+    },
+    {
+      "id": "proofs.counting.fact-pascals-formula",
+      "topic": "counting",
+      "type": "fact",
+      "front": "Pascal's formula",
+      "back": "For integers $1 \\le k \\le n$, $\\binom{n+1}{k} = \\binom{n}{k-1} + \\binom{n}{k}$. This is why each inner entry of the triangle of binomial coefficients is the sum of the two entries just above it.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Equation (3.3), Section 3.6 (p. 90)"
+      }
+    },
+    {
+      "id": "proofs.counting.thm-binomial-theorem",
+      "topic": "counting",
+      "type": "theorem",
+      "front": "Binomial theorem",
+      "back": "For every integer $n \\ge 0$, $(x + y)^n = \\sum_{k=0}^{n} \\binom{n}{k} x^{n-k} y^{k}$. So the entries in row $n$ of Pascal's triangle are the coefficients in the expansion of $(x + y)^n$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Theorem 3.1, Section 3.6 (p. 92)"
+      }
+    },
+    {
+      "id": "proofs.counting.fact-inclusion-exclusion",
+      "topic": "counting",
+      "type": "fact",
+      "front": "Inclusion-exclusion formula",
+      "back": "For finite sets, $|A \\cup B| = |A| + |B| - |A \\cap B|$, because the elements of $A \\cap B$ are counted twice in $|A| + |B|$. For three sets, $|A \\cup B \\cup C| = |A| + |B| + |C| - |A \\cap B| - |A \\cap C| - |B \\cap C| + |A \\cap B \\cap C|$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Fact 3.6 and Equation (3.5), Section 3.7 (pp. 93-94)"
+      }
+    },
+    {
+      "id": "proofs.counting.fact-counting-multisets",
+      "topic": "counting",
+      "type": "fact",
+      "front": "Counting multisets",
+      "back": "Collections that allow repeats but ignore order (written with square brackets). From an $n$-element set one can make $\\binom{k+n-1}{k} = \\binom{k+n-1}{n-1}$ of them with $k$ elements, by encoding each as a list of $k$ stars and $n - 1$ bars.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 3.8 (p. 96); Fact 3.7 (p. 98)"
+      }
+    },
+    {
+      "id": "proofs.counting.fact-pigeonhole-principle",
+      "topic": "counting",
+      "type": "fact",
+      "front": "Pigeonhole principle",
+      "back": "Put $n$ objects into $k$ boxes. If $n > k$, some box gets more than one object; if $n < k$, some box stays empty. More generally (the division principle), some box holds at least $\\lceil n/k \\rceil$ objects and some box holds at most $\\lfloor n/k \\rfloor$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Facts 3.9 and 3.10, Section 3.9 (p. 104)"
+      }
+    },
+    {
+      "id": "proofs.counting.def-combinatorial-proof",
+      "topic": "counting",
+      "type": "definition",
+      "front": "Combinatorial proof",
+      "back": "Establishing an identity by arguing that both sides answer one and the same counting problem, so they must be equal. The argument given for Pascal's formula is an example.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 3.10 (p. 108)"
+      }
+    },
+    {
+      "id": "proofs.direct.def-even",
+      "topic": "direct",
+      "type": "definition",
+      "front": "Even integer",
+      "back": "An integer $n$ that can be written as $n = 2a$ for some integer $a$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 4.1, Section 4.2 (p. 115)"
+      }
+    },
+    {
+      "id": "proofs.direct.def-odd",
+      "topic": "direct",
+      "type": "definition",
+      "front": "Odd integer",
+      "back": "An integer $n$ that can be written as $n = 2a + 1$ for some integer $a$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 4.2, Section 4.2 (p. 115)"
+      }
+    },
+    {
+      "id": "proofs.direct.def-same-parity",
+      "topic": "direct",
+      "type": "definition",
+      "front": "Same parity",
+      "back": "Said of two integers that are both even or both odd, like $5$ and $-17$. An even integer paired with an odd one, like $3$ and $4$, is the opposite case.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 4.3, Section 4.2 (p. 115)"
+      }
+    },
+    {
+      "id": "proofs.direct.notation-divides",
+      "topic": "direct",
+      "type": "notation",
+      "front": "$a \\mid b$",
+      "back": "For integers $a$ and $b$: $b = ac$ for some integer $c$. Then $a$ is a divisor of $b$ and $b$ is a multiple of $a$; $a \\nmid b$ means no such $c$ exists. It is a statement, not a number like the fraction $a/b$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 4.4, Section 4.2 (p. 116)"
+      }
+    },
+    {
+      "id": "proofs.direct.def-prime",
+      "topic": "direct",
+      "type": "definition",
+      "front": "Prime number",
+      "back": "A natural number $n$ whose positive divisors are exactly two numbers, $1$ and $n$ itself. Examples are $2$, $5$ and $17$. The number $1$ does not qualify, since it has only one positive divisor.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 4.5, Section 4.2 (p. 116)"
+      }
+    },
+    {
+      "id": "proofs.direct.def-composite",
+      "topic": "direct",
+      "type": "definition",
+      "front": "Composite number",
+      "back": "A natural number $n$ with more than two positive divisors, which happens exactly when $n = ab$ for some integers $a, b$ with $1 < a, b < n$. The number $1$ is neither this nor prime.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 4.5, Section 4.2 (p. 116)"
+      }
+    },
+    {
+      "id": "proofs.direct.def-gcd",
+      "topic": "direct",
+      "type": "definition",
+      "front": "Greatest common divisor",
+      "back": "For integers $a$ and $b$ that are not both $0$, the largest integer that divides each of them. For instance, $18$ and $24$ give $6$, while $50$ and $9$ give $1$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 4.6, Section 4.2 (p. 116)"
+      }
+    },
+    {
+      "id": "proofs.direct.def-lcm",
+      "topic": "direct",
+      "type": "definition",
+      "front": "Least common multiple",
+      "back": "For non-zero integers $a$ and $b$, the smallest natural number that both $a$ and $b$ divide. For instance, $4$ and $6$ give $12$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 4.6, Section 4.2 (p. 116)"
+      }
+    },
+    {
+      "id": "proofs.direct.fact-integer-closure",
+      "topic": "direct",
+      "type": "fact",
+      "front": "Fact 4.1 (integer arithmetic)",
+      "back": "If $a, b \\in \\mathbb{Z}$, then $a + b$, $a - b$ and $ab$ are in $\\mathbb{Z}$ too. So any expression built from integers using addition, subtraction and multiplication, such as $a^2 b - ca + b$, is an integer.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Fact 4.1, Section 4.2 (p. 117)"
+      }
+    },
+    {
+      "id": "proofs.direct.def-direct-proof",
+      "topic": "direct",
+      "type": "definition",
+      "front": "Direct proof",
+      "back": "A way to prove \"if $P$, then $Q$\": begin by assuming $P$, then use definitions, logic and known facts to show $Q$ must hold. Cases where $P$ is false need no attention, since the conditional is automatically true there.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 4.3 (p. 118)"
+      }
+    },
+    {
+      "id": "proofs.direct.def-using-cases",
+      "topic": "direct",
+      "type": "definition",
+      "front": "Proof by cases",
+      "back": "Splitting an argument into possibilities that together cover every situation (for example, $n$ even or $n$ odd) and showing the claim holds in each one separately.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 4.4 (p. 124)"
+      }
+    },
+    {
+      "id": "proofs.direct.def-wlog",
+      "topic": "direct",
+      "type": "definition",
+      "front": "Without loss of generality",
+      "back": "A phrase signaling that only one of several nearly identical cases will be written out, because the others go the same way. Example: for two integers of opposite parity, assume $m$ is the even one and $n$ the odd one.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 4.5 (pp. 125-126)"
+      }
+    },
+    {
+      "id": "proofs.contrapositive.def-contrapositive",
+      "topic": "contrapositive",
+      "type": "definition",
+      "front": "Contrapositive",
+      "back": "For a conditional $P \\Rightarrow Q$, the statement $\\sim Q \\Rightarrow \\sim P$. The two are logically equivalent, so proving one proves the other. Do not mix it up with the converse $Q \\Rightarrow P$, which is not equivalent.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 5.1 (p. 128); see also Section 2.6 (p. 51)"
+      }
+    },
+    {
+      "id": "proofs.contrapositive.def-contrapositive-proof",
+      "topic": "contrapositive",
+      "type": "definition",
+      "front": "Contrapositive proof",
+      "back": "To prove \"if $P$, then $Q$\", begin by supposing $Q$ is false and reason until you conclude that $P$ is false. This is valid because $P \\Rightarrow Q$ and $\\sim Q \\Rightarrow \\sim P$ have the same truth table.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 5.1 (p. 129)"
+      }
+    },
+    {
+      "id": "proofs.contrapositive.notation-congruence",
+      "topic": "contrapositive",
+      "type": "notation",
+      "front": "$a \\equiv b \\pmod{n}$",
+      "back": "For integers $a$, $b$ and a natural number $n$: $n \\mid (a - b)$, read \"$a$ is congruent to $b$ modulo $n$\". When it fails we write $a \\not\\equiv b \\pmod{n}$. Example: $9 \\equiv 1 \\pmod{4}$, since $4 \\mid 8$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 5.1, Section 5.2 (p. 131)"
+      }
+    },
+    {
+      "id": "proofs.contrapositive.fact-congruence-remainders",
+      "topic": "contrapositive",
+      "type": "fact",
+      "front": "Practical meaning of congruence",
+      "back": "$a \\equiv b \\pmod{n}$ holds exactly when $a$ and $b$ leave the same remainder upon division by $n$. For example, $6$ and $10$ both leave $2$ when divided by $4$. The book shows one direction and leaves the other as Exercise 32 of Chapter 5.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 5.2 (p. 131)"
+      }
+    },
+    {
+      "id": "proofs.contrapositive.fact-congruence-square",
+      "topic": "contrapositive",
+      "type": "fact",
+      "front": "Squaring both sides of a congruence",
+      "back": "If $a \\equiv b \\pmod{n}$, then $a^2 \\equiv b^2 \\pmod{n}$. Proof idea: $a - b = nc$ for some integer $c$, so $a^2 - b^2 = (a - b)(a + b) = n \\cdot c(a + b)$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 5.2 (p. 132)"
+      }
+    },
+    {
+      "id": "proofs.contrapositive.fact-congruence-multiply",
+      "topic": "contrapositive",
+      "type": "fact",
+      "front": "Multiplying a congruence by $c$",
+      "back": "If $a \\equiv b \\pmod{n}$ and $c$ is any integer, then $ac \\equiv bc \\pmod{n}$, because $a - b = nk$ gives $ac - bc = n(kc)$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 5.2 (p. 132)"
+      }
+    },
+    {
+      "id": "proofs.contrapositive.fact-since-p-q",
+      "topic": "contrapositive",
+      "type": "fact",
+      "front": "\"Since $P$, $Q$\" wording",
+      "back": "Unlike \"if $P$, then $Q$\", phrasing such as \"$Q$ because $P$\" or \"$P$, so $Q$\" asserts both that $P$ is true and that $Q$ follows from it. Use it only when $P$ really does hold.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 5.3 (p. 135)"
+      }
+    },
+    {
+      "id": "proofs.contradiction.def-contradiction",
+      "topic": "contradiction",
+      "type": "definition",
+      "front": "Contradiction",
+      "back": "A statement that cannot possibly be true, such as $C \\wedge \\sim C$, which is false no matter what $C$ is. In a proof, any plainly false claim you manage to deduce, such as $2 \\ne 2$, also serves.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Chapter 6 (p. 137); Section 6.1 (p. 140)"
+      }
+    },
+    {
+      "id": "proofs.contradiction.def-proof-by-contradiction",
+      "topic": "contradiction",
+      "type": "definition",
+      "front": "Proof by contradiction",
+      "back": "To prove a statement $P$, suppose $\\sim P$ and reason until you derive something impossible, like $C \\wedge \\sim C$. Then $P$ cannot be false, so it is true. The method works for any kind of statement, not just conditionals.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Chapter 6 (p. 137); Section 6.1 (p. 138)"
+      }
+    },
+    {
+      "id": "proofs.contradiction.fact-contradiction-valid",
+      "topic": "contradiction",
+      "type": "fact",
+      "front": "Why proof by contradiction is valid",
+      "back": "A truth table shows $P$ is logically equivalent to $(\\sim P) \\Rightarrow (C \\wedge \\sim C)$. So proving that $\\sim P$ forces $C \\wedge \\sim C$ establishes $P$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 6.1 (p. 138)"
+      }
+    },
+    {
+      "id": "proofs.contradiction.fact-conditional-by-contradiction",
+      "topic": "contradiction",
+      "type": "fact",
+      "front": "Proving $P \\Rightarrow Q$ by contradiction",
+      "back": "Assume both $P$ and $\\sim Q$, which is the only way the conditional could fail, and then derive an impossibility such as $C \\wedge \\sim C$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 6.2 (p. 141)"
+      }
+    },
+    {
+      "id": "proofs.contradiction.def-rational",
+      "topic": "contradiction",
+      "type": "definition",
+      "front": "Rational number",
+      "back": "A real number $x$ that can be written as $x = a/b$ for some integers $a$ and $b$ (with $b \\ne 0$). All such numbers form the set $\\mathbb{Q}$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 6.1, Section 6.1 (p. 139); see also Section 1.1 (p. 6)"
+      }
+    },
+    {
+      "id": "proofs.contradiction.def-irrational",
+      "topic": "contradiction",
+      "type": "definition",
+      "front": "Irrational number",
+      "back": "A real number that is not a quotient of two integers, that is, $x \\ne a/b$ for every choice of integers $a$ and $b$. An example is $\\sqrt{2}$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 6.1, Section 6.1 (p. 139)"
+      }
+    },
+    {
+      "id": "proofs.contradiction.thm-sqrt2-irrational",
+      "topic": "contradiction",
+      "type": "theorem",
+      "front": "Irrationality of $\\sqrt{2}$",
+      "back": "No integers $a$ and $b$ satisfy $\\sqrt{2} = a/b$. The proof takes such a fraction in lowest terms, gets $a^2 = 2b^2$, and finds that $a$ and $b$ would both be even, which is impossible.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 6.1 (p. 139)"
+      }
+    },
+    {
+      "id": "proofs.contradiction.thm-infinitely-many-primes",
+      "topic": "contradiction",
+      "type": "theorem",
+      "front": "Infinitely many primes",
+      "back": "No finite list contains every natural number that has exactly two positive divisors. Euclid's argument: if $p_1, \\ldots, p_n$ were all of them, then $p_1 p_2 \\cdots p_n + 1$ would be divisible by some $p_k$, making $1/p_k$ an integer.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 6.1 (p. 140)"
+      }
+    },
+    {
+      "id": "proofs.nonconditional.def-iff-proof",
+      "topic": "nonconditional",
+      "type": "definition",
+      "front": "If-and-only-if proof",
+      "back": "To prove $P \\Leftrightarrow Q$, prove two conditionals: $P \\Rightarrow Q$ and its converse $Q \\Rightarrow P$, each by a direct, contrapositive or contradiction argument. Starting the second part with \"Conversely\" helps the reader.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 7.1 (pp. 147-148)"
+      }
+    },
+    {
+      "id": "proofs.nonconditional.def-equivalent-statements",
+      "topic": "nonconditional",
+      "type": "definition",
+      "front": "Equivalent statements",
+      "back": "A theorem's claim that several statements are either all true or all false together. One way to prove it is a cycle of implications such as $(a) \\Rightarrow (b) \\Rightarrow \\cdots \\Rightarrow (f) \\Rightarrow (a)$, which uses the fewest conditionals.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 7.2 (pp. 149-150)"
+      }
+    },
+    {
+      "id": "proofs.nonconditional.def-existence-theorem",
+      "topic": "nonconditional",
+      "type": "definition",
+      "front": "Existence theorem",
+      "back": "A theorem of the form $\\exists x, R(x)$. To prove it, exhibit one specific $x$ and check that $R(x)$ holds, as in $1729 = 1^3 + 12^3 = 9^3 + 10^3$ for two different sums of two cubes.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 7.3 (p. 151)"
+      }
+    },
+    {
+      "id": "proofs.nonconditional.fact-example-not-proof",
+      "topic": "nonconditional",
+      "type": "fact",
+      "front": "One example vs. a conditional",
+      "back": "A single example is enough to establish $\\exists x, R(x)$, but it never proves a conditional $P(x) \\Rightarrow Q(x)$, which has to hold for every $x$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 7.3 (p. 151)"
+      }
+    },
+    {
+      "id": "proofs.nonconditional.thm-prop-7-1",
+      "topic": "nonconditional",
+      "type": "theorem",
+      "front": "Proposition 7.1 (linear combination)",
+      "back": "If $a, b \\in \\mathbb{N}$, there are integers $k$ and $\\ell$ with $\\gcd(a, b) = ak + b\\ell$. Proof idea: the smallest positive element of $\\{ax + by : x, y \\in \\mathbb{Z}\\}$ turns out to be $\\gcd(a, b)$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Proposition 7.1, Section 7.3 (p. 152)"
+      }
+    },
+    {
+      "id": "proofs.nonconditional.def-uniqueness-proof",
+      "topic": "nonconditional",
+      "type": "definition",
+      "front": "Existence and uniqueness proof",
+      "back": "To show there is exactly one $x$ with $P(x)$: first produce an example $d$ for which $P(d)$ is true, then show that any $d'$ with the same property must equal $d$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 7.3 (p. 153)"
+      }
+    },
+    {
+      "id": "proofs.nonconditional.def-constructive-proof",
+      "topic": "nonconditional",
+      "type": "definition",
+      "front": "Constructive proof",
+      "back": "An existence proof that displays an explicit example. For instance, $x = \\sqrt{2}$ and $y = \\log_2 9$ are irrational with $x^y = 3$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 7.4 (p. 154)"
+      }
+    },
+    {
+      "id": "proofs.nonconditional.def-nonconstructive-proof",
+      "topic": "nonconditional",
+      "type": "definition",
+      "front": "Non-constructive proof",
+      "back": "An existence proof that shows an example must exist without pinning it down. For instance, one of $\\sqrt{2}^{\\sqrt{2}}$ and $\\left(\\sqrt{2}^{\\sqrt{2}}\\right)^{\\sqrt{2}}$ gives a rational value from an irrational base and an irrational exponent, but the argument never says which one.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 7.4 (p. 154)"
+      }
+    },
+    {
+      "id": "proofs.set-proofs.fact-prove-membership",
+      "topic": "set-proofs",
+      "type": "fact",
+      "front": "Showing $a \\in \\{x : P(x)\\}$",
+      "back": "Check that $P(a)$ is true. For a set written $\\{x \\in S : P(x)\\}$, confirm both $a \\in S$ and $P(a)$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 8.1 (p. 158)"
+      }
+    },
+    {
+      "id": "proofs.set-proofs.fact-prove-subset-direct",
+      "topic": "set-proofs",
+      "type": "fact",
+      "front": "Proving $A \\subseteq B$ (direct)",
+      "back": "Let $a$ be an arbitrary element of $A$ and deduce $a \\in B$. That proves the conditional \"if $a \\in A$, then $a \\in B$\", which is exactly what the inclusion means.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 8.2 (p. 159)"
+      }
+    },
+    {
+      "id": "proofs.set-proofs.fact-prove-subset-contrapositive",
+      "topic": "set-proofs",
+      "type": "fact",
+      "front": "Proving $A \\subseteq B$ (contrapositive)",
+      "back": "Suppose $a \\notin B$ and deduce $a \\notin A$. Then nothing outside $B$ lies in $A$, so each element of $A$ is in $B$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 8.2 (p. 159)"
+      }
+    },
+    {
+      "id": "proofs.set-proofs.fact-basic-subsets",
+      "topic": "set-proofs",
+      "type": "fact",
+      "front": "Basic subset facts",
+      "back": "For all sets: $A \\cap B \\subseteq A$, $A \\subseteq A \\cup B$, $A - B \\subseteq A$, and if $A \\subseteq B$ and $B \\subseteq C$ then $A \\subseteq C$. You may use these without proof unless an exercise asks for one.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 8.2 (p. 161)"
+      }
+    },
+    {
+      "id": "proofs.set-proofs.fact-prove-set-equality",
+      "topic": "set-proofs",
+      "type": "fact",
+      "front": "Proving $A = B$",
+      "back": "Show $A \\subseteq B$ and then $B \\subseteq A$; together they leave no element in one set but not the other. Sometimes a chain of equalities between set-builder descriptions works too.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 8.3 (pp. 162, 164)"
+      }
+    },
+    {
+      "id": "proofs.set-proofs.fact-cancel-cartesian",
+      "topic": "set-proofs",
+      "type": "fact",
+      "front": "Cancelling a Cartesian factor",
+      "back": "If $C \\ne \\emptyset$ and $A \\times C = B \\times C$, then $A = B$. Picking some $c \\in C$ lets you pass from $a \\in A$ to $(a, c) \\in B \\times C$ and so to $a \\in B$, and symmetrically.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Example 8.11, Section 8.3 (p. 163)"
+      }
+    },
+    {
+      "id": "proofs.set-proofs.fact-demorgan-sets",
+      "topic": "set-proofs",
+      "type": "fact",
+      "front": "DeMorgan's laws for sets",
+      "back": "$\\overline{A \\cap B} = \\overline{A} \\cup \\overline{B}$ and $\\overline{A \\cup B} = \\overline{A} \\cap \\overline{B}$: complementing an intersection gives the union of the complements, and the other way around.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 8.3 (p. 165)"
+      }
+    },
+    {
+      "id": "proofs.set-proofs.fact-distributive-sets",
+      "topic": "set-proofs",
+      "type": "fact",
+      "front": "Distributive laws for sets",
+      "back": "$A \\cap (B \\cup C) = (A \\cap B) \\cup (A \\cap C)$, $A \\cup (B \\cap C) = (A \\cup B) \\cap (A \\cup C)$, $A \\times (B \\cup C) = (A \\times B) \\cup (A \\times C)$ and $A \\times (B \\cap C) = (A \\times B) \\cap (A \\times C)$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 8.3 (pp. 163-165)"
+      }
+    },
+    {
+      "id": "proofs.set-proofs.def-perfect-number",
+      "topic": "set-proofs",
+      "type": "definition",
+      "front": "Perfect number",
+      "back": "A natural number $p$ that equals the total of all its positive divisors other than $p$ itself, such as $6 = 1 + 2 + 3$ and $28 = 1 + 2 + 4 + 7 + 14$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Definition 8.1, Section 8.4 (p. 165)"
+      }
+    },
+    {
+      "id": "proofs.set-proofs.thm-even-perfect",
+      "topic": "set-proofs",
+      "type": "theorem",
+      "front": "Theorems 8.1 and 8.2",
+      "back": "Every number $2^{n-1}(2^n - 1)$ with $n \\in \\mathbb{N}$ and $2^n - 1$ prime is perfect (Theorem 8.1). Moreover, the even perfect numbers are exactly the numbers of this form (Theorem 8.2).",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Theorems 8.1 and 8.2, Section 8.4 (pp. 167, 169)"
+      }
+    },
+    {
+      "id": "proofs.disproof.def-conjecture",
+      "topic": "disproof",
+      "type": "definition",
+      "front": "Conjecture",
+      "back": "A statement that mathematicians suspect is true but that nobody has yet proved or disproved, such as the still-open claim (due to Goldbach) that each even integer above $2$ is a sum of two primes.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Chapter 9 (p. 173)"
+      }
+    },
+    {
+      "id": "proofs.disproof.def-disproof",
+      "topic": "disproof",
+      "type": "definition",
+      "front": "Disproof",
+      "back": "Showing that a statement $P$ is false. It is done by proving the negation $\\sim P$, using a direct, contrapositive or contradiction argument (or simply an example, when $\\sim P$ is an existence statement).",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Chapter 9 (pp. 172, 174)"
+      }
+    },
+    {
+      "id": "proofs.disproof.def-counterexample",
+      "topic": "disproof",
+      "type": "definition",
+      "front": "Counterexample",
+      "back": "A specific case showing a claim is not always true, such as $n = 11$ for \"$n^2 - n + 11$ is always prime\", since $121 = 11 \\cdot 11$. A disproof should say exactly how the case breaks the claim.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 9.1 (p. 175)"
+      }
+    },
+    {
+      "id": "proofs.disproof.fact-disprove-universal",
+      "topic": "disproof",
+      "type": "fact",
+      "front": "Disproving $\\forall x \\in S, P(x)$",
+      "back": "Its negation is $\\exists x \\in S, \\sim P(x)$, so it is enough to exhibit one $x \\in S$ for which $P(x)$ is false.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 9.1 (p. 174)"
+      }
+    },
+    {
+      "id": "proofs.disproof.fact-disprove-conditional",
+      "topic": "disproof",
+      "type": "fact",
+      "front": "Disproving $P(x) \\Rightarrow Q(x)$",
+      "back": "Find one $x$ for which $P(x)$ holds while $Q(x)$ fails. That single case breaks the promise the statement makes.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 9.1 (p. 175)"
+      }
+    },
+    {
+      "id": "proofs.disproof.fact-disprove-existence",
+      "topic": "disproof",
+      "type": "fact",
+      "front": "Disproving $\\exists x \\in S, P(x)$",
+      "back": "Prove the universal negation $\\forall x \\in S, \\sim P(x)$, that is, \"if $x \\in S$, then $\\sim P(x)$\", with a direct, contrapositive or contradiction argument. A single example cannot do this.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 9.2 (p. 176)"
+      }
+    },
+    {
+      "id": "proofs.disproof.def-disproof-by-contradiction",
+      "topic": "disproof",
+      "type": "definition",
+      "front": "Disproof by contradiction",
+      "back": "To show $P$ is false, assume $P$ is true and derive something impossible. Because $\\sim \\sim P = P$, this is just the usual assume-the-opposite argument applied to $\\sim P$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 9.3 (p. 178)"
+      }
+    },
+    {
+      "id": "proofs.induction.def-induction",
+      "topic": "induction",
+      "type": "definition",
+      "front": "Proof by induction",
+      "back": "A method for showing that all of $S_1, S_2, S_3, \\ldots$ are true: (1) prove $S_1$; (2) for an arbitrary integer $k \\ge 1$, prove $S_k \\Rightarrow S_{k+1}$. Like a row of dominoes, every $S_n$ then falls into place.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 10.1 (p. 182)"
+      }
+    },
+    {
+      "id": "proofs.induction.def-basis-step",
+      "topic": "induction",
+      "type": "definition",
+      "front": "Basis step",
+      "back": "The part of an induction proof that checks the first statement in the list. That is usually $S_1$, but depending on the problem it can be $S_0$ or some other $S_m$. It is normally the easy part.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 10.1 (pp. 182-183)"
+      }
+    },
+    {
+      "id": "proofs.induction.def-inductive-step",
+      "topic": "induction",
+      "type": "definition",
+      "front": "Inductive step",
+      "back": "The part of an induction proof that establishes $S_k \\Rightarrow S_{k+1}$ for each relevant $k$, usually by direct proof: assume $S_k$, then deduce $S_{k+1}$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 10.1 (p. 182)"
+      }
+    },
+    {
+      "id": "proofs.induction.def-inductive-hypothesis",
+      "topic": "induction",
+      "type": "definition",
+      "front": "Inductive hypothesis",
+      "back": "In an induction proof, the assumption that $S_k$ holds, made so that you can deduce $S_{k+1}$ from it.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 10.1 (p. 182)"
+      }
+    },
+    {
+      "id": "proofs.induction.def-strong-induction",
+      "topic": "induction",
+      "type": "definition",
+      "front": "Strong induction",
+      "back": "A version of the domino method in which, after checking the first case (or first few cases), you prove $(S_1 \\wedge S_2 \\wedge \\cdots \\wedge S_k) \\Rightarrow S_{k+1}$, so any earlier statement may be used. Handy when $S_{k+1}$ follows from, say, $S_{k-2}$ rather than $S_k$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 10.2 (p. 187)"
+      }
+    },
+    {
+      "id": "proofs.induction.def-smallest-counterexample",
+      "topic": "induction",
+      "type": "definition",
+      "front": "Proof by smallest counterexample",
+      "back": "Check $S_1$. Then suppose, for contradiction, that some $S_n$ fails, and let $k > 1$ be the least index with $S_k$ false. Then $S_{k-1}$ holds while $S_k$ fails; combine these two facts to reach a contradiction.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 10.3 (p. 191)"
+      }
+    },
+    {
+      "id": "proofs.induction.thm-fundamental-arithmetic",
+      "topic": "induction",
+      "type": "theorem",
+      "front": "Fundamental theorem of arithmetic",
+      "back": "Every integer $n > 1$ can be factored into primes, and only in one way: any two prime factorizations of $n$ have the same number of factors and the same primes, possibly listed in a different order.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Theorem 10.1, Section 10.4 (p. 192)"
+      }
+    },
+    {
+      "id": "proofs.induction.thm-prop-10-1",
+      "topic": "induction",
+      "type": "theorem",
+      "front": "Proposition 10.1",
+      "back": "Suppose $n \\ge 2$ and $a_1, a_2, \\ldots, a_n$ are integers. Whenever a prime $p$ satisfies $p \\mid (a_1 a_2 \\cdots a_n)$, it also divides at least one of the individual factors $a_i$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Proposition 10.1, Section 10.1 (p. 186)"
+      }
+    },
+    {
+      "id": "proofs.induction.def-fibonacci",
+      "topic": "induction",
+      "type": "definition",
+      "front": "Fibonacci numbers",
+      "back": "The terms of $1, 1, 2, 3, 5, 8, 13, \\ldots$, given by $F_1 = 1$, $F_2 = 1$ and $F_n = F_{n-1} + F_{n-2}$, so each term after the second is the sum of the two before it. That recurrence makes them a natural fit for induction.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 10.5 (p. 193)"
+      }
+    },
+    {
+      "id": "proofs.induction.thm-bernoulli",
+      "topic": "induction",
+      "type": "theorem",
+      "front": "Bernoulli's inequality",
+      "back": "For every $n \\in \\mathbb{N}$ and every real number $x > -1$, $(1 + x)^n \\ge 1 + nx$. The book proves it by induction on $n$.",
+      "reference": {
+        "book": "hammack-bop3",
+        "section": "Section 10.1 (pp. 185-186)"
+      }
+    }
+  ]
+}

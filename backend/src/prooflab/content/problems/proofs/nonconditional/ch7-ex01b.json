@@ -1,0 +1,92 @@
+{
+  "id": "proofs.nonconditional.ch7-ex01b",
+  "course": "proofs",
+  "topic": "nonconditional",
+  "kind": "parity_proof",
+  "title": "Ex 7.1 (⇐, by contrapositive) · If 3x + 5 is odd, then x is even",
+  "prompt": "Let $x$ be an integer. Exercise 7.1 says $x$ is even if and only if $3x + 5$ is odd. This problem is one direction of that if-and-only-if: prove that if $3x + 5$ is odd, then $x$ is even. Use contrapositive proof: show that if $x$ is odd, then $3x + 5$ is even. (The forward (⇒) direction is a separate problem.)",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch7",
+    "iff"
+  ],
+  "data": {
+    "variables": [
+      "x"
+    ],
+    "hypotheses": [
+      {
+        "var": "x",
+        "is": "odd"
+      }
+    ],
+    "target": "3x + 5",
+    "goal": "even"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "The contrapositive is: if x is not even (so odd), then 3x + 5 is not odd (so even).",
+    "Write x = 2a + 1. Then 3x + 5 = 6a + 8."
+  ],
+  "solution": [
+    "Contrapositive: if $x$ is odd, then $3x + 5$ is even.",
+    "Suppose $x$ is odd, so $x = 2a + 1$. Then $3x + 5 = 6a + 8 = 2(3a + 4)$, which is even.",
+    "So if $3x + 5$ is odd, then $x$ is even. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 7 exercises, #1 (p. 155)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses if-and-only-if proof (Section 7.1): this is the converse (⇐) direction, by contrapositive (Section 5.1), with Definitions 4.1, 4.2 (even, odd)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "prove the contrapositive",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "6a + 8"
+          },
+          {
+            "kind": "witness",
+            "content": "3a + 4"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "assumed x is even",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "ODD_FORM"
+        ]
+      }
+    }
+  ]
+}

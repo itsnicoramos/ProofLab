@@ -1,0 +1,108 @@
+{
+  "id": "proofs.logic.ch2-06-ex11",
+  "course": "proofs",
+  "topic": "logic",
+  "kind": "logical_equivalence",
+  "title": "Ex 2.6 #11 · (∼P) ∧ (P ⇒ Q) vs ∼(Q ⇒ P)",
+  "prompt": "Are $(\\sim P) \\wedge (P \\Rightarrow Q)$ and $\\sim (Q \\Rightarrow P)$ logically equivalent? Decide, and back up your answer with a truth table, a chain of known equivalences, or a row where the two statements differ.",
+  "answer_format": "equivalent or not equivalent. Steps are optional: truth-table columns, rewrite steps, or a row like P = T, Q = F where the two statements differ.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch2",
+    "logical-equivalence"
+  ],
+  "data": {
+    "left": "(~P) ∧ (P ⇒ Q)",
+    "right": "~(Q ⇒ P)",
+    "decide": true
+  },
+  "answer": "not equivalent",
+  "mistakes": [],
+  "hints": [
+    "Write out both columns. With two letters there are only four rows to compare.",
+    "Look closely at the last row, where P and Q are both false."
+  ],
+  "solution": [
+    "$(\\sim P) \\wedge (P \\Rightarrow Q)$ is F F T T, and $\\sim (Q \\Rightarrow P)$ is F F T F.",
+    "They differ in the row $P = $ F, $Q = $ F: the first statement is true there and the second is false.",
+    "So the statements are not logically equivalent."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 2.6 exercises, #11 (p. 52)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses logical equivalence (Section 2.6)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "not equivalent, with a row",
+      "submission": {
+        "steps": [
+          {
+            "kind": "row",
+            "content": "P = F, Q = F"
+          }
+        ],
+        "answer": "not equivalent"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "by truth table",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "(~P) ∧ (P ⇒ Q) : F F T T"
+          },
+          {
+            "kind": "column",
+            "content": "~(Q ⇒ P) : F F T F"
+          }
+        ],
+        "answer": "not equivalent"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "said equivalent",
+      "submission": {
+        "steps": [],
+        "answer": "equivalent"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "LOGIC_LOOK_FOR_ROW"
+        ]
+      }
+    },
+    {
+      "name": "row where they agree",
+      "submission": {
+        "steps": [
+          {
+            "kind": "row",
+            "content": "P = F, Q = T"
+          }
+        ],
+        "answer": "not equivalent"
+      },
+      "expect": {
+        "status": "partial",
+        "first_error": 0,
+        "hint_codes": [
+          "LOGIC_ROW_SAME"
+        ]
+      }
+    }
+  ]
+}

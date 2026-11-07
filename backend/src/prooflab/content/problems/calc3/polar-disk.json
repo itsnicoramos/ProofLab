@@ -1,0 +1,103 @@
+{
+  "id": "calc3.multiple_integrals.polar-disk",
+  "course": "calc3",
+  "topic": "multiple_integrals",
+  "kind": "integral_setup",
+  "title": "Convert to polar: a full disk",
+  "prompt": "Convert $\\displaystyle\\int_{-2}^{2} \\int_{-\\sqrt{4 - x^2}}^{\\sqrt{4 - x^2}} e^{-(x^2 + y^2)}\\,dy\\,dx$ to polar coordinates, integrating $dr$ first, then $d\\theta$ (don't evaluate).",
+  "answer_format": "An iterated integral like int(int(f, y, a, b), x, c, d), inner integral first. Don't evaluate it. Use r and theta.",
+  "difficulty": 2,
+  "tags": [
+    "double integrals",
+    "polar coordinates"
+  ],
+  "data": {
+    "integrand": "e^(-(x^2 + y^2))",
+    "region": [
+      [
+        "y",
+        "-sqrt(4 - x^2)",
+        "sqrt(4 - x^2)"
+      ],
+      [
+        "x",
+        "-2",
+        "2"
+      ]
+    ],
+    "order": [
+      "r",
+      "theta"
+    ],
+    "coordinates": "polar"
+  },
+  "answer": "int(int(e^(-r^2) r, r, 0, 2), theta, 0, 2pi)",
+  "mistakes": [
+    {
+      "answer": "int(int(e^(-r^2) r, r, 0, 4), theta, 0, 2pi)",
+      "hint": "The circle x² + y² = 4 has radius 2, so r goes up to 2, not 4."
+    }
+  ],
+  "hints": [
+    "What region do the limits describe? Sketch y = ±√(4 − x²)."
+  ],
+  "solution": [
+    "The limits describe the whole disk $x^2 + y^2 \\le 4$: $0 \\le r \\le 2$, $0 \\le \\theta \\le 2\\pi$.",
+    "$e^{-(x^2+y^2)} = e^{-r^2}$ and $dA = r\\,dr\\,d\\theta$: $\\int_0^{2\\pi}\\int_0^2 e^{-r^2}\\,r\\,dr\\,d\\theta$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "5.3 Double Integrals in Polar Coordinates",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "whole disk",
+      "submission": {
+        "steps": [
+          {
+            "kind": "note",
+            "content": "disk of radius 2"
+          },
+          {
+            "kind": "expr",
+            "content": "pi(1 - e^(-4))"
+          }
+        ],
+        "answer": "int(int(r e^(-r^2), r, 0, 2), theta, 0, 2pi)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "radius 4",
+      "submission": {
+        "steps": [],
+        "answer": "int(int(e^(-r^2) r, r, 0, 4), theta, 0, 2pi)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    },
+    {
+      "name": "upper half only",
+      "submission": {
+        "steps": [],
+        "answer": "int(int(e^(-r^2) r, r, 0, 2), theta, 0, pi)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "REGION_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

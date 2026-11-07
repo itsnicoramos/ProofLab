@@ -1,0 +1,85 @@
+{
+  "id": "calc4.diff_eq.repeated-root",
+  "course": "calc4",
+  "topic": "diff_eq",
+  "kind": "ode_solution",
+  "title": "A repeated root",
+  "prompt": "Find the general solution of $y'' - 4y' + 4y = 0$.",
+  "answer_format": "y = ... in terms of x. Use C (or C1, C2) for arbitrary constants.",
+  "difficulty": 2,
+  "tags": [
+    "second order",
+    "repeated root"
+  ],
+  "data": {
+    "ode": "y'' - 4y' + 4y = 0"
+  },
+  "answer": "y = (C1 + C2 x) e^(2x)",
+  "mistakes": [],
+  "hints": [
+    "The characteristic equation has a double root.",
+    "With a double root r, e^(rx) and x·e^(rx) are two independent solutions."
+  ],
+  "solution": [
+    "$r^2 - 4r + 4 = (r - 2)^2 = 0$: a double root $r = 2$.",
+    "$y = C_1 e^{2x} + C_2 x e^{2x}$."
+  ],
+  "reference": {
+    "book": "trench-de",
+    "section": "5.2 Constant Coefficient Homogeneous Equations",
+    "note": "Original problem; see the repeated-root case."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "x e^(2x) as the second solution",
+      "submission": {
+        "steps": [
+          {
+            "kind": "roots",
+            "content": "r = 2"
+          }
+        ],
+        "answer": "y = C1 e^(2x) + C2 x e^(2x)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "same solution twice",
+      "submission": {
+        "steps": [],
+        "answer": "y = C1 e^(2x) + C2 e^(2x)"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "DEPENDENT_SOLUTIONS"
+        ]
+      }
+    },
+    {
+      "name": "wrong root",
+      "submission": {
+        "steps": [
+          {
+            "kind": "roots",
+            "content": "r = -2"
+          }
+        ],
+        "answer": "y = (C1 + C2 x) e^(-2x)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "CHARACTERISTIC_ROOTS",
+          "ROOT_SIGNS"
+        ]
+      }
+    }
+  ]
+}

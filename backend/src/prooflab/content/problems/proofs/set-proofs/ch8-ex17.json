@@ -1,0 +1,134 @@
+{
+  "id": "proofs.set-proofs.ch8-ex17",
+  "course": "proofs",
+  "topic": "set-proofs",
+  "kind": "set_identity",
+  "title": "Ex 8.17 · Product distributes over intersection",
+  "prompt": "Let $A$, $B$ and $C$ be any sets. Prove that $A \\times (B \\cap C) = (A \\times B) \\cap (A \\times C)$. The elements of these sets are ordered pairs, so follow a pair $(x, y)$.",
+  "answer_format": "A chain of lines, each a set (like A × (B ∪ C)) or a statement about an ordered pair (x, y) (like x ∈ A and y ∈ B, or (x, y) ∈ A × B). Each line must have exactly the same elements as the line before; start from the left side and end at the right side.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch8",
+    "set-identity",
+    "cartesian-product",
+    "distributive-law"
+  ],
+  "data": {
+    "sets": [
+      "A",
+      "B",
+      "C"
+    ],
+    "left": "A × (B ∩ C)",
+    "right": "(A × B) ∩ (A × C)",
+    "point": [
+      "x",
+      "y"
+    ]
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "(x, y) ∈ A × (B ∩ C) means x ∈ A and y ∈ B and y ∈ C.",
+    "x ∈ A is the same as (x ∈ A and x ∈ A), so you can use it twice.",
+    "Regroup as (x ∈ A and y ∈ B) and (x ∈ A and y ∈ C): each bracket is membership in a product."
+  ],
+  "solution": [
+    "Let $(x, y)$ be any ordered pair. Then $(x, y) \\in A \\times (B \\cap C)$ means $x \\in A \\land (y \\in B \\land y \\in C)$.",
+    "Since $x \\in A$ is equivalent to $x \\in A \\land x \\in A$, we can regroup this as $(x \\in A \\land y \\in B) \\land (x \\in A \\land y \\in C)$.",
+    "That says $(x, y) \\in A \\times B$ and $(x, y) \\in A \\times C$, so $(x, y) \\in (A \\times B) \\cap (A \\times C)$.",
+    "Every step was an equivalence, so $A \\times (B \\cap C) = (A \\times B) \\cap (A \\times C)$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 8 exercises, #17 (p. 171)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Section 8.3 (proving A = B), the Cartesian product (Section 1.2) and the logic laws of Section 2.6. The book also works this identity as Examples 8.12 and 8.13."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "pair chasing",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(x, y) ∈ A × (B ∩ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A and (y ∈ B and y ∈ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(x ∈ A and y ∈ B) and (x ∈ A and y ∈ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(x, y) ∈ A × B and (x, y) ∈ A × C"
+          },
+          {
+            "kind": "expr",
+            "content": "(x, y) ∈ (A × B) ∩ (A × C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "'and' turned into 'or'",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(x, y) ∈ A × (B ∩ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A and (y ∈ B and y ∈ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(x ∈ A and y ∈ B) or (x ∈ A and y ∈ C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "SETID_STEP_DIFFERS"
+        ]
+      }
+    },
+    {
+      "name": "stops after unpacking",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(x, y) ∈ A × (B ∩ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A and (y ∈ B and y ∈ C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "SETID_INCOMPLETE"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "id": "precalc.functions.inverse-rational",
+  "course": "precalc",
+  "topic": "functions",
+  "kind": "inverse_function",
+  "title": "Inverse of a rational function",
+  "prompt": "Find $f^{-1}(x)$ for $f(x) = \\dfrac{2x + 1}{x - 3}$.",
+  "answer_format": "An expression in x.",
+  "difficulty": 2,
+  "tags": [
+    "inverse functions"
+  ],
+  "data": {
+    "function": "(2x + 1)/(x - 3)"
+  },
+  "answer": "(3x + 1)/(x - 2)",
+  "mistakes": [],
+  "hints": [
+    "Write y = f(x), swap x and y, then solve for y.",
+    "After clearing the denominator, collect the y-terms on one side and factor out y."
+  ],
+  "solution": [
+    "$y = \\frac{2x+1}{x-3}$. Swap: $x = \\frac{2y+1}{y-3}$.",
+    "$x(y - 3) = 2y + 1 \\Rightarrow xy - 2y = 3x + 1 \\Rightarrow y(x - 2) = 3x + 1$.",
+    "$f^{-1}(x) = \\frac{3x + 1}{x - 2}$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "3.7 Inverse Functions",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "swap and solve",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "y = (2x+1)/(x-3)"
+          },
+          {
+            "kind": "expr",
+            "content": "x = (2y+1)/(y-3)"
+          },
+          {
+            "kind": "expr",
+            "content": "xy - 3x = 2y + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "y(x - 2) = 3x + 1"
+          }
+        ],
+        "answer": "(3x+1)/(x-2)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "reciprocal",
+      "submission": {
+        "steps": [],
+        "answer": "(x - 3)/(2x + 1)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "RECIPROCAL_NOT_INVERSE"
+        ]
+      }
+    },
+    {
+      "name": "algebra slip",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "y = (2x+1)/(x-3)"
+          },
+          {
+            "kind": "expr",
+            "content": "x = (2y+1)/(y-3)"
+          },
+          {
+            "kind": "expr",
+            "content": "xy - 3x = 2y + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "y(x + 2) = 3x + 1"
+          }
+        ],
+        "answer": "(3x+1)/(x+2)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 3
+      }
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "id": "calc2.series.divergence-test",
+  "course": "calc2",
+  "topic": "series",
+  "kind": "series_convergence",
+  "title": "The divergence test",
+  "prompt": "Does $\\displaystyle \\sum_{n=1}^{\\infty} \\frac{2n + 1}{3n - 1}$ converge or diverge?",
+  "answer_format": "'converges' or 'diverges' (add 'absolutely' or 'conditionally' when the terms change sign).",
+  "difficulty": 1,
+  "tags": [
+    "divergence test"
+  ],
+  "data": {
+    "term": "(2n + 1)/(3n - 1)"
+  },
+  "answer": "diverges",
+  "mistakes": [],
+  "hints": [
+    "What do the terms approach as n → ∞?"
+  ],
+  "solution": [
+    "$\\lim_{n\\to\\infty} \\frac{2n+1}{3n-1} = \\frac23 \\ne 0$.",
+    "By the divergence test, the series diverges."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "5.3 The Divergence and Integral Tests",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "terms don't go to 0",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "nth term test"
+          },
+          {
+            "kind": "limit",
+            "content": "2/3"
+          }
+        ],
+        "answer": "diverges"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "ratio test is inconclusive",
+      "submission": {
+        "steps": [
+          {
+            "kind": "test",
+            "content": "ratio"
+          },
+          {
+            "kind": "limit",
+            "content": "1"
+          }
+        ],
+        "answer": "diverges"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "RATIO_TEST_INCONCLUSIVE",
+          "SERIES_NO_CONCLUSIVE_TEST"
+        ]
+      }
+    },
+    {
+      "name": "says converges",
+      "submission": {
+        "steps": [],
+        "answer": "converges"
+      },
+      "expect": {
+        "status": "incorrect"
+      }
+    }
+  ]
+}

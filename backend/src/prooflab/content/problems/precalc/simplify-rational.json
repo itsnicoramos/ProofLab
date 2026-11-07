@@ -1,0 +1,80 @@
+{
+  "id": "precalc.functions.simplify-rational",
+  "course": "precalc",
+  "topic": "functions",
+  "kind": "expression",
+  "title": "Simplify a rational expression",
+  "prompt": "Simplify $\\dfrac{x^2 - 9}{x^2 + 6x + 9}$ to lowest terms.",
+  "answer_format": "A single fraction in lowest terms.",
+  "difficulty": 1,
+  "tags": [
+    "rational expressions",
+    "factoring"
+  ],
+  "data": {
+    "expression": "(x^2 - 9)/(x^2 + 6x + 9)",
+    "form": "lowest_terms"
+  },
+  "answer": "(x - 3)/(x + 3)",
+  "mistakes": [
+    {
+      "answer": "-1/(6x)",
+      "hint": "You can only cancel factors, not individual terms like x²."
+    }
+  ],
+  "hints": [
+    "Factor the numerator (difference of squares) and the denominator (perfect square)."
+  ],
+  "solution": [
+    "$x^2 - 9 = (x-3)(x+3)$ and $x^2 + 6x + 9 = (x+3)^2$.",
+    "Cancel one factor of $x + 3$: $\\frac{x-3}{x+3}$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "1.6 Rational Expressions",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "factor and cancel",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(x-3)(x+3)/(x+3)^2"
+          }
+        ],
+        "answer": "(x-3)/(x+3)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "cancelled terms",
+      "submission": {
+        "steps": [],
+        "answer": "-9/(6x + 9)"
+      },
+      "expect": {
+        "status": "incorrect"
+      }
+    },
+    {
+      "name": "left unsimplified",
+      "submission": {
+        "steps": [],
+        "answer": "(x^2 - 9)/(x^2 + 6x + 9)"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "FORM_NOT_LOWEST_TERMS"
+        ]
+      }
+    }
+  ]
+}

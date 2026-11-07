@@ -1,0 +1,83 @@
+{
+  "id": "precalc.exp_log.exp-same-base",
+  "course": "precalc",
+  "topic": "exp_log",
+  "kind": "equation",
+  "title": "Rewrite with the same base",
+  "prompt": "Solve $3^{2x - 1} = 27$.",
+  "answer_format": "All real solutions, like x = 2 or x = -3 (or {2, -3}, or 'no solution').",
+  "difficulty": 1,
+  "tags": [
+    "exponential equations"
+  ],
+  "data": {
+    "equation": "3^(2x - 1) = 27"
+  },
+  "answer": "x = 2",
+  "mistakes": [
+    {
+      "answer": "x = 14",
+      "hint": "27 isn't 3 · 9 in exponent form. Write 27 as a power of 3."
+    }
+  ],
+  "hints": [
+    "Write 27 as a power of 3, then set the exponents equal."
+  ],
+  "solution": [
+    "$27 = 3^3$, so $3^{2x-1} = 3^3$.",
+    "Equal bases mean equal exponents: $2x - 1 = 3$, so $x = 2$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "6.6 Exponential and Logarithmic Equations",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "same base",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "3^(2x - 1) = 3^3"
+          },
+          {
+            "kind": "expr",
+            "content": "2x - 1 = 3"
+          }
+        ],
+        "answer": "x = 2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "exponent slip",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "3^(2x - 1) = 3^3"
+          },
+          {
+            "kind": "expr",
+            "content": "2x = 3"
+          }
+        ],
+        "answer": "x = 3/2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "EXTRA_SOLUTIONS",
+          "MISSING_SOLUTIONS"
+        ]
+      }
+    }
+  ]
+}

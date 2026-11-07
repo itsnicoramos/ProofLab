@@ -1,0 +1,85 @@
+{
+  "id": "proofs.disproof.ch9-ex11",
+  "course": "proofs",
+  "topic": "disproof",
+  "kind": "counterexample",
+  "title": "Ex 9.11 · Is a + b < ab for natural numbers?",
+  "prompt": "Statement: for all natural numbers $a$ and $b$, $a + b < ab$. This statement is false. Disprove it with a counterexample.",
+  "answer_format": "Integer values for every variable, like a = 4, b = 2, c = 2.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch9",
+    "counterexample"
+  ],
+  "data": {
+    "variables": {
+      "a": "positive",
+      "b": "positive"
+    },
+    "conclusion": {
+      "op": "lt",
+      "args": [
+        "a + b",
+        "a b"
+      ]
+    }
+  },
+  "answer": "a = 1, b = 1",
+  "mistakes": [],
+  "hints": [
+    "Natural numbers start at 1 in this book.",
+    "Try the smallest values."
+  ],
+  "solution": [
+    "Take $a = b = 1$: $a + b = 2$ but $ab = 1$, and $2 < 1$ is false.",
+    "So the statement is false."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 9 exercises, #11 (p. 179)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses counterexamples (Section 9.1)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "a = b = 1",
+      "submission": {
+        "steps": [],
+        "answer": "a = 1, b = 1"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "inequality holds",
+      "submission": {
+        "steps": [],
+        "answer": "a = 3, b = 3"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "CONCLUSION_HOLDS"
+        ]
+      }
+    },
+    {
+      "name": "0 is not a natural number here",
+      "submission": {
+        "steps": [],
+        "answer": "a = 0, b = 5"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "COUNTEREXAMPLE_DOMAIN"
+        ]
+      }
+    }
+  ]
+}

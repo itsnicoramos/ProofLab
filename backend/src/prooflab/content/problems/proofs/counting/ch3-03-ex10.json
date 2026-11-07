@@ -1,0 +1,98 @@
+{
+  "id": "proofs.counting.ch3-03-ex10",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.3 #10 · P, R, O, F, S lists ending in S with O twice or more",
+  "prompt": "Make lists of length 6 from the symbols P, R, O, F, S, with repetition allowed, such as (O, R, O, F, P, S). How many of these lists end in S and use the symbol O more than once?",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 3,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "multiplication-principle",
+    "subtraction-principle"
+  ],
+  "data": {},
+  "answer": "5^5 - 4^5 - 5*4^4",
+  "mistakes": [
+    {
+      "answer": "5^5 - 4^5",
+      "hint": "That keeps every list with at least one O. 'More than once' means at least two O's, so the lists with exactly one O have to go too."
+    },
+    {
+      "answer": "5^5 - 5*4^4",
+      "hint": "You removed the lists with exactly one O, but the lists with no O at all also fail."
+    },
+    {
+      "answer": "binom(5, 2)*5^3",
+      "hint": "Choosing two places for O and filling the rest freely counts a list with three or more O's several times."
+    }
+  ],
+  "hints": [
+    "The last entry is fixed as S, so only the first five entries vary.",
+    "Among the first five entries, count the lists with no O and the lists with exactly one O, and subtract both from the total."
+  ],
+  "solution": [
+    "The sixth entry must be S, so count the possibilities for the first five entries: $5^5 = 3125$ in all.",
+    "With no O, each of the five entries is P, R, F or S: $4^5 = 1024$ lists. With exactly one O, choose its position (5 ways) and fill the other four entries from P, R, F, S: $5 \\cdot 4^4 = 1280$ lists.",
+    "So $3125 - 1024 - 1280 = 821$ lists end in S and use O more than once."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.3 exercises, #10 (p. 77)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses the multiplication and subtraction principles (Sections 3.2 and 3.3)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "821"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "5^5"
+          },
+          {
+            "kind": "expr",
+            "content": "4^5"
+          },
+          {
+            "kind": "expr",
+            "content": "5*4^4"
+          }
+        ],
+        "answer": "5^5 - 4^5 - 5*4^4"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "5^5 - 4^5"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

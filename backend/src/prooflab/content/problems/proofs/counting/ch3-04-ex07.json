@@ -1,0 +1,93 @@
+{
+  "id": "proofs.counting.ch3-04-ex07",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.4 #7 · Odd digits first, then even digits",
+  "prompt": "Use each of the digits 1, 2, 3, 4, 5, 6, 7, 8, 9 exactly once to form a 9-digit number in which all the odd digits come first (on the left), followed by all the even digits, as in 975318642. How many such numbers are there?",
+  "answer_format": "A whole number, or an expression for it like 26^4, 10!/7! or binom(10, 3). P(n, k) and C(n, k) work too.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "permutations",
+    "multiplication-principle"
+  ],
+  "data": {},
+  "answer": "5!*4!",
+  "mistakes": [
+    {
+      "answer": "5! + 4!",
+      "hint": "The odd block and the even block are arranged independently: every order of the odd digits goes with every order of the even digits. Multiply rather than add."
+    },
+    {
+      "answer": "9!",
+      "hint": "That counts every arrangement of the nine digits, ignoring the odd-then-even rule."
+    },
+    {
+      "answer": "5!",
+      "hint": "You arranged the odd digits, but the even digits can also go in different orders."
+    }
+  ],
+  "hints": [
+    "The first five positions hold the odd digits 1, 3, 5, 7, 9 and the last four hold 2, 4, 6, 8.",
+    "Arrange each group within its own block, then combine the two counts."
+  ],
+  "solution": [
+    "The five odd digits fill the first five positions in any order: $5! = 120$ ways. The four even digits fill the last four positions: $4! = 24$ ways.",
+    "By the multiplication principle there are $5! \\cdot 4! = 120 \\cdot 24 = 2880$ such numbers."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.4 exercises, #7 (p. 84)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses factorials and the multiplication principle (Section 3.4)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "2880"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "5!"
+          },
+          {
+            "kind": "expr",
+            "content": "4!"
+          }
+        ],
+        "answer": "5!*4!"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "5! + 4!"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

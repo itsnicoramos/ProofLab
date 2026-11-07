@@ -1,0 +1,111 @@
+{
+  "id": "calc3.multiple_integrals.reverse-order-exp",
+  "course": "calc3",
+  "topic": "multiple_integrals",
+  "kind": "integral_setup",
+  "title": "Reverse the order of integration",
+  "prompt": "The integral $\\displaystyle\\int_0^1 \\int_x^1 e^{y^2}\\,dy\\,dx$ can't be done in this order. Rewrite it with the order $dx\\,dy$ (don't evaluate).",
+  "answer_format": "An iterated integral like int(int(f, y, a, b), x, c, d), inner integral first. Don't evaluate it.",
+  "difficulty": 2,
+  "tags": [
+    "double integrals",
+    "order of integration"
+  ],
+  "data": {
+    "integrand": "e^(y^2)",
+    "region": [
+      [
+        "y",
+        "x",
+        "1"
+      ],
+      [
+        "x",
+        "0",
+        "1"
+      ]
+    ],
+    "order": [
+      "x",
+      "y"
+    ]
+  },
+  "answer": "int(int(e^(y^2), x, 0, y), y, 0, 1)",
+  "mistakes": [],
+  "hints": [
+    "Sketch the region: 0 ≤ x ≤ 1 and x ≤ y ≤ 1. It's a triangle.",
+    "For a fixed y, which x-values are in the triangle?"
+  ],
+  "solution": [
+    "The region is the triangle $0 \\le x \\le y$, $0 \\le y \\le 1$.",
+    "So the integral is $\\int_0^1 \\int_0^y e^{y^2}\\,dx\\,dy$ (which then equals $\\int_0^1 y e^{y^2}\\,dy = \\frac{e - 1}{2}$)."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "5.2 Double Integrals over General Regions",
+    "note": "Original problem; see changing the order of integration."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "from a sketch",
+      "submission": {
+        "steps": [
+          {
+            "kind": "note",
+            "content": "triangle with corners (0,0), (0,1), (1,1)"
+          },
+          {
+            "kind": "expr",
+            "content": "(e - 1)/2"
+          }
+        ],
+        "answer": "int(int(e^(y^2), x, 0, y), y, 0, 1)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "swapped the limits naively",
+      "submission": {
+        "steps": [],
+        "answer": "int(int(e^(y^2), x, y, 1), y, 0, 1)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "REVERSED_LIMITS_ONLY"
+        ]
+      }
+    },
+    {
+      "name": "kept the old order",
+      "submission": {
+        "steps": [],
+        "answer": "int(int(e^(y^2), y, x, 1), x, 0, 1)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "INTEGRATION_ORDER"
+        ]
+      }
+    },
+    {
+      "name": "limit uses its own variable",
+      "submission": {
+        "steps": [],
+        "answer": "int(int(e^(y^2), x, x, 1), y, 0, 1)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SETUP_BOUNDS"
+        ]
+      }
+    }
+  ]
+}

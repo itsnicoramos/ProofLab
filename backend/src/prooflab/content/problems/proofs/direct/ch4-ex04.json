@@ -1,0 +1,112 @@
+{
+  "id": "proofs.direct.ch4-ex04",
+  "course": "proofs",
+  "topic": "direct",
+  "kind": "parity_proof",
+  "title": "Ex 4.4 · The product of two odd integers",
+  "prompt": "Use a direct proof. Let $x$ and $y$ be integers. Show that if $x$ and $y$ are both odd, then $xy$ is odd.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch4"
+  ],
+  "data": {
+    "variables": [
+      "x",
+      "y"
+    ],
+    "hypotheses": [
+      {
+        "var": "x",
+        "is": "odd"
+      },
+      {
+        "var": "y",
+        "is": "odd"
+      }
+    ],
+    "target": "x y",
+    "goal": "odd"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Write x and y with the definition of odd, using two different new letters.",
+    "Expand the product: every term except one has a factor of 2."
+  ],
+  "solution": [
+    "Since $x$ and $y$ are odd, $x = 2a + 1$ and $y = 2b + 1$ for some integers $a, b$.",
+    "$xy = (2a+1)(2b+1) = 4ab + 2a + 2b + 1 = 2(2ab + a + b) + 1$.",
+    "$2ab + a + b$ is an integer, so $xy$ is odd. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 4 exercises, #4 (p. 126)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 4.2 (odd)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "two letters",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a + 1"
+          },
+          {
+            "kind": "let",
+            "content": "y = 2b + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "(2a+1)(2b+1)"
+          },
+          {
+            "kind": "expr",
+            "content": "4ab + 2a + 2b + 1"
+          },
+          {
+            "kind": "witness",
+            "content": "2ab + a + b"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "same letter for both",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a + 1"
+          },
+          {
+            "kind": "let",
+            "content": "y = 2a + 1"
+          },
+          {
+            "kind": "witness",
+            "content": "2a^2 + 2a"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "SAME_FRESH_VARIABLE"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "id": "calc2.integrals.by-parts-xex",
+  "course": "calc2",
+  "topic": "integrals",
+  "kind": "antiderivative",
+  "title": "Integration by parts",
+  "prompt": "Find $\\displaystyle \\int x e^{x}\\,dx$.",
+  "answer_format": "An antiderivative in x, including + C.",
+  "difficulty": 1,
+  "tags": [
+    "integration by parts"
+  ],
+  "data": {
+    "integrand": "x e^x"
+  },
+  "answer": "x e^x - e^x + C",
+  "mistakes": [
+    {
+      "answer": "x e^x + e^x + C",
+      "hint": "By parts is ∫u dv = uv − ∫v du: the second term is subtracted."
+    }
+  ],
+  "hints": [
+    "Choose u = x (it gets simpler when differentiated) and dv = eˣ dx."
+  ],
+  "solution": [
+    "Let $u = x$, $dv = e^x\\,dx$, so $du = dx$, $v = e^x$.",
+    "$\\int x e^x\\,dx = x e^x - \\int e^x\\,dx = x e^x - e^x + C$."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "3.1 Integration by Parts",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "by parts",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x e^x - int(e^x, x)"
+          },
+          {
+            "kind": "expr",
+            "content": "x e^x - e^x + C"
+          }
+        ],
+        "answer": "e^x (x - 1) + C"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "added instead of subtracted",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x e^x + int(e^x, x)"
+          }
+        ],
+        "answer": "x e^x + e^x + C"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

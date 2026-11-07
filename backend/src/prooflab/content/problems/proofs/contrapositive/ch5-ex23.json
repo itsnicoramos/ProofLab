@@ -1,0 +1,104 @@
+{
+  "id": "proofs.contrapositive.ch5-ex23",
+  "course": "proofs",
+  "topic": "contrapositive",
+  "kind": "divisibility_proof",
+  "title": "Ex 5.23 · a ≡ b (mod n) gives a² ≡ ab (mod n)",
+  "prompt": "Let $a, b, n$ be integers with $n \\ge 1$. Prove that if $a \\equiv b \\pmod n$, then $a^2 \\equiv ab \\pmod n$, that is, $n \\mid (a^2 - ab)$.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch5",
+    "congruence"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b",
+      "n"
+    ],
+    "hypotheses": [
+      {
+        "var": "a",
+        "divisor": "n",
+        "remainder": "b"
+      }
+    ],
+    "target": "a^2 - a b",
+    "goal": {
+      "divisor": "n"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Factor a² − ab first. One factor is exactly what the hypothesis tells you about.",
+    "a − b = nk, so a² − ab = a(a − b) = n·(something)."
+  ],
+  "solution": [
+    "Since $n \\mid (a - b)$, $a - b = nk$ for some integer $k$ (so $a = nk + b$).",
+    "$a^2 - ab = a(a - b) = a(nk) = n(ak)$, and $ak$ is an integer, so $n \\mid (a^2 - ab)$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 5 exercises, #23 (p. 136)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 5.1 (congruence)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "factor",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = nk + b"
+          },
+          {
+            "kind": "expr",
+            "content": "a(a - b)"
+          },
+          {
+            "kind": "expr",
+            "content": "(nk + b) n k"
+          },
+          {
+            "kind": "witness",
+            "content": "a k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "witness missing a",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = nk + b"
+          },
+          {
+            "kind": "witness",
+            "content": "k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "WITNESS_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "id": "proofs.counting.ch3-02-ex03c",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.2 #3(c) · Length-3 lists with an A, no repeats",
+  "prompt": "Using the six symbols A, B, C, D, E, F, how many lists of length 3 can be made in which no symbol is used twice and the letter A appears somewhere in the list?",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "multiplication-principle"
+  ],
+  "data": {},
+  "answer": "3*5*4",
+  "mistakes": [
+    {
+      "answer": "5*4",
+      "hint": "That counts only the lists that start with A. The A could be in any of the three positions."
+    },
+    {
+      "answer": "6*5*4",
+      "hint": "That counts every non-repetitive list of length 3, including the ones with no A at all."
+    }
+  ],
+  "hints": [
+    "Sort the lists by where the A is: first, second or third position.",
+    "Once the A is placed, fill the other two positions from the five remaining symbols without repeating."
+  ],
+  "solution": [
+    "Sort the lists by the position of A. If A is first, the other two entries form a non-repetitive list from the remaining 5 symbols, so there are $5 \\cdot 4 = 20$ such lists.",
+    "The same count holds when A is second or third, so there are $20 + 20 + 20 = 60$ lists.",
+    "(Subtracting works too: $6 \\cdot 5 \\cdot 4 - 5 \\cdot 4 \\cdot 3 = 120 - 60 = 60$ removes the lists with no A.)"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.2 exercises, #3c (p. 73)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses the multiplication principle (Section 3.2)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "60"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "5*4"
+          },
+          {
+            "kind": "expr",
+            "content": "3*20"
+          }
+        ],
+        "answer": "3*5*4"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "5*4"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    },
+    {
+      "name": "other wrong count",
+      "submission": {
+        "steps": [],
+        "answer": "100"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "COUNT_TOO_BIG"
+        ]
+      }
+    }
+  ]
+}

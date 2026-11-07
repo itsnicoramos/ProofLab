@@ -1,0 +1,106 @@
+{
+  "id": "proofs.direct.ch4-ex01",
+  "course": "proofs",
+  "topic": "direct",
+  "kind": "parity_proof",
+  "title": "Ex 4.1 · The square of an even integer",
+  "prompt": "Use a direct proof. Let $x$ be an even integer. Show that $x^2$ is even.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch4"
+  ],
+  "data": {
+    "variables": [
+      "x"
+    ],
+    "hypotheses": [
+      {
+        "var": "x",
+        "is": "even"
+      }
+    ],
+    "target": "x^2",
+    "goal": "even"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "By the definition of even, an even integer is 2 times some integer. Write x that way with a new letter.",
+    "Square it and pull out a factor of 2."
+  ],
+  "solution": [
+    "Since $x$ is even, $x = 2a$ for some integer $a$.",
+    "Then $x^2 = 4a^2 = 2(2a^2)$, and $2a^2$ is an integer, so $x^2$ is even. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 4 exercises, #1 (p. 126)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 4.1 (even)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "direct proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a"
+          },
+          {
+            "kind": "expr",
+            "content": "x^2"
+          },
+          {
+            "kind": "expr",
+            "content": "4a^2"
+          },
+          {
+            "kind": "expr",
+            "content": "2(2a^2)"
+          },
+          {
+            "kind": "witness",
+            "content": "2a^2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "witness too big",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a"
+          },
+          {
+            "kind": "expr",
+            "content": "4a^2"
+          },
+          {
+            "kind": "witness",
+            "content": "4a^2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "WITNESS_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

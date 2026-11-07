@@ -1,0 +1,77 @@
+{
+  "id": "calc3.partials.tangent-plane-sphere",
+  "course": "calc3",
+  "topic": "partials",
+  "kind": "tangent_plane",
+  "title": "Tangent plane to a sphere",
+  "prompt": "Find an equation of the tangent plane to the sphere $x^2 + y^2 + z^2 = 14$ at $(1, 2, 3)$.",
+  "answer_format": "An equation in x, y and z.",
+  "difficulty": 2,
+  "tags": [
+    "tangent plane",
+    "level surfaces"
+  ],
+  "data": {
+    "surface": "x^2 + y^2 + z^2 = 14",
+    "at": [
+      "1",
+      "2",
+      "3"
+    ]
+  },
+  "answer": "x + 2y + 3z = 14",
+  "mistakes": [],
+  "hints": [
+    "Write the sphere as F(x, y, z) = 14. The gradient ∇F at the point is a normal vector to the plane."
+  ],
+  "solution": [
+    "$F = x^2 + y^2 + z^2$, $\\nabla F = \\langle 2x, 2y, 2z\\rangle$, so $\\nabla F(1,2,3) = \\langle 2, 4, 6\\rangle$.",
+    "$2(x - 1) + 4(y - 2) + 6(z - 3) = 0$, which simplifies to $x + 2y + 3z = 14$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "4.6 Directional Derivatives and the Gradient",
+    "note": "Original problem; see tangent planes to level surfaces."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "normal from the gradient",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "F_x = 2x"
+          },
+          {
+            "kind": "expr",
+            "content": "2"
+          },
+          {
+            "kind": "expr",
+            "content": "2(x - 1) + 4(y - 2) + 6(z - 3) = 0"
+          }
+        ],
+        "answer": "x + 2y + 3z = 14"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "plane through the origin",
+      "submission": {
+        "steps": [],
+        "answer": "x + 2y + 3z = 0"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "PLANE_WRONG_POINT"
+        ]
+      }
+    }
+  ]
+}

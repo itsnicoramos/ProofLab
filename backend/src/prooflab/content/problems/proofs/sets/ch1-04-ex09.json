@@ -1,0 +1,66 @@
+{
+  "id": "proofs.sets.ch1-04-ex09",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.4 #9 · 𝒫({a, b} × {0})",
+  "prompt": "Write $\\mathscr{P}(\\{a, b\\} \\times \\{0\\})$ by listing its elements between braces.",
+  "answer_format": "A set of sets between braces, like {∅, {1}, {1, 2}}. Spaces are optional.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": "P({a, b} × {0})",
+    "atoms": [
+      "a",
+      "b"
+    ]
+  },
+  "answer": "{∅, {(a, 0)}, {(b, 0)}, {(a, 0), (b, 0)}}",
+  "mistakes": [],
+  "hints": [
+    "First find {a, b} × {0}: it has two ordered pairs.",
+    "The power set is the set of all subsets, including ∅ and the set itself. A set with k elements has 2ᵏ of them: here you need 4."
+  ],
+  "solution": [
+    "First, $\\{(a, 0), (b, 0)\\}$ is the set inside.",
+    "List every subset, from ∅ up to the whole set: 4 in all.",
+    "So the answer is $\\{\\emptyset, \\{(a, 0)\\}, \\{(b, 0)\\}, \\{(a, 0), (b, 0)\\}\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.4 exercises, #9 (p. 17)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{∅, {(a, 0)}, {(b, 0)}, {(a, 0), (b, 0)}}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{{(a,0)},{(b,0)},{(a,0),(b,0)}}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_EMPTY_MISSING"
+        ]
+      }
+    }
+  ]
+}

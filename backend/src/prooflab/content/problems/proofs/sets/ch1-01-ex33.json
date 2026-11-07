@@ -1,0 +1,80 @@
+{
+  "id": "proofs.sets.ch1-01-ex33",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.1 #33 · |{x ∈ ℤ : |x| < 10}|",
+  "prompt": "Find the cardinality $|\\{x \\in \\mathbb{Z} : |x| < 10\\}|$: how many elements does the set have?",
+  "answer_format": "A whole number: how many elements the set has.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": {
+      "var": "x",
+      "domain": "Z",
+      "where": [
+        "|x| < 10"
+      ]
+    },
+    "ask": "cardinality"
+  },
+  "answer": "19",
+  "mistakes": [],
+  "hints": [
+    "Which integers satisfy |x| < 10?",
+    "That's −9 through 9: count the negatives, zero and the positives."
+  ],
+  "solution": [
+    "The set is {−9, −8, …, 8, 9}: nine negative integers, zero and nine positive integers.",
+    "So the cardinality is $19$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.1 exercises, #33 (p. 8)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "19"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "listed first",
+      "submission": {
+        "steps": [
+          {
+            "kind": "note",
+            "content": "list the set, then count"
+          }
+        ],
+        "answer": "19"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "18"
+      },
+      "expect": {
+        "status": "incorrect"
+      }
+    }
+  ]
+}

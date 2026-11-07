@@ -1,0 +1,133 @@
+{
+  "id": "proofs.set-proofs.ch8-ex14",
+  "course": "proofs",
+  "topic": "set-proofs",
+  "kind": "set_identity",
+  "title": "Ex 8.14 · Removing a set from a union",
+  "prompt": "Let $A$, $B$ and $C$ be any sets. Prove that $(A \\cup B) - C = (A - C) \\cup (B - C)$.",
+  "answer_format": "A chain of lines, each a set (like A ∪ (B ∩ C)) or a statement about an element x (like x ∈ A or x ∈ B). Each line must have exactly the same elements as the line before; start from the left side and end at the right side.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch8",
+    "set-identity",
+    "set-difference",
+    "distributive-law"
+  ],
+  "data": {
+    "sets": [
+      "A",
+      "B",
+      "C"
+    ],
+    "left": "(A ∪ B) − C",
+    "right": "(A − C) ∪ (B − C)",
+    "point": [
+      "x"
+    ]
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "x ∈ (A ∪ B) − C means (x ∈ A or x ∈ B) and x ∉ C.",
+    "Distribute: (P ∨ Q) ∧ R is the same as (P ∧ R) ∨ (Q ∧ R). The condition x ∉ C must go with both x ∈ A and x ∈ B.",
+    "Each piece (x ∈ A and x ∉ C) is x ∈ A − C."
+  ],
+  "solution": [
+    "Let $x$ be any element. Then $x \\in (A \\cup B) - C$ means $(x \\in A \\lor x \\in B) \\land x \\notin C$.",
+    "By the distributive law this is $(x \\in A \\land x \\notin C) \\lor (x \\in B \\land x \\notin C)$.",
+    "That says $x \\in A - C$ or $x \\in B - C$, so $x \\in (A - C) \\cup (B - C)$.",
+    "Every step was an equivalence, so $(A \\cup B) - C = (A - C) \\cup (B - C)$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 8 exercises, #14 (p. 171)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Section 8.3 (proving A = B), the definitions of union, intersection and difference (Section 1.5) and the logic laws of Section 2.6."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "element chasing",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x ∈ (A ∪ B) − C"
+          },
+          {
+            "kind": "expr",
+            "content": "(x ∈ A or x ∈ B) and x ∉ C"
+          },
+          {
+            "kind": "expr",
+            "content": "(x ∈ A and x ∉ C) or (x ∈ B and x ∉ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A − C or x ∈ B − C"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ (A − C) ∪ (B − C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "x ∉ C attached to B only",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x ∈ (A ∪ B) − C"
+          },
+          {
+            "kind": "expr",
+            "content": "(x ∈ A or x ∈ B) and x ∉ C"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A or (x ∈ B and x ∉ C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "SETID_STEP_DIFFERS"
+        ]
+      }
+    },
+    {
+      "name": "straight jump",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(A ∪ B) − C"
+          },
+          {
+            "kind": "expr",
+            "content": "(A − C) ∪ (B − C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "SETID_NO_WORK"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "id": "proofs.counting.ch3-02-ex05d",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.2 #5(d) · 8-digit binary strings with a 1 in place 2 or 4",
+  "prompt": "An 8-digit binary string is a string of eight digits, each 0 or 1 (like 01101001). How many such strings have a 1 as their second digit or a 1 as their fourth digit (or both)?",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "multiplication-principle",
+    "binary-strings"
+  ],
+  "data": {},
+  "answer": "3*2^6",
+  "mistakes": [
+    {
+      "answer": "2^7 + 2^7",
+      "hint": "Adding the strings with a 1 in place 2 to the strings with a 1 in place 4 counts the strings with 1's in both places twice."
+    },
+    {
+      "answer": "2^6",
+      "hint": "That counts only the strings with 1's in both places. 'Or' also allows exactly one of the two digits to be 1."
+    },
+    {
+      "answer": "2*2^6",
+      "hint": "That leaves out the strings that have a 1 in both places."
+    }
+  ],
+  "hints": [
+    "Look only at the second and fourth digits. Which of their four possible combinations are allowed?",
+    "Three of the four combinations work, and the other six digits are free."
+  ],
+  "solution": [
+    "The pair (second digit, fourth digit) can be $(1, 0)$, $(0, 1)$ or $(1, 1)$: 3 choices. The other six digits are unrestricted: $2^6 = 64$ choices.",
+    "So there are $3 \\cdot 64 = 192$ strings. (Equivalently, $2^8 - 2^6 = 256 - 64 = 192$, removing the strings with 0 in both places.)"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.2 exercises, #5d (p. 73)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses the multiplication principle (Section 3.2)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "192"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "2^8"
+          },
+          {
+            "kind": "expr",
+            "content": "2^6"
+          },
+          {
+            "kind": "expr",
+            "content": "2^8 - 2^6"
+          }
+        ],
+        "answer": "3*2^6"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "2^7 + 2^7"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

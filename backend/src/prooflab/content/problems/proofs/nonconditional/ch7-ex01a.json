@@ -1,0 +1,99 @@
+{
+  "id": "proofs.nonconditional.ch7-ex01a",
+  "course": "proofs",
+  "topic": "nonconditional",
+  "kind": "parity_proof",
+  "title": "Ex 7.1 (⇒) · If x is even, then 3x + 5 is odd",
+  "prompt": "Let $x$ be an integer. Exercise 7.1 says $x$ is even if and only if $3x + 5$ is odd. This problem is one direction of that if-and-only-if: prove that if $x$ is even, then $3x + 5$ is odd. Use direct proof. (The converse (⇐) direction is a separate problem.)",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch7",
+    "iff"
+  ],
+  "data": {
+    "variables": [
+      "x"
+    ],
+    "hypotheses": [
+      {
+        "var": "x",
+        "is": "even"
+      }
+    ],
+    "target": "3x + 5",
+    "goal": "odd"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Write x = 2a with a let step.",
+    "3(2a) + 5 = 6a + 5 = 6a + 4 + 1. Take out a factor of 2 from 6a + 4."
+  ],
+  "solution": [
+    "Suppose $x$ is even, so $x = 2a$ for some integer $a$.",
+    "Then $3x + 5 = 6a + 5 = 2(3a + 2) + 1$, and $3a + 2$ is an integer, so $3x + 5$ is odd. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 7 exercises, #1 (p. 155)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses if-and-only-if proof (Section 7.1): this is the forward (⇒) direction, by direct proof, with Definitions 4.1, 4.2 (even, odd)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "direct proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a"
+          },
+          {
+            "kind": "expr",
+            "content": "6a + 5"
+          },
+          {
+            "kind": "witness",
+            "content": "3a + 2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "forgot to halve",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a"
+          },
+          {
+            "kind": "expr",
+            "content": "6a + 5"
+          },
+          {
+            "kind": "witness",
+            "content": "6a + 4"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "WITNESS_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "id": "proofs.sets.ch1-01-ex11",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.1 #11 · {x ∈ ℤ : |x| < 5}",
+  "prompt": "Write the set $\\{x \\in \\mathbb{Z} : |x| < 5\\}$ by listing its elements between braces.",
+  "answer_format": "A set listed between braces, like {1, 2, 3} (∅ for the empty set). Steps are optional.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": {
+      "var": "x",
+      "domain": "Z",
+      "where": [
+        "|x| < 5"
+      ]
+    }
+  },
+  "answer": "{-4, -3, -2, -1, 0, 1, 2, 3, 4}",
+  "mistakes": [],
+  "hints": [
+    "Rewrite |x| < 5 without the absolute value: it's a pair of inequalities.",
+    "Keep the integers strictly between −5 and 5."
+  ],
+  "solution": [
+    "|x| < 5 means −5 < x < 5, so the elements are the integers −4 through 4.",
+    "So the answer is $\\{-4, -3, -2, -1, 0, 1, 2, 3, 4\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.1 exercises, #11 (p. 7)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{-4, -3, -2, -1, 0, 1, 2, 3, 4}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_EXTRA"
+        ]
+      }
+    }
+  ]
+}

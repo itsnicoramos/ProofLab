@@ -1,0 +1,91 @@
+{
+  "id": "calc3.partials.gradient-at-point",
+  "course": "calc3",
+  "topic": "partials",
+  "kind": "gradient",
+  "title": "Gradient at a point",
+  "prompt": "Let $f(x, y) = x e^{y} + y^2$. Find $\\nabla f(2, 0)$.",
+  "answer_format": "A vector of numbers like <a, b>.",
+  "difficulty": 1,
+  "tags": [
+    "gradient"
+  ],
+  "data": {
+    "function": "x e^y + y^2",
+    "variables": [
+      "x",
+      "y"
+    ],
+    "at": [
+      "2",
+      "0"
+    ]
+  },
+  "answer": "<1, 2>",
+  "mistakes": [],
+  "hints": [
+    "Find ∇f as a formula first, then substitute x = 2 and y = 0."
+  ],
+  "solution": [
+    "$\\nabla f = \\langle e^y,\\ xe^y + 2y\\rangle$.",
+    "At $(2, 0)$: $\\langle e^0,\\ 2e^0 + 0\\rangle = \\langle 1, 2\\rangle$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "4.6 Directional Derivatives and the Gradient",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "formula then point",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "<e^y, x e^y + 2y>"
+          },
+          {
+            "kind": "expr",
+            "content": "<1, 2>"
+          }
+        ],
+        "answer": "<1, 2>"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "didn't plug in the point",
+      "submission": {
+        "steps": [],
+        "answer": "<e^y, x e^y + 2y>"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "NOT_EVALUATED_AT_POINT"
+        ]
+      }
+    },
+    {
+      "name": "wrong f_y",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "f_y = e^y + 2y"
+          }
+        ],
+        "answer": "<1, 1>"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0
+      }
+    }
+  ]
+}

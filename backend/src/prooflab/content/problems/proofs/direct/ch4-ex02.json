@@ -1,0 +1,99 @@
+{
+  "id": "proofs.direct.ch4-ex02",
+  "course": "proofs",
+  "topic": "direct",
+  "kind": "parity_proof",
+  "title": "Ex 4.2 · The cube of an odd integer",
+  "prompt": "Use a direct proof. Let $x$ be an odd integer. Show that $x^3$ is odd.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch4"
+  ],
+  "data": {
+    "variables": [
+      "x"
+    ],
+    "hypotheses": [
+      {
+        "var": "x",
+        "is": "odd"
+      }
+    ],
+    "target": "x^3",
+    "goal": "odd"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "An odd integer is 2 times some integer, plus 1.",
+    "Expand (2a + 1)³ and group everything except the final 1 into a multiple of 2."
+  ],
+  "solution": [
+    "Since $x$ is odd, $x = 2a + 1$ for some integer $a$.",
+    "$x^3 = (2a+1)^3 = 8a^3 + 12a^2 + 6a + 1 = 2(4a^3 + 6a^2 + 3a) + 1$.",
+    "$4a^3 + 6a^2 + 3a$ is an integer, so $x^3$ is odd. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 4 exercises, #2 (p. 126)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 4.2 (odd)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "expand and regroup",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "(2a+1)^3"
+          },
+          {
+            "kind": "expr",
+            "content": "8a^3 + 12a^2 + 6a + 1"
+          },
+          {
+            "kind": "witness",
+            "content": "4a^3 + 6a^2 + 3a"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "expansion slip",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "8a^3 + 6a^2 + 6a + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "NOT_EQUIVALENT"
+        ]
+      }
+    }
+  ]
+}

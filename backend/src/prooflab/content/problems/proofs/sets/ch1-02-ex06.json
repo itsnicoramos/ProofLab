@@ -1,0 +1,87 @@
+{
+  "id": "proofs.sets.ch1-02-ex06",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.2 #6 · {x ∈ ℝ : x² = x} × {x ∈ ℕ : x² = x}",
+  "prompt": "List the elements of $\\{x \\in \\mathbb{R} : x^2 = x\\} \\times \\{x \\in \\mathbb{N} : x^2 = x\\}$ between braces. (Steps may call the two factors $A$ and $B$, in that order.)",
+  "answer_format": "A set of ordered pairs between braces, like {(1, a), (2, b)}. Spaces are optional. Steps are optional.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "sets": {
+      "A": {
+        "var": "x",
+        "domain": "R",
+        "where": [
+          "x^2 = x"
+        ]
+      },
+      "B": {
+        "var": "x",
+        "domain": "N",
+        "where": [
+          "x^2 = x"
+        ]
+      }
+    },
+    "compute": "A × B"
+  },
+  "answer": "{(0, 1), (1, 1)}",
+  "mistakes": [],
+  "hints": [
+    "x² = x means x(x − 1) = 0. Which of the solutions are natural numbers?",
+    "Then pair each element of the first factor with each element of the second: 2 pairs in all."
+  ],
+  "solution": [
+    "The first factor is $A = \\{0, 1\\}$ and the second is $B = \\{1\\}$.",
+    "Pair each element of A with each element of B.",
+    "So the answer is $\\{(0, 1), (1, 1)\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.2 exercises, #6 (p. 11)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "A = {0, 1}"
+          },
+          {
+            "kind": "expr",
+            "content": "B = {1}"
+          }
+        ],
+        "answer": "{(0, 1), (1, 1)}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{(0,0),(0,1),(1,0),(1,1)}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_NATURALS_ZERO"
+        ]
+      }
+    }
+  ]
+}

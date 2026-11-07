@@ -1,0 +1,115 @@
+{
+  "id": "precalc.functions.difference-quotient",
+  "course": "precalc",
+  "topic": "functions",
+  "kind": "expression",
+  "title": "Difference quotient",
+  "prompt": "For $f(x) = x^2 - 3x$, simplify the difference quotient $\\dfrac{f(x+h) - f(x)}{h}$, assuming $h \\neq 0$.",
+  "answer_format": "An expression in x and h, with the h in the denominator cancelled.",
+  "difficulty": 2,
+  "tags": [
+    "difference quotient"
+  ],
+  "data": {
+    "variables": {
+      "x": "real",
+      "h": "real"
+    },
+    "difference_quotient": "x^2 - 3x",
+    "form": "cancel"
+  },
+  "answer": "2x + h - 3",
+  "mistakes": [
+    {
+      "answer": "2x - 3",
+      "hint": "That's what you get after letting h → 0 (the derivative). Here h stays in the answer."
+    },
+    {
+      "answer": "2x + h",
+      "hint": "Check f(x + h): the −3x term becomes −3(x + h)."
+    }
+  ],
+  "hints": [
+    "Write f(x + h) = (x + h)² − 3(x + h) and expand.",
+    "After subtracting f(x), every term in the numerator has a factor of h."
+  ],
+  "solution": [
+    "$f(x+h) = x^2 + 2xh + h^2 - 3x - 3h$.",
+    "$f(x+h) - f(x) = 2xh + h^2 - 3h = h(2x + h - 3)$.",
+    "Dividing by $h \\ne 0$: $2x + h - 3$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "3.3 Rates of Change and Behavior of Graphs",
+    "note": "Original problem; see average rate of change."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "expand and cancel",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(2xh + h^2 - 3h)/h"
+          },
+          {
+            "kind": "expr",
+            "content": "h(2x + h - 3)/h"
+          }
+        ],
+        "answer": "2x + h - 3"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "left h in the denominator",
+      "submission": {
+        "steps": [],
+        "answer": "((x+h)^2 - 3(x+h) - (x^2 - 3x))/h"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "FORM_NOT_CANCELLED"
+        ]
+      }
+    },
+    {
+      "name": "took the limit",
+      "submission": {
+        "steps": [],
+        "answer": "2x - 3"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    },
+    {
+      "name": "forgot -3h",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(2xh + h^2)/h"
+          }
+        ],
+        "answer": "2x + h"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

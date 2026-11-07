@@ -1,0 +1,131 @@
+{
+  "id": "calc1.limits.lhopital-cosine",
+  "course": "calc1",
+  "topic": "limits",
+  "kind": "limit",
+  "title": "L'Hôpital twice",
+  "prompt": "Evaluate $\\displaystyle \\lim_{x \\to 0} \\frac{1 - \\cos x}{x^2}$.",
+  "answer_format": "A number, oo, -oo, or DNE. Use 'lhopital' steps for L'Hôpital's rule.",
+  "difficulty": 2,
+  "tags": [
+    "0/0",
+    "lhopital",
+    "trig"
+  ],
+  "data": {
+    "expression": "(1 - cos(x))/x^2",
+    "var": "x",
+    "point": "0"
+  },
+  "answer": "1/2",
+  "mistakes": [],
+  "hints": [
+    "Check the form first: what do the numerator and denominator approach?",
+    "You may need L'Hôpital's rule more than once."
+  ],
+  "solution": [
+    "At $x = 0$ the form is $\\frac{0}{0}$, so L'Hôpital applies: $\\lim \\frac{\\sin x}{2x}$.",
+    "Still $\\frac{0}{0}$; apply it again: $\\lim \\frac{\\cos x}{2} = \\frac{1}{2}$."
+  ],
+  "reference": {
+    "book": "openstax-calc1",
+    "section": "4.8 L'Hôpital's Rule",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "L'Hôpital twice",
+      "submission": {
+        "steps": [
+          {
+            "kind": "lhopital",
+            "content": "sin(x)/(2x)"
+          },
+          {
+            "kind": "lhopital",
+            "content": "cos(x)/2"
+          },
+          {
+            "kind": "expr",
+            "content": "1/2"
+          }
+        ],
+        "answer": "1/2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "used the quotient rule",
+      "submission": {
+        "steps": [
+          {
+            "kind": "lhopital",
+            "content": "(x^2 sin(x) - 2x(1 - cos(x)))/x^4"
+          },
+          {
+            "kind": "expr",
+            "content": "1/2"
+          }
+        ],
+        "answer": "1/2"
+      },
+      "expect": {
+        "status": "partial",
+        "first_error": 0,
+        "hint_codes": [
+          "LHOPITAL_QUOTIENT_RULE",
+          "STEP_ERRORS"
+        ]
+      }
+    },
+    {
+      "name": "L'Hôpital on a non-indeterminate form",
+      "submission": {
+        "steps": [
+          {
+            "kind": "lhopital",
+            "content": "sin(x)/(2x)"
+          },
+          {
+            "kind": "lhopital",
+            "content": "cos(x)/2"
+          },
+          {
+            "kind": "lhopital",
+            "content": "-sin(x)/1"
+          },
+          {
+            "kind": "expr",
+            "content": "0"
+          }
+        ],
+        "answer": "0"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "LHOPITAL_NOT_INDETERMINATE"
+        ]
+      }
+    },
+    {
+      "name": "decimal",
+      "submission": {
+        "steps": [],
+        "answer": "0.5"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "INEXACT"
+        ]
+      }
+    }
+  ]
+}

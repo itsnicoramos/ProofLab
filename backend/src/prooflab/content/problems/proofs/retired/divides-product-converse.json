@@ -1,0 +1,118 @@
+{
+  "id": "proofs.divisibility.divides-product-converse",
+  "course": "proofs",
+  "topic": "divisibility",
+  "kind": "counterexample",
+  "title": "Disprove: a | bc means a | b or a | c",
+  "prompt": "Disprove: for all integers $a$, $b$, $c$, if $a \\mid bc$ then $a \\mid b$ or $a \\mid c$. Give a counterexample.",
+  "answer_format": "Integer values for every variable, like a = 4, b = 2, c = 2.",
+  "difficulty": 2,
+  "tags": [
+    "counterexample",
+    "divisibility"
+  ],
+  "data": {
+    "variables": {
+      "a": "integer",
+      "b": "integer",
+      "c": "integer"
+    },
+    "hypothesis": {
+      "op": "divides",
+      "args": [
+        "a",
+        "b c"
+      ]
+    },
+    "conclusion": {
+      "op": "or",
+      "args": [
+        {
+          "op": "divides",
+          "args": [
+            "a",
+            "b"
+          ]
+        },
+        {
+          "op": "divides",
+          "args": [
+            "a",
+            "c"
+          ]
+        }
+      ]
+    }
+  },
+  "answer": "a = 4, b = 2, c = 2",
+  "mistakes": [],
+  "hints": [
+    "You need a to divide the product bc, but divide neither b nor c on its own.",
+    "Try a composite a, and split its factors between b and c."
+  ],
+  "solution": [
+    "Take $a = 4$, $b = 2$, $c = 2$.",
+    "Then $bc = 4$, so $a \\mid bc$. But $4 \\nmid 2$, so $a \\nmid b$ and $a \\nmid c$.",
+    "The hypothesis holds and the conclusion fails, so the statement is false. (It *is* true when $a$ is prime.)"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "9.1 Counterexamples",
+    "note": "Original problem; see Chapter 9, Disproof."
+  },
+  "review": {
+    "status": "retired",
+    "notes": "Invented problem, retired 2026-11-06: MATH 123 proofs now map 1:1 to Book of Proof exercises."
+  },
+  "examples": [
+    {
+      "name": "a = 6",
+      "submission": {
+        "steps": [],
+        "answer": "a = 6, b = 2, c = 3"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "conclusion still true",
+      "submission": {
+        "steps": [],
+        "answer": "a = 2, b = 4, c = 3"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "CONCLUSION_HOLDS"
+        ]
+      }
+    },
+    {
+      "name": "hypothesis false",
+      "submission": {
+        "steps": [],
+        "answer": "a = 5, b = 2, c = 3"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "HYPOTHESIS_NOT_MET"
+        ]
+      }
+    },
+    {
+      "name": "missing a value",
+      "submission": {
+        "steps": [],
+        "answer": "a = 4, b = 2"
+      },
+      "expect": {
+        "status": "invalid",
+        "hint_codes": [
+          "COUNTEREXAMPLE_MISSING_VALUE"
+        ]
+      }
+    }
+  ]
+}

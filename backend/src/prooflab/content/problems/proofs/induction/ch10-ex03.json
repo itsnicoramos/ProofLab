@@ -1,0 +1,137 @@
+{
+  "id": "proofs.induction.ch10-ex03",
+  "course": "proofs",
+  "topic": "induction",
+  "kind": "induction",
+  "title": "Ex 10.3 · Sum of the first n cubes",
+  "prompt": "Prove by induction that $1^3 + 2^3 + 3^3 + \\cdots + n^3 = \\dfrac{n^2(n + 1)^2}{4}$ for every positive integer $n$. Check $n = 1$, assume the formula for $n = k$, and deduce it for $n = k + 1$.",
+  "answer_format": "A structured proof: a base step (the case n = 1 with numbers only), an assume step (the formula for n = k), then expr steps for the n = k + 1 case, starting from the hypothesis plus the next term. Notes optional. No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch10",
+    "induction",
+    "sum-formula"
+  ],
+  "data": {
+    "base": 1,
+    "sum": {
+      "index": "i",
+      "term": "i^3",
+      "start": 1,
+      "rhs": "n^2(n + 1)^2/4"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Base case: for n = 1 both sides are 1, since 1²·2²/4 = 1.",
+    "Assume 1³ + ⋯ + k³ = k²(k + 1)²/4. The sum up to k + 1 is that plus (k + 1)³.",
+    "Factor (k + 1)²/4 out of k²(k + 1)²/4 + (k + 1)³: what is left is k² + 4(k + 1), a perfect square."
+  ],
+  "solution": [
+    "Base case: for $n = 1$ the left side is $1^3 = 1$ and the right side is $\\frac{1^2 \\cdot 2^2}{4} = 1$.",
+    "Inductive step: suppose $1^3 + 2^3 + \\cdots + k^3 = \\frac{k^2(k + 1)^2}{4}$ for some $k \\ge 1$. Adding the next term gives $\\frac{k^2(k + 1)^2}{4} + (k + 1)^3 = \\frac{(k + 1)^2\\left(k^2 + 4(k + 1)\\right)}{4}$.",
+    "Since $k^2 + 4k + 4 = (k + 2)^2$, this is $\\frac{(k + 1)^2\\left((k + 1) + 1\\right)^2}{4}$, the formula for $n = k + 1$.",
+    "By induction the formula holds for every positive integer $n$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 10 exercises, #3 (p. 195)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses induction (Section 10.1); the book's ℕ starts at 1, so the base case is n = 1."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "induction proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "1^3 = 1^2(1 + 1)^2/4"
+          },
+          {
+            "kind": "assume",
+            "content": "1^3 + 2^3 + ... + k^3 = k^2(k + 1)^2/4"
+          },
+          {
+            "kind": "expr",
+            "content": "k^2(k + 1)^2/4 + (k + 1)^3"
+          },
+          {
+            "kind": "expr",
+            "content": "(k + 1)^2(k^2 + 4(k + 1))/4"
+          },
+          {
+            "kind": "expr",
+            "content": "(k + 1)^2(k + 2)^2/4"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "factoring slip",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "1^3 = 1^2(1 + 1)^2/4"
+          },
+          {
+            "kind": "assume",
+            "content": "1^3 + 2^3 + ... + k^3 = k^2(k + 1)^2/4"
+          },
+          {
+            "kind": "expr",
+            "content": "k^2(k + 1)^2/4 + (k + 1)^3"
+          },
+          {
+            "kind": "expr",
+            "content": "(k + 1)^2(k^2 + k + 1)/4"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 3,
+        "hint_codes": [
+          "IND_STEP_WRONG"
+        ]
+      }
+    },
+    {
+      "name": "no base case",
+      "submission": {
+        "steps": [
+          {
+            "kind": "assume",
+            "content": "1^3 + 2^3 + ... + k^3 = k^2(k + 1)^2/4"
+          },
+          {
+            "kind": "expr",
+            "content": "k^2(k + 1)^2/4 + (k + 1)^3"
+          },
+          {
+            "kind": "expr",
+            "content": "(k + 1)^2(k + 2)^2/4"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "IND_NEED_BASE"
+        ]
+      }
+    }
+  ]
+}

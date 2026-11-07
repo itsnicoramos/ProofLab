@@ -1,0 +1,116 @@
+{
+  "id": "precalc.functions.domain-root-over-linear",
+  "course": "precalc",
+  "topic": "functions",
+  "kind": "domain",
+  "title": "Domain with a root and a denominator",
+  "prompt": "Find the domain of $f(x) = \\dfrac{\\sqrt{x - 2}}{x - 5}$.",
+  "answer_format": "Interval notation, e.g. [a, b) U (b, oo), or inequalities.",
+  "difficulty": 1,
+  "tags": [
+    "domain"
+  ],
+  "data": {
+    "function": "sqrt(x - 2)/(x - 5)"
+  },
+  "answer": "[2, 5) U (5, oo)",
+  "mistakes": [],
+  "hints": [
+    "Two restrictions: what's under the square root can't be negative, and the denominator can't be zero."
+  ],
+  "solution": [
+    "$x - 2 \\ge 0$ gives $x \\ge 2$.",
+    "$x - 5 \\ne 0$ gives $x \\ne 5$.",
+    "Domain: $[2, 5) \\cup (5, \\infty)$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "3.2 Domain and Range",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "both conditions",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x - 2 >= 0"
+          },
+          {
+            "kind": "expr",
+            "content": "x != 5"
+          }
+        ],
+        "answer": "[2, 5) U (5, oo)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "as inequalities",
+      "submission": {
+        "steps": [],
+        "answer": "x >= 2 and x != 5"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "forgot the denominator",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x - 2 >= 0"
+          }
+        ],
+        "answer": "[2, oo)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "ENDPOINTS"
+        ]
+      }
+    },
+    {
+      "name": "excluded 2",
+      "submission": {
+        "steps": [],
+        "answer": "(2, 5) U (5, oo)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "ENDPOINTS"
+        ]
+      }
+    },
+    {
+      "name": "wrong condition",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x - 2 > 1"
+          }
+        ],
+        "answer": "(3, 5) U (5, oo)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "DOMAIN_CONDITION_WRONG",
+          "DOMAIN_TOO_SMALL"
+        ]
+      }
+    }
+  ]
+}

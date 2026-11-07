@@ -1,0 +1,106 @@
+{
+  "id": "proofs.direct.ch4-ex15",
+  "course": "proofs",
+  "topic": "direct",
+  "kind": "parity_proof",
+  "title": "Ex 4.15 · n² + 3n + 4 is even",
+  "prompt": "Prove that for every integer $n$, the number $n^2 + 3n + 4$ is even. (The book suggests cases.)",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch4",
+    "cases"
+  ],
+  "data": {
+    "variables": [
+      "n"
+    ],
+    "target": "n^2 + 3n + 4",
+    "goal": "even"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Split into the two possible parities of n.",
+    "Each case ends with its own witness: (n² + 3n + 4) = 2·witness."
+  ],
+  "solution": [
+    "Case $n = 2k$: $n^2 + 3n + 4 = 4k^2 + 6k + 4 = 2(2k^2 + 3k + 2)$.",
+    "Case $n = 2k + 1$: $n^2 + 3n + 4 = 4k^2 + 10k + 8 = 2(2k^2 + 5k + 4)$.",
+    "Both are even, and every integer falls in one case, so $n^2 + 3n + 4$ is even. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 4 exercises, #15 (p. 126)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definitions 4.1 and 4.2, and proof by cases (Section 4.4)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "two cases",
+      "submission": {
+        "steps": [
+          {
+            "kind": "case",
+            "content": "n = 2k"
+          },
+          {
+            "kind": "expr",
+            "content": "4k^2 + 6k + 4"
+          },
+          {
+            "kind": "witness",
+            "content": "2k^2 + 3k + 2"
+          },
+          {
+            "kind": "case",
+            "content": "n = 2k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "4k^2 + 10k + 8"
+          },
+          {
+            "kind": "witness",
+            "content": "2k^2 + 5k + 4"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "assumes n is even",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 2k"
+          },
+          {
+            "kind": "expr",
+            "content": "4k^2 + 6k + 4"
+          },
+          {
+            "kind": "witness",
+            "content": "2k^2 + 3k + 2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "LET_WITHOUT_HYPOTHESIS"
+        ]
+      }
+    }
+  ]
+}

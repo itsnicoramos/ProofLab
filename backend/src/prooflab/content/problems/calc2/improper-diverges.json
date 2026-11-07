@@ -1,0 +1,71 @@
+{
+  "id": "calc2.integrals.improper-diverges",
+  "course": "calc2",
+  "topic": "integrals",
+  "kind": "definite_integral",
+  "title": "A divergent improper integral",
+  "prompt": "Evaluate $\\displaystyle \\int_1^{\\infty} \\frac{1}{x}\\,dx$, or say that it diverges.",
+  "answer_format": "An exact number (fractions, sqrt, pi, ln ...), or 'diverges'.",
+  "difficulty": 2,
+  "tags": [
+    "improper integrals",
+    "logarithms"
+  ],
+  "data": {
+    "integrand": "1/x",
+    "lower": "1",
+    "upper": "oo"
+  },
+  "answer": "diverges",
+  "mistakes": [
+    {
+      "answer": "0",
+      "hint": "ln b doesn't approach 0 as b → ∞. What does it do?"
+    }
+  ],
+  "hints": [
+    "∫₁ᵇ dx/x = ln b. What happens to ln b as b → ∞?"
+  ],
+  "solution": [
+    "$\\int_1^b \\frac{dx}{x} = \\ln b$, which grows without bound as $b \\to \\infty$.",
+    "The integral diverges."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "3.7 Improper Integrals",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "diverges",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "ln(x)"
+          }
+        ],
+        "answer": "diverges"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "thinks ln b → 0",
+      "submission": {
+        "steps": [],
+        "answer": "0"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

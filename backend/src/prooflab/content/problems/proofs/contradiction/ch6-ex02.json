@@ -1,0 +1,94 @@
+{
+  "id": "proofs.contradiction.ch6-ex02",
+  "course": "proofs",
+  "topic": "contradiction",
+  "kind": "impossibility_proof",
+  "title": "Ex 6.2 · If n² is odd, then n is odd",
+  "prompt": "Use proof by contradiction. Let $n$ be an integer. Prove that if $n^2$ is odd, then $n$ is odd. Suppose, for the sake of contradiction, that $n^2$ is odd but $n$ is even; the steps below show that $n^2$ can't be odd.",
+  "answer_format": "A structured proof: let, case, expr and form steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch6",
+    "contradiction"
+  ],
+  "data": {
+    "variables": [
+      "n"
+    ],
+    "hypotheses": [
+      {
+        "var": "n",
+        "is": "even"
+      }
+    ],
+    "target": "n^2",
+    "divisor": 2,
+    "forbidden": 1,
+    "conclusion": "if $n$ is even then $n^2$ is even, so it can't be odd. That contradicts the hypothesis that $n^2$ is odd, so $n$ is odd. ∎"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "The negation of 'n is odd' is 'n is even'. Assume that, together with n² odd.",
+    "Write n = 2k with a let step. Then n² = 4k², which is 2 times an integer."
+  ],
+  "solution": [
+    "Suppose for the sake of contradiction that $n^2$ is odd and $n$ is even.",
+    "Since $n$ is even, $n = 2k$ for some integer $k$, so $n^2 = 4k^2 = 2(2k^2)$.",
+    "That makes $n^2$ even, contradicting the hypothesis that $n^2$ is odd. So $n$ is odd. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 6 exercises, #2 (p. 144)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses proof by contradiction (Section 6.2) and Definitions 4.1, 4.2 (even, odd)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "contradiction proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 2k"
+          },
+          {
+            "kind": "expr",
+            "content": "4k^2"
+          },
+          {
+            "kind": "form",
+            "content": "2(2k^2)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "assumed the conclusion instead of its negation",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 2k + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "BAD_REPRESENTATION"
+        ]
+      }
+    }
+  ]
+}

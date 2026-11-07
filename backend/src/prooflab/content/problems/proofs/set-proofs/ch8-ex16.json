@@ -1,0 +1,138 @@
+{
+  "id": "proofs.set-proofs.ch8-ex16",
+  "course": "proofs",
+  "topic": "set-proofs",
+  "kind": "set_identity",
+  "title": "Ex 8.16 · Product distributes over union",
+  "prompt": "Let $A$, $B$ and $C$ be any sets. Prove that $A \\times (B \\cup C) = (A \\times B) \\cup (A \\times C)$. The elements of these sets are ordered pairs, so follow a pair $(x, y)$.",
+  "answer_format": "A chain of lines, each a set (like A × (B ∪ C)) or a statement about an ordered pair (x, y) (like x ∈ A and y ∈ B, or (x, y) ∈ A × B). Each line must have exactly the same elements as the line before; start from the left side and end at the right side.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch8",
+    "set-identity",
+    "cartesian-product",
+    "distributive-law"
+  ],
+  "data": {
+    "sets": [
+      "A",
+      "B",
+      "C"
+    ],
+    "left": "A × (B ∪ C)",
+    "right": "(A × B) ∪ (A × C)",
+    "point": [
+      "x",
+      "y"
+    ]
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "(x, y) ∈ A × (B ∪ C) means x ∈ A and y ∈ B ∪ C.",
+    "Unpack y ∈ B ∪ C, then distribute 'x ∈ A and' over the 'or'.",
+    "(x ∈ A and y ∈ B) says (x, y) ∈ A × B, and (x ∈ A and y ∈ C) says (x, y) ∈ A × C."
+  ],
+  "solution": [
+    "Let $(x, y)$ be any ordered pair. By the definition of $\\times$, $(x, y) \\in A \\times (B \\cup C)$ means $x \\in A \\land y \\in B \\cup C$, that is, $x \\in A \\land (y \\in B \\lor y \\in C)$.",
+    "By the distributive law this is $(x \\in A \\land y \\in B) \\lor (x \\in A \\land y \\in C)$.",
+    "That says $(x, y) \\in A \\times B$ or $(x, y) \\in A \\times C$, so $(x, y) \\in (A \\times B) \\cup (A \\times C)$.",
+    "Every step was an equivalence, so $A \\times (B \\cup C) = (A \\times B) \\cup (A \\times C)$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 8 exercises, #16 (p. 171)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Section 8.3 (proving A = B), the Cartesian product (Section 1.2) and the logic laws of Section 2.6."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "pair chasing",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(x, y) ∈ A × (B ∪ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A and y ∈ B ∪ C"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A and (y ∈ B or y ∈ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(x ∈ A and y ∈ B) or (x ∈ A and y ∈ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(x, y) ∈ A × B or (x, y) ∈ A × C"
+          },
+          {
+            "kind": "expr",
+            "content": "(x, y) ∈ (A × B) ∪ (A × C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "x ∈ A attached to B only",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(x, y) ∈ A × (B ∪ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A and (y ∈ B or y ∈ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(x ∈ A and y ∈ B) or y ∈ C"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "SETID_STEP_DIFFERS"
+        ]
+      }
+    },
+    {
+      "name": "straight jump",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "A × (B ∪ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(A × B) ∪ (A × C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "SETID_NO_WORK"
+        ]
+      }
+    }
+  ]
+}

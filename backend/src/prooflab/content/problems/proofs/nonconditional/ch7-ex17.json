@@ -1,0 +1,102 @@
+{
+  "id": "proofs.nonconditional.ch7-ex17",
+  "course": "proofs",
+  "topic": "nonconditional",
+  "kind": "existence",
+  "title": "Ex 7.17 · A prime between 90 and 100",
+  "prompt": "Prove that there is a prime number between 90 and 100. This is an existence statement, so one example proves it: give a prime $p$ with $90 < p < 100$.",
+  "answer_format": "A value like p = 5. Steps are optional notes.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch7",
+    "existence"
+  ],
+  "data": {
+    "variables": {
+      "p": "positive"
+    },
+    "statement": {
+      "op": "and",
+      "args": [
+        {
+          "op": "prime",
+          "args": [
+            "p"
+          ]
+        },
+        {
+          "op": "gt",
+          "args": [
+            "p",
+            90
+          ]
+        },
+        {
+          "op": "lt",
+          "args": [
+            "p",
+            100
+          ]
+        }
+      ]
+    }
+  },
+  "answer": "p = 97",
+  "mistakes": [],
+  "hints": [
+    "Go through 91, 92, …, 99 and rule out the ones with a small factor (2, 3, 5 or 7).",
+    "91 = 7 · 13, so try further up."
+  ],
+  "solution": [
+    "Take $p = 97$. It is between 90 and 100, and it is prime: it isn't divisible by 2, 3, 5 or 7, and $11^2 = 121 > 97$.",
+    "So a prime between 90 and 100 exists. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 7 exercises, #17 (p. 155)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses existence proof (Section 7.3) and Definition 4.5 (prime)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "p = 97",
+      "submission": {
+        "steps": [],
+        "answer": "p = 97"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "91 isn't prime",
+      "submission": {
+        "steps": [],
+        "answer": "p = 91"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "EXISTS_FAILS"
+        ]
+      }
+    },
+    {
+      "name": "prime, but past 100",
+      "submission": {
+        "steps": [],
+        "answer": "p = 101"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "EXISTS_FAILS"
+        ]
+      }
+    }
+  ]
+}

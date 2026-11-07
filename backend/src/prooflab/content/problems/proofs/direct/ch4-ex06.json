@@ -1,0 +1,114 @@
+{
+  "id": "proofs.direct.ch4-ex06",
+  "course": "proofs",
+  "topic": "direct",
+  "kind": "divisibility_proof",
+  "title": "Ex 4.6 · a | b and a | c give a | (b + c)",
+  "prompt": "Use a direct proof. Let $a, b, c$ be integers. Show that if $a \\mid b$ and $a \\mid c$, then $a \\mid (b + c)$.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch4"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b",
+      "c"
+    ],
+    "hypotheses": [
+      {
+        "var": "b",
+        "divisor": "a"
+      },
+      {
+        "var": "c",
+        "divisor": "a"
+      }
+    ],
+    "target": "b + c",
+    "goal": {
+      "divisor": "a"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "a | b means b = a·(some integer). Do the same for c, with a different new letter.",
+    "Factor a out of b + c."
+  ],
+  "solution": [
+    "Since $a \\mid b$ and $a \\mid c$, $b = aj$ and $c = ak$ for some integers $j, k$.",
+    "$b + c = aj + ak = a(j + k)$, and $j + k$ is an integer, so $a \\mid (b + c)$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 4 exercises, #6 (p. 126)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 4.4 (divides)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "factor out a",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "b = aj"
+          },
+          {
+            "kind": "let",
+            "content": "c = ak"
+          },
+          {
+            "kind": "expr",
+            "content": "aj + ak"
+          },
+          {
+            "kind": "expr",
+            "content": "a(j + k)"
+          },
+          {
+            "kind": "witness",
+            "content": "j + k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "same letter for both",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "b = ak"
+          },
+          {
+            "kind": "let",
+            "content": "c = ak"
+          },
+          {
+            "kind": "witness",
+            "content": "2k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "SAME_FRESH_VARIABLE"
+        ]
+      }
+    }
+  ]
+}

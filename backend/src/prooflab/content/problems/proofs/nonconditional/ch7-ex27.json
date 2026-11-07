@@ -1,0 +1,156 @@
+{
+  "id": "proofs.nonconditional.ch7-ex27",
+  "course": "proofs",
+  "topic": "nonconditional",
+  "kind": "impossibility_proof",
+  "title": "Ex 7.27 · If a² + b² is a square, a and b aren't both odd",
+  "prompt": "Let $a$ and $b$ be integers, and suppose $a^2 + b^2$ is a perfect square, say $a^2 + b^2 = c^2$ for an integer $c$. Prove that $a$ and $b$ are not both odd. Use proof by contradiction: suppose both are odd, and show that then $a^2 + b^2 - c^2$ is never divisible by 4, so it can't be 0. Split into cases on the parity of $c$.",
+  "answer_format": "A structured proof: let, case, expr and form steps (notes optional). No final answer box. Use case steps to split into possibilities.",
+  "difficulty": 3,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch7",
+    "contradiction"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b",
+      "c"
+    ],
+    "hypotheses": [
+      {
+        "var": "a",
+        "is": "odd"
+      },
+      {
+        "var": "b",
+        "is": "odd"
+      }
+    ],
+    "target": "a^2 + b^2 - c^2",
+    "divisor": 4,
+    "forbidden": 0,
+    "conclusion": "with $a$ and $b$ both odd, $a^2 + b^2 - c^2$ leaves remainder 1 or 2 when divided by 4, so it can't be 0. That contradicts $a^2 + b^2 = c^2$, so $a$ and $b$ are not both odd. ∎"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Assume a and b are both odd and write each with a let step, using different new letters.",
+    "Then a² + b² = 4(…) + 2. Split into cases c = 2k and c = 2k + 1.",
+    "Write a² + b² − c² as 4·(integer) + r in each case."
+  ],
+  "solution": [
+    "Suppose for the sake of contradiction that $a^2 + b^2 = c^2$ with $a = 2m + 1$ and $b = 2n + 1$ both odd. Then $a^2 + b^2 = 4(m^2 + m + n^2 + n) + 2$.",
+    "Case $c = 2k$: $a^2 + b^2 - c^2 = 4(m^2 + m + n^2 + n - k^2) + 2$.",
+    "Case $c = 2k + 1$: $a^2 + b^2 - c^2 = 4(m^2 + m + n^2 + n - k^2 - k) + 1$.",
+    "Neither is divisible by 4, so $a^2 + b^2 - c^2 \\neq 0$, a contradiction. Hence $a$ and $b$ are not both odd. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 7 exercises, #27 (p. 156)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses proof by contradiction (Section 6.2), Definition 4.2 (odd), and cases on parity."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "cases on c",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2m + 1"
+          },
+          {
+            "kind": "let",
+            "content": "b = 2n + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "4m^2 + 4m + 4n^2 + 4n + 2 - c^2"
+          },
+          {
+            "kind": "case",
+            "content": "c = 2k"
+          },
+          {
+            "kind": "form",
+            "content": "4(m^2 + m + n^2 + n - k^2) + 2"
+          },
+          {
+            "kind": "case",
+            "content": "c = 2k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "4m^2 + 4m + 4n^2 + 4n + 2 - 4k^2 - 4k - 1"
+          },
+          {
+            "kind": "form",
+            "content": "4(m^2 + m + n^2 + n - k^2 - k) + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "only c even",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2m + 1"
+          },
+          {
+            "kind": "let",
+            "content": "b = 2n + 1"
+          },
+          {
+            "kind": "case",
+            "content": "c = 2k"
+          },
+          {
+            "kind": "form",
+            "content": "4(m^2 + m + n^2 + n - k^2) + 2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "CASES_NOT_EXHAUSTIVE"
+        ]
+      }
+    },
+    {
+      "name": "skipped the hypotheses",
+      "submission": {
+        "steps": [
+          {
+            "kind": "case",
+            "content": "c = 2k"
+          },
+          {
+            "kind": "form",
+            "content": "a^2 + b^2 - 4k^2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "FORM_SHAPE"
+        ]
+      }
+    }
+  ]
+}

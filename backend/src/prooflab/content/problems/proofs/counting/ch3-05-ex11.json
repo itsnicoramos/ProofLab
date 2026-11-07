@@ -1,0 +1,94 @@
+{
+  "id": "proofs.counting.ch3-05-ex11",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.5 #11 · 10-digit numbers with no 0 and exactly three 6's",
+  "prompt": "How many positive 10-digit integers have no digit equal to 0 and exactly three digits equal to 6?",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "combinations",
+    "multiplication-principle"
+  ],
+  "data": {},
+  "answer": "binom(10, 3)*8^7",
+  "mistakes": [
+    {
+      "answer": "binom(10, 3)*9^7",
+      "hint": "The seven digits outside the chosen positions can't be 6 either, or the number would have more than three 6's."
+    },
+    {
+      "answer": "binom(10, 3)",
+      "hint": "Choosing the positions of the 6's is only part of the job: the other seven digits still need values."
+    },
+    {
+      "answer": "10*9*8*8^7",
+      "hint": "The three 6's are identical, so the order in which you pick their positions doesn't matter."
+    }
+  ],
+  "hints": [
+    "Start with 10 blank positions and decide which three of them hold the 6's.",
+    "Each of the other seven positions gets a digit that is neither 0 nor 6."
+  ],
+  "solution": [
+    "Choose the 3 positions for the 6's: $\\binom{10}{3} = 120$ ways.",
+    "Each of the other 7 positions gets one of the 8 digits 1, 2, 3, 4, 5, 7, 8, 9: $8^7 = 2{,}097{,}152$ ways.",
+    "So there are $\\binom{10}{3} \\cdot 8^7 = 251{,}658{,}240$ such integers."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.5 exercises, #11 (p. 89)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses combinations (Section 3.5) and the multiplication principle."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "251658240"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "binom(10, 3)"
+          },
+          {
+            "kind": "expr",
+            "content": "8^7"
+          }
+        ],
+        "answer": "binom(10, 3)*8^7"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "binom(10, 3)*9^7"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

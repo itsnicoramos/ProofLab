@@ -1,0 +1,89 @@
+{
+  "id": "calc3.partials.mixed-partial",
+  "course": "calc3",
+  "topic": "partials",
+  "kind": "partial_derivative",
+  "title": "A mixed partial derivative",
+  "prompt": "Find $f_{xy} = \\dfrac{\\partial}{\\partial y}\\left(\\dfrac{\\partial f}{\\partial x}\\right)$ for $f(x, y) = x^2 e^{3y}$.",
+  "answer_format": "An expression in x and y.",
+  "difficulty": 2,
+  "tags": [
+    "partial derivatives",
+    "mixed partials"
+  ],
+  "data": {
+    "function": "x^2 e^(3y)",
+    "variables": [
+      "x",
+      "y"
+    ],
+    "respect": [
+      "x",
+      "y"
+    ]
+  },
+  "answer": "6x e^(3y)",
+  "mistakes": [],
+  "hints": [
+    "First find f_x. Then differentiate that result with respect to y."
+  ],
+  "solution": [
+    "$f_x = 2x e^{3y}$.",
+    "$f_{xy} = \\frac{\\partial}{\\partial y}\\left(2xe^{3y}\\right) = 6x e^{3y}$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "4.3 Partial Derivatives",
+    "note": "Original problem; see higher-order partial derivatives."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "x then y",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "f_x = 2x e^(3y)"
+          },
+          {
+            "kind": "expr",
+            "content": "f_xy = 6x e^(3y)"
+          }
+        ],
+        "answer": "6x e^(3y)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "stopped after f_x",
+      "submission": {
+        "steps": [],
+        "answer": "2x e^(3y)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "PARTIAL_INCOMPLETE"
+        ]
+      }
+    },
+    {
+      "name": "took f_xx",
+      "submission": {
+        "steps": [],
+        "answer": "2e^(3y)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "WRONG_VARIABLE"
+        ]
+      }
+    }
+  ]
+}

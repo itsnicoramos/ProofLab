@@ -1,0 +1,97 @@
+{
+  "id": "proofs.logic.ch2-05-ex11",
+  "course": "proofs",
+  "topic": "logic",
+  "kind": "truth_table",
+  "title": "Ex 2.5 #11 · R and S when P is false",
+  "prompt": "Suppose $P$ is false and the statement $(R \\Rightarrow S) \\Leftrightarrow (P \\wedge Q)$ is true. Find the truth values of $R$ and $S$. You can reason this out without a full truth table.",
+  "answer_format": "Truth values for R and S, like R = T, S = F.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch2",
+    "truth-table"
+  ],
+  "data": {
+    "ask": "values",
+    "constraints": [
+      {
+        "formula": "P",
+        "value": false
+      },
+      {
+        "formula": "(R ⇒ S) ⇔ (P ∧ Q)",
+        "value": true
+      }
+    ],
+    "solve_for": [
+      "R",
+      "S"
+    ]
+  },
+  "answer": "R = T, S = F",
+  "mistakes": [],
+  "hints": [
+    "With P false, what is the truth value of P ∧ Q, whatever Q is?",
+    "A ⇔ statement is true only when both sides have the same truth value. When is an implication R ⇒ S false?"
+  ],
+  "solution": [
+    "Since $P$ is false, $P \\wedge Q$ is false no matter what $Q$ is.",
+    "The biconditional is true, so both of its sides match: $R \\Rightarrow S$ is false as well.",
+    "An implication is false only when its hypothesis is true and its conclusion is false, so $R$ is true and $S$ is false."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 2.5 exercises, #11 (p. 50)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses the truth tables for ∧, ∨, ∼, ⇒ and ⇔ (Sections 2.2–2.5)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct values",
+      "submission": {
+        "steps": [],
+        "answer": "R = T, S = F"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "all four letters",
+      "submission": {
+        "steps": [],
+        "answer": "P = F, Q = T, R = T, S = F"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "R ⇒ S true",
+      "submission": {
+        "steps": [],
+        "answer": "P = F, Q = F, R = F, S = F"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "LOGIC_VALUES_WRONG"
+        ]
+      }
+    },
+    {
+      "name": "wrong R",
+      "submission": {
+        "steps": [],
+        "answer": "R = F, S = F"
+      },
+      "expect": {
+        "status": "incorrect"
+      }
+    }
+  ]
+}

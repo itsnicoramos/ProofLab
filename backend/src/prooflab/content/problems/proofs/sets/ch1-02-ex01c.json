@@ -1,0 +1,69 @@
+{
+  "id": "proofs.sets.ch1-02-ex01c",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.2 #1(c) · A × A",
+  "prompt": "Let $A = \\{1, 2, 3, 4\\}$ and $B = \\{a, c\\}$. List the elements of $A \\times A$ between braces.",
+  "answer_format": "A set of ordered pairs between braces, like {(1, a), (2, b)}. Spaces are optional. Steps are optional.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "sets": {
+      "A": "{1, 2, 3, 4}",
+      "B": "{a, c}"
+    },
+    "compute": "A × A",
+    "atoms": [
+      "a",
+      "c"
+    ]
+  },
+  "answer": "{(1, 1), (1, 2), (1, 3), (1, 4), (2, 1), (2, 2), (2, 3), (2, 4), (3, 1), (3, 2), (3, 3), (3, 4), (4, 1), (4, 2), (4, 3), (4, 4)}",
+  "mistakes": [],
+  "hints": [
+    "Pair every element of the first set with every element of the second; the first entry of each pair comes from the first set.",
+    "The product has (size of first set) × (size of second set) elements: you need 16."
+  ],
+  "solution": [
+    "Pair each element of the first set with each element of the second.",
+    "So the answer is $\\{(1, 1), (1, 2), (1, 3), (1, 4), (2, 1), (2, 2), (2, 3), (2, 4), (3, 1), (3, 2), (3, 3), (3, 4), (4, 1), (4, 2), (4, 3), (4, 4)\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.2 exercises, #1c (p. 11)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{(1, 1), (1, 2), (1, 3), (1, 4), (2, 1), (2, 2), (2, 3), (2, 4), (3, 1), (3, 2), (3, 3), (3, 4), (4, 1), (4, 2), (4, 3), (4, 4)}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{(1,1),(1,2),(1,3),(1,4),(2,1),(2,2),(2,3),(2,4),(3,1),(3,2),(3,3),(3,4),(4,1),(4,2),(4,3)}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_MISSING"
+        ]
+      }
+    }
+  ]
+}

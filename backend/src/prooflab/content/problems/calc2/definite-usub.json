@@ -1,0 +1,105 @@
+{
+  "id": "calc2.integrals.definite-usub",
+  "course": "calc2",
+  "topic": "integrals",
+  "kind": "definite_integral",
+  "title": "Change the limits",
+  "prompt": "Evaluate $\\displaystyle \\int_0^1 2x\\,(x^2 + 1)^3\\,dx$.",
+  "answer_format": "An exact number (fractions, sqrt, pi, ln ...), or 'diverges'.",
+  "difficulty": 2,
+  "tags": [
+    "u-substitution",
+    "definite integrals"
+  ],
+  "data": {
+    "integrand": "2x (x^2 + 1)^3",
+    "lower": "0",
+    "upper": "1"
+  },
+  "answer": "15/4",
+  "mistakes": [],
+  "hints": [
+    "With u = x² + 1, what are u's values when x = 0 and x = 1?"
+  ],
+  "solution": [
+    "Let $u = x^2 + 1$, $du = 2x\\,dx$. When $x = 0$, $u = 1$; when $x = 1$, $u = 2$.",
+    "$\\int_1^2 u^3\\,du = \\left[\\tfrac{u^4}{4}\\right]_1^2 = 4 - \\tfrac14 = \\tfrac{15}{4}$."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "1.5 Substitution",
+    "note": "Original problem; see substitution with definite integrals."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "new limits",
+      "submission": {
+        "steps": [
+          {
+            "kind": "sub",
+            "content": "u = x^2 + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "int(u^3, u, 1, 2)"
+          },
+          {
+            "kind": "expr",
+            "content": "u^4/4"
+          },
+          {
+            "kind": "expr",
+            "content": "16/4 - 1/4"
+          }
+        ],
+        "answer": "15/4"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "kept the x-limits",
+      "submission": {
+        "steps": [
+          {
+            "kind": "sub",
+            "content": "u = x^2 + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "int(u^3, u, 0, 1)"
+          },
+          {
+            "kind": "expr",
+            "content": "u^4/4"
+          }
+        ],
+        "answer": "1/4"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "BOUNDS_NOT_CHANGED"
+        ]
+      }
+    },
+    {
+      "name": "decimal",
+      "submission": {
+        "steps": [],
+        "answer": "3.75"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "INEXACT"
+        ]
+      }
+    }
+  ]
+}

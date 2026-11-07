@@ -1,0 +1,83 @@
+{
+  "id": "proofs.sets.ch1-01-ex34",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.1 #34 · |{x ∈ ℕ : |x| < 10}|",
+  "prompt": "Find the cardinality $|\\{x \\in \\mathbb{N} : |x| < 10\\}|$: how many elements does the set have?",
+  "answer_format": "A whole number: how many elements the set has.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": {
+      "var": "x",
+      "domain": "N",
+      "where": [
+        "|x| < 10"
+      ]
+    },
+    "ask": "cardinality"
+  },
+  "answer": "9",
+  "mistakes": [],
+  "hints": [
+    "x ranges over ℕ = {1, 2, 3, …}.",
+    "Which natural numbers are less than 10?"
+  ],
+  "solution": [
+    "The set is {1, 2, …, 9} (0 is not a natural number in Book of Proof).",
+    "So the cardinality is $9$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.1 exercises, #34 (p. 8)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "9"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "listed first",
+      "submission": {
+        "steps": [
+          {
+            "kind": "note",
+            "content": "list the set, then count"
+          }
+        ],
+        "answer": "9"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "10"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_NATURALS_ZERO"
+        ]
+      }
+    }
+  ]
+}

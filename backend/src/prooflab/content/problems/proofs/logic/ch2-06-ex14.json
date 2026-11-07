@@ -1,0 +1,119 @@
+{
+  "id": "proofs.logic.ch2-06-ex14",
+  "course": "proofs",
+  "topic": "logic",
+  "kind": "logical_equivalence",
+  "title": "Ex 2.6 #14 · P ∧ (Q ∨ ∼Q) vs (∼P) ⇒ (Q ∧ ∼Q)",
+  "prompt": "Are $P \\wedge (Q \\vee \\sim Q)$ and $(\\sim P) \\Rightarrow (Q \\wedge \\sim Q)$ logically equivalent? Decide, and back up your answer with a truth table, a chain of known equivalences, or a row where the two statements differ.",
+  "answer_format": "equivalent or not equivalent. Steps are optional: truth-table columns, rewrite steps, or a row like P = T, Q = F where the two statements differ.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch2",
+    "logical-equivalence"
+  ],
+  "data": {
+    "left": "P ∧ (Q ∨ ~Q)",
+    "right": "(~P) ⇒ (Q ∧ ~Q)",
+    "decide": true
+  },
+  "answer": "equivalent",
+  "mistakes": [],
+  "hints": [
+    "Q ∨ ∼Q is always true and Q ∧ ∼Q is always false. Simplify each statement with that.",
+    "An implication with an always-false conclusion is true exactly when its hypothesis is false."
+  ],
+  "solution": [
+    "$Q \\vee \\sim Q$ is always true, so $P \\wedge (Q \\vee \\sim Q)$ has the same truth value as $P$: T T F F.",
+    "$Q \\wedge \\sim Q$ is always false, so $(\\sim P) \\Rightarrow (Q \\wedge \\sim Q)$ is true exactly when $\\sim P$ is false, that is, when $P$ is true: T T F F.",
+    "The columns agree, so the statements are logically equivalent."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 2.6 exercises, #14 (p. 52)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses logical equivalence (Section 2.6)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "equivalent",
+      "submission": {
+        "steps": [],
+        "answer": "equivalent"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "by truth table",
+      "submission": {
+        "steps": [
+          {
+            "kind": "column",
+            "content": "P ∧ (Q ∨ ~Q) : T T F F"
+          },
+          {
+            "kind": "column",
+            "content": "(~P) ⇒ (Q ∧ ~Q) : T T F F"
+          }
+        ],
+        "answer": "equivalent"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "by rewriting",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "P ∧ (Q ∨ ~Q)"
+          },
+          {
+            "kind": "expr",
+            "content": "P ∧ T"
+          },
+          {
+            "kind": "expr",
+            "content": "P"
+          },
+          {
+            "kind": "expr",
+            "content": "~~P ∨ F"
+          },
+          {
+            "kind": "expr",
+            "content": "(~P) ⇒ F"
+          },
+          {
+            "kind": "expr",
+            "content": "(~P) ⇒ (Q ∧ ~Q)"
+          }
+        ],
+        "answer": "equivalent"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "said not equivalent",
+      "submission": {
+        "steps": [],
+        "answer": "not equivalent"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "LOGIC_TRY_LAWS"
+        ]
+      }
+    }
+  ]
+}

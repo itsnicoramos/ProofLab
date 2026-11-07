@@ -1,0 +1,114 @@
+{
+  "id": "calc3.multiple_integrals.triangle",
+  "course": "calc3",
+  "topic": "multiple_integrals",
+  "kind": "iterated_integral",
+  "title": "Iterated integral over a triangle",
+  "prompt": "Evaluate $\\displaystyle\\int_0^1 \\int_0^x xy\\,dy\\,dx$.",
+  "answer_format": "An exact number.",
+  "difficulty": 1,
+  "tags": [
+    "double integrals",
+    "general regions"
+  ],
+  "data": {
+    "integrand": "x y",
+    "bounds": [
+      [
+        "y",
+        "0",
+        "x"
+      ],
+      [
+        "x",
+        "0",
+        "1"
+      ]
+    ]
+  },
+  "answer": "1/8",
+  "mistakes": [
+    {
+      "answer": "1/4",
+      "hint": "The inner upper limit is y = x, not y = 1. Plug y = x in before integrating in x."
+    }
+  ],
+  "hints": [
+    "In the inner integral, x is a constant and y runs from 0 to x."
+  ],
+  "solution": [
+    "Inner: $\\int_0^x xy\\,dy = x\\cdot\\frac{x^2}{2} = \\frac{x^3}{2}$.",
+    "Outer: $\\int_0^1 \\frac{x^3}{2}\\,dx = \\frac{1}{8}$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "5.2 Double Integrals over General Regions",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "inner then outer",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x^3/2"
+          },
+          {
+            "kind": "expr",
+            "content": "1/8"
+          }
+        ],
+        "answer": "1/8"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "used 1 as the inner limit",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x/2"
+          },
+          {
+            "kind": "expr",
+            "content": "1/4"
+          }
+        ],
+        "answer": "1/4"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    },
+    {
+      "name": "rewrote the outer integral",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "int(x^3/2, x, 0, 1)"
+          },
+          {
+            "kind": "expr",
+            "content": "1/8"
+          }
+        ],
+        "answer": "1/8"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "id": "proofs.contrapositive.ch5-ex12",
+  "course": "proofs",
+  "topic": "contrapositive",
+  "kind": "divisibility_proof",
+  "title": "Ex 5.12 · If 4 ∤ a², a is odd",
+  "prompt": "Use contrapositive proof. Let $a$ be an integer. Show that if $a^2$ is not divisible by 4, then $a$ is odd. Write the proof of the contrapositive with the steps below.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch5",
+    "contrapositive"
+  ],
+  "data": {
+    "variables": [
+      "a"
+    ],
+    "hypotheses": [
+      {
+        "var": "a",
+        "divisor": 2
+      }
+    ],
+    "target": "a^2",
+    "goal": {
+      "divisor": 4
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Contrapositive: if a is even (not odd), then 4 divides a².",
+    "Write a = 2k and compute a²."
+  ],
+  "solution": [
+    "Contrapositive: if $a$ is even, then $4 \\mid a^2$.",
+    "Suppose $a = 2k$. Then $a^2 = 4k^2$, and $k^2$ is an integer, so $4 \\mid a^2$.",
+    "So the original statement is true. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 5 exercises, #12 (p. 136)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses contrapositive proof (Section 5.1) and Definitions 4.1, 4.4."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "prove the contrapositive",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2k"
+          },
+          {
+            "kind": "expr",
+            "content": "4k^2"
+          },
+          {
+            "kind": "witness",
+            "content": "k^2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "assumed a is odd",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2k + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "BAD_REPRESENTATION"
+        ]
+      }
+    }
+  ]
+}

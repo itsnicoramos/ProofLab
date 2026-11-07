@@ -1,0 +1,84 @@
+{
+  "id": "proofs.counting.ch3-04-ex15",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.4 #15 · Four officers from a club of 15",
+  "prompt": "A club has 15 members. In how many ways can it fill the offices of president, vice-president, secretary and treasurer, if no one holds more than one office?",
+  "answer_format": "A whole number, or an expression for it like 26^4, 10!/7! or binom(10, 3). P(n, k) and C(n, k) work too.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "permutations"
+  ],
+  "data": {},
+  "answer": "15*14*13*12",
+  "mistakes": [
+    {
+      "answer": "binom(15, 4)",
+      "hint": "The four offices are different jobs, so it matters who gets which one: order matters here."
+    },
+    {
+      "answer": "15^4",
+      "hint": "One person can't hold two offices, so the number of candidates drops after each choice."
+    }
+  ],
+  "hints": [
+    "Fill the offices one at a time, starting with president.",
+    "Each office you fill leaves one fewer person for the next."
+  ],
+  "solution": [
+    "There are 15 choices for president, then 14 for vice-president, 13 for secretary and 12 for treasurer.",
+    "So there are $P(15, 4) = 15 \\cdot 14 \\cdot 13 \\cdot 12 = 32{,}760$ ways."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.4 exercises, #15 (p. 84)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses permutations P(n, k) (Section 3.4)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "32760"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "15!/11!"
+          }
+        ],
+        "answer": "15*14*13*12"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "binom(15, 4)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

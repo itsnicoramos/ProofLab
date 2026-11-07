@@ -1,0 +1,69 @@
+{
+  "id": "proofs.sets.ch1-02-ex01e",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.2 #1(e) · ∅ × B",
+  "prompt": "Let $A = \\{1, 2, 3, 4\\}$ and $B = \\{a, c\\}$. List the elements of $\\emptyset \\times B$ between braces.",
+  "answer_format": "A set listed between braces, like {1, 2, 3} (∅ for the empty set). Steps are optional.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "sets": {
+      "A": "{1, 2, 3, 4}",
+      "B": "{a, c}"
+    },
+    "compute": "∅ × B",
+    "atoms": [
+      "a",
+      "c"
+    ]
+  },
+  "answer": "∅",
+  "mistakes": [],
+  "hints": [
+    "An element of a Cartesian product needs one entry from each factor.",
+    "How many elements does ∅ have to choose an entry from?"
+  ],
+  "solution": [
+    "There is no element of ∅ to use as an entry, so there are no such tuples: the product is empty.",
+    "So the answer is $\\emptyset$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.2 exercises, #1e (p. 11)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "∅"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{a, c}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_EXTRA"
+        ]
+      }
+    }
+  ]
+}

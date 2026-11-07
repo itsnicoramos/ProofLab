@@ -1,0 +1,89 @@
+{
+  "id": "proofs.contrapositive.ch5-ex02",
+  "course": "proofs",
+  "topic": "contrapositive",
+  "kind": "parity_proof",
+  "title": "Ex 5.2 · If n² is odd, n is odd",
+  "prompt": "Use contrapositive proof. Let $n$ be an integer. Show that if $n^2$ is odd, then $n$ is odd. Write the proof of the contrapositive with the steps below.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch5",
+    "contrapositive"
+  ],
+  "data": {
+    "variables": [
+      "n"
+    ],
+    "hypotheses": [
+      {
+        "var": "n",
+        "is": "even"
+      }
+    ],
+    "target": "n^2",
+    "goal": "even"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Negate both parts and swap them: if n is even, then n² is even.",
+    "Assume n is even, write it as 2·(integer), and show n² is even."
+  ],
+  "solution": [
+    "Contrapositive: if $n$ is even, then $n^2$ is even.",
+    "Suppose $n = 2a$. Then $n^2 = 4a^2 = 2(2a^2)$, which is even.",
+    "So the original statement is true. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 5 exercises, #2 (p. 136)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses contrapositive proof (Section 5.1) and Definition 4.1."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "prove the contrapositive",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 2a"
+          },
+          {
+            "kind": "expr",
+            "content": "4a^2"
+          },
+          {
+            "kind": "witness",
+            "content": "2a^2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "assumed the wrong parity",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 2a + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0
+      }
+    }
+  ]
+}

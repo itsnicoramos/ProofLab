@@ -1,0 +1,132 @@
+{
+  "id": "proofs.set-proofs.ch8-ex09",
+  "course": "proofs",
+  "topic": "set-proofs",
+  "kind": "set_identity",
+  "title": "Ex 8.9 · Intersection distributes over union",
+  "prompt": "Let $A$, $B$ and $C$ be any sets. Prove that $A \\cap (B \\cup C) = (A \\cap B) \\cup (A \\cap C)$, writing a chain of lines in which each line has exactly the same elements as the one before it.",
+  "answer_format": "A chain of lines, each a set (like A ∪ (B ∩ C)) or a statement about an element x (like x ∈ A or x ∈ B). Each line must have exactly the same elements as the line before; start from the left side and end at the right side.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch8",
+    "set-identity",
+    "distributive-law"
+  ],
+  "data": {
+    "sets": [
+      "A",
+      "B",
+      "C"
+    ],
+    "left": "A ∩ (B ∪ C)",
+    "right": "(A ∩ B) ∪ (A ∩ C)",
+    "point": [
+      "x"
+    ]
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Begin with x ∈ A ∩ (B ∪ C): that is, x ∈ A and (x ∈ B or x ∈ C).",
+    "Distribute the 'and' over the 'or': P ∧ (Q ∨ R) is the same as (P ∧ Q) ∨ (P ∧ R).",
+    "Each bracket (x ∈ A and x ∈ B) says x ∈ A ∩ B. Finish with the definition of ∪."
+  ],
+  "solution": [
+    "Let $x$ be any element. Then $x \\in A \\cap (B \\cup C)$ means $x \\in A \\land (x \\in B \\lor x \\in C)$.",
+    "By the distributive law $P \\land (Q \\lor R) = (P \\land Q) \\lor (P \\land R)$, this is $(x \\in A \\land x \\in B) \\lor (x \\in A \\land x \\in C)$.",
+    "That is, $x \\in A \\cap B$ or $x \\in A \\cap C$, so $x \\in (A \\cap B) \\cup (A \\cap C)$.",
+    "Every step was an equivalence, so $A \\cap (B \\cup C) = (A \\cap B) \\cup (A \\cap C)$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 8 exercises, #9 (p. 171)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Section 8.3 (proving A = B), the definitions of union, intersection and difference (Section 1.5) and the logic laws of Section 2.6."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "element chasing",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x ∈ A ∩ (B ∪ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A and (x ∈ B or x ∈ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(x ∈ A and x ∈ B) or (x ∈ A and x ∈ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A ∩ B or x ∈ A ∩ C"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ (A ∩ B) ∪ (A ∩ C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "distributes onto B only",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x ∈ A ∩ (B ∪ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A and (x ∈ B or x ∈ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "(x ∈ A and x ∈ B) or x ∈ C"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "SETID_STEP_DIFFERS"
+        ]
+      }
+    },
+    {
+      "name": "stops before distributing",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "x ∈ A ∩ (B ∪ C)"
+          },
+          {
+            "kind": "expr",
+            "content": "x ∈ A and (x ∈ B or x ∈ C)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "SETID_INCOMPLETE"
+        ]
+      }
+    }
+  ]
+}

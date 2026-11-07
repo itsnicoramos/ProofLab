@@ -1,0 +1,86 @@
+{
+  "id": "proofs.disproof.ch9-ex03",
+  "course": "proofs",
+  "topic": "disproof",
+  "kind": "counterexample",
+  "title": "Ex 9.3 · If n⁵ − n is even, is n even?",
+  "prompt": "Statement: for every integer $n$, if $n^5 - n$ is even, then $n$ is even. This statement is false. Disprove it with a counterexample.",
+  "answer_format": "Integer values for every variable, like a = 4, b = 2, c = 2.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch9",
+    "counterexample"
+  ],
+  "data": {
+    "variables": {
+      "n": "integer"
+    },
+    "hypothesis": {
+      "op": "even",
+      "args": [
+        "n^5 - n"
+      ]
+    },
+    "conclusion": {
+      "op": "even",
+      "args": [
+        "n"
+      ]
+    }
+  },
+  "answer": "n = 1",
+  "mistakes": [],
+  "hints": [
+    "You need n⁵ − n to be even while n itself is odd.",
+    "Try a small odd number."
+  ],
+  "solution": [
+    "Take $n = 1$: $n^5 - n = 0$, which is even, but $n = 1$ is odd.",
+    "(In fact $n^5 - n$ is even for every integer, so any odd $n$ works.)"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 9 exercises, #3 (p. 178)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses counterexamples (Section 9.1)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "n = 1",
+      "submission": {
+        "steps": [],
+        "answer": "n = 1"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "n = 3 also works",
+      "submission": {
+        "steps": [],
+        "answer": "n = 3"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "conclusion holds",
+      "submission": {
+        "steps": [],
+        "answer": "n = 2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "CONCLUSION_HOLDS"
+        ]
+      }
+    }
+  ]
+}

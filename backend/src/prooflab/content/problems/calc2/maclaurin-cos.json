@@ -1,0 +1,79 @@
+{
+  "id": "calc2.series.maclaurin-cos",
+  "course": "calc2",
+  "topic": "series",
+  "kind": "taylor_polynomial",
+  "title": "A Maclaurin polynomial",
+  "prompt": "Find the Maclaurin polynomial of degree 4 for $f(x) = \\cos x$.",
+  "answer_format": "A polynomial in x.",
+  "difficulty": 1,
+  "tags": [
+    "Maclaurin polynomial"
+  ],
+  "data": {
+    "function": "cos(x)",
+    "center": "0",
+    "degree": 4
+  },
+  "answer": "1 - x^2/2 + x^4/24",
+  "mistakes": [],
+  "hints": [
+    "List f, f′, f″, f‴, f⁗ at 0: they cycle 1, 0, −1, 0, 1.",
+    "The coefficient of xᵏ is f⁽ᵏ⁾(0)/k!."
+  ],
+  "solution": [
+    "$f^{(k)}(0)$ for $k = 0..4$: $1, 0, -1, 0, 1$.",
+    "$p_4(x) = 1 - \\frac{x^2}{2!} + \\frac{x^4}{4!} = 1 - \\frac{x^2}{2} + \\frac{x^4}{24}$."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "6.3 Taylor and Maclaurin Series",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "factorials",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "1 - x^2/2! + x^4/4!"
+          }
+        ],
+        "answer": "1 - x^2/2 + x^4/24"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "no factorials",
+      "submission": {
+        "steps": [],
+        "answer": "1 - x^2 + x^4"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "MISSING_FACTORIALS"
+        ]
+      }
+    },
+    {
+      "name": "stopped at degree 2",
+      "submission": {
+        "steps": [],
+        "answer": "1 - x^2/2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "TAYLOR_WRONG_DEGREE"
+        ]
+      }
+    }
+  ]
+}

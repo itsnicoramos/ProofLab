@@ -1,0 +1,83 @@
+{
+  "id": "calc2.series.telescoping",
+  "course": "calc2",
+  "topic": "series",
+  "kind": "series_sum",
+  "title": "A telescoping series",
+  "prompt": "Find $\\displaystyle \\sum_{n=1}^{\\infty} \\frac{1}{n(n+1)}$.",
+  "answer_format": "An exact number. A partial-sum step in N is welcome.",
+  "difficulty": 2,
+  "tags": [
+    "telescoping series",
+    "partial fractions"
+  ],
+  "data": {
+    "term": "1/(n (n + 1))"
+  },
+  "answer": "1",
+  "mistakes": [],
+  "hints": [
+    "1/(n(n+1)) = 1/n − 1/(n+1). Write out the first few terms of S_N."
+  ],
+  "solution": [
+    "$\\frac{1}{n(n+1)} = \\frac1n - \\frac{1}{n+1}$, so $S_N = 1 - \\frac{1}{N+1}$.",
+    "$\\lim_{N\\to\\infty} S_N = 1$."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "5.2 Infinite Series",
+    "note": "Original problem; see telescoping series."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "partial sums",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "S_N = 1 - 1/(N+1)"
+          }
+        ],
+        "answer": "1"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "wrong partial sum",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "1 - 1/N"
+          }
+        ],
+        "answer": "1"
+      },
+      "expect": {
+        "status": "partial",
+        "first_error": 0,
+        "hint_codes": [
+          "SERIES_PARTIAL_SUM_WRONG"
+        ]
+      }
+    },
+    {
+      "name": "limit of the terms",
+      "submission": {
+        "steps": [],
+        "answer": "0"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SERIES_SUM_TERM_LIMIT"
+        ]
+      }
+    }
+  ]
+}

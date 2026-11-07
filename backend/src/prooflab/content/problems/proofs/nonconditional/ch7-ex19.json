@@ -1,0 +1,127 @@
+{
+  "id": "proofs.nonconditional.ch7-ex19",
+  "course": "proofs",
+  "topic": "nonconditional",
+  "kind": "induction",
+  "title": "Ex 7.19 · 2⁰ + 2¹ + ⋯ + 2ⁿ = 2ⁿ⁺¹ − 1",
+  "prompt": "Prove that for every natural number $n$, $2^0 + 2^1 + 2^2 + \\cdots + 2^n = 2^{n+1} - 1$. In this book $\\mathbb{N} = \\{1, 2, 3, \\dots\\}$, so the base case is $n = 1$. ProofLab checks this as a proof by induction (Chapter 10). The book places it in Chapter 7, where a direct argument also works; try that on paper too.",
+  "answer_format": "A structured proof: base, assume and expr steps (notes optional). No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch7",
+    "induction"
+  ],
+  "data": {
+    "base": 1,
+    "sum": {
+      "index": "i",
+      "term": "2^i",
+      "start": 0,
+      "rhs": "2^(n+1) - 1"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Base case n = 1: the sum is 2⁰ + 2¹ = 3, and 2² − 1 = 3.",
+    "Assume 2⁰ + ⋯ + 2ᵏ = 2^(k+1) − 1. The sum up to k + 1 is that plus the next term, 2^(k+1).",
+    "2^(k+1) − 1 + 2^(k+1) = 2·2^(k+1) − 1 = 2^(k+2) − 1."
+  ],
+  "solution": [
+    "Base case: for $n = 1$, $2^0 + 2^1 = 3 = 2^2 - 1$.",
+    "Inductive step: suppose $2^0 + \\cdots + 2^k = 2^{k+1} - 1$ for some $k \\ge 1$. Then $2^0 + \\cdots + 2^k + 2^{k+1} = (2^{k+1} - 1) + 2^{k+1} = 2 \\cdot 2^{k+1} - 1 = 2^{k+2} - 1$.",
+    "By induction the formula holds for every $n \\in \\mathbb{N}$. (Directly: if $S$ is the sum, then $2S - S = 2^{n+1} - 2^0$, so $S = 2^{n+1} - 1$.) $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 7 exercises, #19 (p. 155)",
+    "note": "This exact exercise, restated in ProofLab's words. Checked as a proof by induction (Section 10.1); the book's own solution uses a direct argument."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "induction",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "2^0 + 2^1 = 2^2 - 1"
+          },
+          {
+            "kind": "assume",
+            "content": "2^0 + 2^1 + ... + 2^k = 2^(k+1) - 1"
+          },
+          {
+            "kind": "expr",
+            "content": "2^(k+1) - 1 + 2^(k+1)"
+          },
+          {
+            "kind": "expr",
+            "content": "2*2^(k+1) - 1"
+          },
+          {
+            "kind": "expr",
+            "content": "2^(k+2) - 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "assumed the statement for n",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "1 + 2 = 4 - 1"
+          },
+          {
+            "kind": "assume",
+            "content": "2^0 + 2^1 + ... + 2^n = 2^(n+1) - 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "IND_ASSUME_USE_K"
+        ]
+      }
+    },
+    {
+      "name": "never used the hypothesis",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "1 + 2 = 4 - 1"
+          },
+          {
+            "kind": "assume",
+            "content": "2^0 + ... + 2^k = 2^(k+1) - 1"
+          },
+          {
+            "kind": "expr",
+            "content": "2^(k+2) - 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "IND_USE_HYPOTHESIS"
+        ]
+      }
+    }
+  ]
+}

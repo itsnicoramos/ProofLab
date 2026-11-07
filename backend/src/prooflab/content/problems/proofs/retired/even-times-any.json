@@ -1,0 +1,129 @@
+{
+  "id": "proofs.parity.even-times-any",
+  "course": "proofs",
+  "topic": "parity",
+  "kind": "parity_proof",
+  "title": "An even integer times any integer",
+  "prompt": "Prove: if $m$ is an even integer and $n$ is any integer, then $mn$ is even.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "direct proof",
+    "parity"
+  ],
+  "data": {
+    "variables": [
+      "m",
+      "n"
+    ],
+    "hypotheses": [
+      {
+        "var": "m",
+        "is": "even"
+      }
+    ],
+    "target": "m n",
+    "goal": "even"
+  },
+  "mistakes": [],
+  "hints": [
+    "Only m comes with a hypothesis. What does it let you write?",
+    "n is an integer, so it can appear in your witness."
+  ],
+  "solution": [
+    "Since $m$ is even, $m = 2k$ for some integer $k$.",
+    "Then $mn = 2kn = 2(kn)$, and $kn$ is an integer, so $mn$ is even. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "sundstrom-mr3",
+    "section": "1.2 Constructing Direct Proofs",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "retired",
+    "notes": "Invented problem, retired 2026-11-06: MATH 123 proofs now map 1:1 to Book of Proof exercises."
+  },
+  "examples": [
+    {
+      "name": "direct proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "m = 2k"
+          },
+          {
+            "kind": "expr",
+            "content": "2kn"
+          },
+          {
+            "kind": "expr",
+            "content": "2(kn)"
+          },
+          {
+            "kind": "witness",
+            "content": "kn"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "assumes n is even too",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "m = 2k"
+          },
+          {
+            "kind": "let",
+            "content": "n = 2j"
+          },
+          {
+            "kind": "expr",
+            "content": "4kj"
+          },
+          {
+            "kind": "witness",
+            "content": "2kj"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "LET_WITHOUT_HYPOTHESIS"
+        ]
+      }
+    },
+    {
+      "name": "witness ProofLab can't see is an integer",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "m = 2k"
+          },
+          {
+            "kind": "witness",
+            "content": "mn/2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "WITNESS_NOT_INTEGER"
+        ]
+      }
+    }
+  ]
+}

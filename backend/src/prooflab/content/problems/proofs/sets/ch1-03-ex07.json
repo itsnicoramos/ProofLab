@@ -1,0 +1,66 @@
+{
+  "id": "proofs.sets.ch1-03-ex07",
+  "course": "proofs",
+  "topic": "sets",
+  "kind": "finite_set",
+  "title": "Ex 1.3 #7 · Subsets of {ℝ, {ℚ, ℕ}}",
+  "prompt": "List all the subsets of $\\{\\mathbb{R}, \\{\\mathbb{Q}, \\mathbb{N}\\}\\}$. Enter them together as one set of sets between outer braces, like $\\{\\emptyset, \\{1\\}\\}$.",
+  "answer_format": "A set of sets between braces, like {∅, {1}, {1, 2}}. Spaces are optional.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch1"
+  ],
+  "data": {
+    "compute": "P({R, {Q, N}})",
+    "atoms": [
+      "R",
+      "Q",
+      "N"
+    ]
+  },
+  "answer": "{∅, {R}, {{N, Q}}, {R, {N, Q}}}",
+  "mistakes": [],
+  "hints": [
+    "This set has two elements: ℝ and the set {ℚ, ℕ}.",
+    "A set with k elements has 2ᵏ subsets, including ∅ and the set itself: here that's 4."
+  ],
+  "solution": [
+    "The set has 2 element(s), so it has 4 subset(s), from ∅ up to the whole set.",
+    "So the answer is $\\{\\emptyset, \\{\\mathbb{R}\\}, \\{\\{\\mathbb{N}, \\mathbb{Q}\\}\\}, \\{\\mathbb{R}, \\{\\mathbb{N}, \\mathbb{Q}\\}\\}\\}$."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 1.3 exercises, #7 (p. 15)",
+    "note": "This exact exercise, restated in ProofLab's words."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct set",
+      "submission": {
+        "steps": [],
+        "answer": "{∅, {R}, {{N, Q}}, {R, {N, Q}}}"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "{{R},{{N,Q}},{R,{N,Q}}}"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SET_EMPTY_MISSING"
+        ]
+      }
+    }
+  ]
+}

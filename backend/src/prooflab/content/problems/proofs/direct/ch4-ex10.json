@@ -1,0 +1,102 @@
+{
+  "id": "proofs.direct.ch4-ex10",
+  "course": "proofs",
+  "topic": "direct",
+  "kind": "divisibility_proof",
+  "title": "Ex 4.10 · a | b gives a | (3b³ − b² + 5b)",
+  "prompt": "Use a direct proof. Let $a, b$ be integers. Show that if $a \\mid b$, then $a \\mid (3b^3 - b^2 + 5b)$.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch4"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b"
+    ],
+    "hypotheses": [
+      {
+        "var": "b",
+        "divisor": "a"
+      }
+    ],
+    "target": "3b^3 - b^2 + 5b",
+    "goal": {
+      "divisor": "a"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Substitute b = ak into 3b³ − b² + 5b.",
+    "Every term now has a factor of a. Factor it out; what's left is the witness."
+  ],
+  "solution": [
+    "Since $a \\mid b$, $b = ak$ for some integer $k$.",
+    "$3b^3 - b^2 + 5b = 3a^3k^3 - a^2k^2 + 5ak = a(3a^2k^3 - ak^2 + 5k)$.",
+    "$3a^2k^3 - ak^2 + 5k$ is an integer, so $a \\mid (3b^3 - b^2 + 5b)$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 4 exercises, #10 (p. 126)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 4.4 (divides)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "substitute and factor",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "b = ak"
+          },
+          {
+            "kind": "expr",
+            "content": "3a^3 k^3 - a^2 k^2 + 5a k"
+          },
+          {
+            "kind": "expr",
+            "content": "a(3a^2 k^3 - a k^2 + 5k)"
+          },
+          {
+            "kind": "witness",
+            "content": "3a^2 k^3 - a k^2 + 5k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "dropped the powers of a",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "b = ak"
+          },
+          {
+            "kind": "witness",
+            "content": "3k^3 - k^2 + 5k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "WITNESS_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

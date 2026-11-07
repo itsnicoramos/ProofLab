@@ -1,0 +1,96 @@
+{
+  "id": "calc4.diff_eq.separable-growth",
+  "course": "calc4",
+  "topic": "diff_eq",
+  "kind": "ode_solution",
+  "title": "A separable equation",
+  "prompt": "Find the general solution of $\\dfrac{dy}{dx} = 2xy$.",
+  "answer_format": "y = ... in terms of x. Use C (or C1, C2) for arbitrary constants. An implicit answer like ln|y| = ... is fine.",
+  "difficulty": 1,
+  "tags": [
+    "separable"
+  ],
+  "data": {
+    "ode": "y' = 2x y"
+  },
+  "answer": "y = C e^(x^2)",
+  "mistakes": [
+    {
+      "answer": "y = e^(x^2) + C",
+      "hint": "The constant from integrating ends up inside the exponent: e^(x² + C) = e^C·e^(x²), so it multiplies instead of adding."
+    }
+  ],
+  "hints": [
+    "Separate: put every y on one side and every x on the other.",
+    "∫ dy/y = ln|y|."
+  ],
+  "solution": [
+    "$\\frac{dy}{y} = 2x\\,dx$, so $\\ln|y| = x^2 + C$.",
+    "Exponentiate: $|y| = e^C e^{x^2}$, i.e. $y = Ce^{x^2}$ (C can be any constant)."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "4.3 Separable Equations",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "separate and integrate",
+      "submission": {
+        "steps": [
+          {
+            "kind": "note",
+            "content": "dy/y = 2x dx"
+          },
+          {
+            "kind": "expr",
+            "content": "ln|y| = x^2 + C"
+          }
+        ],
+        "answer": "y = C e^(x^2)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "implicit answer",
+      "submission": {
+        "steps": [],
+        "answer": "ln|y| = x^2 + C"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "constant added outside",
+      "submission": {
+        "steps": [],
+        "answer": "y = e^(x^2) + C"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    },
+    {
+      "name": "dropped the constant",
+      "submission": {
+        "steps": [],
+        "answer": "y = e^(x^2)"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "NOT_GENERAL"
+        ]
+      }
+    }
+  ]
+}

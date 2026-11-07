@@ -1,0 +1,103 @@
+{
+  "id": "proofs.divisibility.product-of-divisors",
+  "course": "proofs",
+  "topic": "divisibility",
+  "kind": "counterexample",
+  "title": "Disprove: a | c and b | c mean ab | c",
+  "prompt": "Disprove: for all positive integers $a$, $b$, $c$, if $a \\mid c$ and $b \\mid c$, then $ab \\mid c$. Give a counterexample.",
+  "answer_format": "Integer values for every variable, like a = 4, b = 2, c = 2.",
+  "difficulty": 1,
+  "tags": [
+    "counterexample",
+    "divisibility"
+  ],
+  "data": {
+    "variables": {
+      "a": "positive",
+      "b": "positive",
+      "c": "positive"
+    },
+    "hypothesis": {
+      "op": "and",
+      "args": [
+        {
+          "op": "divides",
+          "args": [
+            "a",
+            "c"
+          ]
+        },
+        {
+          "op": "divides",
+          "args": [
+            "b",
+            "c"
+          ]
+        }
+      ]
+    },
+    "conclusion": {
+      "op": "divides",
+      "args": [
+        "a b",
+        "c"
+      ]
+    }
+  },
+  "answer": "a = 2, b = 2, c = 2",
+  "mistakes": [],
+  "hints": [
+    "What goes wrong when a and b share a factor?"
+  ],
+  "solution": [
+    "Take $a = b = c = 2$: $2 \\mid 2$ twice, but $ab = 4 \\nmid 2$.",
+    "So the statement is false. (It holds when $a$ and $b$ have no common factor.)"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "9.1 Counterexamples",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "retired",
+    "notes": "Invented problem, retired 2026-11-06: MATH 123 proofs now map 1:1 to Book of Proof exercises."
+  },
+  "examples": [
+    {
+      "name": "a = b = 3",
+      "submission": {
+        "steps": [],
+        "answer": "a = 3, b = 3, c = 3"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "coprime a and b",
+      "submission": {
+        "steps": [],
+        "answer": "a = 2, b = 3, c = 6"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "CONCLUSION_HOLDS"
+        ]
+      }
+    },
+    {
+      "name": "zero isn't positive",
+      "submission": {
+        "steps": [],
+        "answer": "a = 0, b = 2, c = 2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "COUNTEREXAMPLE_DOMAIN"
+        ]
+      }
+    }
+  ]
+}

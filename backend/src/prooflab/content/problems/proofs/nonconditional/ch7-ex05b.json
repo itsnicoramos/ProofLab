@@ -1,0 +1,92 @@
+{
+  "id": "proofs.nonconditional.ch7-ex05b",
+  "course": "proofs",
+  "topic": "nonconditional",
+  "kind": "parity_proof",
+  "title": "Ex 7.5 (⇐, by contrapositive) · If a³ is odd, then a is odd",
+  "prompt": "Let $a$ be an integer. Exercise 7.5 says $a$ is odd if and only if $a^3$ is odd. This problem is one direction of that if-and-only-if: prove that if $a^3$ is odd, then $a$ is odd. Use contrapositive proof: show that if $a$ is even, then $a^3$ is even. (The forward (⇒) direction is a separate problem.)",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch7",
+    "iff"
+  ],
+  "data": {
+    "variables": [
+      "a"
+    ],
+    "hypotheses": [
+      {
+        "var": "a",
+        "is": "even"
+      }
+    ],
+    "target": "a^3",
+    "goal": "even"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "The contrapositive is: if a is even, then a³ is even.",
+    "Write a = 2n. Then a³ = 8n³."
+  ],
+  "solution": [
+    "Contrapositive: if $a$ is even, then $a^3$ is even.",
+    "Suppose $a = 2n$. Then $a^3 = 8n^3 = 2(4n^3)$, which is even.",
+    "So if $a^3$ is odd, then $a$ is odd. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 7 exercises, #5 (p. 155)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses if-and-only-if proof (Section 7.1): this is the converse (⇐) direction, by contrapositive (Section 5.1), with Definitions 4.1, 4.2 (even, odd)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "prove the contrapositive",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2n"
+          },
+          {
+            "kind": "expr",
+            "content": "8n^3"
+          },
+          {
+            "kind": "witness",
+            "content": "4n^3"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "started from a³ instead of a",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a^3 = 2n + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "LET_FORMAT"
+        ]
+      }
+    }
+  ]
+}

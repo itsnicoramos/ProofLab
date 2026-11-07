@@ -1,0 +1,104 @@
+{
+  "id": "proofs.disproof.ch9-ex28",
+  "course": "proofs",
+  "topic": "disproof",
+  "kind": "counterexample",
+  "title": "Ex 9.28 · Do a | b and b | a force a = b?",
+  "prompt": "Statement: for all integers $a$ and $b$, if $a \\mid b$ and $b \\mid a$, then $a = b$. This statement is false. Disprove it with a counterexample.",
+  "answer_format": "Integer values for every variable, like a = 4, b = 2, c = 2.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch9",
+    "counterexample"
+  ],
+  "data": {
+    "variables": {
+      "a": "integer",
+      "b": "integer"
+    },
+    "hypothesis": {
+      "op": "and",
+      "args": [
+        {
+          "op": "divides",
+          "args": [
+            "a",
+            "b"
+          ]
+        },
+        {
+          "op": "divides",
+          "args": [
+            "b",
+            "a"
+          ]
+        }
+      ]
+    },
+    "conclusion": {
+      "op": "eq",
+      "args": [
+        "a",
+        "b"
+      ]
+    }
+  },
+  "answer": "a = 1, b = -1",
+  "mistakes": [],
+  "hints": [
+    "Divisibility ignores signs.",
+    "Try a number and its negative."
+  ],
+  "solution": [
+    "Take $a = 1$, $b = -1$: $1 \\mid -1$ and $-1 \\mid 1$, but $1 \\ne -1$.",
+    "So the statement is false. (It is true for natural numbers.)"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 9 exercises, #28 (p. 179)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses counterexamples (Section 9.1) and Definition 4.4."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "a = 1, b = -1",
+      "submission": {
+        "steps": [],
+        "answer": "a = 1, b = -1"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "equal numbers",
+      "submission": {
+        "steps": [],
+        "answer": "a = 3, b = 3"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "CONCLUSION_HOLDS"
+        ]
+      }
+    },
+    {
+      "name": "b doesn't divide a",
+      "submission": {
+        "steps": [],
+        "answer": "a = 2, b = 4"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "HYPOTHESIS_NOT_MET"
+        ]
+      }
+    }
+  ]
+}

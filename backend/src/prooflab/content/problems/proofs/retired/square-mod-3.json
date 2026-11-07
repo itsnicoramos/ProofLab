@@ -1,0 +1,132 @@
+{
+  "id": "proofs.divisibility.square-mod-3",
+  "course": "proofs",
+  "topic": "divisibility",
+  "kind": "divisibility_proof",
+  "title": "Squares of numbers ≡ 1 (mod 3)",
+  "prompt": "Prove: if $n \\equiv 1 \\pmod 3$, then $n^2 \\equiv 1 \\pmod 3$.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "direct proof",
+    "congruence"
+  ],
+  "data": {
+    "variables": [
+      "n"
+    ],
+    "hypotheses": [
+      {
+        "var": "n",
+        "divisor": 3,
+        "remainder": 1
+      }
+    ],
+    "target": "n^2",
+    "goal": {
+      "divisor": 3,
+      "remainder": 1
+    }
+  },
+  "mistakes": [],
+  "hints": [
+    "n ≡ 1 (mod 3) means n leaves remainder 1 when divided by 3. Write n that way with a new letter.",
+    "Your goal is to write n² as 3·(an integer) + 1."
+  ],
+  "solution": [
+    "Since $n \\equiv 1 \\pmod 3$, $n = 3k + 1$ for some integer $k$.",
+    "Then $n^2 = 9k^2 + 6k + 1 = 3(3k^2 + 2k) + 1$, and $3k^2 + 2k$ is an integer, so $n^2 \\equiv 1 \\pmod 3$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "sundstrom-mr3",
+    "section": "3.5 The Division Algorithm and Congruence",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "retired",
+    "notes": "Invented problem, retired 2026-11-06: MATH 123 proofs now map 1:1 to Book of Proof exercises."
+  },
+  "examples": [
+    {
+      "name": "direct proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 3k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "(3k+1)^2"
+          },
+          {
+            "kind": "expr",
+            "content": "9k^2 + 6k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "3(3k^2 + 2k) + 1"
+          },
+          {
+            "kind": "witness",
+            "content": "3k^2 + 2k"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "3k - 2 also works",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 3k - 2"
+          },
+          {
+            "kind": "expr",
+            "content": "9k^2 - 12k + 4"
+          },
+          {
+            "kind": "witness",
+            "content": "3k^2 - 4k + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "used remainder 0",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 3k"
+          },
+          {
+            "kind": "expr",
+            "content": "9k^2"
+          },
+          {
+            "kind": "witness",
+            "content": "3k^2"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "BAD_REPRESENTATION"
+        ]
+      }
+    }
+  ]
+}

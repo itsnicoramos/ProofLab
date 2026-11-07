@@ -1,0 +1,96 @@
+{
+  "id": "proofs.nonconditional.ch7-ex02b",
+  "course": "proofs",
+  "topic": "nonconditional",
+  "kind": "parity_proof",
+  "title": "Ex 7.2 (⇐, by contrapositive) · If 3x + 6 is odd, then x is odd",
+  "prompt": "Let $x$ be an integer. Exercise 7.2 says $x$ is odd if and only if $3x + 6$ is odd. This problem is one direction of that if-and-only-if: prove that if $3x + 6$ is odd, then $x$ is odd. Use contrapositive proof: show that if $x$ is even, then $3x + 6$ is even. (The forward (⇒) direction is a separate problem.)",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch7",
+    "iff"
+  ],
+  "data": {
+    "variables": [
+      "x"
+    ],
+    "hypotheses": [
+      {
+        "var": "x",
+        "is": "even"
+      }
+    ],
+    "target": "3x + 6",
+    "goal": "even"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "The contrapositive is: if x is even, then 3x + 6 is even.",
+    "Write x = 2a. Then 3x + 6 = 6a + 6."
+  ],
+  "solution": [
+    "Contrapositive: if $x$ is even, then $3x + 6$ is even.",
+    "Suppose $x = 2a$. Then $3x + 6 = 6a + 6 = 2(3a + 3)$, which is even.",
+    "So if $3x + 6$ is odd, then $x$ is odd. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 7 exercises, #2 (p. 155)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses if-and-only-if proof (Section 7.1): this is the converse (⇐) direction, by contrapositive (Section 5.1), with Definitions 4.1, 4.2 (even, odd)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "prove the contrapositive",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a"
+          },
+          {
+            "kind": "expr",
+            "content": "6a + 6"
+          },
+          {
+            "kind": "witness",
+            "content": "3a + 3"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "witness not divided by 2",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a"
+          },
+          {
+            "kind": "witness",
+            "content": "3a + 6"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "WITNESS_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

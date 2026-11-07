@@ -1,0 +1,89 @@
+{
+  "id": "proofs.counting.ch3-08-ex15",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.8 #15 · Rearranging TENNESSEE",
+  "prompt": "How many different permutations (rearrangements) are there of the letters in the word TENNESSEE?",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "multisets",
+    "permutations"
+  ],
+  "data": {},
+  "answer": "9!/(4!*2!*2!)",
+  "mistakes": [
+    {
+      "answer": "9!",
+      "hint": "Swapping two identical letters, such as two of the E's, gives the same arrangement, so 9! counts each arrangement many times."
+    },
+    {
+      "answer": "9!/(4!*2!)",
+      "hint": "Check every repeated letter: E, N and S each appear more than once."
+    }
+  ],
+  "hints": [
+    "Count how many times each letter appears: T, E, N, S.",
+    "Divide 9! by the factorial of each letter's count."
+  ],
+  "solution": [
+    "TENNESSEE has 9 letters: one T, four E's, two N's and two S's.",
+    "By the formula for permutations of a multiset there are $\\frac{9!}{1!\\,4!\\,2!\\,2!} = \\frac{362{,}880}{96} = 3780$ permutations."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.8 exercises, #15 (p. 103)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses permutations of a multiset (Section 3.8)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "3780"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "9!"
+          },
+          {
+            "kind": "expr",
+            "content": "4!*2!*2!"
+          }
+        ],
+        "answer": "9!/(4!*2!*2!)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "9!"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

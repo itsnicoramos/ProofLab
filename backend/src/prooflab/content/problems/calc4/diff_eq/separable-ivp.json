@@ -1,0 +1,91 @@
+{
+  "id": "calc4.diff_eq.separable-ivp",
+  "course": "calc4",
+  "topic": "diff_eq",
+  "kind": "ode_solution",
+  "title": "Separable initial value problem",
+  "prompt": "Solve $\\dfrac{dy}{dx} = \\dfrac{x}{y}$ with $y(0) = 2$.",
+  "answer_format": "y = ... (an implicit relation between x and y is fine).",
+  "difficulty": 1,
+  "tags": [
+    "separable",
+    "IVP"
+  ],
+  "data": {
+    "ode": "y' = x/y",
+    "ics": {
+      "y(0)": "2"
+    }
+  },
+  "answer": "y = sqrt(x^2 + 4)",
+  "mistakes": [],
+  "hints": [
+    "Separate to y dy = x dx and integrate both sides.",
+    "Use y(0) = 2 to find the constant."
+  ],
+  "solution": [
+    "$y\\,dy = x\\,dx \\Rightarrow \\frac{y^2}{2} = \\frac{x^2}{2} + C$, i.e. $y^2 = x^2 + C$.",
+    "$y(0) = 2$ gives $C = 4$; since $y > 0$ at $x = 0$, $y = \\sqrt{x^2 + 4}$."
+  ],
+  "reference": {
+    "book": "openstax-calc2",
+    "section": "4.3 Separable Equations",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "explicit",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "y^2 = x^2 + C"
+          }
+        ],
+        "answer": "y = sqrt(x^2 + 4)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "implicit",
+      "submission": {
+        "steps": [],
+        "answer": "y^2 - x^2 = 4"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "constant never found",
+      "submission": {
+        "steps": [],
+        "answer": "y^2 = x^2 + C"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "CONSTANTS_LEFT"
+        ]
+      }
+    },
+    {
+      "name": "wrong constant",
+      "submission": {
+        "steps": [],
+        "answer": "y^2 = x^2 + 2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "IC_NOT_SATISFIED"
+        ]
+      }
+    }
+  ]
+}

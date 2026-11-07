@@ -1,0 +1,91 @@
+{
+  "id": "calc4.diff_eq.distinct-roots",
+  "course": "calc4",
+  "topic": "diff_eq",
+  "kind": "ode_solution",
+  "title": "Distinct real roots",
+  "prompt": "Find the general solution of $y'' - 3y' + 2y = 0$.",
+  "answer_format": "y = ... in terms of x. Use C (or C1, C2) for arbitrary constants.",
+  "difficulty": 1,
+  "tags": [
+    "second order",
+    "constant coefficients"
+  ],
+  "data": {
+    "ode": "y'' - 3y' + 2y = 0"
+  },
+  "answer": "y = C1 e^x + C2 e^(2x)",
+  "mistakes": [],
+  "hints": [
+    "Try y = e^(rx): you get the characteristic equation r² − 3r + 2 = 0."
+  ],
+  "solution": [
+    "Characteristic equation: $r^2 - 3r + 2 = (r - 1)(r - 2) = 0$, so $r = 1, 2$.",
+    "$y = C_1 e^{x} + C_2 e^{2x}$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "7.1 Second-Order Linear Equations",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "characteristic equation",
+      "submission": {
+        "steps": [
+          {
+            "kind": "characteristic",
+            "content": "r^2 - 3r + 2 = 0"
+          },
+          {
+            "kind": "roots",
+            "content": "r = 1 or r = 2"
+          }
+        ],
+        "answer": "y = C1 e^x + C2 e^(2x)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "sign slip in the characteristic equation",
+      "submission": {
+        "steps": [
+          {
+            "kind": "characteristic",
+            "content": "r^2 + 3r + 2 = 0"
+          },
+          {
+            "kind": "roots",
+            "content": "r = -1, -2"
+          }
+        ],
+        "answer": "y = C1 e^(-x) + C2 e^(-2x)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 0,
+        "hint_codes": [
+          "ROOT_SIGNS"
+        ]
+      }
+    },
+    {
+      "name": "only one constant",
+      "submission": {
+        "steps": [],
+        "answer": "y = C e^(2x)"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "NOT_GENERAL"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "id": "proofs.counting.ch3-04-ex08",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.4 #8 · Odd digits in one unbroken run",
+  "prompt": "Use each of the digits 1, 2, 3, 4, 5, 6, 7 exactly once to form a 7-digit number in which the odd digits 1, 3, 5, 7 appear together in one unbroken run. For example, 2753146 qualifies, but 1234567 does not. How many such numbers are there?",
+  "answer_format": "A whole number, or an expression for it like 26^4, 10!/7! or binom(10, 3). P(n, k) and C(n, k) work too.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "permutations",
+    "multiplication-principle"
+  ],
+  "data": {},
+  "answer": "4!*4!",
+  "mistakes": [
+    {
+      "answer": "4!*3!",
+      "hint": "You arranged the odd digits and the even digits, but the run itself can sit in different places: treat it as one big symbol arranged along with 2, 4 and 6."
+    },
+    {
+      "answer": "4*4!",
+      "hint": "The even digits outside the run can also come in different orders."
+    },
+    {
+      "answer": "7!",
+      "hint": "That counts every arrangement of the seven digits, including ones where the odd digits are split up."
+    }
+  ],
+  "hints": [
+    "Glue the four odd digits into a single block. Then you are arranging that block together with 2, 4 and 6.",
+    "Count the orders of the four items (the block, 2, 4, 6), then the orders of the odd digits inside the block."
+  ],
+  "solution": [
+    "Treat the run of odd digits as one block. Arranging the block with the three even digits means arranging 4 items: $4! = 24$ ways.",
+    "Inside the block, the digits 1, 3, 5, 7 can be in any order: $4! = 24$ ways.",
+    "By the multiplication principle there are $4! \\cdot 4! = 576$ such numbers."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.4 exercises, #8 (p. 84)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses factorials and the multiplication principle (Section 3.4)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "576"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "4!"
+          },
+          {
+            "kind": "expr",
+            "content": "4!*4!"
+          }
+        ],
+        "answer": "4!*4!"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "4!*3!"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

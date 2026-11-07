@@ -1,0 +1,104 @@
+{
+  "id": "proofs.nonconditional.ch7-ex04a",
+  "course": "proofs",
+  "topic": "nonconditional",
+  "kind": "parity_proof",
+  "title": "Ex 7.4 (⇒, by contrapositive) · If a² + 4a + 5 is odd, then a is even",
+  "prompt": "Let $a$ be an integer. Exercise 7.4 says $a^2 + 4a + 5$ is odd if and only if $a$ is even. This problem is one direction of that if-and-only-if: prove that if $a^2 + 4a + 5$ is odd, then $a$ is even. Use contrapositive proof: show that if $a$ is odd, then $a^2 + 4a + 5$ is even. (The converse (⇐) direction is a separate problem.)",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch7",
+    "iff"
+  ],
+  "data": {
+    "variables": [
+      "a"
+    ],
+    "hypotheses": [
+      {
+        "var": "a",
+        "is": "odd"
+      }
+    ],
+    "target": "a^2 + 4a + 5",
+    "goal": "even"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "The contrapositive is: if a is odd, then a² + 4a + 5 is even.",
+    "Write a = 2n + 1 and expand: you should get 4n² + 12n + 10."
+  ],
+  "solution": [
+    "Contrapositive: if $a$ is odd, then $a^2 + 4a + 5$ is even.",
+    "Suppose $a = 2n + 1$. Then $a^2 + 4a + 5 = 4n^2 + 4n + 1 + 8n + 4 + 5 = 4n^2 + 12n + 10 = 2(2n^2 + 6n + 5)$, which is even.",
+    "So if $a^2 + 4a + 5$ is odd, then $a$ is even. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 7 exercises, #4 (p. 155)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses if-and-only-if proof (Section 7.1): this is the forward (⇒) direction, by contrapositive (Section 5.1), with Definitions 4.1, 4.2 (even, odd)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "prove the contrapositive",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2n + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "4n^2 + 4n + 1 + 8n + 4 + 5"
+          },
+          {
+            "kind": "expr",
+            "content": "4n^2 + 12n + 10"
+          },
+          {
+            "kind": "witness",
+            "content": "2n^2 + 6n + 5"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "forgot to halve",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2n + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "4n^2 + 12n + 10"
+          },
+          {
+            "kind": "witness",
+            "content": "4n^2 + 12n + 10"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 2,
+        "hint_codes": [
+          "WITNESS_MISMATCH"
+        ]
+      }
+    }
+  ]
+}

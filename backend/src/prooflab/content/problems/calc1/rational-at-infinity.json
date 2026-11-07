@@ -1,0 +1,92 @@
+{
+  "id": "calc1.limits.rational-at-infinity",
+  "course": "calc1",
+  "topic": "limits",
+  "kind": "limit",
+  "title": "Limit at infinity",
+  "prompt": "Evaluate $\\displaystyle \\lim_{x \\to \\infty} \\frac{3x^2 + 1}{2x^2 - x}$.",
+  "answer_format": "A number, oo, -oo, or DNE.",
+  "difficulty": 1,
+  "tags": [
+    "infinity",
+    "rational functions"
+  ],
+  "data": {
+    "expression": "(3x^2 + 1)/(2x^2 - x)",
+    "var": "x",
+    "point": "oo"
+  },
+  "answer": "3/2",
+  "mistakes": [
+    {
+      "answer": "3",
+      "hint": "Divide the numerator and the denominator by x², not just the numerator."
+    },
+    {
+      "answer": "oo",
+      "hint": "The numerator and the denominator both grow like x². Compare their leading terms."
+    }
+  ],
+  "hints": [
+    "Divide every term by the highest power of x in the denominator."
+  ],
+  "solution": [
+    "Divide by $x^2$: $\\frac{3 + 1/x^2}{2 - 1/x}$.",
+    "As $x \\to \\infty$, $1/x^2 \\to 0$ and $1/x \\to 0$, so the limit is $\\frac{3}{2}$."
+  ],
+  "reference": {
+    "book": "openstax-calc1",
+    "section": "4.6 Limits at Infinity and Asymptotes",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "divide by x^2",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "(3 + 1/x^2)/(2 - 1/x)"
+          },
+          {
+            "kind": "expr",
+            "content": "3/2"
+          }
+        ],
+        "answer": "3/2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "only divided the top",
+      "submission": {
+        "steps": [],
+        "answer": "3"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    },
+    {
+      "name": "says infinity",
+      "submission": {
+        "steps": [],
+        "answer": "oo"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

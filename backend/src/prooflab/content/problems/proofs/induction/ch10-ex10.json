@@ -1,0 +1,139 @@
+{
+  "id": "proofs.induction.ch10-ex10",
+  "course": "proofs",
+  "topic": "induction",
+  "kind": "induction",
+  "title": "Ex 10.10 · 3 divides 5^(2n) − 1",
+  "prompt": "Prove by induction that $3 \\mid (5^{2n} - 1)$ for every integer $n \\ge 0$. Check $n = 0$, assume $5^{2k} - 1 = 3m$ for an integer $m$ (the case $n = k$), and show that $5^{2(k+1)} - 1$ is $3$ times an integer.",
+  "answer_format": "A structured proof: a base step (the case n = 0 with numbers only), an assume step (f(k) = d·m for an integer m), expr steps for the n = k + 1 case, and a witness step (the integer w with f(k + 1) = d·w). Notes optional. No final answer box.",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch10",
+    "induction",
+    "divisibility"
+  ],
+  "data": {
+    "base": 0,
+    "divides": {
+      "divisor": 3,
+      "expr": "5^(2n) - 1"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Base case: for n = 0, 5⁰ − 1 = 0, and 3 divides 0.",
+    "Write the hypothesis as an equation, 5^(2k) − 1 = 3m, so you can substitute it. Then 5^(2(k + 1)) − 1 = 25·5^(2k) − 1 = 25(5^(2k) − 1) + 24.",
+    "Substitute: 25·3m + 24 = 75m + 24. Factor out 3."
+  ],
+  "solution": [
+    "Base case: for $n = 0$, $5^{0} - 1 = 0 = 3 \\cdot 0$, so $3 \\mid (5^{0} - 1)$.",
+    "Inductive step: suppose $3 \\mid (5^{2k} - 1)$ for some $k \\ge 0$, so $5^{2k} - 1 = 3m$ for an integer $m$.",
+    "Then $5^{2(k+1)} - 1 = 25 \\cdot 5^{2k} - 1 = 25(5^{2k} - 1) + 24 = 75m + 24 = 3(25m + 8)$, and $25m + 8$ is an integer, so $3 \\mid (5^{2(k+1)} - 1)$.",
+    "By induction, $3 \\mid (5^{2n} - 1)$ for every integer $n \\ge 0$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 10 exercises, #10 (p. 195)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses induction (Section 10.1) with base case n = 0, as the exercise asks for every integer n ≥ 0, and the definition of divisibility (Definition 4.4)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "induction proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "5^0 - 1 = 0 = 3*0"
+          },
+          {
+            "kind": "assume",
+            "content": "5^(2k) - 1 = 3m"
+          },
+          {
+            "kind": "expr",
+            "content": "25*5^(2k) - 1"
+          },
+          {
+            "kind": "expr",
+            "content": "25(5^(2k) - 1) + 24"
+          },
+          {
+            "kind": "expr",
+            "content": "75m + 24"
+          },
+          {
+            "kind": "witness",
+            "content": "25m + 8"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "hypothesis not written as 3m",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "5^0 - 1 = 0 = 3*0"
+          },
+          {
+            "kind": "assume",
+            "content": "3 | 5^(2k) - 1"
+          },
+          {
+            "kind": "expr",
+            "content": "75m + 24"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "IND_ASSUME_FORMAT"
+        ]
+      }
+    },
+    {
+      "name": "no witness step",
+      "submission": {
+        "steps": [
+          {
+            "kind": "base",
+            "content": "5^0 - 1 = 0 = 3*0"
+          },
+          {
+            "kind": "assume",
+            "content": "5^(2k) - 1 = 3m"
+          },
+          {
+            "kind": "expr",
+            "content": "25(5^(2k) - 1) + 24"
+          },
+          {
+            "kind": "expr",
+            "content": "3(25m + 8)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "IND_FINISH_DIVIDES"
+        ]
+      }
+    }
+  ]
+}

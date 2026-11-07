@@ -1,0 +1,116 @@
+{
+  "id": "proofs.contrapositive.ch5-ex24",
+  "course": "proofs",
+  "topic": "contrapositive",
+  "kind": "divisibility_proof",
+  "title": "Ex 5.24 · Multiplying congruences",
+  "prompt": "Let $a, b, c, d, n$ be integers with $n \\ge 1$. Prove that if $a \\equiv b \\pmod n$ and $c \\equiv d \\pmod n$, then $ac \\equiv bd \\pmod n$, that is, $n \\mid (ac - bd)$.",
+  "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+  "difficulty": 3,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch5",
+    "congruence"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "n"
+    ],
+    "hypotheses": [
+      {
+        "var": "a",
+        "divisor": "n",
+        "remainder": "b"
+      },
+      {
+        "var": "c",
+        "divisor": "n",
+        "remainder": "d"
+      }
+    ],
+    "target": "a c - b d",
+    "goal": {
+      "divisor": "n"
+    }
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "Write a = nj + b and c = nk + d, with two different new letters.",
+    "Multiply them out; the bd terms cancel and n divides everything else."
+  ],
+  "solution": [
+    "Since $n \\mid (a - b)$ and $n \\mid (c - d)$: $a = nj + b$ and $c = nk + d$ for integers $j, k$.",
+    "$ac - bd = (nj + b)(nk + d) - bd = n^2jk + njd + nkb = n(njk + jd + kb)$.",
+    "The bracket is an integer, so $n \\mid (ac - bd)$. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 5 exercises, #24 (p. 136)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses Definition 5.1 (congruence)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "substitute both",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = nj + b"
+          },
+          {
+            "kind": "let",
+            "content": "c = nk + d"
+          },
+          {
+            "kind": "expr",
+            "content": "(nj + b)(nk + d) - b d"
+          },
+          {
+            "kind": "expr",
+            "content": "n^2 j k + n j d + n k b"
+          },
+          {
+            "kind": "witness",
+            "content": "n j k + j d + k b"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "same letter for both",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = nk + b"
+          },
+          {
+            "kind": "let",
+            "content": "c = nk + d"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "SAME_FRESH_VARIABLE"
+        ]
+      }
+    }
+  ]
+}

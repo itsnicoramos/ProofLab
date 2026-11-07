@@ -1,0 +1,92 @@
+{
+  "id": "precalc.trig.exact-sine",
+  "course": "precalc",
+  "topic": "trig",
+  "kind": "expression",
+  "title": "An exact trig value",
+  "prompt": "Find the exact value of $\\sin\\!\\left(\\dfrac{4\\pi}{3}\\right)$.",
+  "answer_format": "An exact number (radicals allowed), no decimals.",
+  "difficulty": 1,
+  "tags": [
+    "unit circle",
+    "exact values"
+  ],
+  "data": {
+    "variables": {},
+    "expression": "sin(4pi/3)",
+    "form": "exact",
+    "forbid": [
+      "sin",
+      "cos",
+      "tan"
+    ]
+  },
+  "answer": "-sqrt(3)/2",
+  "mistakes": [],
+  "hints": [
+    "4π/3 is in quadrant III. What's the reference angle, and what sign does sine have there?"
+  ],
+  "solution": [
+    "$\\frac{4\\pi}{3}$ lies in quadrant III with reference angle $\\frac{\\pi}{3}$.",
+    "$\\sin\\frac{\\pi}{3} = \\frac{\\sqrt3}{2}$ and sine is negative in quadrant III, so the value is $-\\frac{\\sqrt3}{2}$."
+  ],
+  "reference": {
+    "book": "openstax-precalc2e",
+    "section": "5.2 Unit Circle: Sine and Cosine Functions",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "exact",
+      "submission": {
+        "steps": [],
+        "answer": "-√3/2"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "decimal",
+      "submission": {
+        "steps": [],
+        "answer": "-0.866"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "INEXACT"
+        ]
+      }
+    },
+    {
+      "name": "wrong sign",
+      "submission": {
+        "steps": [],
+        "answer": "sqrt(3)/2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "SIGN_ERROR"
+        ]
+      }
+    },
+    {
+      "name": "didn't evaluate",
+      "submission": {
+        "steps": [],
+        "answer": "sin(4pi/3)"
+      },
+      "expect": {
+        "status": "partial",
+        "hint_codes": [
+          "FORM_NOT_EVALUATED"
+        ]
+      }
+    }
+  ]
+}

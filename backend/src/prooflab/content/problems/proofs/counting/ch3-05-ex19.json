@@ -1,0 +1,88 @@
+{
+  "id": "proofs.counting.ch3-05-ex19",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.5 #19 · Counting flushes",
+  "prompt": "A 5-card poker hand is a set of 5 cards from a standard 52-card deck (13 cards in each of 4 suits); the order of the cards doesn't matter. A hand is a flush if all 5 cards are of the same suit. How many different flushes are there?",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "combinations",
+    "cards"
+  ],
+  "data": {},
+  "answer": "4*binom(13, 5)",
+  "mistakes": [
+    {
+      "answer": "binom(13, 5)",
+      "hint": "That counts the flushes in one particular suit. There are four suits to choose from."
+    },
+    {
+      "answer": "4*13*12*11*10*9",
+      "hint": "A hand is a set of cards: the order in which they are dealt doesn't matter."
+    },
+    {
+      "answer": "binom(52, 5)",
+      "hint": "That counts every 5-card hand, not just the flushes."
+    }
+  ],
+  "hints": [
+    "First choose the suit, then choose which 5 of that suit's 13 cards are in the hand."
+  ],
+  "solution": [
+    "Choose the suit: 4 ways. Choose 5 of its 13 cards: $\\binom{13}{5} = 1287$ ways.",
+    "So there are $4 \\cdot 1287 = 5148$ flushes."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.5 exercises, #19 (p. 89)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses combinations (Section 3.5)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "5148"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "binom(13, 5)"
+          }
+        ],
+        "answer": "4*binom(13, 5)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "binom(13, 5)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

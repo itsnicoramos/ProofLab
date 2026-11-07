@@ -1,0 +1,95 @@
+{
+  "id": "proofs.counting.ch3-08-ex05",
+  "course": "proofs",
+  "topic": "counting",
+  "kind": "count",
+  "title": "Ex 3.8 #5 · Grabbing 15 balls when there's one white ball",
+  "prompt": "A bag holds 20 red balls, 20 blue balls and 20 green balls (balls of the same color are identical), plus a single white ball. You reach in and grab 15 balls. How many different outcomes are possible?",
+  "answer_format": "A whole number, or an expression for it like 26^4 or binom(10, 3).",
+  "difficulty": 2,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch3",
+    "multisets",
+    "stars-and-bars",
+    "addition-principle"
+  ],
+  "data": {},
+  "answer": "binom(17, 15) + binom(16, 14)",
+  "mistakes": [
+    {
+      "answer": "binom(18, 15)",
+      "hint": "That treats white like the other colors, as if you could grab several white balls. There is only one."
+    },
+    {
+      "answer": "binom(17, 15)",
+      "hint": "That counts only the grabs without the white ball."
+    },
+    {
+      "answer": "2*binom(17, 15)",
+      "hint": "When the white ball is in your hand, only 14 of the grabbed balls are red, blue or green."
+    }
+  ],
+  "hints": [
+    "Split into two cases: the white ball is in your grab, or it isn't.",
+    "In each case the rest of the grab is a multiset of red, blue and green balls, which stars and bars counts. You take at most 15 of these, so the limit of 20 per color never matters."
+  ],
+  "solution": [
+    "Without the white ball, the grab is a 15-element multiset of red, blue and green: 15 stars and 2 bars, so $\\binom{17}{15} = 136$ outcomes.",
+    "With the white ball, the other 14 balls form a multiset of red, blue and green: $\\binom{16}{14} = 120$ outcomes.",
+    "By the addition principle there are $136 + 120 = 256$ outcomes."
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Section 3.8 exercises, #5 (p. 103)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses multisets and stars and bars (Section 3.8) with the addition principle."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "correct count",
+      "submission": {
+        "steps": [],
+        "answer": "256"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "correct expression",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "binom(17, 15)"
+          },
+          {
+            "kind": "expr",
+            "content": "binom(16, 14)"
+          }
+        ],
+        "answer": "binom(17, 15) + binom(16, 14)"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "common slip",
+      "submission": {
+        "steps": [],
+        "answer": "binom(18, 15)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "KNOWN_MISTAKE"
+        ]
+      }
+    }
+  ]
+}

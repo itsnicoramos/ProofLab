@@ -1,0 +1,122 @@
+{
+  "id": "proofs.contradiction.ch6-ex08",
+  "course": "proofs",
+  "topic": "contradiction",
+  "kind": "impossibility_proof",
+  "title": "Ex 6.8 · If a² + b² = c², then a or b is even",
+  "prompt": "Use proof by contradiction. Let $a, b, c$ be integers with $a^2 + b^2 = c^2$. Prove that $a$ or $b$ is even. Suppose, for the sake of contradiction, that $a$ and $b$ are both odd. Show that then $a^2 + b^2 - c^2$ is never divisible by 4, so it can't be 0. Split into cases on the parity of $c$.",
+  "answer_format": "A structured proof: let, case, expr and form steps (notes optional). No final answer box. Use case steps to split into possibilities.",
+  "difficulty": 3,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch6",
+    "contradiction"
+  ],
+  "data": {
+    "variables": [
+      "a",
+      "b",
+      "c"
+    ],
+    "hypotheses": [
+      {
+        "var": "a",
+        "is": "odd"
+      },
+      {
+        "var": "b",
+        "is": "odd"
+      }
+    ],
+    "target": "a^2 + b^2 - c^2",
+    "divisor": 4,
+    "forbidden": 0,
+    "conclusion": "with $a$ and $b$ odd, $a^2 + b^2 - c^2$ leaves remainder 1 or 2 when divided by 4, so it can't be 0. That contradicts $a^2 + b^2 = c^2$, so $a$ or $b$ is even. ∎"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "The negation of 'a or b is even' is 'a and b are both odd' (De Morgan). Assume that.",
+    "Write a and b with let steps using two different new letters, like a = 2m + 1 and b = 2n + 1.",
+    "Then split into cases c = 2k and c = 2k + 1, and write a² + b² − c² as 4·(integer) + r."
+  ],
+  "solution": [
+    "Suppose for the sake of contradiction that $a^2 + b^2 = c^2$ and $a, b$ are both odd: $a = 2m + 1$, $b = 2n + 1$ for integers $m, n$. Then $a^2 + b^2 = 4(m^2 + m + n^2 + n) + 2$.",
+    "Case $c = 2k$: $a^2 + b^2 - c^2 = 4(m^2 + m + n^2 + n - k^2) + 2$.",
+    "Case $c = 2k + 1$: $a^2 + b^2 - c^2 = 4(m^2 + m + n^2 + n - k^2 - k) + 1$.",
+    "In neither case is $a^2 + b^2 - c^2$ divisible by 4, so it isn't 0, contradicting $a^2 + b^2 = c^2$. Hence $a$ or $b$ is even. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 6 exercises, #8 (p. 144)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses proof by contradiction (Section 6.2), DeMorgan's law, Definition 4.2 (odd), and cases on parity."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "cases on c",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2m + 1"
+          },
+          {
+            "kind": "let",
+            "content": "b = 2n + 1"
+          },
+          {
+            "kind": "case",
+            "content": "c = 2k"
+          },
+          {
+            "kind": "expr",
+            "content": "(2m + 1)^2 + (2n + 1)^2 - 4k^2"
+          },
+          {
+            "kind": "form",
+            "content": "4(m^2 + m + n^2 + n - k^2) + 2"
+          },
+          {
+            "kind": "case",
+            "content": "c = 2k + 1"
+          },
+          {
+            "kind": "form",
+            "content": "4(m^2 + m + n^2 + n - k^2 - k) + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "same letter for a and b",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "a = 2k + 1"
+          },
+          {
+            "kind": "let",
+            "content": "b = 2k + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "SAME_FRESH_VARIABLE"
+        ]
+      }
+    }
+  ]
+}

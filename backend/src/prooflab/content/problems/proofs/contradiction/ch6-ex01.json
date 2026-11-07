@@ -1,0 +1,102 @@
+{
+  "id": "proofs.contradiction.ch6-ex01",
+  "course": "proofs",
+  "topic": "contradiction",
+  "kind": "impossibility_proof",
+  "title": "Ex 6.1 · If n is odd, then n² is odd",
+  "prompt": "Use proof by contradiction. Let $n$ be an integer. Prove that if $n$ is odd, then $n^2$ is odd. Suppose, for the sake of contradiction, that $n$ is odd but $n^2$ is even; the steps below show that $n^2$ can't be even.",
+  "answer_format": "A structured proof: let, case, expr and form steps (notes optional). No final answer box.",
+  "difficulty": 1,
+  "tags": [
+    "math123",
+    "book-of-proof",
+    "ch6",
+    "contradiction"
+  ],
+  "data": {
+    "variables": [
+      "n"
+    ],
+    "hypotheses": [
+      {
+        "var": "n",
+        "is": "odd"
+      }
+    ],
+    "target": "n^2",
+    "divisor": 2,
+    "forbidden": 0,
+    "conclusion": "$n^2$ is odd, so it can't also be even. That contradicts the assumption that $n^2$ is even, so $n^2$ is odd. ∎"
+  },
+  "answer": "",
+  "mistakes": [],
+  "hints": [
+    "In a proof by contradiction you keep the hypothesis (n is odd), assume the conclusion is false (n² is even), and show the two can't both hold.",
+    "Write n = 2k + 1 with a let step, expand n², and put it in the form 2·(integer) + 1."
+  ],
+  "solution": [
+    "Suppose for the sake of contradiction that $n$ is odd and $n^2$ is even.",
+    "Since $n$ is odd, $n = 2k + 1$ for some integer $k$, so $n^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1$.",
+    "That makes $n^2$ odd, contradicting the assumption that $n^2$ is even. So $n^2$ is odd. $\\blacksquare$"
+  ],
+  "reference": {
+    "book": "hammack-bop3",
+    "section": "Chapter 6 exercises, #1 (p. 144)",
+    "note": "This exact exercise, restated in ProofLab's words. Uses proof by contradiction (Section 6.2) and Definition 4.2 (odd)."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "contradiction proof",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 2k + 1"
+          },
+          {
+            "kind": "expr",
+            "content": "(2k + 1)^2"
+          },
+          {
+            "kind": "expr",
+            "content": "4k^2 + 4k + 1"
+          },
+          {
+            "kind": "form",
+            "content": "2(2k^2 + 2k) + 1"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "dropped the + 1",
+      "submission": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "n = 2k + 1"
+          },
+          {
+            "kind": "form",
+            "content": "n^2 = 2(2k^2 + 2k)"
+          }
+        ],
+        "answer": null
+      },
+      "expect": {
+        "status": "incorrect",
+        "first_error": 1,
+        "hint_codes": [
+          "FORM_NOT_EQUAL"
+        ]
+      }
+    }
+  ]
+}

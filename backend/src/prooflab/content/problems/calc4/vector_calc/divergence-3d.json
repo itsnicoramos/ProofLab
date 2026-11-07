@@ -1,0 +1,81 @@
+{
+  "id": "calc4.vector_calc.divergence-3d",
+  "course": "calc4",
+  "topic": "vector_calc",
+  "kind": "divergence",
+  "title": "Divergence of a 3D field",
+  "prompt": "Find $\\operatorname{div}\\mathbf F$ for $\\mathbf F(x,y,z) = \\langle x^2 y,\\ yz,\\ xz^2 \\rangle$.",
+  "answer_format": "One expression in x, y, z.",
+  "difficulty": 1,
+  "tags": [
+    "divergence"
+  ],
+  "data": {
+    "field": [
+      "x^2 y",
+      "y z",
+      "x z^2"
+    ]
+  },
+  "answer": "2xy + z + 2xz",
+  "mistakes": [],
+  "hints": [
+    "div F = ∂P/∂x + ∂Q/∂y + ∂R/∂z, where F = ⟨P, Q, R⟩.",
+    "Differentiate each component only with respect to its own variable."
+  ],
+  "solution": [
+    "$\\frac{\\partial}{\\partial x}(x^2y) = 2xy$, $\\frac{\\partial}{\\partial y}(yz) = z$, $\\frac{\\partial}{\\partial z}(xz^2) = 2xz$.",
+    "$\\operatorname{div}\\mathbf F = 2xy + z + 2xz$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "6.5 Divergence and Curl",
+    "note": "Original problem."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "sum of partials",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "2xy + z + 2xz"
+          }
+        ],
+        "answer": "2xy + z + 2xz"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "computed the curl instead",
+      "submission": {
+        "steps": [],
+        "answer": "<-y, -z^2, -x^2>"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "CURL_NOT_DIV"
+        ]
+      }
+    },
+    {
+      "name": "paired components with the wrong variables",
+      "submission": {
+        "steps": [],
+        "answer": "x^2 + y + z^2"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "DIV_MIXED_PARTIALS"
+        ]
+      }
+    }
+  ]
+}

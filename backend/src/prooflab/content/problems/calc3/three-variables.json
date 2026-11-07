@@ -1,0 +1,73 @@
+{
+  "id": "calc3.partials.three-variables",
+  "course": "calc3",
+  "topic": "partials",
+  "kind": "partial_derivative",
+  "title": "Three variables",
+  "prompt": "Find $\\dfrac{\\partial f}{\\partial z}$ for $f(x, y, z) = xyz + \\sin(xz)$.",
+  "answer_format": "An expression in x, y and z.",
+  "difficulty": 1,
+  "tags": [
+    "partial derivatives",
+    "chain rule"
+  ],
+  "data": {
+    "function": "x y z + sin(x z)",
+    "variables": [
+      "x",
+      "y",
+      "z"
+    ],
+    "respect": [
+      "z"
+    ]
+  },
+  "answer": "x y + x cos(x z)",
+  "mistakes": [],
+  "hints": [
+    "Treat x and y as constants. The sine term needs the chain rule."
+  ],
+  "solution": [
+    "$\\frac{\\partial}{\\partial z}(xyz) = xy$.",
+    "$\\frac{\\partial}{\\partial z}\\sin(xz) = \\cos(xz)\\cdot x$.",
+    "So $f_z = xy + x\\cos(xz)$."
+  ],
+  "reference": {
+    "book": "openstax-calc3",
+    "section": "4.3 Partial Derivatives",
+    "note": "Original problem; see functions of more than two variables."
+  },
+  "review": {
+    "status": "draft"
+  },
+  "examples": [
+    {
+      "name": "chain rule in z",
+      "submission": {
+        "steps": [
+          {
+            "kind": "expr",
+            "content": "∂f/∂z = xy + x cos(xz)"
+          }
+        ],
+        "answer": "x(y + cos(x z))"
+      },
+      "expect": {
+        "status": "correct"
+      }
+    },
+    {
+      "name": "took the x-partial",
+      "submission": {
+        "steps": [],
+        "answer": "y z + z cos(x z)"
+      },
+      "expect": {
+        "status": "incorrect",
+        "hint_codes": [
+          "WRONG_VARIABLE"
+        ]
+      }
+    }
+  ]
+}
