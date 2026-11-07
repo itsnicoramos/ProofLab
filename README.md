@@ -119,6 +119,9 @@ PROOFLAB_TEST_COURSES=calc1 uv run pytest tests/test_content.py
 
 ## Live on Vercel
 
+- Website: https://prooflab-ruby.vercel.app
+- Checker API: https://prooflab-api.vercel.app (try `/health`)
+
 The website and the checker deploy to Vercel from `main` (two projects, `frontend/` and
 `backend/`; see `SPEC.md` §18). The hosted copy has no progress database (progress stays in
 each browser) and reads only text files; run it locally for photo and PDF scanning and for

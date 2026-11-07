@@ -776,8 +776,8 @@ Two Vercel projects deploy from the same GitHub repository (`itsnicoramos/ProofL
 
 | Project | Root | What runs |
 |---|---|---|
-| `prooflab` | `frontend/` | the Next.js website |
-| `prooflab-api` | `backend/` | the FastAPI checker as a Python function (`index.py`, `[tool.vercel] entrypoint = "index:app"`) |
+| `prooflab` | `frontend/` | the Next.js website, https://prooflab-ruby.vercel.app |
+| `prooflab-api` | `backend/` | the FastAPI checker as a Python function (`index.py`, `[tool.vercel] entrypoint = "index:app"`), https://prooflab-api.vercel.app |
 
 The website's `PROOFLAB_API_URL` points at the checker's production URL; the browser never
 calls the checker directly.
