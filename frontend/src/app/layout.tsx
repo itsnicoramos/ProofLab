@@ -87,10 +87,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             >
               Typing math
             </Link>
-            <p>
-              Verdicts come from SymPy and written rules, never from AI. Problems marked draft have
-              machine-checked answer keys that a person hasn&apos;t reviewed yet.
-            </p>
+            <p>&copy; 2026 ProofLab. All rights reserved.</p>
           </div>
         </footer>
         <SyncAgent />
