@@ -13,6 +13,7 @@ import { ActiveMobileMenu, MobileMenu } from "@/components/MobileNav";
 import { SearchDialog } from "@/components/SearchDialog";
 import { SyncAgent } from "@/components/SyncAgent";
 import { ActiveSectionLink, SectionLink } from "@/components/TestsLink";
+import { ActiveXpLink, XpLink } from "@/components/XpLink";
 
 // DESIGN.md: serif for headings (textbook voice beside KaTeX), Geist for UI, mono for input.
 const sourceSerif = Source_Serif_4({ variable: "--font-source-serif", subsets: ["latin"] });
@@ -66,6 +67,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                     <ActiveSectionLink {...s} />
                   </Suspense>
                 ))}
+                <Suspense fallback={<XpLink active={false} />}>
+                  <ActiveXpLink />
+                </Suspense>
               </nav>
               <SearchDialog />
               <div className="sm:hidden">

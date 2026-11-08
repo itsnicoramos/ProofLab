@@ -15,6 +15,7 @@ import {
 import { DifficultyDots, StatusIcon } from "@/components/Badges";
 import { ChoiceView } from "@/components/ChoiceView";
 import { Workspace, type WorkspaceProblem } from "@/components/Workspace";
+import { partsText, XpNote } from "@/components/XpNote";
 import { gradeChoices, gradeTest } from "@/lib/actions";
 import { gradeFromVerdict, recordProblem, useLearn } from "@/lib/learn";
 import { firstStepKind, usesAnswer, VERDICT_LABEL } from "@/lib/labels";
@@ -34,6 +35,7 @@ import {
   useTypedFlags,
 } from "@/lib/storage";
 import { randomSeed, testHref, type TestSettings } from "@/lib/testUrl";
+import { recordTest, useXp } from "@/lib/xp";
 import type { ChoiceQuestion, Verdict, VerdictStatus } from "@/lib/types";
 
 export interface TestQuestion {
@@ -242,6 +244,17 @@ export function TestRunner({
           );
         }
       }
+      // XP (SPEC §19): the facts of this submission; the XP is worked out from them.
+      recordTest(testId, settings.course, {
+        kind: settings.kind,
+        questions: questions.map((q) => ({
+          item: q.variantOf ? null : q.id,
+          difficulty: q.difficulty,
+          format: isChoice(q) ? "choice" : "written",
+          status: results[q.id]?.verdict.status ?? "incorrect",
+          blank: isBlankResult(results[q.id]),
+        })),
+      });
       focusResults.current = true;
       saveTestRecord(testId, {
         ...meta,
@@ -273,6 +286,7 @@ export function TestRunner({
     <div className="space-y-8">
       {graded ? (
         <Results
+          testId={testId}
           questions={questions}
           results={graded.results ?? {}}
           score={graded.score ?? 0}
@@ -482,6 +496,7 @@ function ChoiceAnswer({
 const STATUS_ORDER: VerdictStatus[] = ["correct", "partial", "incorrect", "invalid"];
 
 function Results({
+  testId,
   questions,
   results,
   score,
@@ -491,6 +506,7 @@ function Results({
   onRetake,
   onNewTest,
 }: {
+  testId: string;
   questions: TestQuestion[];
   results: Record<string, ExamResult>;
   score: number;
@@ -502,6 +518,7 @@ function Results({
 }) {
   const total = questions.length;
   const percent = total ? Math.round((score / total) * 100) : 0;
+  const xpTest = useXp().summary.tests[testId] ?? null;
   const isBlank = isBlankResult;
   const blank = questions.filter((q) => isBlank(results[q.id])).length;
   const counts = STATUS_ORDER.map((status) => ({
@@ -545,6 +562,14 @@ function Results({
           <p className="text-sm text-muted">
             Took {formatMinutes(elapsed)}, against about {suggestedMinutes} min suggested.
           </p>
+        )}
+        {xpTest && (
+          <div className="pt-1">
+            <XpNote uids={[xpTest.latest.uid]} breakdown={false} />
+            {xpTest.latest.xp > 0 && xpTest.latest.parts.length > 0 && (
+              <p className="text-sm text-muted">{partsText(xpTest.latest.parts)}</p>
+            )}
+          </div>
         )}
       </div>
 
@@ -614,6 +639,12 @@ function Results({
         >
           Build a different test
         </Link>
+        {xpTest && xpTest.best > 0 && (
+          <p className="w-full text-xs text-muted">
+            A retake pays only the XP above your best on this test ({xpTest.best} XP). A new
+            test pays in full.
+          </p>
+        )}
       </div>
     </section>
   );

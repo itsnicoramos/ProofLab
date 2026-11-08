@@ -1,8 +1,8 @@
 // Keeps this browser's copy of the student's progress in step with the SQLite progress
 // database on the Mac (SPEC §17). Push first (the outbox), then pull and merge:
 //
-// - reviews: union by uid (an append-only log, so devices never conflict); a recorded reset
-//   removes the reviews made before it;
+// - reviews and the XP activity log: union by uid (append-only logs, so devices never
+//   conflict); a recorded reset removes the events made before it;
 // - best verdicts: the better one wins;
 // - notes decks and test records: the newer copy wins; a deletion on any device removes the
 //   copy everywhere; anything still waiting in the outbox is left alone.
@@ -18,6 +18,8 @@ import { useSyncExternalStore } from "react";
 import { deckOp, type NoteDeck, readAllDecks, writeDecks } from "./decks";
 import { readReviews, type Review, writeReviews } from "./learn";
 import { dropSent, enqueue, pendingSlots, readOutbox, type StoreOp } from "./outbox";
+import { backfillEarlierWork, readActivity, writeActivity } from "./xp";
+import type { Activity } from "./xpRules";
 import {
   mergeProgress,
   readAllProgress,
@@ -45,11 +47,19 @@ interface Snapshot {
     deleted: boolean;
   }[];
   tests: { id: string; record: TestRecord | null; updated_at: number; deleted: boolean }[];
+  activity?: Activity[];
+  activity_reset_at?: number | null;
 }
 
 // ---------------------------------------------------------------- status (for the UI)
 
 let status: SyncStatus = "idle";
+// Once the server has said it keeps no database, stay "local" while later runs are in flight,
+// so the UI never flickers to "saved on every device" (the Vercel deployment).
+let noDatabase = false;
+// The last "Reset XP" the database recorded, so the one-time backfill doesn't bring back
+// earlier work a reset on another device already forgot.
+let activityResetAt: number | null = null;
 let lastSaved: number | null = null;
 const listeners = new Set<() => void>();
 
@@ -120,11 +130,11 @@ async function push(): Promise<boolean> {
     });
     if (res.status === 404) throw new NoDatabase();
     if (res.status === 422) {
-      dropSent(batch.length); // malformed changes would block the queue forever
+      dropSent(batch); // malformed changes would block the queue forever
       continue;
     }
     if (!res.ok) return false;
-    dropSent(batch.length);
+    dropSent(batch);
   }
   return true;
 }
@@ -143,6 +153,20 @@ function mergeReviews(server: Review[], resetAt: number | null): void {
   const missing = kept.filter((r) => !serverUids.has(r.uid) && !pending.has(r.uid));
   if (missing.length) enqueue(...missing.map((r) => ({ op: "review" as const, ...r })));
   if (extra.length || kept.length !== local.length) writeReviews([...kept, ...extra]);
+}
+
+function mergeActivity(server: Activity[], resetAt: number | null): void {
+  const local = readActivity();
+  const seen = new Set(local.map((e) => e.uid));
+  const after = (e: Activity) => resetAt === null || e.at > resetAt;
+  const extra = server.filter((e) => !seen.has(e.uid) && after(e));
+  // A recorded "Reset XP" removes the events made before it, on every device.
+  const kept = local.filter(after);
+  const serverUids = new Set(server.map((e) => e.uid));
+  const pending = new Set(readOutbox().flatMap((op) => (op.op === "activity" ? [op.uid] : [])));
+  const missing = kept.filter((e) => !serverUids.has(e.uid) && !pending.has(e.uid));
+  if (missing.length) enqueue(...missing.map((e) => ({ op: "activity" as const, ...e })));
+  if (extra.length || kept.length !== local.length) writeActivity([...kept, ...extra]);
 }
 
 function mergeAllProgress(server: Record<string, string>): void {
@@ -234,6 +258,8 @@ async function pull(): Promise<boolean> {
   mergeAllProgress(snap.progress ?? {});
   mergeDecks(snap.decks ?? []);
   mergeTests(snap.tests ?? []);
+  activityResetAt = snap.activity_reset_at ?? null;
+  mergeActivity(snap.activity ?? [], activityResetAt);
   return true;
 }
 
@@ -249,17 +275,25 @@ export function syncNow(): Promise<void> {
     return running;
   }
   running = (async () => {
-    setStatus("syncing");
+    setStatus(noDatabase ? "local" : "syncing");
     try {
       seedOnce();
       const pushed = await push();
       // Only merge once our own changes are in: then the database is the full picture.
       const pulled = pushed ? await pull() : false;
-      setStatus(pushed && pulled ? "saved" : "offline");
+      if (pulled) {
+        noDatabase = false;
+        // Other devices' live XP events are merged now, so the one-time backfill of earlier
+        // work can skip anything they already cover.
+        backfillEarlierWork(activityResetAt);
+      }
+      setStatus(pushed && pulled ? "saved" : noDatabase ? "local" : "offline");
     } catch (error) {
       if (error instanceof NoDatabase) {
         // Nothing will ever take the queue on this server; progress stays in this browser.
-        dropSent(readOutbox().length);
+        noDatabase = true;
+        dropSent(readOutbox());
+        backfillEarlierWork();
         setStatus("local");
       } else {
         setStatus("offline");

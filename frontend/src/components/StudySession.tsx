@@ -6,10 +6,11 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { ChoiceView } from "@/components/ChoiceView";
 import { Rich } from "@/components/Rich";
+import { XpNote } from "@/components/XpNote";
 import { loadDeck } from "@/lib/actions";
 import { getDeck, noteItemId } from "@/lib/decks";
 import {
@@ -25,6 +26,7 @@ import {
 } from "@/lib/learn";
 import { COURSE_SHORT, isCourseId, topicLabel } from "@/lib/labels";
 import type { DeckCard } from "@/lib/types";
+import { recordCard } from "@/lib/xp";
 
 const NEW_PER_SESSION = 20;
 const QUIZ_LENGTH = 10;
@@ -192,9 +194,17 @@ function Review({ cards, cram }: { cards: SessionCard[]; cram: boolean }) {
   const [position, setPosition] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [graded, setGraded] = useState(0);
+  const [xpUids, setXpUids] = useState<string[]>([]);
 
   const card = queue?.[position] ?? null;
   const previews = useMemo(() => (card ? previewIntervals(learn, card.id) : []), [learn, card]);
+  // The grade button just pressed disappears with the last card: move focus to the summary
+  // heading so keyboard and screen-reader users land on the result (and the XP earned).
+  const endHeading = useRef<HTMLHeadingElement>(null);
+  const finished = !card;
+  useEffect(() => {
+    if (finished) endHeading.current?.focus();
+  }, [finished]);
 
   const grade = useCallback(
     (g: Grade) => {
@@ -204,6 +214,9 @@ function Review({ cards, cram }: { cards: SessionCard[]; cram: boolean }) {
       } else {
         review(card.id, card.meta, g);
       }
+      // 1 XP a card a day, whatever the grade: you grade yourself, so honesty costs nothing.
+      const uid = recordCard({ item: card.id, course: card.meta.course, topic: card.meta.topic });
+      setXpUids((u) => [...u, uid]);
       setGraded((n) => n + 1);
       // "Again" comes back later in this same session (a short learning step).
       if (g === 1) setQueue([...queue, card]);
@@ -233,12 +246,15 @@ function Review({ cards, cram }: { cards: SessionCard[]; cram: boolean }) {
     const nothing = queue.length === 0;
     return (
       <section className="space-y-4 rounded-xl border border-line bg-surface p-5 sm:p-6">
-        <h2 className="text-xl">{nothing ? "All caught up" : "Session done"}</h2>
+        <h2 ref={endHeading} tabIndex={-1} className="text-xl outline-none">
+          {nothing ? "All caught up" : "Session done"}
+        </h2>
         <p className="text-muted">
           {nothing
             ? `None of these ${cards.length} cards are due, and you've seen them all before. They'll come back when they're due.`
             : `You graded ${graded} card${graded === 1 ? "" : "s"}. Each one is scheduled for its next review.`}
         </p>
+        <XpNote uids={xpUids} breakdown={false} />
         <div className="flex flex-wrap gap-3">
           {nothing && cards.length > 0 && (
             <button
@@ -359,6 +375,12 @@ function Quiz({ cards }: { cards: SessionCard[] }) {
   const [position, setPosition] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
   const [score, setScore] = useState(0);
+  const [xpUids, setXpUids] = useState<string[]>([]);
+  const endHeading = useRef<HTMLHeadingElement>(null);
+  const finished = questions.length > 0 && position >= questions.length;
+  useEffect(() => {
+    if (finished) endHeading.current?.focus();
+  }, [finished]);
 
   if (questions.length === 0) {
     return <p className="text-muted">A quiz needs at least four cards with different terms.</p>;
@@ -367,11 +389,14 @@ function Quiz({ cards }: { cards: SessionCard[] }) {
   if (!q) {
     return (
       <section className="space-y-4 rounded-xl border border-line bg-surface p-5 sm:p-6">
-        <h2 className="text-xl">Quiz done</h2>
+        <h2 ref={endHeading} tabIndex={-1} className="text-xl outline-none">
+          Quiz done
+        </h2>
         <p className="font-serif text-4xl">
           {score} <span className="text-2xl text-muted">/ {questions.length}</span>
         </p>
         <p className="text-sm text-muted">Every answer was added to your review schedule.</p>
+        <XpNote uids={xpUids} breakdown={false} />
         <div className="flex flex-wrap gap-3">
           <button
             type="button"
@@ -380,6 +405,7 @@ function Quiz({ cards }: { cards: SessionCard[] }) {
               setPosition(0);
               setPicked(null);
               setScore(0);
+              setXpUids([]);
             }}
             className="h-11 rounded-lg bg-accent px-5 text-sm font-semibold text-accent-ink"
           >
@@ -399,6 +425,11 @@ function Quiz({ cards }: { cards: SessionCard[] }) {
     const right = key === q.correct;
     if (right) setScore((s) => s + 1);
     review(q.card.id, q.card.meta, right ? 3 : 1);
+    // A quiz answer is checked, so only a right one earns XP (1 a card a day).
+    if (right) {
+      const uid = recordCard({ item: q.card.id, course: q.card.meta.course, topic: q.card.meta.topic });
+      setXpUids((u) => [...u, uid]);
+    }
   }
 
   return (

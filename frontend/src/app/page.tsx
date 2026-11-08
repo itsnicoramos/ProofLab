@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { Suspense } from "react";
 
+import { ChapterSolved } from "@/components/ChapterSolved";
 import { ContinueShelf, type ProblemIndexEntry } from "@/components/ContinueShelf";
 import { ProblemCard, SeeAllCard } from "@/components/ProblemCard";
 import { Shelf } from "@/components/Shelf";
+import { TodayStrip } from "@/components/TodayStrip";
 import { getCourses, getProblems } from "@/lib/api";
 import { COURSE_ORDER, topicLabel } from "@/lib/labels";
 import type { ProblemSummary } from "@/lib/types";
@@ -21,6 +23,7 @@ export default function HomePage() {
           that goes wrong and says why.
         </p>
       </header>
+      <TodayStrip />
       <Suspense fallback={<ShelvesSkeleton />}>
         <Shelves />
       </Suspense>
@@ -78,6 +81,7 @@ async function Shelves() {
                   id={`${courseId}-${t.topic}`}
                   title={label}
                   meta={`${list.length} problems`}
+                  progress={<ChapterSolved problemIds={list.map((p) => p.id)} />}
                 >
                   {list.slice(0, HOME_SHELF_LIMIT).map((p) => (
                     <ProblemCard key={p.id} problem={p} />

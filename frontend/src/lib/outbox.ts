@@ -3,6 +3,8 @@
 // agent (lib/sync.ts) sends the queue to the SQLite store on the Mac. The queue itself lives in
 // localStorage, so nothing is lost if the tab closes before it's sent.
 
+import type { Activity } from "./xpRules";
+
 const KEY = "prooflab:v1:outbox";
 const MAX = 5000;
 export const OUTBOX_EVENT = "prooflab:outbox";
@@ -31,7 +33,9 @@ export type StoreOp =
     }
   | { op: "deck_delete"; id: string; updated_at: number }
   | { op: "test"; id: string; record: unknown; updated_at: number }
-  | { op: "test_delete"; id: string; updated_at: number };
+  | { op: "test_delete"; id: string; updated_at: number }
+  | ({ op: "activity" } & Activity)
+  | { op: "reset_activity"; at: number };
 
 export function readOutbox(): StoreOp[] {
   try {
@@ -74,15 +78,33 @@ export function enqueue(...ops: StoreOp[]): void {
     const key = slot(op);
     if (key) queue = queue.filter((q) => slot(q) !== key);
     if (op.op === "reset_reviews") queue = queue.filter((q) => q.op !== "review");
+    if (op.op === "reset_activity") queue = queue.filter((q) => q.op !== "activity");
     queue.push(op);
   }
   writeOutbox(queue);
   window.dispatchEvent(new Event(OUTBOX_EVENT));
 }
 
-/** Remove the first `n` changes once the database has confirmed them. */
-export function dropSent(n: number): void {
-  writeOutbox(readOutbox().slice(n));
+/**
+ * Remove exactly the changes that were sent, once the database has confirmed them. Not "the
+ * first n": while a send is in flight the queue can change under it (a reset clears the queued
+ * reviews or activity and appends itself), and dropping by position would lose that reset.
+ */
+export function dropSent(sent: StoreOp[]): void {
+  const counts = new Map<string, number>();
+  for (const op of sent) {
+    const key = JSON.stringify(op);
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+  writeOutbox(
+    readOutbox().filter((op) => {
+      const key = JSON.stringify(op);
+      const n = counts.get(key) ?? 0;
+      if (n === 0) return true;
+      counts.set(key, n - 1);
+      return false;
+    }),
+  );
 }
 
 /** Ids with a change still waiting, so a pull doesn't overwrite them with older copies. */

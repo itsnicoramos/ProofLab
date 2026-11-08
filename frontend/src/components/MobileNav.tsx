@@ -1,14 +1,15 @@
 "use client";
 
 // Phone navigation (DESIGN.md, Navigation): below the sm breakpoint the top bar keeps the Σ
-// mark, Search and a labelled Menu button. The menu is a side sheet with the study sections,
-// every course and the typing guide. From sm up the top bar shows everything in one row.
+// mark, Search and a labelled Menu button. The menu is a side sheet with the study sections
+// (Progress shows today's XP), every course and the typing guide. From sm up the top bar shows everything in one row.
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRef } from "react";
 
 import { COURSE_ORDER, COURSE_SHORT, courseOfProblemId, isCourseId } from "@/lib/labels";
+import { useXpToday } from "@/lib/xp";
 
 function courseFromPath(pathname: string) {
   const [, section, id] = pathname.split("/");
@@ -25,7 +26,20 @@ const SECTIONS = [
   },
   { href: "/cards", label: "Flashcards", match: (p: string) => p.startsWith("/cards") },
   { href: "/tests", label: "Tests", match: (p: string) => p.startsWith("/tests") },
+  { href: "/progress", label: "Progress", match: (p: string) => p.startsWith("/progress") },
 ];
+
+/** Today's XP beside the Progress row (blank until the browser's copy is read). */
+function TodayXp() {
+  const { ready, todayXp, goal, streak } = useXpToday();
+  if (!ready) return null;
+  const days = streak?.current ?? 0;
+  return (
+    <span className="ml-auto pl-3 text-sm tabular-nums text-muted">
+      {todayXp} / {goal} XP{days > 0 ? ` · ${days}-day streak` : ""}
+    </span>
+  );
+}
 
 function MenuIcon() {
   return (
@@ -96,6 +110,7 @@ export function MobileMenu({ pathname }: { pathname: string | null }) {
                       className={rowClass(current)}
                     >
                       {s.label}
+                      {s.href === "/progress" && <TodayXp />}
                     </Link>
                   </li>
                 );

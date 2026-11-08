@@ -13,6 +13,7 @@ import {
 import { StatusIcon } from "@/components/Badges";
 import { Rich, Tex } from "@/components/Rich";
 import { ScanDialog, type ScanApply } from "@/components/ScanDialog";
+import { XpNote } from "@/components/XpNote";
 import { checkWork, revealSolution } from "@/lib/actions";
 import { gradeFromVerdict, recordProblem } from "@/lib/learn";
 import { linesToSteps } from "@/lib/scan";
@@ -33,13 +34,14 @@ import {
   updateAttempt,
   useAttempt,
 } from "@/lib/storage";
+import { recordReveal, recordSolve, useXpToday } from "@/lib/xp";
 import type { ProblemDetail, Solution, StepResult, StepStatus, Verdict } from "@/lib/types";
 
 export type WorkspaceProblem = Pick<
   ProblemDetail,
   "id" | "kind" | "step_kinds" | "answer_format" | "hint_count"
 > &
-  Partial<Pick<ProblemDetail, "course" | "topic" | "difficulty">>;
+  Partial<Pick<ProblemDetail, "course" | "topic" | "difficulty" | "variant_of">>;
 
 interface CheckedStep {
   content: string;
@@ -100,6 +102,21 @@ export function Workspace({
 }: WorkspaceProps) {
   const exam = mode === "exam";
   const scheduled = useRef(false);
+  // XP (SPEC §19): checks on this visit, and the solve recorded when one first said Correct.
+  const checks = useRef(0);
+  const solved = useRef<string | null>(null);
+  // The XP note shows under the check that earned it; a later check on this visit clears it.
+  const [solveUid, setSolveUid] = useState<string | null>(null);
+  // Solved already today (this visit, an earlier one, or Start over): more solves pay nothing
+  // today, so the XP wording changes. Read from the activity log, the source of truth.
+  const xpItem = problem.variant_of ?? problem.id;
+  const xp = useXpToday();
+  const solvedToday =
+    !exam &&
+    xp.today !== null &&
+    xp.activity.some((e) => e.type === "solve" && e.item === xpItem && e.day === xp.today);
+  // Start over bumps this, so a check still in flight from before is dropped when it lands.
+  const attemptEpoch = useRef(0);
   const locked = exam && result !== null;
   const firstKind = firstStepKind(problem.kind, problem.step_kinds);
   const newKind = problem.step_kinds.includes("expr") ? "expr" : firstKind;
@@ -205,6 +222,25 @@ export function Workspace({
     resetAttempt(draftKey, firstKind);
     setChecked(null);
     setError(null);
+    checks.current = 0;
+    solved.current = null;
+    setSolveUid(null);
+    attemptEpoch.current += 1;
+  }
+
+  /** "Try again": put the cursor on the first step marked wrong (or the answer). */
+  function tryAgain() {
+    const wrong = attempt.steps.find((s) => resultFor(s)?.status === "error");
+    // The answer box needs work unless it was checked correct (an empty one has no result).
+    const answerNeedsWork = hasAnswer && answerResult?.status !== "correct";
+    const target =
+      (wrong && inputs.current.get(wrong.id)) ||
+      (answerNeedsWork && document.getElementById(answerId)) ||
+      inputs.current.get(attempt.steps[attempt.steps.length - 1].id);
+    if (target instanceof HTMLInputElement) {
+      target.focus();
+      if (target.value) target.select();
+    }
   }
 
   // ------------------------------------------------------------- checking
@@ -216,6 +252,7 @@ export function Workspace({
     const seen = attempt.hints.length;
     // Normal checks re-request the latest hint already shown; "another hint" asks for the next.
     const hintsRevealed = options.anotherHint ? seen : Math.max(seen - 1, 0);
+    const epoch = attemptEpoch.current;
     startTransition(async () => {
       const res = await checkWork({
         problemId: problem.id,
@@ -223,6 +260,7 @@ export function Workspace({
         answer: answer || null,
         hintsRevealed,
       });
+      if (epoch !== attemptEpoch.current) return; // "Start over" was pressed while it ran
       if (!res.ok) {
         setError(res.error);
         return;
@@ -246,6 +284,25 @@ export function Workspace({
         );
       }
       recordProgress(problem.id, res.verdict.status);
+      checks.current += 1;
+      // The XP note belongs under the check that earned it; a later check on this visit pays
+      // nothing, so it shows none.
+      if (solved.current) setSolveUid(null);
+      // Correct pays XP once a visit; anything else is "try again" and costs nothing.
+      if (res.verdict.status === "correct" && !solved.current && problem.course && problem.topic) {
+        solved.current = recordSolve(
+          { item: xpItem, course: problem.course, topic: problem.topic },
+          // The first hint appears by itself after a wrong check, so only the ones asked for
+          // with "Show another hint" count: a wrong answer never costs XP.
+          {
+            difficulty: problem.difficulty ?? 0,
+            checks: checks.current,
+            hints: Math.max(0, seen - 1),
+            ...(problem.variant_of ? { variant: true } : {}),
+          },
+        );
+        setSolveUid(solved.current);
+      }
       // The first check on this visit is what you could do from memory; later checks are you
       // fixing it with feedback, so only the first one schedules the next review.
       const grade = gradeFromVerdict(res.verdict.status, seen);
@@ -270,6 +327,13 @@ export function Workspace({
       if (res.ok) {
         setSolution(res.solution);
         setConfirmingSolution(false);
+        if (!exam && problem.course && problem.topic) {
+          recordReveal({
+            item: problem.variant_of ?? problem.id,
+            course: problem.course,
+            topic: problem.topic,
+          });
+        }
       } else {
         setError(res.error);
       }
@@ -311,9 +375,9 @@ export function Workspace({
       className="space-y-5"
       onKeyDown={(e) => {
         // ⌘/Ctrl + Enter checks from any field, including the step-kind menus.
-        if (!exam && e.key === "Enter" && (e.metaKey || e.ctrlKey) && !pending) {
+        if (!exam && e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
           e.preventDefault();
-          submit();
+          if (!pending && !nothingToCheck) submit();
         }
       }}
     >
@@ -426,7 +490,7 @@ export function Workspace({
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.metaKey && !e.ctrlKey) {
                 e.preventDefault();
-                submit();
+                if (!pending && !nothingToCheck) submit();
               }
             }}
             placeholder={locked ? "No answer given" : "Your answer"}
@@ -497,6 +561,9 @@ export function Workspace({
             {!hasAnswer && verdict.answer?.message && (
               <Rich text={verdict.answer.message} className="mt-1.5 text-sm" />
             )}
+            {!exam && !stale && verdict.status === "correct" && solveUid && (
+              <XpNote uids={[solveUid]} className="mt-1.5" />
+            )}
             {feedback.length > 0 && (
               <ul className="mt-2.5 space-y-1.5 text-sm">
                 {feedback.map((h, i) => (
@@ -508,6 +575,30 @@ export function Workspace({
                   </li>
                 ))}
               </ul>
+            )}
+            {!exam && !stale && verdict.status !== "correct" && (
+              <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+                <button
+                  type="button"
+                  onClick={tryAgain}
+                  className="h-11 rounded-lg border border-line bg-surface px-4 text-sm font-medium hover:border-accent"
+                >
+                  Try again
+                </button>
+                <span className="text-sm text-muted">
+                  {solvedToday
+                    ? "You already solved this one today, so it pays no more XP until tomorrow. "
+                    : "No XP yet. "}
+                  {attempt.steps.some((st) => resultFor(st)?.status === "error")
+                    ? "Fix the marked step and check again"
+                    : hasAnswer && answerResult?.status !== "correct"
+                      ? attempt.answer.trim()
+                        ? "Fix your final answer and check again"
+                        : "Enter a final answer and check again"
+                      : "Use the feedback above and check again"}
+                  {solvedToday ? "." : "; trying again costs nothing."}
+                </span>
+              </div>
             )}
           </div>
         )}
@@ -550,6 +641,7 @@ export function Workspace({
               <span className="flex flex-wrap items-center gap-2">
                 <span className="text-muted">
                   Reveal the full solution? Trying a hint first usually teaches more.
+                  {!exam && !solvedToday && " Seeing it means no XP for this problem today."}
                 </span>
                 <button
                   type="button"

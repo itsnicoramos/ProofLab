@@ -79,6 +79,7 @@ async function ProblemContent({ params }: { params: Promise<{ id: string }> }) {
           course: problem.course,
           topic: problem.topic,
           difficulty: problem.difficulty,
+          variant_of: problem.variant_of,
         }}
       />
 

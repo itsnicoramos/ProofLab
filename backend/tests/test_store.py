@@ -88,6 +88,76 @@ def test_tests_round_trip(store):
     assert store.snapshot()["tests"][0]["deleted"]
 
 
+def activity(uid, type_="solve", at=1000, day="2026-11-08", data=None, item="proofs.direct.p1"):
+    event = {
+        "op": "activity",
+        "uid": uid,
+        "type": type_,
+        "day": day,
+        "at": at,
+        "item": item,
+        "course": "proofs",
+        "topic": "direct",
+    }
+    if data is not None:
+        event["data"] = data
+    return event
+
+
+def test_activity_is_append_only_and_idempotent(store):
+    solve = {"difficulty": 2, "checks": 1, "hints": 0}
+    test = {
+        "kind": "midterm",
+        "questions": [{"difficulty": 2, "format": "written", "status": "correct", "blank": False}],
+    }
+    assert store.apply(ops(activity("a", data=solve), activity("b", "reveal", at=900))) == 2
+    assert (
+        store.apply(
+            ops(
+                activity("a", data=solve),
+                activity("c", "test", 1500, data=test, item="midterm-abc"),
+            )
+        )
+        == 1
+    )
+    snap = store.snapshot()
+    assert [e["uid"] for e in snap["activity"]] == ["b", "a", "c"]
+    assert snap["activity"][1]["data"] == solve
+    assert "data" not in snap["activity"][0]  # a reveal has no data
+    assert snap["activity_reset_at"] is None
+    # Undated earlier work keeps its null day.
+    store.apply(
+        ops(activity("old", day=None, at=0, data={"difficulty": 0, "checks": 0, "hints": 0}))
+    )
+    assert store.snapshot()["activity"][0]["day"] is None
+    assert store.counts()["activity"] == 4
+
+
+def test_reset_activity_forgets_everything_before_it(store):
+    store.apply(ops(activity("a", at=1000), activity("b", at=2000), activity("z", day=None, at=0)))
+    store.apply(ops({"op": "reset_activity", "at": 1500}))
+    snap = store.snapshot()
+    assert [e["uid"] for e in snap["activity"]] == ["b"]
+    assert snap["activity_reset_at"] == 1500
+    # An event from before the reset that arrives late (another device) stays forgotten.
+    assert store.apply(ops(activity("late", at=1400), activity("old", day=None, at=0))) == 0
+    assert store.apply(ops(activity("new", at=1600))) == 1
+    # An older reset never moves it back.
+    store.apply(ops({"op": "reset_activity", "at": 100}))
+    assert store.snapshot()["activity_reset_at"] == 1500
+
+
+def test_bad_activity_is_rejected(store):
+    with pytest.raises(ValidationError):
+        ops(activity("x", "bonus"))  # not a kind of event
+    with pytest.raises(ValidationError):
+        ops(activity("x", day="8 Nov"))
+    with pytest.raises(ValidationError):
+        ops({**activity("x"), "xp": 999})  # XP is never sent; it's computed from the facts
+    with pytest.raises(ValueError, match="too large"):
+        store.apply(ops(activity("x", data={"pad": "x" * 30_000})))
+
+
 def test_bad_operations_are_rejected():
     with pytest.raises(ValidationError):
         ops({**review("x"), "grade": 7})

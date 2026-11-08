@@ -429,7 +429,8 @@ tests/
 ```
 
 `uv run pytest` must pass before any change lands. The Docker image has a `test` target that
-runs the suite on Python 3.12.
+runs the suite on Python 3.12. The website's XP rules (§19) have their own unit tests:
+`npm test` in `frontend/` (Node's built-in runner, no extra packages).
 
 ## 10. Roadmap
 
@@ -731,11 +732,12 @@ database (§17), so every device gets the same model.
 
 Below the `sm` breakpoint (640 px) the top bar keeps the Σ mark, Search and a hamburger button
 labelled **Menu**. It opens a side sheet (native `<dialog>`, closes on Close, Esc, a link or a
-tap on the backdrop) with Practice, Flashcards and Tests, every course, and Typing math, the
-current page marked. There is no bottom bar. Every control is at least 44 px tall, keyboard hints
+tap on the backdrop) with Practice, Flashcards, Tests and Progress (with today's XP beside it),
+every course, and Typing math, the current page marked. There is no bottom bar. Every control is at least 44 px tall, keyboard hints
 ("Enter adds a step", "Space") are hidden on touch screens, and the step editor's remove button
 stays visible on touch screens (hover-only on desktop). From `sm` up the single top bar lists
-every course plus Flashcards and Tests.
+every course plus Flashcards, Tests and today's XP (a link to Progress; the streak shows from
+`md` up).
 
 ## 17. Progress database (SQLite)
 
@@ -752,6 +754,7 @@ temporary file.
 | `progress` | best verdict per problem | only goes up (invalid < incorrect < partial < correct) |
 | `decks` | notes decks with their cards (JSON) | newest `updated_at` wins; deletes leave a tombstone |
 | `tests` | practice-test records (start, submit, score, results) | newest `updated_at` wins; deletes leave a tombstone |
+| `activity` | what can earn XP (§19): `uid, type, day, at, item, course, topic, data` (JSON facts, never XP) | append-only, idempotent by `uid`; `reset_activity` clears it, and events from before a reset are refused |
 
 Problems and concept cards stay JSON content files (§4, §15.1); answer drafts stay in each
 browser.
@@ -760,10 +763,13 @@ browser.
 offline. Every change is also queued in an outbox (`lib/outbox.ts`); the sync agent
 (`lib/sync.ts`, mounted in the layout) sends the queue to `POST /api/store` (proxied to the
 backend) a moment after a change, on load, when the tab becomes visible, when the network
-returns, and every 30 s. Once the queue is empty it pulls `GET /store` and merges: reviews by
-union (and local reviews the database no longer has are dropped, which is how a reset reaches
-other devices), verdicts by rank, decks and tests by `updated_at` and tombstones, never
-overwriting anything still in the queue. The first sync on a browser sends everything it had
+returns, and every 30 s. After the database confirms a batch, exactly the changes that were
+sent leave the queue (matched by content, not position), so a reset queued while a batch was in
+flight is never lost. Once the queue is empty it pulls `GET /store` and merges: reviews and XP
+activity by union (events made before a recorded reset, `reviews_reset_at` or
+`activity_reset_at`, are dropped, which is how a reset reaches other devices; anything else the
+database lacks is sent again), verdicts by rank, decks and tests by `updated_at` and
+tombstones, never overwriting anything still in the queue. The first sync on a browser sends everything it had
 from before the database existed.
 
 **The study model is rebuilt from the review log.** `lib/learn.ts` replays the reviews in time
@@ -796,3 +802,107 @@ files only: photos, scanned PDFs and Word files need the checker running on the 
 else (checking, tests, quizzes, new versions, flashcards, cards from pasted notes) works the same.
 Locally nothing changes: `uvicorn prooflab.main:create_app --factory` with the full feature set.
 
+## 19. XP, streaks and the daily goal
+
+Duolingo-style motivation, kept honest: **a right answer earns XP, a wrong one means try
+again** and costs nothing. XP comes only from the deterministic checker's verdict, a test's
+score, or reviewing flashcards (1 XP a card a day, whatever the self-grade); nothing is decided
+by AI. The mechanics are borrowed, not the look: no mascot, gems,
+leagues, hearts, sounds or confetti (DESIGN.md: ProofLab acknowledges earned XP plainly).
+
+### What's stored
+
+`frontend/src/lib/xp.ts` keeps an append-only **activity log** in the browser
+(`prooflab:v1:activity`), queued for the progress database (§17) like reviews. Each event is a
+fact, never an XP amount:
+
+| `type` | Recorded when | `data` |
+|---|---|---|
+| `solve` | a practice check first says Correct on a visit (once per visit; "Start over" allows another) | `difficulty`, `checks` this visit, `hints` asked for with "Show another hint" (the first hint appears by itself after a wrong check and is free), `variant` for a ProofLab-made version |
+| `reveal` | the worked solution is opened in practice | none |
+| `test` | a practice test is submitted | `kind`, and per question `item` (the book problem, null for a version), `difficulty`, `format`, `status`, `blank` |
+| `card` | a flashcard is graded (any grade), or a quiz card is answered right | none |
+
+Every event carries `day`, the browser's local date when it happened, so devices in different
+time zones agree on which day counted. ProofLab-made versions are filed under the base problem.
+
+### XP rules (`frontend/src/lib/xpRules.ts`)
+
+XP is recomputed by replaying the log in time order (same log, same XP, on every device):
+
+- **Solve:** easy 10, medium 15, hard 20; +5 if it was the first check of the visit; −5 for each
+  extra hint asked for (never below 5). The first hint, which a wrong check shows by itself, is
+  free, so a wrong answer never costs XP. 0 if the solution was opened earlier that day, or if this problem
+  already paid that day. Solved on an earlier day before: half, rounded up (a review). A reveal
+  after solving doesn't take XP back.
+- **Test:** per written question 10/15/20 by difficulty (half for partly right); per
+  multiple-choice question 5 if right; blank or wrong 0. If at least half the questions were
+  answered: +5 quiz, +20 midterm, +30 final, and +10 more for 70% or more. A test id that
+  already paid (Retake these questions) pays only what beats its best; a new seed pays in full.
+- **Card:** 1 XP per card per day, whatever the grade (self-graded, so grading honestly costs
+  nothing). Quiz answers pay only when right.
+
+### Goal, streak, level, milestones
+
+- **Daily goal:** 20, 50 or 100 XP (default 50), kept in the browser (`prooflab:v1:goal`).
+- **Streak:** consecutive days with any XP; today counts once it has XP, and the streak stays
+  alive until today ends. Every 7 days in a row earns a **streak freeze** (hold up to 2); a
+  missed past day uses one automatically, otherwise the streak resets.
+- **Level:** level n starts at 50 × n × (n − 1) XP (2 at 100, 3 at 300, 4 at 600, 5 at 1,000).
+- **Milestones**, from real history only: first problem solved, first induction proof, 10
+  different problems solved without asking for an extra hint and without opening the solution
+  before solving (on any day; opening it afterwards to compare doesn't count against it), a
+  perfect quiz, a final at 80% or more, 7- and 30-day streaks, 1,000 XP, and every chapter where
+  all problems are Correct (dated by the day its last problem first became Correct: its first
+  practice solve of the book problem itself, not a ProofLab-made version, or its first right
+  answer in a practice test; the date is left off when a problem has neither on record).
+
+### Where it shows
+
+- Under the Correct verdict that earned it: "+20 XP" and its breakdown ("Medium 15, first try
+  +5"; a floored solve adds "minimum +5" so the parts add up), or why it paid less. Later checks
+  on the same visit show no XP note. Any other verdict shows **Try again**, which puts the cursor
+  on the first step marked wrong, else on the final answer box if it isn't confirmed correct
+  (empty included), else on the last step, plus "No XP yet" and what to do (fix the marked step,
+  enter or fix the final answer, or use the feedback). Once the problem has been solved today
+  (on any visit), "No XP yet" becomes "You already solved this one today, so it pays no more XP
+  until tomorrow", and the "Show solution" confirmation stops saying that opening it means no
+  XP today.
+- Test results: the XP and its breakdown; a note that a retake pays only above the best.
+- The end of a flashcard session or quiz: XP earned.
+- The top bar (from `sm` up): "35 / 50 XP" linking to `/progress`, the streak from `md` up; in
+  the phone menu, the Progress row. The home page: a Today line (XP, streak, problems due for
+  review). Every chapter shelf: "3 of 12 solved" or "Chapter complete".
+- When an action finishes the daily goal: one line, "Daily goal done: 50 XP today. 13-day
+  streak." In practice it is inside the verdict's live region, so screen readers hear it; on the
+  flashcard, quiz and test-result screens focus moves to the result heading, and the line
+  follows it.
+- `/progress`: today and the goal picker, streak and freezes, a 12-week calendar (no XP, some,
+  goal met, freeze used), level and XP by source, chapters (solved count and skill from
+  §15.3), milestones, recent XP, and **Reset XP and streak** (with a confirmation that keeps
+  keyboard focus and says "in this browser" when there is no database; answers, test results,
+  the flashcard schedule and chapter completions stay).
+
+### Earlier work and limits
+
+- Once per browser, right after its first sync with the database (or as soon as it learns
+  there is none), the browser backfills work from before XP existed (`backfillEvents` in
+  `xpRules.ts`), with fixed uids so two devices never count it twice. "Before XP existed" is
+  read from the merged log: the earliest live (non-backfill) event on any device is when XP
+  started for this student; with none yet (a fresh browser, the Vercel site), everything is
+  earlier work. Backfilled: problems already Correct, one per book problem with ProofLab-made
+  versions folded in (flat 10 XP, `day: null`, so they count toward the total and level but not
+  toward a day or streak), unless the log has a live solve for it, it was first worked on after
+  XP started, or a test taken after XP started covers it (a backfilled solve would sort first
+  and turn a live solve into a half-XP review); submitted tests from before XP started (dated;
+  difficulty unknown, so 10 per written point), unless the log has an event for that test; and
+  concept and notes flashcard reviews from before XP started (dated; quiz answers included,
+  right or wrong). Problem flashcards are stored like practice checks, so they can't be told
+  apart and are skipped; hidden courses are skipped; nothing from before a reset the database
+  recorded comes back. The backfill is marked done only once its events are really stored, so
+  a full browser storage retries on the next load instead of losing them.
+- On the Vercel deployment there is no progress database (§18), so XP stays in each browser
+  and a streak doesn't follow the student between devices there.
+- The log lives in the student's browser and could be edited. With one student and no
+  leaderboards that only fools the student; leaderboards would need accounts and the server
+  to recompute XP from its own checks.

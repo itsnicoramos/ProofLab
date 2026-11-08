@@ -1,13 +1,15 @@
 """The student's progress in one SQLite file (SPEC §17). One student, no accounts.
 
 What lives here is what used to live only in each browser: flashcard and problem reviews (the
-study model is rebuilt from them), best verdicts, notes decks and practice-test records. Every
+study model is rebuilt from them), the XP activity log (XP, streaks and the daily goal are
+rebuilt from it, SPEC §19), best verdicts, notes decks and practice-test records. Every
 browser keeps a copy for speed and offline use and syncs with ``GET``/``POST /store``, so a
 phone and a laptop share one schedule. Problems and concept cards stay JSON content files.
 
-Reviews are an append-only event log (idempotent by the browser's ``uid``), so reviews made on
-two devices merge without conflicts. A reset is itself recorded (``reviews_reset_at``): it
-removes the reviews made before it, and browsers drop their copies of exactly those. A review
+Reviews and activity are append-only event logs (idempotent by the browser's ``uid``), so
+events made on two devices merge without conflicts. A reset is itself recorded
+(``reviews_reset_at``, ``activity_reset_at``): it removes the events made before it, and browsers
+drop their copies of exactly those. A review
 the database simply doesn't have (a new or replaced database file) is never treated as deleted:
 browsers send it again. Decks and test records are documents with an
 ``updated_at``: the newer write wins, and deletions leave a tombstone so other devices drop
@@ -68,6 +70,17 @@ CREATE TABLE IF NOT EXISTS tests (
     updated_at INTEGER NOT NULL,
     deleted INTEGER NOT NULL DEFAULT 0
 );
+CREATE TABLE IF NOT EXISTS activity (
+    uid TEXT PRIMARY KEY,
+    type TEXT NOT NULL,
+    day TEXT,
+    at INTEGER NOT NULL,
+    item TEXT NOT NULL,
+    course TEXT NOT NULL,
+    topic TEXT NOT NULL,
+    data TEXT
+);
+CREATE INDEX IF NOT EXISTS activity_at ON activity (at);
 """
 
 
@@ -148,8 +161,38 @@ class TestDeleteOp(_Op):
     updated_at: Millis
 
 
+Day = Annotated[str, StringConstraints(pattern=r"^\d{4}-\d{2}-\d{2}$")]
+
+
+class ActivityOp(_Op):
+    """One thing that can earn XP (SPEC §19): facts only; XP is computed in the browser."""
+
+    op: Literal["activity"]
+    uid: Id
+    type: Literal["solve", "reveal", "test", "card"]
+    day: Day | None = None
+    at: Millis
+    item: Id
+    course: Short
+    topic: Short = ""
+    data: dict[str, Any] | None = None
+
+
+class ResetActivityOp(_Op):
+    op: Literal["reset_activity"]
+    at: Millis
+
+
 Op = Annotated[
-    ReviewOp | ResetReviewsOp | ProgressOp | DeckOp | DeckDeleteOp | TestOp | TestDeleteOp,
+    ReviewOp
+    | ResetReviewsOp
+    | ProgressOp
+    | DeckOp
+    | DeckDeleteOp
+    | TestOp
+    | TestDeleteOp
+    | ActivityOp
+    | ResetActivityOp,
     Field(discriminator="op"),
 ]
 
@@ -161,6 +204,7 @@ class SyncIn(BaseModel):
 
 
 MAX_RECORD_BYTES = 400_000
+MAX_ACTIVITY_BYTES = 20_000
 
 
 # --------------------------------------------------------------------------- the store
@@ -282,6 +326,28 @@ class Store:
                 (op.id, record, op.updated_at),
             )
             return 1
+        if isinstance(op, ActivityOp):
+            row = db.execute("SELECT value FROM meta WHERE key = 'activity_reset_at'").fetchone()
+            if row is not None and op.at <= int(row["value"]):
+                return 0  # made before a reset: it stays forgotten
+            data = None if op.data is None else json.dumps(op.data, ensure_ascii=False)
+            if data is not None and len(data.encode()) > MAX_ACTIVITY_BYTES:
+                raise ValueError(f"activity {op.uid} is too large")
+            cur = db.execute(
+                "INSERT OR IGNORE INTO activity (uid, type, day, at, item, course, topic, data)"
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                (op.uid, op.type, op.day, op.at, op.item, op.course, op.topic, data),
+            )
+            return cur.rowcount
+        if isinstance(op, ResetActivityOp):
+            removed = db.execute("DELETE FROM activity WHERE at <= ?", (op.at,)).rowcount
+            db.execute(
+                "INSERT INTO meta (key, value) VALUES ('activity_reset_at', ?) ON CONFLICT (key)"
+                " DO UPDATE SET value ="
+                " max(CAST(value AS INTEGER), CAST(excluded.value AS INTEGER))",
+                (str(op.at),),
+            )
+            return max(removed, 1)
         raise TypeError(f"unknown operation {op!r}")  # pragma: no cover
 
     # ----------------------------------------------------------------- reads
@@ -292,6 +358,14 @@ class Store:
             db = self._db
             row = db.execute("SELECT value FROM meta WHERE key = 'reviews_reset_at'").fetchone()
             reset_at = int(row["value"]) if row else None
+            row = db.execute("SELECT value FROM meta WHERE key = 'activity_reset_at'").fetchone()
+            activity_reset_at = int(row["value"]) if row else None
+            activity = []
+            for r in db.execute("SELECT * FROM activity ORDER BY at, uid"):
+                event = {k: r[k] for k in r.keys() if k != "data"}
+                if r["data"] is not None:
+                    event["data"] = json.loads(r["data"])
+                activity.append(event)
             reviews = [
                 {k: r[k] for k in r.keys()}
                 for r in db.execute("SELECT * FROM reviews ORDER BY at, uid")
@@ -326,13 +400,15 @@ class Store:
             "progress": progress,
             "decks": decks,
             "tests": tests,
+            "activity": activity,
+            "activity_reset_at": activity_reset_at,
         }
 
     def counts(self) -> dict[str, int]:
         with self._lock:
             return {
                 table: self._db.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]  # noqa: S608
-                for table in ("reviews", "progress", "decks", "tests")
+                for table in ("reviews", "progress", "decks", "tests", "activity")
             }
 
 

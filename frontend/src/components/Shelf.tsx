@@ -13,6 +13,7 @@ export function Shelf({
   heading = "h3",
   expandable = false,
   action,
+  progress,
   children,
 }: {
   id: string;
@@ -21,6 +22,8 @@ export function Shelf({
   heading?: "h2" | "h3";
   expandable?: boolean;
   action?: ReactNode;
+  /** Shown after the meta line, e.g. "3 of 12 solved". */
+  progress?: ReactNode;
   children: ReactNode;
 }) {
   const scroller = useRef<HTMLDivElement>(null);
@@ -61,6 +64,7 @@ export function Shelf({
           {title}
         </Heading>
         {meta && <span className="text-sm text-muted">{meta}</span>}
+        {progress}
         <div className="ml-auto flex items-center gap-1">
           {action}
           {expandable && (overflowing || expanded) && (

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
+import { ChapterSolved } from "@/components/ChapterSolved";
 import { ProblemCard } from "@/components/ProblemCard";
 import { SolvedCount } from "@/components/ProgressMark";
 import { Shelf } from "@/components/Shelf";
@@ -84,6 +85,7 @@ async function CourseContent({ params }: { params: Promise<{ course: string }> }
             id={t.topic}
             title={topicLabel(t.topic, course)}
             meta={`${list.length} problems`}
+            progress={<ChapterSolved problemIds={list.map((p) => p.id)} />}
             heading="h2"
             expandable
           >

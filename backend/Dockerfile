@@ -2,6 +2,9 @@
 # ProofLab backend: multi-stage build on python:3.12-slim.
 #   docker build -t prooflab .                     # runtime image
 #   docker build --target test -t prooflab-test .  # runs the test suite on Python 3.12
+#   docker run --rm -p 8000:8000 -v prooflab-data:/data prooflab
+# The progress database (flashcard reviews, test results, XP and streaks; SPEC §17, §19) lives
+# at /data/prooflab.sqlite3, so a named volume keeps it when the container is replaced.
 
 FROM python:3.12-slim AS builder
 COPY --from=ghcr.io/astral-sh/uv:0.13.7 /uv /uvx /bin/
@@ -23,11 +26,15 @@ COPY tests ./tests
 RUN uv run --frozen pytest
 
 FROM python:3.12-slim AS runtime
-RUN useradd --create-home --uid 10001 prooflab
+RUN useradd --create-home --uid 10001 prooflab \
+    && mkdir -p /data \
+    && chown prooflab:prooflab /data
 COPY --from=builder --chown=prooflab:prooflab /app/.venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1
+    PYTHONDONTWRITEBYTECODE=1 \
+    PROOFLAB_DB=/data/prooflab.sqlite3
+VOLUME ["/data"]
 USER prooflab
 WORKDIR /app
 EXPOSE 8000
