@@ -120,6 +120,12 @@ its worker killed and replaced, and is reported as `invalid` with code `TIMEOUT`
 | `review` | Review | §4.3 |
 | `examples` | list | ≥ 2 sample submissions with expected verdicts (§8) |
 
+**Live courses.** For now the site shows only `proofs`. The other five keep all their problems,
+rules and tests, and the API still serves them, but the frontend hides them: `COURSE_ORDER` in
+`frontend/src/lib/labels.ts` lists the live courses, `lib/api.ts` drops everything else from
+course and problem lists, and their pages answer 404. Adding an id back to `COURSE_ORDER`
+shows that course again.
+
 Answer keys, mistakes, examples and solutions are **never** returned by
 `GET /problems/{id}`. Solutions are only returned by `GET /problems/{id}/solution`.
 

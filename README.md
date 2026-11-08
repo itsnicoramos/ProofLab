@@ -6,8 +6,9 @@ generated text.
 
 - **No AI.** Every verdict comes from SymPy, numeric evaluation, and hand-written rules. The
   same input always gets the same verdict.
-- **Built for math and STEM courses:** proofs (Book of Proof, Chapters 1–10), precalculus,
-  and Calculus 1–4 to start.
+- **Built for math and STEM courses:** proofs (Book of Proof, Chapters 1–10) is the course
+  on the site for now. Precalculus and Calculus 1–4 are written and checked too, but hidden
+  until later: add a course back to `COURSE_ORDER` in `frontend/src/lib/labels.ts` to show it.
 - **Practice tests.** Build a midterm, final or quick quiz from the problem bank, written out
   or as multiple choice (wrong choices are common mistakes, each confirmed wrong by the
   checker). Optionally adapt it to your weak chapters and mix in ProofLab-made versions with new

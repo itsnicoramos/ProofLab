@@ -7,7 +7,9 @@ Dial: ENERGY 1 / RHYTHM 2 / MOTION 1
 ## Identity
 
 - **What it is:** a study desk for checking math one step at a time. One student, many
-  courses (MATH 123 with *Book of Proof*, then precalculus and Calculus 1–4).
+  courses (MATH 123 with *Book of Proof*, then precalculus and Calculus 1–4). For now only
+  the Proof course is shown; the others are hidden, not removed (`COURSE_ORDER` in
+  `frontend/src/lib/labels.ts`).
 - **Personality:** calm, precise, honest. It never celebrates, never hypes, never pretends.
   It points at the exact step that went wrong.
 - **The math is the star.** Every screen's focal point is mathematics typeset with KaTeX:

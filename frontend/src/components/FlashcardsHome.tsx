@@ -6,7 +6,7 @@ import { useId, useState } from "react";
 
 import { deleteDeck, noteItemId, useDecks } from "@/lib/decks";
 import { formatInterval, resetLearning, summarize, useHydrated, useLearn } from "@/lib/learn";
-import { COURSE_SHORT } from "@/lib/labels";
+import { COURSE_SHORT, HIDDEN_COURSES } from "@/lib/labels";
 import { useClock } from "@/lib/storage";
 import { useSyncStatus } from "@/lib/sync";
 import { randomSeed, testHref } from "@/lib/testUrl";
@@ -75,7 +75,10 @@ export function FlashcardsHome({ courses }: { courses: CardCourse[] }) {
   const allTopics = topics.length === course.topics.length;
   const topicParam = allTopics ? [] : topics;
 
-  const items = Object.values(learn.items);
+  // Reviews from a hidden course stay saved but aren't counted: the due session skips them too.
+  const items = Object.values(learn.items).filter(
+    (it) => !(HIDDEN_COURSES as string[]).includes(it.course),
+  );
   const due = now === null ? 0 : items.filter((it) => it.due <= now).length;
   const nextDue = now === null ? null : items.filter((it) => it.due > now).sort((a, b) => a.due - b.due)[0];
   const summary = summarize(learn);

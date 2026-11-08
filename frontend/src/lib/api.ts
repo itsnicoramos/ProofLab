@@ -2,6 +2,7 @@
 // Server Actions: the backend URL stays on the server, so the browser never needs CORS.
 import { cache } from "react";
 
+import { isCourseId } from "./labels";
 import type {
   CheckInput,
   ChoiceGrade,
@@ -48,8 +49,12 @@ async function getJson<T>(path: string): Promise<T | null> {
   return (await res.json()) as T;
 }
 
+// Only the courses the site shows (COURSE_ORDER in lib/labels.ts) get past these three, so a
+// hidden course never appears in a list and its pages answer 404.
+
 export const getCourses = cache(async (): Promise<CourseSummary[]> => {
-  return (await getJson<CourseSummary[]>("/courses")) ?? [];
+  const courses = (await getJson<CourseSummary[]>("/courses")) ?? [];
+  return courses.filter((c) => isCourseId(c.id));
 });
 
 export const getProblems = cache(
@@ -58,12 +63,14 @@ export const getProblems = cache(
     if (course) params.set("course", course);
     if (topic) params.set("topic", topic);
     const query = params.size ? `?${params}` : "";
-    return (await getJson<ProblemSummary[]>(`/problems${query}`)) ?? [];
+    const problems = (await getJson<ProblemSummary[]>(`/problems${query}`)) ?? [];
+    return problems.filter((p) => isCourseId(p.course));
   },
 );
 
 export const getProblem = cache(async (id: string): Promise<ProblemDetail | null> => {
-  return getJson<ProblemDetail>(`/problems/${encodeURIComponent(id)}`);
+  const problem = await getJson<ProblemDetail>(`/problems/${encodeURIComponent(id)}`);
+  return problem && isCourseId(problem.course) ? problem : null;
 });
 
 export interface TestOptions {

@@ -14,7 +14,7 @@ import {
   postChoiceAnswer,
   postNotes,
 } from "./api";
-import { bookSection, COURSE_ORDER, COURSE_SHORT, kindLabel, topicLabel } from "./labels";
+import { bookSection, COURSE_ORDER, COURSE_SHORT, isCourseId, kindLabel, topicLabel } from "./labels";
 import type {
   CheckInput,
   ChoiceGrade,
@@ -155,6 +155,7 @@ export async function loadDeck(
 ): Promise<DeckResult> {
   if (
     !COURSE_RE.test(course) ||
+    !isCourseId(course) ||
     !Array.isArray(topics) ||
     !topics.every((t) => TOPIC_RE.test(t)) ||
     !Array.isArray(parts) ||

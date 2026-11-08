@@ -2,7 +2,18 @@
 
 import type { CourseId, StepStatus, VerdictStatus } from "./types";
 
-export const COURSE_ORDER: CourseId[] = ["proofs", "precalc", "calc1", "calc2", "calc3", "calc4"];
+/** Every course ProofLab has content for. */
+export const ALL_COURSES: CourseId[] = ["proofs", "precalc", "calc1", "calc2", "calc3", "calc4"];
+
+/**
+ * The courses the site shows. Only Proof is live for now; the calculus courses are hidden, not
+ * removed (their problems and checker rules stay in the backend). To bring one back, add its id
+ * here in the order it should appear.
+ */
+export const COURSE_ORDER: CourseId[] = ["proofs"];
+
+/** Courses with content that the site doesn't show yet. */
+export const HIDDEN_COURSES: CourseId[] = ALL_COURSES.filter((c) => !COURSE_ORDER.includes(c));
 
 export const COURSE_SHORT: Record<CourseId, string> = {
   proofs: "Proof",

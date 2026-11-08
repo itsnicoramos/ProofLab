@@ -263,8 +263,8 @@ export function TestBuilder({ courses }: { courses: BuilderCourse[] }) {
           <span className="text-sm">
             Include new versions with different numbers
             <span className="block text-xs text-muted">
-              Problems ProofLab can remake (77 so far: parity proofs, truth tables, sets, induction
-              sums, calculus) usually come as a version with new numbers, checked the same way and
+              Problems ProofLab can remake (51 so far: parity and direct proofs, truth tables, sets,
+              induction sums) usually come as a version with new numbers, checked the same way and
               marked as not from the book.
             </span>
           </span>
