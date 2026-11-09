@@ -1,0 +1,774 @@
+{
+  "title": "/tutor practice 4",
+  "about": "One practice session on Book of Proof Chapter 4. The learner's and tutor's words are written for this page, following the tutor skill. Every command and its output is real: frontend/scripts/capture_replay.py ran each one against the prooflab-tutor CLI and a throwaway memory schema.",
+  "setup_note": "Before this session the learner ran /tutor start once and chose to begin at Chapter 4. That onboarding is in the memory the session reads.",
+  "captured_on": "2026-11-08",
+  "cli": "uv run --project backend --extra tutor prooflab-tutor",
+  "setup": [
+    {
+      "args": [
+        "memory",
+        "session",
+        "start",
+        "start"
+      ],
+      "exit": 0,
+      "output": {
+        "session_id": 1,
+        "started_at": "2026-11-08T23:18:14.915646-07:00"
+      }
+    },
+    {
+      "args": [
+        "memory",
+        "plan",
+        "set"
+      ],
+      "stdin": {
+        "mission": "Taking MATH 123 now",
+        "pace": "~5 h/week",
+        "entry_chapter": 4,
+        "placement": {
+          "self_selected": true
+        },
+        "chapters": {
+          "1": "skip",
+          "2": "skip",
+          "3": "skip",
+          "4": "do",
+          "5": "do",
+          "6": "do",
+          "7": "do",
+          "8": "do",
+          "9": "do",
+          "10": "do",
+          "11": "do",
+          "12": "do",
+          "13": "do",
+          "14": "do"
+        }
+      },
+      "exit": 0,
+      "output": {
+        "plan": {
+          "id": 1,
+          "mission": "Taking MATH 123 now",
+          "goal": null,
+          "pace": "~5 h/week",
+          "exam_date": null,
+          "entry_chapter": 4,
+          "placement": {
+            "self_selected": true
+          },
+          "created_at": "2026-11-08T23:18:16.092160-07:00",
+          "updated_at": "2026-11-08T23:18:16.092160-07:00"
+        },
+        "chapters": {
+          "1": "skip",
+          "2": "skip",
+          "3": "skip",
+          "4": "do",
+          "5": "do",
+          "6": "do",
+          "7": "do",
+          "8": "do",
+          "9": "do",
+          "10": "do",
+          "11": "do",
+          "12": "do",
+          "13": "do",
+          "14": "do"
+        }
+      }
+    },
+    {
+      "args": [
+        "memory",
+        "session",
+        "end",
+        "1",
+        "--summary",
+        "Onboarded: MATH 123, about 5 h a week, chose to start at Chapter 4."
+      ],
+      "exit": 0,
+      "output": {
+        "session_id": 1,
+        "ended": true
+      }
+    }
+  ],
+  "steps": [
+    {
+      "kind": "learner",
+      "text": "/tutor practice 4"
+    },
+    {
+      "kind": "read",
+      "files": [
+        ".claude/skills/tutor/SKILL.md",
+        ".claude/skills/tutor/modes/practice.md"
+      ],
+      "summary": "The agent loads the tutor skill and its practice mode. They list the commands to run and the rules to keep."
+    },
+    {
+      "kind": "run",
+      "touches": "memory",
+      "args": [
+        "memory",
+        "show"
+      ],
+      "summary": "Reads the learner's memory: the plan starts at Chapter 4, the last session was onboarding, nothing is solved yet.",
+      "exit": 0,
+      "output": {
+        "learner": "me",
+        "plan": {
+          "id": 1,
+          "mission": "Taking MATH 123 now",
+          "goal": null,
+          "pace": "~5 h/week",
+          "exam_date": null,
+          "entry_chapter": 4,
+          "placement": {
+            "self_selected": true
+          },
+          "created_at": "2026-11-08T23:18:16.092160-07:00",
+          "updated_at": "2026-11-08T23:18:16.092160-07:00"
+        },
+        "chapters": [
+          {
+            "chapter": 1,
+            "status": "skip",
+            "title": "Sets",
+            "topic": "sets"
+          },
+          {
+            "chapter": 2,
+            "status": "skip",
+            "title": "Logic",
+            "topic": "logic"
+          },
+          {
+            "chapter": 3,
+            "status": "skip",
+            "title": "Counting",
+            "topic": "counting"
+          },
+          {
+            "chapter": 4,
+            "status": "do",
+            "title": "Direct Proof",
+            "topic": "direct"
+          },
+          {
+            "chapter": 5,
+            "status": "do",
+            "title": "Contrapositive Proof",
+            "topic": "contrapositive"
+          },
+          {
+            "chapter": 6,
+            "status": "do",
+            "title": "Proof by Contradiction",
+            "topic": "contradiction"
+          },
+          {
+            "chapter": 7,
+            "status": "do",
+            "title": "Proving Non-Conditional Statements",
+            "topic": "nonconditional"
+          },
+          {
+            "chapter": 8,
+            "status": "do",
+            "title": "Proofs Involving Sets",
+            "topic": "set-proofs"
+          },
+          {
+            "chapter": 9,
+            "status": "do",
+            "title": "Disproof",
+            "topic": "disproof"
+          },
+          {
+            "chapter": 10,
+            "status": "do",
+            "title": "Mathematical Induction",
+            "topic": "induction"
+          },
+          {
+            "chapter": 11,
+            "status": "do",
+            "title": "Relations",
+            "topic": "relations"
+          },
+          {
+            "chapter": 12,
+            "status": "do",
+            "title": "Functions",
+            "topic": "functions"
+          },
+          {
+            "chapter": 13,
+            "status": "do",
+            "title": "Proofs in Calculus",
+            "topic": "calculus-proofs"
+          },
+          {
+            "chapter": 14,
+            "status": "do",
+            "title": "Cardinality of Sets",
+            "topic": "cardinality"
+          }
+        ],
+        "next_chapter": 4,
+        "recent_sessions": [
+          {
+            "id": 1,
+            "mode": "start",
+            "chapter": null,
+            "started_at": "2026-11-08T23:18:14.915646-07:00",
+            "ended_at": "2026-11-08T23:18:17.329200-07:00",
+            "summary": "Onboarded: MATH 123, about 5 h a week, chose to start at Chapter 4."
+          }
+        ],
+        "recent_attempts": [],
+        "quizzes": [],
+        "open_review": [],
+        "notes": [],
+        "cards_due": [],
+        "stats": {
+          "attempts": 0,
+          "problems_correct": 0,
+          "first_try_correct": 0
+        },
+        "solved": []
+      }
+    },
+    {
+      "kind": "run",
+      "touches": "memory",
+      "args": [
+        "memory",
+        "session",
+        "start",
+        "practice",
+        "--chapter",
+        "4"
+      ],
+      "summary": "Opens a practice session. Every checked attempt is saved under its id.",
+      "exit": 0,
+      "output": {
+        "session_id": 2,
+        "started_at": "2026-11-08T23:18:20.165102-07:00"
+      }
+    },
+    {
+      "kind": "run",
+      "touches": "content",
+      "args": [
+        "lesson",
+        "4"
+      ],
+      "summary": "Reads the Chapter 4 lesson note. Its practice route starts with Ex 4.1, which isn't solved yet.",
+      "exit": 0,
+      "output": {
+        "chapter": 4,
+        "title": "Direct Proof",
+        "topic": "direct",
+        "sections": [
+          "4.1 Theorems (p. 113)",
+          "4.2 Definitions (p. 115)",
+          "4.3 Direct Proof (p. 118)",
+          "4.4 Using Cases (p. 124)",
+          "4.5 Treating Similar Cases (p. 125)"
+        ],
+        "prerequisites": [
+          1,
+          2
+        ],
+        "minutes": 100,
+        "checkable": "partly",
+        "review": "draft",
+        "path": "backend/src/prooflab/content/lessons/proofs/ch04-direct.md",
+        "free_pdf": "https://richardhammack.github.io/BookOfProof/",
+        "text": "# Chapter 4: Direct Proof\n\n## Why it matters\nA direct proof is the basic way to prove \"if $P$, then $Q$\": assume $P$ and reason forward until you reach $Q$. Contrapositive proof, contradiction and induction all reuse its moves. The habit you build here, unpacking definitions into equations with new variables and then packing the result back into a definition, is most of what proving facts about integers takes.\n\n## Core ideas\n1. **Theorems and their shape** (Section 4.1, p. 113). A theorem is a statement that has been proved true. Smaller results are called propositions; a lemma is a step toward a bigger result, and a corollary follows quickly from one. Most have the form $P \\Rightarrow Q$, often with a hidden \"for every integer $n$\" in front.\n2. **Even, odd and parity** (Section 4.2, p. 115). An integer $n$ is even if $n = 2a$ for some integer $a$, and odd if $n = 2a + 1$ for some integer $a$. Every integer is exactly one of the two. Two integers have the same parity if both are even or both are odd, and opposite parity otherwise.\n3. **Divisibility, primes, gcd and lcm** (Section 4.2, p. 115). For integers $a$ and $b$, $a \\mid b$ means $b = ac$ for some integer $c$; read it \"$a$ divides $b$\". It is a statement, not a number: $4 \\mid 28$ is true, while $28/4 = 7$ is a number. A natural number $p > 1$ is prime if its only positive divisors are 1 and $p$; a natural number above 1 that isn't prime is composite. $\\gcd(a, b)$ is the largest integer dividing both, and $\\operatorname{lcm}(a, b)$ is the smallest positive integer that both divide.\n4. **Facts you may use freely** (Section 4.2, p. 115). Sums, differences and products of integers are integers. That is why an expression like $2k^2 + 3k$ counts as an integer once $k$ is one. The division algorithm says that for any integer $n$ and positive integer $d$, there are unique integers $q$ and $r$ with $n = qd + r$ and $0 \\le r < d$. So every integer has the form $3q$, $3q + 1$ or $3q + 2$.\n5. **The outline of a direct proof** (Section 4.3, p. 118). To prove $P \\Rightarrow Q$, write \"Suppose $P$.\" Then take justified steps until you can write \"Therefore $Q$.\" You never assume $Q$. Start with \"Proof.\" and finish with a mark such as ∎.\n6. **Unpack, compute, repack** (Section 4.3, p. 118). Rewrite each hypothesis with its definition and a new variable: \"$x$ is odd, so $x = 2k + 1$ for some integer $k$.\" Substitute into the expression the conclusion is about and do the algebra. Then show the result has the shape the conclusion's definition needs, such as $2(\\text{integer})$, $2(\\text{integer}) + 1$ or $a \\cdot (\\text{integer})$, and say which integer it is.\n7. **One new letter per hypothesis** (Section 4.3, p. 118). If $x$ and $y$ are both odd, write $x = 2j + 1$ and $y = 2k + 1$. Using the same letter for both quietly assumes $x = y$, so the proof would only cover that one situation.\n8. **Proof by cases** (Section 4.4, p. 124). When the hypothesis gives you nothing to unpack, as in \"for every integer $n$, ...\", split into cases that cover every possibility: $n$ even and $n$ odd, or the three remainders when dividing by 3. Prove the conclusion separately in each case.\n9. **Treating similar cases** (Section 4.5, p. 125). When two cases differ only by swapping the names of variables, prove one and say the other works the same way with the roles swapped. The phrase \"without loss of generality\" signals this. Use it only when the cases really are symmetric.\n\n## Worked example\nProve: if $a$ is odd and $b$ is even, then $a^2 + 3ab - b$ is odd.\n\n1. Suppose $a$ is odd and $b$ is even. By the definitions, $a = 2j + 1$ and $b = 2k$ for some integers $j$ and $k$. There are two hypotheses, so there are two different new letters.\n2. Substitute: $a^2 + 3ab - b = (2j + 1)^2 + 3(2j + 1)(2k) - 2k$.\n3. Expand. $(2j + 1)^2 = 4j^2 + 4j + 1$ and $3(2j + 1)(2k) = 12jk + 6k$. So the expression equals $4j^2 + 4j + 12jk + 4k + 1$.\n4. Repack: $4j^2 + 4j + 12jk + 4k + 1 = 2(2j^2 + 2j + 6jk + 2k) + 1$.\n5. Name the integer. $2j^2 + 2j + 6jk + 2k$ is an integer, because sums and products of integers are integers. So $a^2 + 3ab - b$ has the form $2(\\text{integer}) + 1$, which means it is odd. ∎\n\nIn ProofLab, as a `parity_proof` problem whose target is $a^2 + 3ab - b$ and whose goal is odd:\n- let: `a = 2j + 1`\n- let: `b = 2k`\n- expr: `(2j + 1)^2 + 3(2j + 1)(2k) - 2k`\n- expr: `4j^2 + 4j + 12jk + 4k + 1`\n- expr: `2(2j^2 + 2j + 6jk + 2k) + 1`\n- witness: `2j^2 + 2j + 6jk + 2k`\n\nThe witness is only the integer inside the brackets. ProofLab checks that $2 \\cdot (\\text{witness}) + 1$ equals the target after your substitutions.\n\n## Typing it into ProofLab\nChapter 4 problems are `parity_proof` (conclusions about even and odd) and `divisibility_proof` (conclusions about $\\mid$). ProofLab checks the algebra skeleton of your proof: each representation, each line of algebra, the witness and the cases. It doesn't read your sentences, so you still write the proof out in words. Exercises about primes, gcds, inequalities or real numbers aren't checked here.\n\nStep kinds:\n- `let`: rewrite a hypothesis with a new integer letter. Even: `x = 2k`. Odd: `x = 2k + 1`. For $a \\mid b$, write `b = am`. The left side is a problem variable that a hypothesis is about. The right side uses one new single letter that you haven't used for anything else.\n- `expr`: one line of algebra. Every line must equal the expression you're proving something about, after your `let` substitutions. It may use the problem's letters or your new ones.\n- `witness`: the integer $w$ that finishes the proof. For even, target $= 2w$. For odd, target $= 2w + 1$; always this $+1$ form, never $2w - 1$. For $d \\mid$ target, target $= d \\cdot w$. Type $w$ itself, like `3k^2 + k`, or a labelled form like `m = 3k^2 + k`. It must be a polynomial in your integer letters with integer coefficients.\n- `case`: starts a case, like `n = 2k`, and later another, like `n = 2k + 1`. Each case needs its own `expr` lines and its own `witness`. All cases must split the same variable by the same number and together cover every remainder. You may reuse $k$ in each case. Cases can't be nested.\n- `note`: free text, never checked.\n\nThere is no answer box. The proof is complete when every step checks out and it ends with a valid witness (in every case, if you used cases).\n\nA divisibility example: if $a \\mid b$ and $a \\mid c$, then $a^2 \\mid (bc + 3b^2)$.\n- let: `b = aj`\n- let: `c = ak`\n- expr: `(aj)(ak) + 3(aj)^2`\n- expr: `a^2(jk + 3j^2)`\n- witness: `jk + 3j^2`\n\nA cases example: for every integer $n$, $n^2 - 3n + 9$ is odd.\n- case: `n = 2k`\n- expr: `4k^2 - 6k + 9`\n- witness: `2k^2 - 3k + 4`\n- case: `n = 2k + 1`\n- expr: `4k^2 - 2k + 7`\n- witness: `2k^2 - k + 3`\n\n## Common mistakes\n- **One letter for two hypotheses** (`SAME_FRESH_VARIABLE`). Writing $x = 2k + 1$ and $y = 2k + 1$ says $x = y$. Give each hypothesis its own letter.\n- **Reusing a problem variable** (`FRESH_NOT_NEW`). $x = 2x + 1$ or $b = ab$ doesn't introduce anything new. Pick a letter that isn't already in the problem.\n- **Wrong form for even or odd** (`EVEN_FORM`, `ODD_FORM`, `BAD_REPRESENTATION`). Odd means $2k + 1$, not $k + 1$ or $2k$. For $a \\mid b$ the multiple goes on $b$: $b = am$, not $a = bm$.\n- **A badly formed let** (`LET_FORMAT`, `LET_WITHOUT_HYPOTHESIS`). A let is an equation like `x = 2k + 1` with a problem variable on the left, not a sentence like \"x is odd\". Only rewrite variables a hypothesis talks about; a variable with no assumption stays as it is, or gets split into cases.\n- **Not using the hypothesis** (`MISSING_LET`). If the target still contains $x$ and you never used \"$x$ is odd\", you haven't used what you were given. Start with the let.\n- **Algebra slips** (`NOT_EQUIVALENT`). Each `expr` line must equal the target. Expand squares carefully: $(2k + 1)^2 = 4k^2 + 4k + 1$, not $4k^2 + 1$.\n- **Witness off by a piece** (`WITNESS_MISMATCH`). The witness is only the integer inside $2(\\ldots) + 1$ or $d(\\ldots)$. Leave out the $+1$, and for $a^2 \\mid \\ldots$ divide out all of $a^2$, not just $a$.\n- **Witness that isn't clearly an integer** (`WITNESS_NOT_INTEGER`, `TRY_CASES`). A fraction like $\\frac{n^2 + n}{2}$ isn't visibly an integer. Split into cases so the algebra gives an integer polynomial.\n- **Cases that don't cover everything** (`CASES_NOT_EXHAUSTIVE`, `CASE_MISMATCH`). Even and odd together cover every integer, while remainders mod 3 need three cases. Don't mix splits, such as $n = 2k$ with $n = 3k + 1$.\n- **Stopping before the end** (`PROOF_INCOMPLETE`). Correct algebra isn't a finished proof until you name the witness that matches the definition.\n\n## Pause questions\n1. Why can't you write $x = 2k + 1$ and $y = 2k + 1$ when proving something about two odd integers?\n2. Using only the definition, is 0 even? Is $-7$ odd? Which integer shows it in each case?\n3. What is the difference between $a \\mid b$ and $a / b$? Is $6 \\mid 3$ true?\n4. A claim says \"for every integer $n$\" and assumes nothing else about $n$. What do you do first, and how do you know your cases cover everything?\n\n## Practice route\n- `proofs.direct.ch4-ex01`: one let and a short witness; learn the step kinds here.\n- `proofs.direct.ch4-ex03`: a longer expansion that ends in the odd form with a $+1$ left over.\n- `proofs.direct.ch4-ex04`: two odd hypotheses, so two different new letters.\n- `proofs.direct.ch4-ex05`: only $x$ has a hypothesis; $y$ stays as it is.\n- `proofs.direct.ch4-ex06`: the first divisibility proof; factor out $a$.\n- `proofs.direct.ch4-ex19`: chain two divisibility facts by substituting one into the other.\n- `proofs.direct.ch4-ex14`: no hypothesis about $n$, so split into even and odd cases.\n- `proofs.direct.ch4-ex15`: cases again, this time with an even goal.\n"
+      }
+    },
+    {
+      "kind": "run",
+      "touches": "content",
+      "args": [
+        "show",
+        "proofs.direct.ch4-ex01"
+      ],
+      "summary": "Fetches the exercise: the prompt, the step kinds it accepts and how many hints it has. There is no solution in it: show never returns one.",
+      "rules": [
+        5
+      ],
+      "exit": 0,
+      "output": {
+        "id": "proofs.direct.ch4-ex01",
+        "course": "proofs",
+        "topic": "direct",
+        "kind": "parity_proof",
+        "title": "Ex 4.1 · The square of an even integer",
+        "prompt": "Use a direct proof. Let $x$ be an even integer. Show that $x^2$ is even.",
+        "difficulty": 1,
+        "tags": [
+          "math123",
+          "book-of-proof",
+          "ch4"
+        ],
+        "review_status": "draft",
+        "variant_of": null,
+        "answer_format": "A structured proof: let, case, expr and witness steps (notes optional). No final answer box.",
+        "syntax_help": "Write the proof as steps. 'let': rewrite a hypothesis with a new integer variable (n = 2k + 1). 'case': start a case (n = 3k + 1); cases must cover every possibility. 'expr': a chain of expressions, each equal to the one you're proving things about. 'witness': the integer w with expression = d·w + r (write w, or m = w). 'note': free text, not checked.",
+        "step_kinds": [
+          "case",
+          "expr",
+          "let",
+          "note",
+          "witness"
+        ],
+        "has_answer": false,
+        "reference": {
+          "book_id": "hammack-bop3",
+          "title": "Book of Proof",
+          "authors": [
+            "Richard Hammack"
+          ],
+          "edition": "3rd edition (Edition 3.4)",
+          "section": "Chapter 4 exercises, #1 (p. 126)",
+          "note": "This exact exercise, restated in ProofLab's words. Uses Definition 4.1 (even).",
+          "url": "https://richardhammack.github.io/BookOfProof/",
+          "license": "CC BY-NC-ND 4.0",
+          "license_url": "https://creativecommons.org/licenses/by-nc-nd/4.0/"
+        },
+        "review": {
+          "status": "draft",
+          "reviewed_on": null
+        },
+        "hint_count": 2,
+        "chapter": 4
+      }
+    },
+    {
+      "kind": "tutor",
+      "rules": [
+        6
+      ],
+      "text": "Ex 4.1, the square of an even integer. It's Book of Proof, Chapter 4 exercises, #1 (p. 126).\n\nUse a direct proof. Let x be an even integer. Show that x^2 is even.\n\nWrite your proof in your own words, and I'll turn it into ProofLab steps for the checker."
+    },
+    {
+      "kind": "learner",
+      "text": "x is even so x = 2a for some integer a. then x^2 = (2a)^2 = 4a^2 = 2(4a^2). so x^2 is 2 times an integer, which means it's even"
+    },
+    {
+      "kind": "tutor",
+      "rules": [
+        2
+      ],
+      "text": "Here's how I'll enter your work:",
+      "proposal": [
+        {
+          "kind": "let",
+          "content": "x = 2a"
+        },
+        {
+          "kind": "expr",
+          "content": "x^2"
+        },
+        {
+          "kind": "expr",
+          "content": "(2a)^2"
+        },
+        {
+          "kind": "expr",
+          "content": "4a^2"
+        },
+        {
+          "kind": "expr",
+          "content": "2(4a^2)"
+        },
+        {
+          "kind": "witness",
+          "content": "4a^2"
+        }
+      ],
+      "after": "Send it to the checker?",
+      "aside": "Step 5 has a slip, and the tutor enters it exactly as written. It translates the learner's work; it never fixes it."
+    },
+    {
+      "kind": "learner",
+      "text": "yes"
+    },
+    {
+      "kind": "run",
+      "touches": "checker",
+      "args": [
+        "check",
+        "proofs.direct.ch4-ex01",
+        "--hints-shown",
+        "0",
+        "--record",
+        "--session",
+        "2"
+      ],
+      "summary": "The checker grades the steps. Step 5 isn't equal to the step before it, so the witness fails too. The verdict is saved to memory as it came back.",
+      "exit": 0,
+      "output": {
+        "checked_by": "ProofLab's checker (deterministic rules and SymPy, no AI)",
+        "problem_id": "proofs.direct.ch4-ex01",
+        "chapter": 4,
+        "verdict": {
+          "problem_id": "proofs.direct.ch4-ex01",
+          "status": "incorrect",
+          "score": 0.0,
+          "steps": [
+            {
+              "index": 0,
+              "kind": "let",
+              "status": "ok",
+              "message": "Since $x$ is even, $x = 2 a$ for some integer $a$.",
+              "latex": "x = 2 a",
+              "code": null
+            },
+            {
+              "index": 1,
+              "kind": "expr",
+              "status": "ok",
+              "message": "This step checks out.",
+              "latex": "x^{2}",
+              "code": null
+            },
+            {
+              "index": 2,
+              "kind": "expr",
+              "status": "ok",
+              "message": "This step checks out.",
+              "latex": "4 a^{2}",
+              "code": null
+            },
+            {
+              "index": 3,
+              "kind": "expr",
+              "status": "ok",
+              "message": "This step checks out.",
+              "latex": "4 a^{2}",
+              "code": null
+            },
+            {
+              "index": 4,
+              "kind": "expr",
+              "status": "error",
+              "message": "This step doesn't follow from the one before it: the two aren't equal.",
+              "latex": "8 a^{2}",
+              "code": "NOT_EQUIVALENT"
+            },
+            {
+              "index": 5,
+              "kind": "witness",
+              "status": "error",
+              "message": "With this witness, $2 \\cdot 4 a^{2}$ isn't equal to the expression you're working on. Check your algebra.",
+              "latex": "4 a^{2}",
+              "code": "WITNESS_MISMATCH"
+            }
+          ],
+          "answer": {
+            "status": "incorrect",
+            "message": "Step 5 doesn't check out, so the proof isn't valid yet.",
+            "latex": null,
+            "code": "PROOF_HAS_ERRORS"
+          },
+          "hints": [
+            {
+              "code": "AUTHORED_HINT",
+              "message": "Hint 1: By the definition of even, an even integer is 2 times some integer. Write x that way with a new letter.",
+              "step": null
+            }
+          ]
+        },
+        "recorded": true,
+        "attempt_id": 1,
+        "first_try": true,
+        "counted": true
+      },
+      "stdin": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a"
+          },
+          {
+            "kind": "expr",
+            "content": "x^2"
+          },
+          {
+            "kind": "expr",
+            "content": "(2a)^2"
+          },
+          {
+            "kind": "expr",
+            "content": "4a^2"
+          },
+          {
+            "kind": "expr",
+            "content": "2(4a^2)"
+          },
+          {
+            "kind": "witness",
+            "content": "4a^2"
+          }
+        ],
+        "answer": null
+      }
+    },
+    {
+      "kind": "tutor",
+      "rules": [
+        1,
+        3,
+        4
+      ],
+      "text": "ProofLab's checker marks this incorrect. The first step it flags is step 5, `2(4a^2)`: it doesn't follow from the step before it, because the two aren't equal.\n\nEvery expr line has to equal x^2. So here's a question: if you multiply out 2(4a^2), do you get back 4a^2?"
+    },
+    {
+      "kind": "learner",
+      "text": "oh, that's 8a^2. it should be 2(2a^2), so the integer is 2a^2"
+    },
+    {
+      "kind": "tutor",
+      "rules": [
+        2
+      ],
+      "text": "Here's your new version. Steps 5 and 6 changed:",
+      "proposal": [
+        {
+          "kind": "let",
+          "content": "x = 2a"
+        },
+        {
+          "kind": "expr",
+          "content": "x^2"
+        },
+        {
+          "kind": "expr",
+          "content": "(2a)^2"
+        },
+        {
+          "kind": "expr",
+          "content": "4a^2"
+        },
+        {
+          "kind": "expr",
+          "content": "2(2a^2)"
+        },
+        {
+          "kind": "witness",
+          "content": "2a^2"
+        }
+      ],
+      "after": "Send it?"
+    },
+    {
+      "kind": "learner",
+      "text": "send it"
+    },
+    {
+      "kind": "run",
+      "touches": "checker",
+      "args": [
+        "check",
+        "proofs.direct.ch4-ex01",
+        "--hints-shown",
+        "0",
+        "--record",
+        "--session",
+        "2"
+      ],
+      "summary": "Every step checks out, and the witness 2a^2 gives x^2 = 2(2a^2). Saved as a second try with no hints.",
+      "exit": 0,
+      "output": {
+        "checked_by": "ProofLab's checker (deterministic rules and SymPy, no AI)",
+        "problem_id": "proofs.direct.ch4-ex01",
+        "chapter": 4,
+        "verdict": {
+          "problem_id": "proofs.direct.ch4-ex01",
+          "status": "correct",
+          "score": 1.0,
+          "steps": [
+            {
+              "index": 0,
+              "kind": "let",
+              "status": "ok",
+              "message": "Since $x$ is even, $x = 2 a$ for some integer $a$.",
+              "latex": "x = 2 a",
+              "code": null
+            },
+            {
+              "index": 1,
+              "kind": "expr",
+              "status": "ok",
+              "message": "This step checks out.",
+              "latex": "x^{2}",
+              "code": null
+            },
+            {
+              "index": 2,
+              "kind": "expr",
+              "status": "ok",
+              "message": "This step checks out.",
+              "latex": "4 a^{2}",
+              "code": null
+            },
+            {
+              "index": 3,
+              "kind": "expr",
+              "status": "ok",
+              "message": "This step checks out.",
+              "latex": "4 a^{2}",
+              "code": null
+            },
+            {
+              "index": 4,
+              "kind": "expr",
+              "status": "ok",
+              "message": "This step checks out.",
+              "latex": "4 a^{2}",
+              "code": null
+            },
+            {
+              "index": 5,
+              "kind": "witness",
+              "status": "ok",
+              "message": "$x^{2} = 2 \\cdot 2 a^{2}$ and $2 a^{2}$ is an integer.",
+              "latex": "2 a^{2}",
+              "code": null
+            }
+          ],
+          "answer": {
+            "status": "correct",
+            "message": "Proof complete: $x^{2}$ = $2 \\cdot 2 a^{2}$ with $2 a^{2}$ an integer, so $x^{2}$ is even. ∎",
+            "latex": null,
+            "code": "PROOF_COMPLETE"
+          },
+          "hints": []
+        },
+        "recorded": true,
+        "attempt_id": 2,
+        "first_try": false,
+        "counted": true
+      },
+      "stdin": {
+        "steps": [
+          {
+            "kind": "let",
+            "content": "x = 2a"
+          },
+          {
+            "kind": "expr",
+            "content": "x^2"
+          },
+          {
+            "kind": "expr",
+            "content": "(2a)^2"
+          },
+          {
+            "kind": "expr",
+            "content": "4a^2"
+          },
+          {
+            "kind": "expr",
+            "content": "2(2a^2)"
+          },
+          {
+            "kind": "witness",
+            "content": "2a^2"
+          }
+        ],
+        "answer": null
+      }
+    },
+    {
+      "kind": "tutor",
+      "rules": [
+        1
+      ],
+      "text": "ProofLab's checker marks it correct, on your second try, with no hints used. What made it work: 4a^2 = 2(2a^2), and 2a^2 is an integer, so x^2 has the even form 2(integer).\n\nNext on the route is Ex 4.3, a longer expansion that ends in the odd form. Want it, or stop here?"
+    },
+    {
+      "kind": "learner",
+      "text": "stop here for today"
+    },
+    {
+      "kind": "run",
+      "touches": "memory",
+      "args": [
+        "memory",
+        "note",
+        "add",
+        "--kind",
+        "struggle",
+        "--chapter",
+        "4",
+        "--text",
+        "Factoring slip: wrote 4a^2 = 2(4a^2). Fixed it after one question, no hints."
+      ],
+      "summary": "Remembers one thing about how the learner learns, for next time.",
+      "rules": [
+        7
+      ],
+      "exit": 0,
+      "output": {
+        "note_id": 1
+      }
+    },
+    {
+      "kind": "run",
+      "touches": "memory",
+      "args": [
+        "memory",
+        "session",
+        "end",
+        "2",
+        "--summary",
+        "Ch 4: solved Ex 4.1 on the 2nd try after a factoring slip. Next: Ex 4.3."
+      ],
+      "summary": "Closes the session with one line that the next session's warm-up starts from.",
+      "rules": [
+        7
+      ],
+      "exit": 0,
+      "output": {
+        "session_id": 2,
+        "ended": true
+      }
+    },
+    {
+      "kind": "run",
+      "touches": "memory",
+      "args": [
+        "memory",
+        "export"
+      ],
+      "file": "LEARNING.md",
+      "summary": "Writes LEARNING.md, a readable copy of the memory. Git ignores it, so it stays on the learner's machine.",
+      "rules": [
+        7
+      ],
+      "exit": 0,
+      "output": {
+        "path": "LEARNING.md",
+        "bytes": 1492
+      },
+      "file_text": "# My Book of Proof path\n\n<!-- Written by `prooflab-tutor memory export` from your tutor memory in Postgres.\n     Edits here are not read back: ask the tutor to change your plan instead. -->\n\n## Why I'm learning\n\nTaking MATH 123 now\n\n## Placement\n\n- Date: 2026-11-08\n- Score: self-selected\n- Entry point: Chapter 4: Direct Proof\n- Pace: ~5 h/week\n\n## Path\n\n| Chapter | Title | Status | Est. hours |\n|---|---|---|---|\n| 1 | Sets | Skip | 1.5 |\n| 2 | Logic | Skip | 2.0 |\n| 3 | Counting | Skip | 2.3 |\n| 4 | Direct Proof | Do | 1.7 |\n| 5 | Contrapositive Proof | Do | 1.5 |\n| 6 | Proof by Contradiction | Do | 1.5 |\n| 7 | Proving Non-Conditional Statements | Do | 1.7 |\n| 8 | Proofs Involving Sets | Do | 1.5 |\n| 9 | Disproof | Do | 1.0 |\n| 10 | Mathematical Induction | Do | 2.5 |\n| 11 | Relations | Do | 2.3 |\n| 12 | Functions | Do | 2.5 |\n| 13 | Proofs in Calculus | Do | 3.0 |\n| 14 | Cardinality of Sets | Do | 2.5 |\n\n## Progress log\n\n| Date | Mode | Chapter | Checked correct | Note |\n|---|---|---|---|---|\n| 2026-11-08 | start |  |  | Onboarded: MATH 123, about 5 h a week, chose to start at Chapter 4. |\n| 2026-11-08 | practice | 4 | 1 of 2 | Ch 4: solved Ex 4.1 on the 2nd try after a factoring slip. Next: Ex 4.3. |\n\n## Solved (marked Correct by ProofLab's checker)\n\n- `proofs.direct.ch4-ex01` (2026-11-08)\n\n## Quizzes\n\nNone yet.\n\n## Review queue\n\nEmpty.\n\n## What the tutor remembers\n\n- struggle (chapter 4): Factoring slip: wrote 4a^2 = 2(4a^2). Fixed it after one question, no hints.\n"
+    },
+    {
+      "kind": "tutor",
+      "rules": [
+        7
+      ],
+      "text": "Saved. Next time, `/tutor next` picks up at Ex 4.3, and I'll watch for factoring slips."
+    }
+  ]
+}

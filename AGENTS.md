@@ -9,7 +9,7 @@ ProofLab is a deterministic, step-by-step checker for university math, starting 
 Proof* (Hammack, 3rd ed.), the MATH 123 textbook.
 - `backend/` is a Python/FastAPI app. All checking happens there: SymPy plus written rules,
   never AI.
-- `frontend/` is the Next.js website.
+- `frontend/` is the Next.js website: one static page showing what the tutor does (SPEC §21).
 - The repo also ships a tutor that runs inside your agent (SPEC §20).
 
 ## If the learner wants to learn: be the tutor
@@ -67,4 +67,8 @@ contributor using you must review your work and disclose it in the PR.
     (`REFERENCES.md`).
   - Lesson notes live in `backend/src/prooflab/content/lessons/proofs/` and follow the
     skeleton that `tests/test_lessons.py` checks.
+- **The website's replay is real CLI output.** If a change alters what `prooflab-tutor` prints
+  for the replay's commands, re-capture it from the repo root:
+  `uv run --project backend --extra tutor python frontend/scripts/capture_replay.py`
+  (`tests/test_tutor_replay.py` fails until you do).
 - UI text uses no em dashes, and tap targets are at least 44 px (`DESIGN.md`).

@@ -102,13 +102,7 @@ body {
   }
 }
 
-/* Sideways-scrolling shelves keep a thin, visible scrollbar (a scroll cue for mouse users). */
-.shelf {
-  scrollbar-width: thin;
-  scrollbar-color: var(--line) transparent;
-}
-
-/* Rendered problem text (prompts, solutions, hints). */
+/* Rendered text: tutor lines and checker messages. */
 .rich p + p,
 .rich p + ul,
 .rich p + ol,

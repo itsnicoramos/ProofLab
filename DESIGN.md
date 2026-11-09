@@ -6,65 +6,53 @@ Dial: ENERGY 1 / RHYTHM 2 / MOTION 1
 
 ## Identity
 
-- **What it is:** a study desk for checking math one step at a time. One student, many
-  courses (MATH 123 with *Book of Proof*, then precalculus and Calculus 1–4). For now only
-  the Proof course is shown; the others are hidden, not removed (`COURSE_ORDER` in
-  `frontend/src/lib/labels.ts`).
-- **Personality:** calm, precise, honest. It never hypes and never pretends. It points at the
-  exact step that went wrong, and it acknowledges earned XP plainly ("+20 XP"): no confetti,
-  sounds, mascots or emoji (SPEC §19).
-- **The math is the star.** Every screen's focal point is mathematics typeset with KaTeX:
-  the problem's own statement, or the student's own steps. Chrome stays quiet around it.
+- **What it is:** one page that shows what a coding agent does when someone types `/tutor` in
+  the ProofLab repo (SPEC §21). ProofLab itself is a study desk for checking math one step at a
+  time; the page explains the tutor that brings that desk into the learner's own agent. The
+  practice site that used to live here is in git history up to commit `0eb0d0f`.
+- **Personality:** calm, precise, honest. It never hypes and never pretends. It says plainly
+  which words were written for the page and which output is real, and the real output is the
+  star: commands and their JSON, and the checker's verdicts.
+- **The math is still the star.** In a verdict, each step is shown the way the checker read
+  it, typeset with KaTeX. Chrome stays quiet around it.
 
-## Browsing
+## The page
 
-- Home and course pages are **shelves**: one row per course topic (for MATH 123, per book
-  chapter), scrolled sideways, like a streaming app's rows. This is the one borrowed
-  pattern, borrowed for its job (lots of items, browse by category), not for its look.
-- A card's "artwork" is the problem's actual statement, typeset. No illustrations, no icons.
-- A "Continue" shelf shows problems this browser has started but not solved. It's only real
-  local progress; nothing is invented.
+One column, in this order. Each section has a serif heading over a hairline rule.
+
+- **Hero:** the question the page answers ("What your agent does when you type `/tutor`"), one
+  paragraph, then **Set it up** (accent, the one primary action) and **Watch a session**
+  (bordered). No badge, no illustration, no stats strip.
+- **How the pieces fit:** the diagram is plain bordered cards joined by labelled arrows (↓),
+  each label naming both ends ("The agent runs every command through prooflab-tutor"), so it
+  reads right at any width. It is one column on a phone; the skill and the CLI sit side by side
+  from `sm`, and content, checker and memory from `md`. The checker card has the ink border
+  instead of the hairline, because it is the only judge.
+- **One session, step by step:** a transcript that grows one step at a time.
+  - A solid sticky bar under the navbar holds **Back**, **Next** (accent), "Step 11 of 22" and
+    **Show all** / **Start over**.
+  - Each step has a muted "Step N" and who acts. The learner's typing is mono on the surface
+    colour, the tutor's words are sans on the surface colour, and what the agent reads or runs
+    sits on the quieter idle tint ("behind the scenes").
+  - The current step gets the accent ring ("you are here").
+  - A check's verdict is a bordered card. Per step: its kind in mono, the step typeset, then
+    "Checks out" in status green or "Flagged" in status red with the message and hint code.
+    Full JSON, piped input and `LEARNING.md` sit in closed `<details>`.
+  - From `lg` up, a sticky side panel lists the seven pieces and marks the ones the current
+    step uses with the accent ring and tint.
+- **Seven rules it keeps:** bordered cards, two columns from `md`, the number in the serif like
+  a marked paper, each with "See it in step N" (a link that opens the replay at that step).
+- **Set it up:** numbered cards with the command in mono on the idle tint and a bordered
+  **Copy** button. "Which agents work" is three cards (never a wide table, so nothing scrolls
+  sideways on a phone).
 
 ## Navigation
 
-- One sticky bar, always visible, solid (no blur). From tablet width up it is one row: the Σ
-  mark and name, then every course as a direct link (current course marked), then
-  **Flashcards**, **Tests**, today's XP ("35 / 50 XP", a link to Progress; the streak joins it
-  from tablet width, `md`, 768 px) and **Search**. "Typing math" lives in the footer (and on every
-  problem page).
-- On a phone (below 640 px) the bar keeps the Σ mark, Search and a hamburger button with the
-  word **Menu** next to the icon (never a bare icon). It opens a solid side sheet from the right:
-  Practice, Flashcards, Tests, Progress (with today's XP), then every course, then Typing
-  math, the current page on the accent tint. No bottom bar, so nothing sits over the page.
-- Search is a magnifier button ("Search" plus a `/` key hint from tablet width up). Search is a
-  modal dialog, top-aligned, solid surface: the one element allowed a shadow, because it sits
-  above the page. `/` or ⌘/Ctrl + K opens it; arrows move, Enter opens, Esc closes.
-- Step editor: "Scan work" sits beside "+ Add step" (camera outline icon, same quiet bordered
-  style). It opens a modal: Take a photo (accent, the one primary action), Choose a file, a
-  dashed drop zone, then an editable review of the text before anything reaches the steps.
-- Test pages: one solid sticky bar under the navbar while a test is open (answered count, time
-  so far, a jump to Finish). Results use the serif for the score, like a marked paper.
-  Multiple-choice questions are full-width rows (48 px) with a lettered circle; after grading
-  the right row turns green, a wrong pick red, and the explanation and worked solution follow.
-  ProofLab-made versions carry a small bordered label "Made by ProofLab, not from the book".
-- Flashcards: one card at a time on the surface colour, the term in the serif, "Show the
-  answer" as a full-width button, then four grade buttons (Again, Hard, Good, Easy) each
-  showing when the card comes back. Good is outlined in the accent as the usual answer.
-
-## XP and progress (SPEC §19)
-
-- XP is text, never a badge or glow: "+20 XP" in the semibold UI face under a Correct verdict,
-  its breakdown in muted text beside it. A wrong answer gets a plain bordered **Try again**
-  button and "No XP yet". The one goal line ("Daily goal done: 50 XP today.") sits in the same
-  live region as the verdict in practice; on the flashcard, quiz and test-result screens focus
-  moves to the result heading and the line follows it.
-- Progress bars and the 12-week calendar use **ink**, not the accent or the status colours:
-  line (no XP), ink at 35% (some), solid ink (goal met), a dashed outline (a freeze covered
-  the day). Today's square gets the accent ring ("you are here"). Status green appears only
-  where it already means "solved": "Chapter complete", "3 of 12 solved", and today's XP in the
-  top bar once the goal is met.
-- The Progress page is one column of the usual bordered surface cards (Today, Streak, Level,
-  Chapters, Milestones, Recent XP); big numbers use the serif, like a marked paper.
+- One sticky bar, solid (no blur): the Σ mark and name, then from `md` the section links (How it
+  works, Session, Rules, Set up), and **GitHub** as a bordered button. Below `md` the section
+  links give way to a single **Set up** link. A one-page site needs no menu.
+- The footer: the MIT line, the *Book of Proof* credit, and links to the source and the free PDF.
+- Every link and button is at least 44 px tall, including the footer's and the rule links.
 
 ## Palette (tokens in `frontend/src/app/globals.css`)
 
@@ -82,16 +70,17 @@ Theme follows the system setting: the product has no reason to force light or da
 - **Headings and problem titles: Source Serif 4.** A textbook voice that sits naturally next
   to KaTeX's Computer Modern–style math, so titles and formulas read as one page.
 - **UI text: Geist Sans.** Small, legible, and neutral, so controls recede behind the math.
-- **Math input: Geist Mono.** Typed expressions need fixed-width characters so `(`, `^` and
-  `*` line up and typos stand out. Never used as decoration.
+- **Typed text: Geist Mono.** What the learner types, the steps the tutor proposes, and every
+  command and its output: fixed-width characters keep `(`, `^` and `*` lined up and show that
+  this is literal input. Never used as decoration.
 
 ## Motifs
 
 - The **Σ mark**: summation, the student adding up steps toward a result.
-- **Math as artwork**: problem statements typeset on cards instead of images.
+- **The real thing as artwork**: the page has no illustrations. Its visuals are the captured
+  session itself, the checker's typeset verdicts and the diagram of the repo's own pieces.
 
 ## Motion
 
-Hover and focus states only. Shelf arrows jump a page instantly (scroll-snap lines up the
-next card). Nothing loops, pulses or animates on load; loading skeletons stop pulsing under
-reduced motion.
+Hover and focus states only. Next reveals a step instantly and scrolls it into view without
+animation; a rule link jumps straight to its step. Nothing loops, pulses or animates on load.

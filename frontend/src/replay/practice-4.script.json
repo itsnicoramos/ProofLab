@@ -1,0 +1,310 @@
+{
+  "title": "/tutor practice 4",
+  "about": "One practice session on Book of Proof Chapter 4. The learner's and tutor's words are written for this page, following the tutor skill. Every command and its output is real: frontend/scripts/capture_replay.py ran each one against the prooflab-tutor CLI and a throwaway memory schema.",
+  "setup_note": "Before this session the learner ran /tutor start once and chose to begin at Chapter 4. That onboarding is in the memory the session reads.",
+  "setup": [
+    {
+      "args": [
+        "memory",
+        "session",
+        "start",
+        "start"
+      ]
+    },
+    {
+      "args": [
+        "memory",
+        "plan",
+        "set"
+      ],
+      "stdin": {
+        "mission": "Taking MATH 123 now",
+        "pace": "~5 h/week",
+        "entry_chapter": 4,
+        "placement": {
+          "self_selected": true
+        },
+        "chapters": {
+          "1": "skip",
+          "2": "skip",
+          "3": "skip",
+          "4": "do",
+          "5": "do",
+          "6": "do",
+          "7": "do",
+          "8": "do",
+          "9": "do",
+          "10": "do",
+          "11": "do",
+          "12": "do",
+          "13": "do",
+          "14": "do"
+        }
+      }
+    },
+    {
+      "args": [
+        "memory",
+        "session",
+        "end",
+        "1",
+        "--summary",
+        "Onboarded: MATH 123, about 5 h a week, chose to start at Chapter 4."
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "kind": "learner",
+      "text": "/tutor practice 4"
+    },
+    {
+      "kind": "read",
+      "files": [
+        ".claude/skills/tutor/SKILL.md",
+        ".claude/skills/tutor/modes/practice.md"
+      ],
+      "summary": "The agent loads the tutor skill and its practice mode. They list the commands to run and the rules to keep."
+    },
+    {
+      "kind": "run",
+      "touches": "memory",
+      "args": [
+        "memory",
+        "show"
+      ],
+      "summary": "Reads the learner's memory: the plan starts at Chapter 4, the last session was onboarding, nothing is solved yet."
+    },
+    {
+      "kind": "run",
+      "touches": "memory",
+      "args": [
+        "memory",
+        "session",
+        "start",
+        "practice",
+        "--chapter",
+        "4"
+      ],
+      "summary": "Opens a practice session. Every checked attempt is saved under its id."
+    },
+    {
+      "kind": "run",
+      "touches": "content",
+      "args": [
+        "lesson",
+        "4"
+      ],
+      "summary": "Reads the Chapter 4 lesson note. Its practice route starts with Ex 4.1, which isn't solved yet."
+    },
+    {
+      "kind": "run",
+      "touches": "content",
+      "args": [
+        "show",
+        "proofs.direct.ch4-ex01"
+      ],
+      "summary": "Fetches the exercise: the prompt, the step kinds it accepts and how many hints it has. There is no solution in it: show never returns one.",
+      "rules": [
+        5
+      ]
+    },
+    {
+      "kind": "tutor",
+      "rules": [
+        6
+      ],
+      "text": "Ex 4.1, the square of an even integer. It's Book of Proof, Chapter 4 exercises, #1 (p. 126).\n\nUse a direct proof. Let x be an even integer. Show that x^2 is even.\n\nWrite your proof in your own words, and I'll turn it into ProofLab steps for the checker."
+    },
+    {
+      "kind": "learner",
+      "text": "x is even so x = 2a for some integer a. then x^2 = (2a)^2 = 4a^2 = 2(4a^2). so x^2 is 2 times an integer, which means it's even"
+    },
+    {
+      "kind": "tutor",
+      "rules": [
+        2
+      ],
+      "text": "Here's how I'll enter your work:",
+      "proposal": [
+        {
+          "kind": "let",
+          "content": "x = 2a"
+        },
+        {
+          "kind": "expr",
+          "content": "x^2"
+        },
+        {
+          "kind": "expr",
+          "content": "(2a)^2"
+        },
+        {
+          "kind": "expr",
+          "content": "4a^2"
+        },
+        {
+          "kind": "expr",
+          "content": "2(4a^2)"
+        },
+        {
+          "kind": "witness",
+          "content": "4a^2"
+        }
+      ],
+      "after": "Send it to the checker?",
+      "aside": "Step 5 has a slip, and the tutor enters it exactly as written. It translates the learner's work; it never fixes it."
+    },
+    {
+      "kind": "learner",
+      "text": "yes"
+    },
+    {
+      "kind": "run",
+      "touches": "checker",
+      "args": [
+        "check",
+        "proofs.direct.ch4-ex01",
+        "--hints-shown",
+        "0",
+        "--record",
+        "--session",
+        "{session}"
+      ],
+      "stdin_from": 8,
+      "summary": "The checker grades the steps. Step 5 isn't equal to the step before it, so the witness fails too. The verdict is saved to memory as it came back."
+    },
+    {
+      "kind": "tutor",
+      "rules": [
+        1,
+        3,
+        4
+      ],
+      "text": "ProofLab's checker marks this incorrect. The first step it flags is step 5, `2(4a^2)`: it doesn't follow from the step before it, because the two aren't equal.\n\nEvery expr line has to equal x^2. So here's a question: if you multiply out 2(4a^2), do you get back 4a^2?"
+    },
+    {
+      "kind": "learner",
+      "text": "oh, that's 8a^2. it should be 2(2a^2), so the integer is 2a^2"
+    },
+    {
+      "kind": "tutor",
+      "rules": [
+        2
+      ],
+      "text": "Here's your new version. Steps 5 and 6 changed:",
+      "proposal": [
+        {
+          "kind": "let",
+          "content": "x = 2a"
+        },
+        {
+          "kind": "expr",
+          "content": "x^2"
+        },
+        {
+          "kind": "expr",
+          "content": "(2a)^2"
+        },
+        {
+          "kind": "expr",
+          "content": "4a^2"
+        },
+        {
+          "kind": "expr",
+          "content": "2(2a^2)"
+        },
+        {
+          "kind": "witness",
+          "content": "2a^2"
+        }
+      ],
+      "after": "Send it?"
+    },
+    {
+      "kind": "learner",
+      "text": "send it"
+    },
+    {
+      "kind": "run",
+      "touches": "checker",
+      "args": [
+        "check",
+        "proofs.direct.ch4-ex01",
+        "--hints-shown",
+        "0",
+        "--record",
+        "--session",
+        "{session}"
+      ],
+      "stdin_from": 13,
+      "summary": "Every step checks out, and the witness 2a^2 gives x^2 = 2(2a^2). Saved as a second try with no hints."
+    },
+    {
+      "kind": "tutor",
+      "rules": [
+        1
+      ],
+      "text": "ProofLab's checker marks it correct, on your second try, with no hints used. What made it work: 4a^2 = 2(2a^2), and 2a^2 is an integer, so x^2 has the even form 2(integer).\n\nNext on the route is Ex 4.3, a longer expansion that ends in the odd form. Want it, or stop here?"
+    },
+    {
+      "kind": "learner",
+      "text": "stop here for today"
+    },
+    {
+      "kind": "run",
+      "touches": "memory",
+      "args": [
+        "memory",
+        "note",
+        "add",
+        "--kind",
+        "struggle",
+        "--chapter",
+        "4",
+        "--text",
+        "Factoring slip: wrote 4a^2 = 2(4a^2). Fixed it after one question, no hints."
+      ],
+      "summary": "Remembers one thing about how the learner learns, for next time.",
+      "rules": [
+        7
+      ]
+    },
+    {
+      "kind": "run",
+      "touches": "memory",
+      "args": [
+        "memory",
+        "session",
+        "end",
+        "{session}",
+        "--summary",
+        "Ch 4: solved Ex 4.1 on the 2nd try after a factoring slip. Next: Ex 4.3."
+      ],
+      "summary": "Closes the session with one line that the next session's warm-up starts from.",
+      "rules": [
+        7
+      ]
+    },
+    {
+      "kind": "run",
+      "touches": "memory",
+      "args": [
+        "memory",
+        "export"
+      ],
+      "file": "LEARNING.md",
+      "summary": "Writes LEARNING.md, a readable copy of the memory. Git ignores it, so it stays on the learner's machine.",
+      "rules": [
+        7
+      ]
+    },
+    {
+      "kind": "tutor",
+      "rules": [
+        7
+      ],
+      "text": "Saved. Next time, `/tutor next` picks up at Ex 4.3, and I'll watch for factoring slips."
+    }
+  ]
+}

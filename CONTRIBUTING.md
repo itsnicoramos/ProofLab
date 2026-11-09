@@ -10,7 +10,8 @@ truth for how ProofLab behaves; this file covers how to send a change.
   misbehaves.
 - **Bug fixes** in the checker, the API, the website, or the tutor's command line
   (`prooflab-tutor`), with a test that fails before the fix and passes after it.
-- **Website improvements.** Layout, accessibility, clearer wording, speed.
+- **Website improvements.** The page that explains the tutor: layout, accessibility, clearer
+  wording.
 - **Tutor improvements.** Changes to the `/tutor` skill (`.claude/skills/tutor/`) and its
   modes that make it teach better while keeping its rules (see below).
 
@@ -27,7 +28,7 @@ Point to the exercise by chapter and number, never by pasting its text.
 
 Open an issue at <https://github.com/itsnicoramos/ProofLab/issues> with:
 
-- **Where it happened:** the website (which page, browser, phone or desktop), the API, or the
+- **Where it happened:** the website (browser, phone or desktop), the API, or the
   tutor (which agent, and which command or mode).
 - **What you did:** for a wrong verdict, the problem id (like `proofs.direct.ch4-ex01`) and
   the exact steps you typed.
@@ -109,8 +110,11 @@ npm run build
 - **Tests never touch real data.**
   - `backend/tests/conftest.py` points the progress database and the tutor memory at
     throwaway places. Keep it that way.
-  - A browser you drive for testing must not sync with a real progress database. Point the
-    website at a throwaway backend, or block `/api/store`.
+  - The website's replay is captured with a throwaway memory schema
+    (`frontend/scripts/capture_replay.py`), never with your own tutor memory.
+- **The website shows only real CLI output.** If your change alters what `prooflab-tutor`
+  prints for the replay's commands, capture the replay again; `tests/test_tutor_replay.py`
+  fails until you do.
 - **Schema changes are new files.** Add a migration (`backend/src/prooflab/tutor_memory/schema/NNN_*.sql`)
   and never edit one that has already shipped. The SQLite progress store follows `SPEC.md` §17.
 - **Website text** has no em dashes. Tap targets are at least 44px, and every page works at

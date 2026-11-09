@@ -18,9 +18,10 @@ went wrong and *why*, with rule-based hints.
 - **First target: MATH 123**, whose textbook is *Book of Proof* (Hammack, 3rd ed.), all 14
   chapters. Then every math/STEM course after it. Content is organised by course track so new
   courses are added as content + topic modules, not rewrites.
-- **Two parts.** `backend/` is the Python API that does all checking; `frontend/` is the
-  Next.js website. The website calls the API from the server (Server Components and Server
-  Actions) over HTTP/JSON (§7), so the browser never talks to the API directly.
+- **Two parts.** `backend/` is the Python API that does all checking, plus the tutor's CLI
+  (§20). `frontend/` is the Next.js website: since 2026-11-08 a single static page explaining
+  what the repo tutor does (§21). The practice site that used to call the API (§13 to §19) is
+  in git history up to commit `0eb0d0f`.
 
 ### Scope disclaimer
 
@@ -39,9 +40,9 @@ submitted work passed ProofLab's checks — it is not a substitute for an instru
 ## 2. Architecture
 
 ```
-Next.js frontend (next phase)
-        │  HTTP/JSON
-        ▼
+HTTP clients (§7)          prooflab-tutor CLI (§20, calls the checker in-process)
+        │  HTTP/JSON                       │
+        ▼                                  ▼
 FastAPI  (api/routes.py, api/schemas.py)
         │
         ▼
@@ -576,6 +577,9 @@ Kinds: **midterm** (first half of the chapters, 8 questions), **final** (every c
 
 ### Taking a test (frontend)
 
+> **Removed from the website on 2026-11-08** (§21). This describes the practice site as it
+> was up to commit `0eb0d0f`; the backend parts still work.
+
 - `/tests` builds a test: course, midterm or final, chapters, number of questions. Each start
   picks a fresh random seed. Course pages link straight to the default midterm and final.
 - `/tests/<course>/<kind>?seed=&topics=&length=` runs it. In exam mode the workspace has no
@@ -641,6 +645,9 @@ the base problem.
 
 ### Search
 
+> **Removed from the website on 2026-11-08** (§21). This describes the practice site as it
+> was up to commit `0eb0d0f`; the backend parts still work.
+
 The navbar search (`/` or ⌘/Ctrl + K) finds topics, problems, practice tests and help pages.
 Its index comes from `/courses` and `/problems` through a server action, loaded the first time
 the dialog opens. Matching is plain: every word of the query must appear in the entry's name,
@@ -664,7 +671,7 @@ still comes from the deterministic checkers.
   - Word, RTF, ODT, HTML: macOS's `textutil`. Plain text (`.txt`, `.md`, `.tex`): decoded.
   - Limits: 15 MB per file. On non-macOS hosts (the Docker image) only text files can be read
     and `GET /read` says so; the website explains instead of failing.
-- **Website**: a "Scan work" button in the step editor (practice and exam mode) opens a dialog
+- **Website** (removed on 2026-11-08, §21; in git history up to `0eb0d0f`): a "Scan work" button in the step editor (practice and exam mode) opens a dialog
   with a live camera and Capture button (falling back to the phone camera through the file
   picker), "Choose a file", drag and drop, and paste. Photos are shrunk to 2200 px and turned
   the right way up in the browser. `/api/read` proxies to the backend.
@@ -686,6 +693,10 @@ still comes from the deterministic checkers.
   fit §12's plan, still as transcription only.
 
 ## 15. Flashcards (no AI)
+
+> **The website side was removed on 2026-11-08** (§21): `/cards` and the study model in
+> `frontend/src/lib/learn.ts` are in git history up to commit `0eb0d0f`. The backend's decks and
+> cards still work, and the tutor uses the concept cards (§20).
 
 `/cards` on the website; `backend/src/prooflab/cards.py` and `notes.py`; the study model is
 `frontend/src/lib/learn.ts`.
@@ -735,6 +746,9 @@ database (§17), so every device gets the same model.
 
 ## 16. Phone layout
 
+> **Removed from the website on 2026-11-08** (§21). This describes the practice site as it
+> was up to commit `0eb0d0f`; the backend parts still work.
+
 Below the `sm` breakpoint (640 px) the top bar keeps the Σ mark, Search and a hamburger button
 labelled **Menu**. It opens a side sheet (native `<dialog>`, closes on Close, Esc, a link or a
 tap on the backdrop) with Practice, Flashcards, Tests and Progress (with today's XP beside it),
@@ -764,7 +778,8 @@ temporary file.
 Problems and concept cards stay JSON content files (§4, §15.1); answer drafts stay in each
 browser.
 
-**Sync.** Each browser keeps its own copy (localStorage) so pages stay instant and work
+**Sync** (removed with the practice site on 2026-11-08, §21; the `/store` endpoints remain but
+nothing in the repo calls them now). Each browser kept its own copy (localStorage) so pages stay instant and work
 offline. Every change is also queued in an outbox (`lib/outbox.ts`); the sync agent
 (`lib/sync.ts`, mounted in the layout) sends the queue to `POST /api/store` (proxied to the
 backend) a moment after a change, on load, when the tab becomes visible, when the network
@@ -793,11 +808,11 @@ Two Vercel projects deploy from the same GitHub repository (`itsnicoramos/ProofL
 
 | Project | Root | What runs |
 |---|---|---|
-| `prooflab` | `frontend/` | the Next.js website, https://prooflab-ruby.vercel.app |
+| `prooflab` | `frontend/` | the tutor explainer (§21), static, https://prooflab-ruby.vercel.app |
 | `prooflab-api` | `backend/` | the FastAPI checker as a Python function (`index.py`, `[tool.vercel] entrypoint = "index:app"`), https://prooflab-api.vercel.app |
 
-The website's `PROOFLAB_API_URL` points at the checker's production URL; the browser never
-calls the checker directly.
+The explainer calls no API. The `prooflab` project's `PROOFLAB_API_URL` setting was for the
+practice site and is no longer read.
 
 On Vercel the checker runs with `PROOFLAB_ISOLATE=0` (checks run in-process, no worker
 processes, and the function's 60 s limit is the backstop) and `PROOFLAB_STORE=0`: Vercel has no
@@ -808,6 +823,9 @@ else (checking, tests, quizzes, new versions, flashcards, cards from pasted note
 Locally nothing changes: `uvicorn prooflab.main:create_app --factory` with the full feature set.
 
 ## 19. XP, streaks and the daily goal
+
+> **Removed from the website on 2026-11-08** (§21). This describes the practice site as it
+> was up to commit `0eb0d0f`; the backend parts still work.
 
 Duolingo-style motivation, kept honest: **a right answer earns XP, a wrong one means try
 again** and costs nothing. XP comes only from the deterministic checker's verdict, a test's
@@ -916,8 +934,8 @@ XP is recomputed by replaying the log in time order (same log, same XP, on every
 
 Decided with the user on 2026-11-08. Anyone who clones the repo gets a *Book of Proof* tutor
 in their own coding agent (Claude Code, Codex, Cursor, others), the way *AI Engineering from
-Scratch* ships tutor skills. **The app itself gets no AI:** the website and API are
-unchanged, and the in-app Ollama assistant (§12) is still not wired. The tutor follows the
+Scratch* ships tutor skills. **The app itself gets no AI:** the API is
+unchanged (the website later became the tutor's explainer, §21), and the in-app Ollama assistant (§12) is still not wired. The tutor follows the
 same principles: the checker is the judge, it stays grounded, and it never leaks answers.
 
 ### Pieces
@@ -1068,3 +1086,64 @@ format, the citations against `sections`, the ids, the codes, and that there are
 - `tests/test_tutor_memory.py` runs against Postgres when `PROOFLAB_TUTOR_TEST_DATABASE_URL`
   is set, in a throwaway schema per test, and is skipped otherwise.
 - `tests/conftest.py` points the tutor memory at a closed port for every other test.
+- `tests/test_tutor_replay.py` keeps the website's replay (§21) equal to the CLI's real output.
+
+## 21. Website: the tutor explainer
+
+Decided with the user on 2026-11-08. The Next.js site (`frontend/`,
+https://prooflab-ruby.vercel.app) is now one static page that shows what a coding agent does
+when someone types `/tutor` in the repo. The practice site (problem shelves, the step
+workspace, flashcards, tests, progress, XP and the sync to the progress database, §13 to §19)
+was deleted from `frontend/`; it is in git history up to commit `0eb0d0f`. The backend and its
+HTTP API are unchanged.
+
+### The page
+
+One page, `/`, prerendered at build time. It calls no API and stores nothing.
+
+- **How the pieces fit:** a diagram of the learner, the coding agent, the tutor skill,
+  `prooflab-tutor`, content, the checker and memory, each with its place in the repo.
+- **One session, step by step:** a replay of `/tutor practice 4` in 22 steps.
+  - Back and Next reveal one step at a time; Show all reveals the rest.
+  - Each step says who acts: the learner, the tutor, or the agent reading a file or running a
+    command.
+  - Commands show their real JSON output. `check` shows the verdict the way the checker read
+    each step, typeset with KaTeX, with flagged steps in the status red.
+  - From `lg` up, a side panel marks the pieces the current step uses ("you are here").
+  - A link to `#step-N` opens the session up to step N.
+- **Seven rules it keeps:** the rules of §20, each linking to the replay step that shows it.
+- **Set it up:** the four commands with copy buttons, and how Claude Code, Codex and other
+  agents start the tutor.
+
+### Real output only
+
+`frontend/src/replay/practice-4.script.json` holds the turns. The learner's and tutor's words
+are written for the page, following the skill, and the page says so.
+`frontend/scripts/capture_replay.py` runs every command in it with the real CLI and writes
+`practice-4.json`, which the page imports.
+
+- It uses a throwaway memory schema, dropped before and after. An existing `LEARNING.md` is
+  put back.
+- `{session}` becomes the id that `memory session start` returned.
+- `check` gets exactly the steps the tutor proposed (`stdin_from`), so a verdict on the page is
+  always about the steps the learner agreed to.
+- Absolute paths inside the repo are shortened to repo-relative ones.
+
+Re-capture after changing the checker, Chapter 4's content or the CLI's output:
+`uv run --project backend --extra tutor python frontend/scripts/capture_replay.py`.
+
+### Tests
+
+- `frontend/src/lib/replay.test.ts` (`npm test`):
+  - the capture matches its script;
+  - the tutor says correct only right after a correct verdict, and names the checker;
+  - every check grades the last proposed steps, after a learner reply;
+  - no solution is shown, and `show` output carries none;
+  - a wrong verdict is followed by a question, not rewritten steps;
+  - every rule links to a step tagged with it;
+  - no machine paths, and no em or en dashes in page text.
+- `backend/tests/test_tutor_replay.py` re-runs the replay's `show`, `lesson` and `check`
+  commands and requires the same output, so the page can't drift from the CLI. It is skipped
+  where the frontend isn't checked out (the backend Docker image).
+- Checked in a browser at 375 px and 1280 px, in light and dark: no sideways scroll, and every
+  control is at least 44 px.

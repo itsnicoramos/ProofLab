@@ -1,49 +1,41 @@
-# ProofLab 
+# ProofLab website
 
-The Next.js 16 frontend for ProofLab. See the [root README](../README.md) for running it
-alongside the backend, and [SPEC.md](../SPEC.md) for how checking works.
+One static page that shows what a coding agent does when you type `/tutor` in the ProofLab
+repo (SPEC §21). It calls no API and stores nothing. See the [root README](../README.md) for the
+tutor itself and [SPEC.md](../SPEC.md) for how checking works.
 
 ```
 src/
 ├── app/
-│   ├── page.tsx                  home: Today line, Continue shelf + a shelf per topic
-│   ├── progress/page.tsx         XP, daily goal, streak, level, chapters, milestones
-│   ├── courses/[course]/page.tsx problems grouped by topic, with your progress
-│   ├── problems/[id]/page.tsx    prompt, step editor, verdict, hints, solution
-│   ├── tests/page.tsx            practice-test builder + your past tests
-│   ├── tests/[course]/[kind]/    a practice midterm or final (exam mode, graded on submit)
-│   ├── api/read/route.ts         proxies scanned files to the backend reader
-│   ├── help/page.tsx             how to type math
+│   ├── page.tsx           the page: hero, how the pieces fit, the session replay, rules, setup
+│   ├── layout.tsx         top bar and footer
 │   └── error.tsx, not-found.tsx
 ├── components/
-│   ├── Workspace.tsx             the interactive step editor (practice and exam modes)
-│   ├── TestBuilder.tsx, TestRunner.tsx, TestHistory.tsx
-│   ├── SearchDialog.tsx          navbar search (/ or ⌘K), index loaded on first open
-│   ├── ScanDialog.tsx            "Scan work": camera, files, drop, paste → review → steps
-│   ├── Rich.tsx                  Markdown + KaTeX rendering
-│   ├── Badges.tsx, ProgressMark.tsx, ChapterSolved.tsx
-│   ├── XpNote.tsx, XpLink.tsx    "+20 XP" under a verdict; today's XP in the top bar
-│   ├── TodayStrip.tsx, ProgressView.tsx
-└── lib/
-    ├── api.ts                    server-side backend client (PROOFLAB_API_URL)
-    ├── actions.ts                Server Actions: checkWork, revealSolution, gradeTest,
-    │                             getSearchIndex
-    ├── search.ts                 search ranking
-    ├── scan.ts                   photo shrinking, reader calls, tidying lines into steps
-    ├── storage.ts                drafts + progress in localStorage
-    ├── rich.ts                   safe Markdown-subset + LaTeX renderer
-    ├── xp.ts                     the XP activity log, goal, today (synced like reviews)
-    ├── xpRules.ts                XP, streak, level and milestone rules (pure; `npm test`)
-    ├── labels.ts, types.ts
+│   ├── Replay.tsx         the step-through (client): Back, Next, Show all, #step-N links
+│   ├── StepView.tsx       one replay step, rendered on the server; the checker's verdict view
+│   ├── Diagram.tsx        the pieces diagram and the replay's "working in this step" panel
+│   ├── CopyButton.tsx     copies a setup command
+│   ├── Rich.tsx, Logo.tsx
+├── lib/
+│   ├── replay.ts          replay types and helpers (no imports, so `npm test` can load it)
+│   ├── site.ts            the rules, pieces, setup steps and agents the page lists
+│   ├── rich.ts            safe Markdown-subset + LaTeX renderer
+│   └── replay.test.ts     the replay keeps the tutor's rules; no em dashes in page text
+└── replay/
+    ├── practice-4.script.json   the session's turns (written) and commands (to run)
+    └── practice-4.json          the same, with every command's real output (generated)
+scripts/
+└── capture_replay.py      runs the script's commands with prooflab-tutor and writes the JSON
 ```
 
-`npm test` runs the XP rule tests with Node's built-in test runner (`node --test`; Node 24
-runs TypeScript directly, so nothing extra is installed).
+Capture the replay again from the repo root after changing the checker, Chapter 4's content or
+the CLI's output. It needs the tutor's memory (`docker compose up -d tutor-db`) and uses a
+throwaway schema, so your own memory is never touched:
 
-- Pages fetch from the backend at request time inside `<Suspense>` (Cache Components is on),
-  so `npm run build` doesn't need the backend running.
-- The browser never calls the backend directly: checks go through Server Actions, so the
-  backend URL stays server-side and no CORS setup is needed.
-- Drafts and revealed hints live in this browser's `localStorage` only. Best results, test
-  records, flashcard reviews and the XP activity log are kept there too and synced to the
-  progress database (`lib/sync.ts`, SPEC §17) when the backend has one.
+```bash
+uv run --project backend --extra tutor python frontend/scripts/capture_replay.py
+```
+
+`npm test` runs `src/lib/*.test.ts` with Node's built-in test runner (Node 24 runs TypeScript
+directly). `backend/tests/test_tutor_replay.py` checks that the CLI still prints what the page
+shows.
