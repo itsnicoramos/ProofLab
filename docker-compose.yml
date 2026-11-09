@@ -1,0 +1,29 @@
+# The repo tutor's memory (SPEC §20): one local Postgres, for `prooflab-tutor memory ...`.
+#
+#   docker compose up -d tutor-db      start it (data lives in the tutor-db-data volume)
+#   docker compose down                stop it (the volume, and your memory, stay)
+#
+# It listens on 127.0.0.1:5433 only, so it can't clash with a Postgres on 5432 and isn't
+# reachable from other machines. Set TUTOR_DB_PASSWORD in .env (see .env.example) to change
+# the local password. This is separate from the site's progress database (SQLite).
+services:
+  tutor-db:
+    # postgres:17-alpine, pinned by digest so every clone runs the same server.
+    image: postgres:17-alpine@sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac
+    environment:
+      POSTGRES_USER: prooflab
+      POSTGRES_PASSWORD: ${TUTOR_DB_PASSWORD:-prooflab-local}
+      POSTGRES_DB: prooflab_tutor
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - tutor-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prooflab -d prooflab_tutor"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  tutor-db-data:

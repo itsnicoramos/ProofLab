@@ -24,6 +24,11 @@ generated text.
 - **Scan your work.** Photograph handwriting or pick a photo, PDF or Word document; ProofLab
   reads it on your Mac (Apple's on-device text recognizer), you fix any misreads, and the lines
   become steps. Reading never decides right or wrong. See `SPEC.md` §14.
+- **A tutor in your own coding agent.** Clone the repo, open Claude Code, Codex or another
+  agent in it, and type `/tutor`. It teaches all 14 chapters of *Book of Proof* from
+  ProofLab's own lesson notes and has you prove real exercises. ProofLab's checker grades
+  every attempt, never the AI. It remembers your plan and progress in a local Postgres. See
+  [Learn with the tutor](#learn-with-the-tutor) and `SPEC.md` §20.
 - **Two parts:** a Python/FastAPI backend that does all the checking (`backend/`) and a
   Next.js website you study in (`frontend/`).
 
@@ -171,6 +176,63 @@ PROOFLAB_TEST_COURSES=calc1 uv run pytest tests/test_content.py
 > Also right-click the ProofLab folder in Finder → **Keep Downloaded** so source files are
 > never offloaded.
 
+## Learn with the tutor
+
+The repo ships a math tutor for *Book of Proof* that runs inside your own coding agent, in the
+spirit of *AI Engineering from Scratch*, but for proofs.
+- **It teaches** each chapter from an original lesson note.
+- **It quizzes you** and coaches you through real exercises.
+- **ProofLab's checker** (the same deterministic rules as the website) decides whether your
+  work is right. The agent explains and hints; it never grades.
+- **It remembers** your plan, chapter progress, graded attempts, quiz scores, review queue,
+  and what you tend to trip on. It keeps that in a local Postgres, separate from the
+  website's progress.
+
+You need [uv](https://docs.astral.sh/uv/), Docker (Docker Desktop, or Colima on a Mac), and a
+coding agent such as Claude Code or Codex.
+
+```bash
+git clone https://github.com/itsnicoramos/ProofLab.git && cd ProofLab
+```
+
+```bash
+docker compose up -d tutor-db
+```
+
+```bash
+cd backend && uv sync --extra tutor && uv run prooflab-tutor memory init && cd ..
+```
+
+Then open your agent in the `ProofLab` folder and start:
+
+| Agent | Start | Next lesson | Practise a chapter | Quiz or mock test |
+|---|---|---|---|---|
+| Claude Code | `/tutor` | `/tutor next` | `/tutor practice 4` | `/tutor quiz 6`, `/tutor midterm 1-6` |
+| Codex | `use the tutor skill to start` | `next lesson` | `practise chapter 4` | `quiz me on chapter 6` |
+| Other agents | `Read AGENTS.md and be my tutor` | `next lesson` | `practise chapter 4` | `give me a mock midterm on chapters 1 to 6` |
+
+What a session looks like:
+1. A warm-up from your last session.
+2. A chapter taught a few ideas at a time, with questions for you.
+3. A worked example.
+4. An exercise you prove yourself. The checker marks it, and you try again until it's right.
+5. A short exit check.
+
+Chapters 11 to 14 have lessons, but ProofLab can't check them yet, so the tutor's comments on
+those proofs are labelled "feedback, not a verdict".
+
+The pieces:
+- **Skill:** `.claude/skills/tutor/`. Other agents reach it through `AGENTS.md`.
+- **Lesson notes:** `backend/src/prooflab/content/lessons/proofs/`.
+- **Tools the agent runs:** `uv run --project backend --extra tutor prooflab-tutor --help`.
+- **Readable copy of your memory:** run `prooflab-tutor memory export` to get `LEARNING.md`
+  (ignored by git).
+
+Memory notes:
+- Without the database, the tutor still teaches and checks; it just can't save.
+- `docker compose down` keeps your memory, which lives in the `tutor-db-data` volume.
+- `prooflab-tutor memory forget --confirm` deletes it.
+
 ## Live on Vercel
 
 - Website: https://prooflab-ruby.vercel.app
@@ -214,6 +276,9 @@ docker build --target test -t prooflab-test backend
 | `PROOFLAB_ISOLATE` | `1` | run each check in its own worker process (`0` = in-process, for debugging) |
 | `PROOFLAB_MAX_CONCURRENT_CHECKS` | `4` | checks running at once; more get HTTP 503 |
 | `PROOFLAB_DB` | `~/Library/Application Support/ProofLab/prooflab.sqlite3` (Docker: `/data/prooflab.sqlite3`) | SQLite file for your progress (reviews, decks, test results, XP), shared by every device that opens the site |
+| `TUTOR_DB_PASSWORD` | `prooflab-local` | password of the tutor's local Postgres (`docker-compose.yml`; set it in `.env`, see `.env.example`) |
+| `PROOFLAB_TUTOR_DATABASE_URL` | the compose `tutor-db` on `127.0.0.1:5433` | any other Postgres for the tutor's memory |
+| `PROOFLAB_TUTOR_LEARNER` | `me` | the tutor memory's profile name, if several people share a clone |
 
 ## API
 
@@ -260,6 +325,10 @@ Tag problems with your course code (e.g. `"tags": ["math123"]`) and filter with
 prooflab/
 ├── SPEC.md          source of truth
 ├── REFERENCES.md    books, licenses, citation policy
+├── CONTRIBUTING.md  how to report bugs and send changes
+├── AGENTS.md        instructions for AI agents, the tutor's rules (CLAUDE.md imports it)
+├── docker-compose.yml   the tutor's memory: Postgres on 127.0.0.1:5433
+├── .claude/skills/tutor/   the tutor skill: SKILL.md + modes/ (SPEC §20)
 ├── frontend/        Next.js website (see frontend/README.md)
 │   └── src/lib/xpRules.ts   XP, streak and level rules (SPEC §19), tested by `npm test`
 └── backend/
@@ -271,6 +340,9 @@ prooflab/
     │   ├── cards.py, notes.py   flashcards and cards from notes (SPEC §15)
     │   ├── store.py             progress database, SQLite (SPEC §17)
     │   ├── reader.py            photos/PDFs/documents → text (SPEC §14)
+    │   ├── tutor.py             prooflab-tutor, the tutor's command line (SPEC §20)
+    │   ├── tutor_memory/        the tutor's Postgres memory: schema/, queries, LEARNING.md export
+    │   ├── lessons.py           lesson-note loader (content/lessons/)
     │   ├── api/                 routes.py, schemas.py
     │   ├── engine/
     │   │   ├── algebra.py       safe parser, equivalence, sets, solving
@@ -278,6 +350,23 @@ prooflab/
     │   │   ├── hints.py         hint catalog
     │   │   ├── models.py        Problem, Step, Verdict, Reference, Review
     │   │   └── topics/<course>/<topic>.py
-    │   └── content/             references.json, courses.json, problems/**.json, cards/*.json
-    └── tests/                   engine/, api/, test_content.py
+    │   └── content/             references.json, courses.json, problems/**.json, cards/*.json,
+    │                            lessons/proofs/chNN-*.md
+    └── tests/                   engine/, api/, test_content.py, test_tutor*.py, test_lessons.py
 ```
+
+## Contributing
+
+Bug reports, bug fixes, website improvements and tutor improvements are welcome. Problems and
+lesson notes are written by the maintainer for now; suggest them in an issue.
+[CONTRIBUTING.md](CONTRIBUTING.md) has the workflow, the checks a pull request must pass, and
+the rules every change keeps.
+
+## License
+
+[MIT](LICENSE), copyright itsnicoramos. That covers the code and ProofLab's own content: its
+restatements of exercises, hints, worked solutions, flashcards and lesson notes.
+
+*Book of Proof* itself is not in this repository. It is by Richard Hammack, licensed CC
+BY-NC-ND 4.0, and free to read at <https://richardhammack.github.io/BookOfProof/>. ProofLab
+cites its sections and exercise numbers and never copies its text (`REFERENCES.md`).

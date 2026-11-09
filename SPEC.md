@@ -13,6 +13,8 @@ went wrong and *why*, with rule-based hints.
   comes from SymPy computations, numeric evaluation, and hand-written rules. Same input → same
   verdict. A local LLM assistant (Ollama) is **planned, not wired** (§12): it may explain,
   tutor and give extra hints, but it can never mark work right or wrong.
+  The repo tutor (§20) runs in the learner's own coding agent under the same rule: it
+  teaches and hints, and the checker grades.
 - **First target: MATH 123**, whose textbook is *Book of Proof* (Hammack, 3rd ed.), all 14
   chapters. Then every math/STEM course after it. Content is organised by course track so new
   courses are added as content + topic modules, not rewrites.
@@ -532,6 +534,9 @@ Responses stream (server-sent events) so a slow small model still feels responsi
 - Settings: `PROOFLAB_ASSIST` (`0`/`1`, default `0`), `PROOFLAB_OLLAMA_URL`
   (default `http://localhost:11434`), `PROOFLAB_OLLAMA_MODEL`.
 
+The repo tutor's lesson notes (§20) are a ready source of grounding text in ProofLab's own
+words, which may replace extracting the book's section text.
+
 ### Open questions (to settle before wiring)
 
 1. May the cited *Book of Proof* section text be extracted from your PDF into the gitignored
@@ -906,3 +911,160 @@ XP is recomputed by replaying the log in time order (same log, same XP, on every
 - The log lives in the student's browser and could be edited. With one student and no
   leaderboards that only fools the student; leaderboards would need accounts and the server
   to recompute XP from its own checks.
+
+## 20. Repo tutor (an AI tutor in the learner's own agent)
+
+Decided with the user on 2026-11-08. Anyone who clones the repo gets a *Book of Proof* tutor
+in their own coding agent (Claude Code, Codex, Cursor, others), the way *AI Engineering from
+Scratch* ships tutor skills. **The app itself gets no AI:** the website and API are
+unchanged, and the in-app Ollama assistant (§12) is still not wired. The tutor follows the
+same principles: the checker is the judge, it stays grounded, and it never leaks answers.
+
+### Pieces
+
+| Piece | Where | Role |
+|---|---|---|
+| Skill | `.claude/skills/tutor/SKILL.md` + `modes/{start,level,learn,practice,quiz,guide}.md` | how to teach: routing, the rules below, each mode's script. Claude Code loads it as `/tutor`; other agents reach it through `AGENTS.md` (`CLAUDE.md` imports `AGENTS.md`) |
+| Lesson notes | `backend/src/prooflab/content/lessons/proofs/chNN-<topic>.md` | one original note per chapter, ProofLab's own words |
+| CLI | `backend/src/prooflab/tutor.py`, run as `uv run --project backend --extra tutor prooflab-tutor` | content, checking and memory, JSON out |
+| Memory | `backend/src/prooflab/tutor_memory/`, Postgres from `docker-compose.yml` | the learner's plan and history |
+
+### The tutor's rules
+
+1. **The checker is the only judge.** The agent calls work correct only when `check` or
+   `answer` said so. Chapters 11 to 14 have no checker yet, so anything said about those
+   proofs is labelled "feedback, not a verdict".
+2. **Translate, never fix.** The agent turns the learner's own words into ProofLab steps
+   (§3, §5) and shows them before checking. Ambiguity means asking, not choosing.
+3. **The hint ladder matches the site:**
+   - a question first;
+   - then the authored hints in order (a wrong verdict carries the next one as
+     `AUTHORED_HINT`);
+   - then one hint of the agent's own;
+   - the solution only when the learner gives up, followed by an offered new-number version.
+4. **Try again on a wrong verdict.** The agent points at the first step with status `error`,
+   explains its message and code, and asks for another attempt.
+5. **Exercises are read only through the CLI.** Problem JSON holds solutions and worked
+   attempts. Choice questions come without keys.
+6. **No book text and no invented book exercises.** Citations use section, exercise number
+   and page, plus the free PDF link. New numbers come only from labelled versions (§13.3).
+7. **Local only.**
+   - Never the API server.
+   - Never the SQLite progress store (§17).
+   - Never SQL from the agent; memory goes through the CLI.
+   - Without memory the tutor keeps teaching and says it can't save.
+
+### CLI contract
+
+The CLI loads the live course only (`proofs`, matching `COURSE_ORDER`). It reuses the API's
+own code paths, so the tutor and the site always agree: `find_problem`, `problem_detail`,
+`practice_test_out`, `answer_out` in `api/routes.py`, and `check_isolated` with the API's
+timeouts. Exit codes: 0 done, 1 bad request, 3 memory unavailable.
+
+| Command | Output |
+|---|---|
+| `chapters` | 14 chapters: lesson path, `checkable`, minutes, sections, problem counts, card counts |
+| `lesson N` | the note's frontmatter and text |
+| `problems --chapter N [--difficulty D]` | problem summaries with `chapter` |
+| `show <id>` | `ProblemDetail` (§7): never the answer, solution, mistakes or examples |
+| `check <id> [--hints-shown H] [--record --session S --quiz Q]` | `{checked_by, problem_id, chapter, verdict}`; work as `Submission` JSON on stdin or `--file` |
+| `hint <id> N`, `solution <id>` | authored hint N; the worked solution |
+| `cards --chapter N --count K --seed S` or `--ids …` | concept cards |
+| `quiz --chapter N --count K --seed S` | a practice quiz in `choice` style (§13), no keys |
+| `quiz --placement --seed S` | 10 choice questions, 2 per area (sets; logic; counting; direct and contrapositive; contradiction and induction), difficulty 1 or 2, no keys |
+| `answer <id> --seed S --format F --choice X [--record --quiz Q]` | `ChoiceAnswerOut` (§13.2) |
+| `test --kind quiz\|midterm\|final --chapters 1-5 --seed S [--style] [--length] [--variants]` | a practice test (§13); chapters without problems are listed in `skipped_chapters` |
+| `variant <id> --seed S` | a §13.3 version with a `label` saying it is not a book exercise |
+| `memory status\|init\|show\|plan set\|plan archive\|chapter\|session start\|session end\|note add\|review add\|review clear\|card\|quiz start\|quiz finish\|export\|forget --confirm` | the memory (below) |
+
+`--record` saves the checker's own result: an `attempts` row is written only from a verdict the
+CLI just computed, and a quiz score is computed from recorded answers. The agent can't
+write "correct". If memory is down, `check --record` still returns the verdict, with
+`"recorded": false` and the reason.
+
+Some attempts are only format slips: the verdict is `invalid`, or its first error is an
+input-format code (`FORMAT_CODES` in `tutor.py`: `PARSE_ERROR`, `NOT_AN_EXPRESSION`,
+`LET_FORMAT`, `SET_SYNTAX`, ...). They are stored with `counted = false` (migration 002). They
+never take away "first try" and stay out of the stats. A translation slip by the agent
+therefore can't count against the learner.
+
+### Memory (Postgres)
+
+- **Service:** `docker compose up -d tutor-db`.
+  - `postgres:17-alpine`, pinned by digest;
+  - `127.0.0.1:5433` only;
+  - volume `tutor-db-data`;
+  - user `prooflab`, database `prooflab_tutor`.
+- **Password:** `TUTOR_DB_PASSWORD` (default `prooflab-local`, from the environment or the
+  gitignored `.env`).
+- **Settings:** `PROOFLAB_TUTOR_DATABASE_URL` overrides the whole URL;
+  `PROOFLAB_TUTOR_DB_SCHEMA` (default `tutor`) picks the schema; `PROOFLAB_TUTOR_LEARNER`
+  (default `me`) picks the profile.
+- **Driver:** `psycopg[binary]` 3, an optional extra (`uv sync --extra tutor`), so the Vercel
+  API and the Docker image don't carry it.
+- **Migrations:**
+  - `tutor_memory/schema/NNN_*.sql`, applied in order on every connection under an advisory
+    lock, and tracked in `schema_version`;
+  - they never drop data;
+  - `memory init` just runs them and reports.
+- **Tables** (all keyed by learner, deleted with it):
+
+| Table | Holds |
+|---|---|
+| `learners` | profile names |
+| `plans` | mission, goal, pace, exam date, entry chapter, placement (jsonb). One active plan; "start over" sets `archived_at` and keeps a snapshot of chapter statuses |
+| `chapter_status` | chapter 1 to 14 → `skip`, `review`, `do`, `done` |
+| `sessions` | mode, chapter, start, end, one-line summary for the next warm-up |
+| `attempts` | problem id, chapter, checker status, score, hint codes, hints shown, first try, the submission (jsonb) |
+| `quiz_results`, `quiz_answers` | kind, chapters, seed, total, score; one counted answer per question |
+| `review_queue` | chapter, missed idea, problem ids, cleared or not |
+| `notes` | `struggle`, `misconception`, `preference` or `goal`, at most 500 characters |
+| `card_reviews` | concept card recalled or not. A card is due when last missed or last seen over 7 days ago |
+
+- **Safety:**
+  - parameterized SQL only, with Pydantic-validated inputs and `CHECK` constraints for
+    lengths and enums;
+  - a learner can only change their own rows;
+  - printed URLs hide the password;
+  - nothing from the book is stored.
+- **`memory export`** writes `LEARNING.md` at the repo root (gitignored): a readable view with
+  the mission, placement, path, progress log, solved list, quizzes, review queue and notes.
+  Edits to the file are never read back.
+
+### Lesson notes
+
+Each note has a one-line `key: value` frontmatter (lists as JSON arrays) with these keys:
+- `chapter`, `title`, `topic` (the outline id);
+- `book: hammack-bop3`;
+- `sections` (`"4.3 Direct Proof (p. 118)"`);
+- `prerequisites`, `minutes`;
+- `checkable: yes|partly|no`;
+- `review: draft|reviewed`.
+
+The body is `# Chapter N: Title`, then exactly these sections in order: **Why it matters,
+Core ideas, Worked example, Typing it into ProofLab, Common mistakes, Pause questions,
+Practice route**. Every core idea cites `(Section N.k, p. P)`, using the section start pages
+of Edition 3.4.
+
+In checkable chapters:
+- every "Common mistakes" bullet names real hint codes;
+- the practice route lists real problem ids.
+
+Chapters 11 to 14 instead name book exercise sets by section ("Exercises for Section 11.2"),
+never their text. Worked examples are original, not book examples or exercises. The notes
+contain no answer keys.
+
+Notes start as `draft`. A note becomes `reviewed` only after a person checks it against the
+book: no copied wording, correct sections and pages. `tests/test_lessons.py` checks the
+format, the citations against `sections`, the ids, the codes, and that there are no dashes.
+
+### Verified so far
+
+- `tests/test_tutor.py` (no database):
+  - the CLI's verdicts and choice grading equal the API's (`/check`, `/quiz/answer`);
+  - `show`, `problems`, quizzes, placement and tests carry no solutions, examples or keys;
+  - the CLI never opens the SQLite store;
+  - an unreachable memory gives exit code 3 with the start command, and checking still works.
+- `tests/test_tutor_memory.py` runs against Postgres when `PROOFLAB_TUTOR_TEST_DATABASE_URL`
+  is set, in a throwaway schema per test, and is skipped otherwise.
+- `tests/conftest.py` points the tutor memory at a closed port for every other test.

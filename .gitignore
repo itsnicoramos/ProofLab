@@ -28,3 +28,9 @@ next-env.d.ts
 .idea/
 .DS_Store
 
+
+# The repo tutor (SPEC §20): the readable export of your tutor memory stays yours.
+LEARNING.md
+# Claude Code runtime files (the tutor skill in .claude/skills/ is tracked)
+.claude/scheduled_tasks.lock
+.claude/settings.local.json

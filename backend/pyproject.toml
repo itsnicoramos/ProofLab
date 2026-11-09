@@ -12,6 +12,13 @@ dependencies = [
     "pyobjc-framework-quartz>=11 ; sys_platform == 'darwin'",
 ]
 
+[project.optional-dependencies]
+# The repo tutor's memory in Postgres (SPEC §20): uv sync --extra tutor
+tutor = ["psycopg[binary]>=3.2"]
+
+[project.scripts]
+prooflab-tutor = "prooflab.tutor:main"
+
 [dependency-groups]
 dev = [
     "pytest>=8.3",

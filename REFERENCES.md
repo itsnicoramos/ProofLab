@@ -13,6 +13,10 @@
   teaches its topic, so a student who's stuck knows where to read.
 - Confirming the exercise number, page and statement against the book is part of moving a
   problem from `draft` to `reviewed`.
+- **Lesson notes** (the repo tutor, SPEC §20) are written in ProofLab's own words. They cite
+  *Book of Proof* sections as `(Section N.k, p. P)` with Edition 3.4 start pages, use only
+  original worked examples, and name the book's exercise sets by number, never their text. A note
+  moves from `draft` to `reviewed` once a person has checked it against the book.
 
 The machine-readable registry is `backend/src/prooflab/content/references.json`.
 

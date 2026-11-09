@@ -65,9 +65,14 @@ def _variant(registry: Registry, problem_id: str) -> Problem | None:
     return make_variant(base, parsed[1]) if base is not None else None
 
 
+def find_problem(registry: Registry, problem_id: str) -> Problem | None:
+    """A served problem, or a ProofLab-made version rebuilt from its id. The tutor CLI uses
+    this too, so the site and the tutor always resolve ids the same way."""
+    return registry.get(problem_id) or _variant(registry, problem_id)
+
+
 def _problem_or_404(request: Request, problem_id: str) -> Problem:
-    registry = _registry(request)
-    problem = registry.get(problem_id) or _variant(registry, problem_id)
+    problem = find_problem(_registry(request), problem_id)
     if problem is None:
         raise HTTPException(status_code=404, detail=f"No problem with id {problem_id!r}.")
     return problem
@@ -167,8 +172,12 @@ def list_problems(
 
 @router.get("/problems/{problem_id}", response_model=ProblemDetail, tags=["problems"])
 def get_problem(request: Request, problem_id: str) -> ProblemDetail:
-    p = _problem_or_404(request, problem_id)
-    book = _registry(request).references[p.reference.book]
+    return problem_detail(_registry(request), _problem_or_404(request, problem_id))
+
+
+def problem_detail(registry: Registry, p: Problem) -> ProblemDetail:
+    """Everything needed to attempt a problem. Never the answer, solution or worked examples."""
+    book = registry.references[p.reference.book]
     handler = get_handler(p.kind)
     has_answer = handler.has_answer(p, handler.params(p))
     return ProblemDetail(
@@ -233,25 +242,55 @@ def practice_test(
     ``prefer`` (problem ids due for review) come from the student's own results, and
     ``variants`` swaps some questions for ProofLab-made versions with new numbers.
     """
-    registry = _registry(request)
     chosen = [t for t in (topics or "").split(",") if t.strip()] or None
     due = [i.strip() for i in (prefer or "").split(",") if i.strip()][:200]
     try:
-        test = build_practice_test(
-            registry,
+        return practice_test_out(
+            _registry(request),
             course,
-            kind,  # type: ignore[arg-type]
+            kind,
+            _runner(request),
             seed=seed,
             topics=chosen,
             length=length,
-            style=style,  # type: ignore[arg-type]
+            style=style,
             weights=_weights(weights),
             prefer=due,
             variants=variants,
         )
     except PracticeTestError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
-    run = _runner(request)
+
+
+def practice_test_out(
+    registry: Registry,
+    course: Course,
+    kind: str,
+    run,  # noqa: ANN001 - a Runner for prooflab.quiz
+    *,
+    seed: int,
+    topics: list[str] | None = None,
+    length: int | None = None,
+    style: str = "written",
+    weights: dict[str, float] | None = None,
+    prefer: list[str] | None = None,
+    variants: bool = False,
+) -> PracticeTestOut:
+    """A practice test as the site serves it. Choice questions carry no answer key.
+
+    Raises PracticeTestError when the test can't be assembled."""
+    test = build_practice_test(
+        registry,
+        course,
+        kind,  # type: ignore[arg-type]
+        seed=seed,
+        topics=topics,
+        length=length,
+        style=style,  # type: ignore[arg-type]
+        weights=weights or {},
+        prefer=prefer or [],
+        variants=variants,
+    )
     siblings = [p for p in registry.served() if p.course is course]
     questions: list[QuestionOut] = []
     for i, q in enumerate(test.questions):
@@ -285,17 +324,33 @@ def practice_test(
 @router.post("/quiz/answer", response_model=ChoiceAnswerOut, tags=["practice tests"])
 def answer_choice(request: Request, body: ChoiceAnswerIn) -> ChoiceAnswerOut:
     """Grade a multiple-choice answer by rebuilding the question from its problem and seed."""
-    registry = _registry(request)
     problem = _problem_or_404(request, body.problem_id)
-    siblings = [p for p in registry.served() if p.course is problem.course]
-    question = build_question(problem, body.seed, _runner(request), siblings, body.format)  # type: ignore[arg-type]
-    if question is None:
+    out = answer_out(
+        _registry(request), problem, body.seed, body.format, body.choice, _runner(request)
+    )
+    if out is None:
         raise HTTPException(status_code=404, detail="That question can't be rebuilt any more.")
-    correct, explanation = grade(question, body.choice)
+    return out
+
+
+def answer_out(
+    registry: Registry,
+    problem: Problem,
+    seed: int,
+    fmt: str | None,
+    choice: str,
+    run,  # noqa: ANN001 - a Runner for prooflab.quiz
+) -> ChoiceAnswerOut | None:
+    """Grade one choice by rebuilding its question; None if it can't be rebuilt any more."""
+    siblings = [p for p in registry.served() if p.course is problem.course]
+    question = build_question(problem, seed, run, siblings, fmt)  # type: ignore[arg-type]
+    if question is None:
+        return None
+    correct, explanation = grade(question, choice)
     return ChoiceAnswerOut(
         problem_id=problem.id,
         correct=correct,
-        choice=body.choice,
+        choice=choice,
         correct_choice=question.correct,
         explanation=explanation,
         solution=problem.solution,

@@ -12,6 +12,10 @@ import pytest
 
 # Tests never touch the student's real progress database (SPEC §17).
 os.environ["PROOFLAB_DB"] = str(Path(tempfile.mkdtemp(prefix="prooflab-test-")) / "test.sqlite3")
+# Nor the learner's tutor memory (SPEC §20): by default it points at a port nothing listens
+# on. tests/test_tutor_memory.py opts in to a throwaway Postgres schema explicitly.
+os.environ["PROOFLAB_TUTOR_DATABASE_URL"] = "postgresql://nobody:none@127.0.0.1:9/none"
+os.environ["PROOFLAB_TUTOR_DB_SCHEMA"] = "never_used"
 
 from prooflab.engine.checker import check
 from prooflab.engine.models import Problem, Submission, Verdict
