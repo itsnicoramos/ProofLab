@@ -3,7 +3,7 @@ import { Diagram } from "@/components/Diagram";
 import { Replay, type ReplayItem } from "@/components/Replay";
 import { StepView } from "@/components/StepView";
 import { announce, piecesFor, type Replay as ReplayData } from "@/lib/replay";
-import { AGENTS, BOOK_URL, GITHUB_URL, RULES, SETUP } from "@/lib/site";
+import { AGENTS, GITHUB_URL, RULES, SETUP } from "@/lib/site";
 import captured from "@/replay/practice-4.json";
 
 const replay = captured as unknown as ReplayData;
@@ -22,8 +22,8 @@ export default function HomePage() {
           What your agent does when you type <code className="font-mono text-[0.85em]">/tutor</code>
         </h1>
         <p className="text-lg text-muted">
-          ProofLab checks university math one step at a time, starting with <em>Book of Proof</em>,
-          the MATH 123 textbook. Its repo ships a tutor that runs inside your own coding agent. The
+          ProofLab checks university math one step at a time, starting with the proofs in MATH 123.
+          Its repo ships a tutor that runs inside your own coding agent. The
           agent teaches, asks and hints. ProofLab&apos;s checker, written rules and SymPy with no AI,
           decides what&apos;s right.
         </p>
@@ -62,7 +62,8 @@ export default function HomePage() {
           <p className="text-sm text-muted">
             {replay.setup_note} The learner&apos;s and tutor&apos;s words were written for this page,
             following the tutor skill. Every command and its output is real, captured from the CLI on{" "}
-            {replay.captured_on} with a throwaway memory. The page shortens{" "}
+            {replay.captured_on} with a throwaway memory. For exercises and lessons the page shows the
+            fields the tutor uses. The page shortens{" "}
             <code className="font-mono text-xs">{replay.cli}</code> to{" "}
             <code className="font-mono text-xs">prooflab-tutor</code>.
           </p>
@@ -162,9 +163,6 @@ export default function HomePage() {
             className="inline-flex h-11 items-center rounded-lg bg-accent px-5 text-sm font-semibold text-accent-ink"
           >
             Get the code on GitHub
-          </a>
-          <a href={BOOK_URL} className="inline-flex min-h-11 items-center text-sm text-accent hover:underline">
-            Book of Proof, free PDF from the author
           </a>
         </div>
       </Section>

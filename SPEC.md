@@ -1129,6 +1129,13 @@ are written for the page, following the skill, and the page says so.
   always about the steps the learner agreed to.
 - Absolute paths inside the repo are shortened to repo-relative ones.
 
+**The page names no textbook** (decided with the user on 2026-11-08). The capture keeps the
+CLI's full output, but the page shows only the fields the tutor uses for `show` and `lesson`
+(no `reference`, `tags`, `sections` or `free_pdf`), the lesson's practice route, and
+`LEARNING.md` from its second section (`pageOutputs` in `frontend/src/lib/replay.ts`). The
+replay's tutor presents the exercise without a citation. The real tutor in a terminal still
+cites the book (§20, rule 6).
+
 Re-capture after changing the checker, Chapter 4's content or the CLI's output:
 `uv run --project backend --extra tutor python frontend/scripts/capture_replay.py`.
 
@@ -1141,7 +1148,8 @@ Re-capture after changing the checker, Chapter 4's content or the CLI's output:
   - no solution is shown, and `show` output carries none;
   - a wrong verdict is followed by a question, not rewritten steps;
   - every rule links to a step tagged with it;
-  - no machine paths, and no em or en dashes in page text.
+  - no machine paths, and no em or en dashes in page text;
+  - no page text or rendered output names the book, its author or a page citation.
 - `backend/tests/test_tutor_replay.py` re-runs the replay's `show`, `lesson` and `check`
   commands and requires the same output, so the page can't drift from the CLI. It is skipped
   where the frontend isn't checked out (the backend Docker image).

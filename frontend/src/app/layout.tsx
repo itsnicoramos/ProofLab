@@ -6,7 +6,7 @@ import { Geist, Geist_Mono, Source_Serif_4 } from "next/font/google";
 import Link from "next/link";
 
 import { SigmaMark } from "@/components/Logo";
-import { BOOK_URL, GITHUB_URL } from "@/lib/site";
+import { GITHUB_URL } from "@/lib/site";
 
 // DESIGN.md: serif for headings (textbook voice beside KaTeX), Geist for UI, mono for commands.
 const sourceSerif = Source_Serif_4({ variable: "--font-source-serif", subsets: ["latin"] });
@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 export const metadata: Metadata = {
   title: { default: "ProofLab tutor", template: "%s · ProofLab" },
   description:
-    "What a coding agent does when you type /tutor in the ProofLab repo: it teaches Book of Proof, and ProofLab's checker, not AI, decides what's right.",
+    "What a coding agent does when you type /tutor in the ProofLab repo: it teaches proofs, and ProofLab's checker, not AI, decides what's right.",
 };
 
 export const viewport: Viewport = {
@@ -80,16 +80,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <footer className="border-t border-line">
           <div className="mx-auto max-w-6xl space-y-2 px-4 py-5 text-sm text-muted sm:px-6">
             <p>ProofLab is MIT licensed. Copyright 2026 itsnicoramos.</p>
-            <p>
-              <em>Book of Proof</em> is by Richard Hammack, free from the author under CC BY-NC-ND
-              4.0. ProofLab cites it by section and page and copies none of its text.
-            </p>
             <div className="flex flex-wrap gap-x-6">
               <a href={GITHUB_URL} className="inline-flex h-11 items-center text-ink hover:text-accent">
                 Source on GitHub
-              </a>
-              <a href={BOOK_URL} className="inline-flex h-11 items-center text-ink hover:text-accent">
-                Book of Proof, free PDF
               </a>
             </div>
           </div>

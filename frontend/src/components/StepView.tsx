@@ -3,6 +3,7 @@ import {
   ACTOR,
   command,
   isCheck,
+  pageOutputs,
   type CheckOutput,
   type ReplayStep,
   type RunStep,
@@ -91,13 +92,9 @@ function RunBody({ step }: { step: RunStep }) {
       </div>
       <p className="text-muted">{step.summary}</p>
       {isCheck(step) && <VerdictView output={step.output} />}
-      {step.file && step.file_text && (
-        <Output label={`Open ${step.file}`} text={step.file_text} />
-      )}
-      {step.stdin !== undefined && (
-        <Output label="What the agent piped in" text={JSON.stringify(step.stdin, null, 2)} />
-      )}
-      <Output label="Full output (JSON)" text={JSON.stringify(step.output, null, 2)} />
+      {pageOutputs(step).map((o) => (
+        <Output key={o.label} label={o.label} text={o.text} />
+      ))}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 {
   "title": "/tutor practice 4",
-  "about": "One practice session on Book of Proof Chapter 4. The learner's and tutor's words are written for this page, following the tutor skill. Every command and its output is real: frontend/scripts/capture_replay.py ran each one against the prooflab-tutor CLI and a throwaway memory schema.",
+  "about": "One practice session on Chapter 4. The learner's and tutor's words are written for this page, following the tutor skill. Every command and its output is real: frontend/scripts/capture_replay.py ran each one against the prooflab-tutor CLI and a throwaway memory schema.",
   "setup_note": "Before this session the learner ran /tutor start once and chose to begin at Chapter 4. That onboarding is in the memory the session reads.",
   "captured_on": "2026-11-08",
   "cli": "uv run --project backend --extra tutor prooflab-tutor",
@@ -15,7 +15,7 @@
       "exit": 0,
       "output": {
         "session_id": 1,
-        "started_at": "2026-11-08T23:18:14.915646-07:00"
+        "started_at": "2026-11-08T23:43:55.575552-07:00"
       }
     },
     {
@@ -60,8 +60,8 @@
           "placement": {
             "self_selected": true
           },
-          "created_at": "2026-11-08T23:18:16.092160-07:00",
-          "updated_at": "2026-11-08T23:18:16.092160-07:00"
+          "created_at": "2026-11-08T23:43:56.447470-07:00",
+          "updated_at": "2026-11-08T23:43:56.447470-07:00"
         },
         "chapters": {
           "1": "skip",
@@ -131,8 +131,8 @@
           "placement": {
             "self_selected": true
           },
-          "created_at": "2026-11-08T23:18:16.092160-07:00",
-          "updated_at": "2026-11-08T23:18:16.092160-07:00"
+          "created_at": "2026-11-08T23:43:56.447470-07:00",
+          "updated_at": "2026-11-08T23:43:56.447470-07:00"
         },
         "chapters": [
           {
@@ -226,8 +226,8 @@
             "id": 1,
             "mode": "start",
             "chapter": null,
-            "started_at": "2026-11-08T23:18:14.915646-07:00",
-            "ended_at": "2026-11-08T23:18:17.329200-07:00",
+            "started_at": "2026-11-08T23:43:55.575552-07:00",
+            "ended_at": "2026-11-08T23:43:57.306404-07:00",
             "summary": "Onboarded: MATH 123, about 5 h a week, chose to start at Chapter 4."
           }
         ],
@@ -259,7 +259,7 @@
       "exit": 0,
       "output": {
         "session_id": 2,
-        "started_at": "2026-11-08T23:18:20.165102-07:00"
+        "started_at": "2026-11-08T23:43:59.966293-07:00"
       }
     },
     {
@@ -357,7 +357,7 @@
       "rules": [
         6
       ],
-      "text": "Ex 4.1, the square of an even integer. It's Book of Proof, Chapter 4 exercises, #1 (p. 126).\n\nUse a direct proof. Let x be an even integer. Show that x^2 is even.\n\nWrite your proof in your own words, and I'll turn it into ProofLab steps for the checker."
+      "text": "Ex 4.1, the square of an even integer.\n\nUse a direct proof. Let x be an even integer. Show that x^2 is even.\n\nWrite your proof in your own words, and I'll turn it into ProofLab steps for the checker."
     },
     {
       "kind": "learner",

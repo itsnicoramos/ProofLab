@@ -106,3 +106,68 @@ export function announce(step: ReplayStep, n: number, total: number): string {
         : step.text.split("\n")[0];
   return `Step ${n} of ${total}. ${ACTOR[step.kind]}: ${what}`;
 }
+
+/** An output box on the page: a label and the text inside it. */
+export type Shown = { label: string; text: string };
+
+// The page names no textbook, so for exercises and lessons it shows the fields the tutor
+// uses (no `reference`, `tags`, `sections` or `free_pdf`). The capture keeps everything.
+const EXERCISE_FIELDS = [
+  "id",
+  "kind",
+  "title",
+  "prompt",
+  "difficulty",
+  "answer_format",
+  "syntax_help",
+  "step_kinds",
+  "has_answer",
+  "hint_count",
+  "chapter",
+];
+const LESSON_FIELDS = ["chapter", "title", "topic", "prerequisites", "minutes", "checkable", "path"];
+
+const json = (value: unknown) => JSON.stringify(value, null, 2);
+
+function pick(value: unknown, keys: string[]): Record<string, unknown> {
+  const from = (value ?? {}) as Record<string, unknown>;
+  return Object.fromEntries(keys.filter((k) => k in from).map((k) => [k, from[k]]));
+}
+
+/** One "## heading" section of a Markdown note, heading included. */
+function section(text: string, heading: string): string {
+  const start = text.indexOf(`## ${heading}\n`);
+  if (start < 0) return "";
+  const next = text.indexOf("\n## ", start + 3);
+  return text.slice(start, next < 0 ? undefined : next).trim();
+}
+
+/** What a run step shows in its closed output boxes. */
+export function pageOutputs(step: RunStep): Shown[] {
+  const shown: Shown[] = [];
+  if (step.file && step.file_text) {
+    const body = step.file_text.indexOf("\n## ");
+    shown.push({
+      label: `Open ${step.file} (an excerpt)`,
+      text: body < 0 ? step.file_text : step.file_text.slice(body + 1),
+    });
+  }
+  if (step.stdin !== undefined) shown.push({ label: "What the agent piped in", text: json(step.stdin) });
+  const name = step.args[0];
+  if (name === "show") {
+    shown.push({
+      label: "Output (JSON, the fields the tutor uses)",
+      text: json(pick(step.output, EXERCISE_FIELDS)),
+    });
+  } else if (name === "lesson") {
+    const text = String((step.output as { text?: unknown } | null)?.text ?? "");
+    shown.push({
+      label: "Output (JSON, the fields the tutor uses)",
+      text: json(pick(step.output, LESSON_FIELDS)),
+    });
+    shown.push({ label: "The note's practice route", text: section(text, "Practice route") });
+  } else {
+    shown.push({ label: "Full output (JSON)", text: json(step.output) });
+  }
+  return shown;
+}

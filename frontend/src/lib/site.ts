@@ -4,7 +4,6 @@
 import type { Piece } from "./replay.ts";
 
 export const GITHUB_URL = "https://github.com/itsnicoramos/ProofLab";
-export const BOOK_URL = "https://richardhammack.github.io/BookOfProof/";
 
 export type Rule = { n: number; title: string; text: string; step: number };
 
@@ -42,8 +41,8 @@ export const RULES: Rule[] = [
   },
   {
     n: 6,
-    title: "No book text, nothing invented",
-    text: "It cites Book of Proof by section and page and links the free PDF. Practice comes from ProofLab's exercise bank or a labelled new-number version.",
+    title: "No copied text, nothing invented",
+    text: "Exercises come from ProofLab's bank, restated in its own words, or from a new-number version labelled as made by ProofLab. The tutor never makes one up.",
     step: 6,
   },
   {
@@ -84,7 +83,7 @@ export const PIECES: Record<Piece, PieceInfo> = {
     id: "content",
     name: "Content",
     where: "backend/src/prooflab/content/",
-    text: "Book of Proof exercises restated in ProofLab's words, 14 lesson notes and concept cards. Solutions stay behind the CLI.",
+    text: "Proof exercises in ProofLab's own words, 14 lesson notes and concept cards. Solutions stay behind the CLI.",
   },
   checker: {
     id: "checker",

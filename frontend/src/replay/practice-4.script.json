@@ -1,6 +1,6 @@
 {
   "title": "/tutor practice 4",
-  "about": "One practice session on Book of Proof Chapter 4. The learner's and tutor's words are written for this page, following the tutor skill. Every command and its output is real: frontend/scripts/capture_replay.py ran each one against the prooflab-tutor CLI and a throwaway memory schema.",
+  "about": "One practice session on Chapter 4. The learner's and tutor's words are written for this page, following the tutor skill. Every command and its output is real: frontend/scripts/capture_replay.py ran each one against the prooflab-tutor CLI and a throwaway memory schema.",
   "setup_note": "Before this session the learner ran /tutor start once and chose to begin at Chapter 4. That onboarding is in the memory the session reads.",
   "setup": [
     {
@@ -114,7 +114,7 @@
       "rules": [
         6
       ],
-      "text": "Ex 4.1, the square of an even integer. It's Book of Proof, Chapter 4 exercises, #1 (p. 126).\n\nUse a direct proof. Let x be an even integer. Show that x^2 is even.\n\nWrite your proof in your own words, and I'll turn it into ProofLab steps for the checker."
+      "text": "Ex 4.1, the square of an even integer.\n\nUse a direct proof. Let x be an even integer. Show that x^2 is even.\n\nWrite your proof in your own words, and I'll turn it into ProofLab steps for the checker."
     },
     {
       "kind": "learner",

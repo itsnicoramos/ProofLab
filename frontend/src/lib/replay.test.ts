@@ -5,7 +5,15 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import { isCheck, piecesFor, type Replay, type ReplayStep, type TutorStep } from "./replay.ts";
+import {
+  command,
+  isCheck,
+  pageOutputs,
+  piecesFor,
+  type Replay,
+  type ReplayStep,
+  type TutorStep,
+} from "./replay.ts";
 import { RULES } from "./site.ts";
 
 const SRC = join(import.meta.dirname, "..");
@@ -131,4 +139,31 @@ test("page text has no em or en dashes (DESIGN.md)", () => {
     assert.doesNotMatch(words, /[\u2013\u2014]/, JSON.stringify(step).slice(0, 60));
   }
   assert.doesNotMatch(`${script.about} ${script.setup_note}`, /[\u2013\u2014]/);
+});
+
+// The website names no textbook (decided 2026-11-08): not in its text, and not in anything the
+// replay renders. The capture itself keeps the CLI's full output.
+const BOOK = /book of proof|hammack|bookofproof|book-of-proof|\bp\. ?\d/i;
+
+test("the page never names the book", () => {
+  for (const path of files(".").filter((p) => /\.(tsx|ts)$/.test(p) && !p.endsWith(".test.ts"))) {
+    assert.doesNotMatch(read(path), BOOK, path);
+  }
+  steps.forEach((step, i) => {
+    const words =
+      step.kind === "run"
+        ? [command(step), step.summary, ...pageOutputs(step).flatMap((o) => [o.label, o.text])]
+        : step.kind === "read"
+          ? [...step.files, step.summary]
+          : step.kind === "tutor"
+            ? [step.text, step.after ?? "", step.aside ?? "", ...(step.proposal ?? []).map((p) => p.content)]
+            : [step.text];
+    for (const w of words) assert.doesNotMatch(w, BOOK, `step ${i + 1}`);
+    if (isCheck(step)) {
+      const v = step.output.verdict;
+      const said = [...v.steps.map((s) => s.message), v.answer?.message ?? "", ...v.hints.map((h) => h.message)];
+      for (const w of said) assert.doesNotMatch(w, BOOK, `verdict at step ${i + 1}`);
+    }
+  });
+  assert.doesNotMatch(replay.setup_note, BOOK);
 });
