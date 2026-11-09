@@ -2,8 +2,17 @@
 
 import { useState } from "react";
 
-/** Copies one command. Says "Copied" for a moment, and tells screen readers too. */
-export function CopyButton({ text, label }: { text: string; label: string }) {
+/** Copies one command (or, with `what`, something else). Says "Copied" for a moment, and
+ * tells screen readers too. */
+export function CopyButton({
+  text,
+  label,
+  what = "the command",
+}: {
+  text: string;
+  label: string;
+  what?: string;
+}) {
   const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
 
   async function copy() {
@@ -20,7 +29,7 @@ export function CopyButton({ text, label }: { text: string; label: string }) {
     <button
       type="button"
       onClick={copy}
-      aria-label={`Copy the command: ${label}`}
+      aria-label={`Copy ${what}: ${label}`}
       className="h-11 shrink-0 rounded-lg border border-line bg-surface px-3 text-sm font-semibold"
     >
       <span aria-live="polite">

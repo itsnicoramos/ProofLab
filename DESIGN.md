@@ -45,8 +45,10 @@ One column, in this order. Each section has a serif heading over a hairline rule
     step uses with the accent ring and tint.
 - **Seven rules it keeps:** bordered cards, two columns from `md`, the number in the serif like
   a marked paper, each with "See it in step N" (a link that opens the replay at that step).
-- **Set it up:** numbered cards with the command in mono on the idle tint and a bordered
-  **Copy** button. "Which agents work" is three cards (never a wide table, so nothing scrolls
+- **Set it up:** first one card for someone who has never used a terminal. It says to ask any
+  AI assistant they like to walk them through the setup, and holds a prompt in mono on the
+  idle tint with its own **Copy** button. Then numbered cards with the command in mono on the
+  idle tint and a bordered **Copy** button. "Which agents work" is three cards (never a wide table, so nothing scrolls
   sideways on a phone).
 
 ## Navigation

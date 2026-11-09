@@ -1,6 +1,7 @@
 {
   "id": "empty-slot-coach",
   "title": "MATH 223, where nothing can be graded yet",
+  "question": "In a course with no checker, does the tutor give feedback and never a verdict?",
   "course": "math223",
   "tests": [
     "feedback, not a verdict",

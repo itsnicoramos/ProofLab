@@ -14,7 +14,7 @@ import {
   type ReplayStep,
   type TutorStep,
 } from "./replay.ts";
-import { RULES } from "./site.ts";
+import { GITHUB_URL, HELP_PROMPT, RULES } from "./site.ts";
 
 const SRC = join(import.meta.dirname, "..");
 const read = (path: string) => readFileSync(join(SRC, path), "utf8");
@@ -166,4 +166,16 @@ test("the page never names the book", () => {
     }
   });
   assert.doesNotMatch(replay.setup_note, BOOK);
+});
+
+// For someone with no technical background, the page says to ask any AI assistant, and gives
+// them the words to paste.
+test("the setup section gives people new to the terminal a way in", () => {
+  assert.ok(HELP_PROMPT.includes(GITHUB_URL));
+  assert.match(HELP_PROMPT, /never used a terminal/);
+  assert.match(HELP_PROMPT, /one step at a time/);
+  const page = read("app/page.tsx");
+  assert.match(page, /Never used a terminal\?/);
+  assert.match(page, /Ask any AI assistant you like/);
+  assert.match(page, /<CopyButton text=\{HELP_PROMPT\}/);
 });

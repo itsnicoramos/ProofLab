@@ -3,7 +3,7 @@ import { Diagram } from "@/components/Diagram";
 import { Replay, type ReplayItem } from "@/components/Replay";
 import { StepView } from "@/components/StepView";
 import { announce, piecesFor, type Replay as ReplayData } from "@/lib/replay";
-import { AGENTS, GITHUB_URL, RULES, SETUP } from "@/lib/site";
+import { AGENTS, GITHUB_URL, HELP_PROMPT, RULES, SETUP } from "@/lib/site";
 import captured from "@/replay/practice-4.json";
 
 const replay = captured as unknown as ReplayData;
@@ -113,6 +113,21 @@ export default function HomePage() {
         >
           How to install uv
         </a>
+
+        <div className="mt-2 max-w-4xl rounded-lg border border-line bg-surface px-4 py-3">
+          <h3 className="text-lg">Never used a terminal?</h3>
+          <p className="mt-1 text-muted">
+            You don&apos;t have to work this out alone. Ask any AI assistant you like to walk you
+            through the setup, one step at a time. Paste this to start.
+          </p>
+          <div className="mt-2 flex items-start gap-2">
+            <p className="min-w-0 flex-1 rounded-md bg-idle-soft px-3 py-2.5 font-mono text-[13px] break-words">
+              {HELP_PROMPT}
+            </p>
+            <CopyButton text={HELP_PROMPT} label="ask for help with the setup" what="the prompt" />
+          </div>
+        </div>
+
         <ol className="mt-4 max-w-4xl space-y-4">
           {SETUP.map((s, i) => (
             <li key={s.title} className="rounded-lg border border-line bg-surface px-4 py-3">

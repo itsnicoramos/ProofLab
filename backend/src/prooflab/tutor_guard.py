@@ -32,7 +32,7 @@ BLOCKED_BY_GUARD = "Blocked by the ProofLab tutor's guardrail"
 NEW_SESSION = " The tutor skill is active in this session; to work on the code, start a new one."
 
 _HEREDOC = re.compile(
-    r"<<-?\s*(['\"]?)([A-Za-z_][A-Za-z0-9_]*)\1[^\n]*\n.*?\n[ \t]*\2[ \t]*(?=\n|$)", re.S
+    r"<<-?\s*(['\"]?)([A-Za-z_][A-Za-z0-9_]*)\1[^\n]*\n(.*?)\n[ \t]*\2[ \t]*(?=\n|$)", re.S
 )
 _ENV_FILE = re.compile(r"(?<![\w.-])\.env(?!\.example)(?:\.[\w-]+)?(?![\w-])")
 _STAY_LOCAL = re.compile(
@@ -70,6 +70,11 @@ def strip_heredocs(command: str) -> str:
     """The command without its here-document bodies: work and notes piped into the tools are
     data (they may say anything), so only the command line itself is judged."""
     return _HEREDOC.sub(" ", command)
+
+
+def heredoc_bodies(command: str) -> list[str]:
+    """What the command pipes in through here-documents, in order: the work and the notes."""
+    return [found.group(3) for found in _HEREDOC.finditer(command)]
 
 
 def tutor_calls(command: str) -> list[list[str]]:

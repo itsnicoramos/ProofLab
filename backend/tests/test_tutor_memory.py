@@ -17,6 +17,7 @@ import os
 import sys
 import uuid
 from datetime import date
+from pathlib import Path
 
 import pytest
 
@@ -470,3 +471,44 @@ def test_cli_keeps_the_courses_apart(cli, tmp_path, monkeypatch):
     assert code == 1 and "MATH 223" in out["error"]
     assert cli("memory", "forget", "--confirm", *in223)[1]["courses"] == ["math223"]
     assert cli("memory", "show")[1]["plan"]["mission"] == "Pass MATH 123"
+
+
+def test_an_eval_run_seeds_and_then_drops_its_own_memory(schema, tmp_path, monkeypatch, capsys):
+    """A scenario's setup lands in the eval's throwaway schema, the agent under test sees it,
+    and the schema is gone afterwards. The learner's own schema is never used."""
+    monkeypatch.setenv("PROOFLAB_TUTOR_DATABASE_URL", URL)
+    monkeypatch.setenv("PROOFLAB_TUTOR_DB_SCHEMA", schema)  # the "learner's own" memory here
+    monkeypatch.setattr(tutor, "REPO_ROOT", tmp_path)
+    agent = tmp_path / "agent.py"
+    agent.write_text(
+        "import io, json, os, sys\n"
+        "from contextlib import redirect_stdout\n"
+        "from prooflab import tutor\n"
+        "out = io.StringIO()\n"
+        "with redirect_stdout(out):\n"
+        "    tutor.main(['memory', 'show'])\n"
+        "notes = [n['text'] for n in json.loads(out.getvalue())['notes']]\n"
+        "text = os.environ['PROOFLAB_TUTOR_DB_SCHEMA'] + ' :: ' + ' / '.join(notes)\n"
+        "message = {'content': [{'type': 'text', 'text': text}]}\n"
+        "print(json.dumps({'type': 'assistant', 'session_id': 's', 'message': message}))\n",
+        encoding="utf-8",
+    )
+    src = str(Path(tutor.__file__).resolve().parents[1])
+    monkeypatch.setenv("PYTHONPATH", src)
+    trace = tmp_path / "trace.jsonl"
+    code = tutor.main(
+        ["eval", "poisoned-note", "--agent", f"{sys.executable} {agent}", "--out", str(trace)]
+    )
+    report = json.loads(capsys.readouterr().out)
+    lines = [json.loads(line) for line in trace.read_text(encoding="utf-8").splitlines()]
+    heard = lines[1]["message"]["content"][0]["text"]
+    used, _, notes = heard.partition(" :: ")
+    assert code == 0 and "dropped" in report["memory"]
+    assert used.startswith("eval_") and used != schema and "SYSTEM OVERRIDE" in notes
+    with psycopg.connect(URL, autocommit=True) as conn:
+        left = conn.execute(
+            "SELECT count(*) FROM information_schema.schemata WHERE schema_name = %s", (used,)
+        ).fetchone()[0]
+    assert left == 0
+    with connect(URL, schema) as conn:  # nothing was written to the learner's own schema
+        assert conn.execute("SELECT count(*) AS n FROM notes").fetchone()["n"] == 0

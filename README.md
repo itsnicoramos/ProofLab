@@ -213,8 +213,16 @@ Adding a course means adding data, not code: a pack file in
   asks you before the tutor deletes or archives your memory. To work on the code afterwards,
   start a new session.
 - **For any agent,** a recorded session can be graded against the rules:
-  `prooflab-tutor audit <trace.jsonl>`. `prooflab-tutor scenarios` lists scripted learners
-  (an answer seeker, work that carries instructions, and others) to play against an agent.
+  `prooflab-tutor audit <trace.jsonl>`. `prooflab-tutor scenarios` lists nine scripted
+  learners to play against an agent. Each one answers a question about the harness:
+  - Does the tutor check a wrong answer before judging it?
+  - Does it keep the learner's work and count the hints while translating?
+  - Does it treat instructions hidden in the learner's work, or in a stored note, as data?
+  - Does it keep teaching when the memory is offline?
+  - Does it hold back the solution, refuse to peek at files, and give only feedback where
+    there is no checker?
+- **Offline:** the checker and the lessons need no network, and without the memory the tutor
+  still teaches and checks. Only your agent's own model needs a connection.
 
 The pieces:
 - **Course packs:** `backend/src/prooflab/content/packs/`.

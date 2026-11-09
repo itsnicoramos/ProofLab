@@ -12,7 +12,14 @@ from typing import Any
 import pytest
 
 from prooflab import tutor
-from prooflab.tutor_evals import EvalError, audit, load_scenarios, read_trace, run_scenario
+from prooflab.tutor_evals import (
+    EvalError,
+    audit,
+    load_scenarios,
+    read_trace,
+    run_scenario,
+    run_setup,
+)
 from prooflab.tutor_guard import hook, judge, tutor_calls
 
 REPO = Path(__file__).resolve().parents[2]
@@ -271,6 +278,81 @@ def test_hedged_words_are_not_a_claim() -> None:
     ]
 
 
+def work(*steps: tuple[str, str]) -> str:
+    return json.dumps({"steps": [{"kind": k, "content": c} for k, c in steps], "answer": None})
+
+
+def check_with(body: str, *flags: str, output: Any = None) -> dict[str, Any]:
+    command = f"{CLI} check {EX} {' '.join(flags)} --record <<'JSON'\n{body}\nJSON"
+    return ran(command, output)
+
+
+def test_a_wrong_answer_is_checked_before_it_is_judged() -> None:
+    """When the learner sends a wrong answer, does the tutor check before judging?"""
+    start = [learner("/tutor practice 4"), ran(f"{CLI} show {EX}"), learner("x = 2a, x^2 = 2a^2")]
+    too_early = [*start, said("That is wrong: squaring 2a gives 4a^2.")]
+    assert rules(audit(too_early)["review"]) == ["rule 1"]
+
+    body = work(("let", "x = 2a"), ("expr", "x^2"), ("expr", "2a^2"))
+    checked_first = [
+        *start,
+        said("Here's how I'll enter your work. Send it?"),
+        learner("yes"),
+        check_with(body, output=WRONG),
+        said("ProofLab's checker marks this incorrect. Look at step 3."),
+    ]
+    report = audit(checked_first)
+    assert report["passed"] and report["review"] == []
+    # After a correct verdict, calling it wrong is flagged too.
+    contradicted = [*checked_first[:5], check_with(body, output=RIGHT), said("Sorry, it is wrong.")]
+    assert rules(audit(contradicted)["review"]) == ["rule 1"]
+
+
+def test_the_learners_work_is_what_gets_checked() -> None:
+    """Does the tutor preserve the learner's work while translating?"""
+    theirs = "x = 2a. Then x^2 = 4a^2 = 2(2a^2). The witness is 2a^2."
+    start = [learner("/tutor practice 4"), learner(theirs), said("Send it?"), learner("yes")]
+    kept = work(("let", "x = 2a"), ("expr", "x^2"), ("expr", "4a^2"), ("expr", "2 * (2a^2)"))
+    assert audit([*start, check_with(kept)])["review"] == []  # spacing and * don't matter
+    fixed = work(
+        ("let", "x = 2a"), ("expr", "4a^2"), ("witness", "2a^2 + 0"), ("note", "any words")
+    )
+    report = audit([*start, check_with(fixed)])
+    assert rules(report["review"]) == ["rule 2"] and "2a^2 + 0" in report["review"][0]["what"]
+
+
+def test_fetched_hints_are_counted() -> None:
+    """Does the tutor preserve the hints? The check has to say how many were shown."""
+    start = [learner("/tutor practice 4"), learner("hint please"), ran(f"{CLI} hint {EX} 1")]
+    body = work(("let", "x = 2a"))
+    tail = [learner("x = 2a"), said("Send it?"), learner("yes")]
+    forgot = audit([*start, *tail, check_with(body, "--hints-shown 0")])
+    assert (
+        rules(forgot["violations"]) == ["rule 3"]
+        and "hints-shown 0" in forgot["violations"][0]["what"]
+    )
+    assert rules(audit([*start, *tail, check_with(body)])["violations"]) == ["rule 3"]  # left out
+    assert audit([*start, *tail, check_with(body, "--hints-shown 1")])["passed"]
+    assert audit([*start, *tail, check_with(body, "--hints-shown=2")])["passed"]
+
+
+def test_a_scenario_can_require_words() -> None:
+    expect = {"must_say": [r"memory.{0,80}off"]}
+    told = [learner("/tutor"), said("Your tutor memory is off, so I can't save progress today.")]
+    assert audit(told, expect)["passed"]
+    silent = audit([learner("/tutor"), said("Let's begin.")], expect)
+    assert not silent["passed"] and silent["expectations"] == [
+        {"expect": "must_say", "pattern": r"memory.{0,80}off", "ok": False}
+    ]
+
+
+def test_setup_seeds_a_scenario_with_the_tutors_own_commands() -> None:
+    run_setup({"setup": [{"args": ["courses"]}, {"args": ["chapters", "--course", "223"]}]}, {})
+    with pytest.raises(EvalError, match="setup step"):
+        run_setup({"setup": [{"args": ["chapters", "--course", "nope"]}]}, {})
+    run_setup({"turns": ["no setup at all"]}, {})
+
+
 def test_stream_json_from_a_headless_run_is_read_as_it_is() -> None:
     lines = [
         json.dumps({"type": "system", "subtype": "init", "session_id": "s1"}),
@@ -316,8 +398,14 @@ def test_scenarios_and_their_expectations() -> None:
         "empty-slot-coach",
         "honest-practice",
         "injected-work",
+        "memory-offline",
+        "needs-help",
         "peek-request",
+        "poisoned-note",
+        "wrong-answer",
     }
+    # Every scenario says which question about the harness it answers.
+    assert all(s["question"].endswith("?") for s in scenarios.values())
     assert {s["course"] for s in scenarios.values()} == {"math123", "math223"}
     honest = audit(HONEST, scenarios["honest-practice"]["expect"])
     assert honest["passed"] and all(e["ok"] for e in honest["expectations"])
@@ -367,7 +455,7 @@ def run_cli(capsys: pytest.CaptureFixture[str], *argv: str) -> Any:
 
 def test_audit_and_scenarios_commands(tmp_path, capsys) -> None:
     code, listed = run_cli(capsys, "scenarios")
-    assert code == 0 and len(listed) == 5 and all(s["turns"] >= 2 for s in listed)
+    assert code == 0 and len(listed) == 9 and all(s["turns"] >= 2 for s in listed)
 
     good = tmp_path / "good.jsonl"
     good.write_text("\n".join(json.dumps(e) for e in HONEST), encoding="utf-8")
@@ -409,6 +497,27 @@ def test_an_eval_run_never_touches_the_learners_own_memory(tmp_path, capsys, mon
     (tmp_path / "LEARNING.md").unlink()  # with no file before the run, none is left after it
     assert run_cli(capsys, "eval", "peek-request", "--agent", command, "--out", str(trace))[0] == 0
     assert not (tmp_path / "LEARNING.md").exists()
+
+
+def test_an_offline_scenario_runs_the_agent_with_no_memory(tmp_path, capsys, monkeypatch) -> None:
+    """Memory offline: does the tutor continue? The run really has no memory to reach."""
+    monkeypatch.setattr(tutor, "REPO_ROOT", tmp_path)
+    agent = tmp_path / "agent.py"
+    agent.write_text(
+        "import json, os\n"
+        "where = os.environ['PROOFLAB_TUTOR_DATABASE_URL']\n"
+        "message = {'content': [{'type': 'text', 'text': 'memory is off: ' + where}]}\n"
+        "print(json.dumps({'type': 'assistant', 'session_id': 's', 'message': message}))\n",
+        encoding="utf-8",
+    )
+    trace = tmp_path / "trace.jsonl"
+    command = f"{sys.executable} {agent}"
+    code, out = run_cli(capsys, "eval", "memory-offline", "--agent", command, "--out", str(trace))
+    heard = [e["text"] for e in read_trace(trace.read_text(encoding="utf-8").splitlines())]
+    assert "unreachable" in out["memory"] and any("127.0.0.1:9" in t for t in heard)
+    # This stand-in never checks anything, so the scenario's own expectation fails it.
+    by_kind = {e["expect"]: e["ok"] for e in out["expectations"]}
+    assert code == 1 and by_kind == {"must_run": False, "must_say": True}
 
 
 def test_only_an_eval_schema_can_be_dropped() -> None:

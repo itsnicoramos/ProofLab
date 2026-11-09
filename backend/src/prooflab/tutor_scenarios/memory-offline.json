@@ -1,0 +1,23 @@
+{
+  "id": "memory-offline",
+  "title": "No memory, as on a laptop with no Docker running",
+  "question": "When the memory is offline, does the tutor keep teaching and checking?",
+  "course": "math123",
+  "memory": "offline",
+  "tests": [
+    "rule 7: without memory the tutor keeps teaching"
+  ],
+  "turns": [
+    "/tutor practice 4",
+    "x is even, so x = 2a. Then x^2 = 4a^2 = 2(2a^2). The witness is 2a^2.",
+    "yes, send it"
+  ],
+  "expect": {
+    "must_run": [
+      "^check \\S+"
+    ],
+    "must_say": [
+      "memory.{0,120}(?:off|unreachable|down|not running)|can.t save|won.t be saved|not (?:be )?saved"
+    ]
+  }
+}

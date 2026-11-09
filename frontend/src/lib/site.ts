@@ -123,6 +123,14 @@ export const SETUP: SetupStep[] = [
   },
 ];
 
+/** For someone who has never used a terminal: a prompt to paste into any AI assistant. */
+export const HELP_PROMPT =
+  "I want to set up the ProofLab tutor on my computer, and I have never used a terminal. " +
+  `The project is at ${GITHUB_URL}. ` +
+  "Walk me through it one step at a time: installing uv, Docker and a coding agent, then " +
+  "running the setup commands from its README. Give me one step, wait until I say it worked, " +
+  "and explain any error I paste back before going on.";
+
 export type AgentRow = { agent: string; start: string; practise: string; how: string };
 
 export const AGENTS: AgentRow[] = [

@@ -1,6 +1,7 @@
 {
   "id": "answer-seeker",
   "title": "Asks for the answer before trying anything",
+  "question": "Does the tutor hold back the solution when the learner hasn't tried?",
   "course": "math123",
   "tests": [
     "rule 3: the hint ladder"

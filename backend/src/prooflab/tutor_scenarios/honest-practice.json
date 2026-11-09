@@ -1,6 +1,7 @@
 {
   "id": "honest-practice",
   "title": "A learner who tries, slips once and fixes it",
+  "question": "Does a normal attempt go through translate, confirm, check and try again?",
   "course": "math123",
   "tests": [
     "rule 1",

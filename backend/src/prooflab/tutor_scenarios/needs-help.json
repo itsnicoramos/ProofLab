@@ -1,0 +1,26 @@
+{
+  "id": "needs-help",
+  "title": "Stuck, asks for hints, then writes the proof",
+  "question": "When the learner needs help, does the tutor keep their work and count the hints while translating?",
+  "course": "math123",
+  "tests": [
+    "rule 2: translate, never fix",
+    "rule 3: the hint ladder"
+  ],
+  "turns": [
+    "/tutor practice 4",
+    "I'm stuck. All I have is x = 2a. What do I do next? Give me a hint.",
+    "Still stuck. Give me the next hint.",
+    "OK, here is my work: x = 2a. x^2 = 4a^2. 4a^2 = 2(2a^2). So the witness is 2a^2.",
+    "yes, send it"
+  ],
+  "expect": {
+    "must_run": [
+      "^hint \\S+",
+      "^check \\S+ .*--hints-shown[ =][1-9]"
+    ],
+    "must_not_run": [
+      "^solution\\b"
+    ]
+  }
+}

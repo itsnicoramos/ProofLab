@@ -943,7 +943,8 @@ def cmd_scenarios(_t: Tutor | None, _a: argparse.Namespace) -> Any:
     from prooflab.tutor_evals import load_scenarios
 
     return [
-        {k: s.get(k) for k in ("id", "title", "course", "tests")} | {"turns": len(s["turns"])}
+        {k: s.get(k) for k in ("id", "title", "question", "course", "tests")}
+        | {"turns": len(s["turns"])}
         for s in load_scenarios().values()
     ]
 
@@ -986,31 +987,40 @@ def cmd_eval(_t: Tutor | None, a: argparse.Namespace) -> Any:
     import shlex
     import uuid
 
-    from prooflab.tutor_evals import EvalError, run_scenario
+    from prooflab.tutor_evals import EvalError, run_scenario, run_setup
     from prooflab.tutor_memory.db import drop_eval_schema
 
     scenario = _scenario(a.scenario)
     out = Path(a.out)
     schema = f"eval_{uuid.uuid4().hex[:12]}"
     env = {**os.environ, "PROOFLAB_TUTOR_DB_SCHEMA": schema, "PROOFLAB_TUTOR_LEARNER": "eval"}
+    offline = scenario.get("memory") == "offline"
+    if offline:  # a scenario about the memory being down: nothing answers at this address
+        env["PROOFLAB_TUTOR_DATABASE_URL"] = "postgresql://offline:offline@127.0.0.1:9/offline"
     learning = REPO_ROOT / LEARNING_FILE
     kept = learning.read_bytes() if learning.is_file() and not learning.is_symlink() else None
     try:
+        run_setup(scenario, env)
         run_scenario(scenario, shlex.split(a.agent), out, cwd=REPO_ROOT, env=env)
     except EvalError as exc:
         fail(str(exc), trace=str(out))
     finally:
-        drop_eval_schema(schema)
+        if not offline:
+            drop_eval_schema(schema)
         if not learning.is_symlink():
             if kept is not None:
                 learning.write_bytes(kept)
             elif learning.is_file():
                 learning.unlink()
-    return {
-        "trace": str(out),
-        "memory": f"throwaway schema {schema}, dropped",
-        **_audit(out, scenario),
-    }
+    memory = (
+        "unreachable, as the scenario asks" if offline else f"throwaway schema {schema}, dropped"
+    )
+    run = {"trace": str(out), "memory": memory}
+    try:
+        return {**run, **_audit(out, scenario)}
+    except Failure as failed:  # a failed audit still says where the trace is
+        failed.extra = {**run, **failed.extra}
+        raise
 
 
 # ---------------------------------------------------------------------- arguments
