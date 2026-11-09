@@ -20,11 +20,13 @@ def render(
     show: dict[str, Any],
     history: dict[str, Any],
     chapters: dict[int, dict[str, Any]],
+    heading: str = "My Book of Proof path",
 ) -> str:
-    """``chapters`` maps a chapter number to its lesson summary (title, minutes)."""
+    """``chapters`` maps a chapter number to its lesson summary (title, minutes). ``heading``
+    names the course's path."""
     plan = show["plan"]
     out = [
-        "# My Book of Proof path",
+        f"# {heading}",
         "",
         "<!-- Written by `prooflab-tutor memory export` from your tutor memory in Postgres.",
         "     Edits here are not read back: ask the tutor to change your plan instead. -->",
@@ -105,7 +107,8 @@ def render(
     if show["open_review"]:
         for r in show["open_review"]:
             ids = ", ".join(f"`{i}`" for i in r["problem_ids"])
-            out.append(f"- Chapter {r['chapter']}: {r['idea']}" + (f" ({ids})" if ids else ""))
+            where = f"Chapter {r['chapter']}: " if r["chapter"] else ""
+            out.append(f"- {where}{r['idea']}" + (f" ({ids})" if ids else ""))
     else:
         out.append("Empty.")
     out.append("")

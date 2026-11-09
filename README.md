@@ -13,6 +13,10 @@ runs inside your own coding agent, or through its HTTP API.
   checker yet, so there the tutor gives feedback, labelled as not a verdict. It remembers your
   plan and progress in a local Postgres. See [Learn with the tutor](#learn-with-the-tutor) and
   `SPEC.md` §20.
+- **One harness, several courses.** A course is a small pack file, so the same tutor, rules
+  and memory serve MATH 123 today and MATH 223 (discrete mathematics and combinatorics) once
+  its content is added. A guard stops the agent from breaking the hard rules, and recorded
+  sessions can be graded against them. See [Courses](#courses) and `SPEC.md` §22.
 - **A website that shows how the tutor works.** https://prooflab-ruby.vercel.app is one page:
   a diagram of the pieces, a step-by-step replay of a real `/tutor practice 4` session (every
   command's output captured from the CLI), the tutor's seven rules and the setup steps. See
@@ -171,6 +175,12 @@ Then open your agent in the `ProofLab` folder and start:
 | Codex | `use the tutor skill to start` | `next lesson` | `practise chapter 4` | `quiz me on chapter 6` |
 | Other agents | `Read AGENTS.md and be my tutor` | `next lesson` | `practise chapter 4` | `give me a mock midterm on chapters 1 to 6` |
 
+Check the setup at any time. It says what is missing and how to fix it:
+
+```bash
+uv run --project backend --extra tutor prooflab-tutor doctor
+```
+
 What a session looks like:
 1. A warm-up from your last session.
 2. A chapter taught a few ideas at a time, with questions for you.
@@ -181,7 +191,33 @@ What a session looks like:
 Chapters 11 to 14 have lessons, but ProofLab can't check them yet, so the tutor's comments on
 those proofs are labelled "feedback, not a verdict".
 
+### Courses
+
+The tutor teaches one course at a time, and each course keeps its own plan and progress.
+
+| Course | Say | What you get |
+|---|---|---|
+| MATH 123, proofs (*Book of Proof*) | `/tutor`, or "tutor me in MATH 123" | 14 lessons, checked exercises in Chapters 1 to 10, quizzes and mock tests |
+| MATH 223, discrete mathematics and combinatorics | "tutor me in MATH 223" | An empty slot for now: a plan, coaching on your own course material ("feedback, not a verdict") and memory. No lessons or checked exercises yet |
+
+List them with `prooflab-tutor courses`. Every command takes `--course math223`.
+
+Adding a course means adding data, not code: a pack file in
+`backend/src/prooflab/content/packs/`, a track of problems, and lesson notes if there are any
+(`SPEC.md` §22).
+
+### Guardrails and evals
+
+- **In Claude Code** the skill turns on a guard for the session. It blocks reading exercise
+  files or `.env`, starting servers, touching a database directly and writing files, and it
+  asks you before the tutor deletes or archives your memory. To work on the code afterwards,
+  start a new session.
+- **For any agent,** a recorded session can be graded against the rules:
+  `prooflab-tutor audit <trace.jsonl>`. `prooflab-tutor scenarios` lists scripted learners
+  (an answer seeker, work that carries instructions, and others) to play against an agent.
+
 The pieces:
+- **Course packs:** `backend/src/prooflab/content/packs/`.
 - **Skill:** `.claude/skills/tutor/`. Other agents reach it through `AGENTS.md`.
 - **Lesson notes:** `backend/src/prooflab/content/lessons/proofs/`.
 - **Tools the agent runs:** `uv run --project backend --extra tutor prooflab-tutor --help`.
@@ -191,7 +227,8 @@ The pieces:
 Memory notes:
 - Without the database, the tutor still teaches and checks; it just can't save.
 - `docker compose down` keeps your memory, which lives in the `tutor-db-data` volume.
-- `prooflab-tutor memory forget --confirm` deletes it.
+- `prooflab-tutor memory forget --confirm` deletes the selected course's memory. Add
+  `--all-courses` to delete every course's.
 
 ## Live on Vercel
 
@@ -238,6 +275,7 @@ docker build --target test -t prooflab-test backend
 | `TUTOR_DB_PASSWORD` | `prooflab-local` | password of the tutor's local Postgres (`docker-compose.yml`; set it in `.env`, see `.env.example`) |
 | `PROOFLAB_TUTOR_DATABASE_URL` | the compose `tutor-db` on `127.0.0.1:5433` | any other Postgres for the tutor's memory |
 | `PROOFLAB_TUTOR_LEARNER` | `me` | the tutor memory's profile name, if several people share a clone |
+| `PROOFLAB_TUTOR_COURSE` | `math123` | the course pack the tutor uses when `--course` isn't given |
 
 ## API
 
@@ -304,6 +342,9 @@ prooflab/
     │   ├── store.py             progress database, SQLite (SPEC §17)
     │   ├── reader.py            photos/PDFs/documents → text (SPEC §14)
     │   ├── tutor.py             prooflab-tutor, the tutor's command line (SPEC §20)
+    │   ├── packs.py             course packs: one file per course (SPEC §22)
+    │   ├── tutor_guard.py       the tutor's hard rules as code, run by the Claude Code hook
+    │   ├── tutor_evals.py       grade a recorded session; tutor_scenarios/ holds the scripts
     │   ├── tutor_memory/        the tutor's Postgres memory: schema/, queries, LEARNING.md export
     │   ├── lessons.py           lesson-note loader (content/lessons/)
     │   ├── api/                 routes.py, schemas.py

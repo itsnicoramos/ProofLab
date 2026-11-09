@@ -17,6 +17,7 @@ from prooflab.tutor_memory.models import (
 )
 
 CARD_REVIEW_DAYS = 7
+DEFAULT_COURSE = "math123"
 ATTEMPT_STATUSES = ("correct", "partial", "incorrect", "invalid")
 
 
@@ -43,17 +44,24 @@ def _rows(cur: Any) -> list[dict[str, Any]]:
 
 
 class Memory:
-    """One learner's memory, on an open connection from ``db.connect``."""
+    """One learner's memory of one course, on an open connection from ``db.connect``.
 
-    def __init__(self, conn: Any, learner: str) -> None:
+    A ``learners`` row is a learner in a course (SPEC §22), so everything below is kept apart
+    per course just by hanging off ``self.id``."""
+
+    def __init__(self, conn: Any, learner: str, course: str = DEFAULT_COURSE) -> None:
         self.conn = conn
         self.learner = learner
+        self.course = course
         row = conn.execute(
-            "INSERT INTO learners (name) VALUES (%s) ON CONFLICT (name) DO NOTHING RETURNING id",
-            (learner,),
+            "INSERT INTO learners (name, course) VALUES (%s, %s)"
+            " ON CONFLICT (name, course) DO NOTHING RETURNING id",
+            (learner, course),
         ).fetchone()
         if row is None:
-            row = conn.execute("SELECT id FROM learners WHERE name = %s", (learner,)).fetchone()
+            row = conn.execute(
+                "SELECT id FROM learners WHERE name = %s AND course = %s", (learner, course)
+            ).fetchone()
         self.id: int = row["id"]
 
     # ------------------------------------------------------------------ reading
@@ -72,8 +80,25 @@ class Memory:
         )
         return {r["chapter"]: r["status"] for r in cur.fetchall()}
 
-    def show(self) -> dict[str, Any]:
-        """Everything a tutoring session needs, in one call."""
+    def courses(self) -> list[dict[str, Any]]:
+        """Every course this learner has a memory row in, with how much is there."""
+        return _rows(
+            self.conn.execute(
+                "SELECT l.course,"
+                " EXISTS (SELECT 1 FROM plans p"
+                "         WHERE p.learner_id = l.id AND p.archived_at IS NULL) AS has_plan,"
+                " (SELECT count(*) FROM sessions s WHERE s.learner_id = l.id) AS sessions,"
+                " (SELECT max(s.started_at) FROM sessions s"
+                "  WHERE s.learner_id = l.id) AS last_session"
+                " FROM learners l WHERE l.name = %s ORDER BY l.course",
+                (self.learner,),
+            )
+        )
+
+    def show(self, chapters: int = 14) -> dict[str, Any]:
+        """Everything a tutoring session needs, in one call. ``chapters`` is how many the
+        course has (the course pack knows; the memory doesn't)."""
+        numbers = range(1, chapters + 1)
         q = self.conn.execute
         statuses = self.chapters()
         stats = q(
@@ -85,11 +110,10 @@ class Memory:
         ).fetchone()
         return {
             "learner": self.learner,
+            "course": self.course,
             "plan": self.plan(),
-            "chapters": [{"chapter": n, "status": statuses.get(n)} for n in range(1, 15)],
-            "next_chapter": next(
-                (n for n in range(1, 15) if statuses.get(n) in ("do", "review")), None
-            ),
+            "chapters": [{"chapter": n, "status": statuses.get(n)} for n in numbers],
+            "next_chapter": next((n for n in numbers if statuses.get(n) in ("do", "review")), None),
             "recent_sessions": _rows(
                 q(
                     "SELECT id, mode, chapter, started_at, ended_at, summary FROM sessions"
@@ -464,7 +488,16 @@ class Memory:
 
     # ------------------------------------------------------------------ forgetting
 
-    def forget(self) -> dict[str, Any]:
-        """Delete everything stored for this learner (after the learner confirmed in chat)."""
-        self.conn.execute("DELETE FROM learners WHERE id = %s", (self.id,))
-        return {"learner": self.learner, "forgotten": True}
+    def forget(self, all_courses: bool = False) -> dict[str, Any]:
+        """Delete everything stored for this learner in this course, or in every course
+        (after the learner confirmed in chat)."""
+        if all_courses:
+            cur = self.conn.execute(
+                "DELETE FROM learners WHERE name = %s RETURNING course", (self.learner,)
+            )
+        else:
+            cur = self.conn.execute(
+                "DELETE FROM learners WHERE id = %s RETURNING course", (self.id,)
+            )
+        gone = sorted(r["course"] for r in cur.fetchall())
+        return {"learner": self.learner, "courses": gone, "forgotten": True}

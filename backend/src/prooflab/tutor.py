@@ -32,28 +32,21 @@ from prooflab.api.routes import (
     problem_detail,
 )
 from prooflab.cards import build_deck
-from prooflab.content import Registry, load_registry
+from prooflab.content import ContentLoadError, Registry, load_registry
 from prooflab.engine.checker import check_isolated
 from prooflab.engine.models import Course, Problem, Submission, Verdict
-from prooflab.lessons import Lesson, load_lessons
+from prooflab.lessons import Lesson, LessonError, load_lessons
+from prooflab.packs import CoursePack, PackError, find_pack, load_packs
 from prooflab.practice import PracticeTestError
 from prooflab.quiz import build_question
 
-COURSE = Course("proofs")  # the only course the tutor teaches (SPEC §4)
-BOOK_PDF = "https://richardhammack.github.io/BookOfProof/"
 CHECKED_BY = "ProofLab's checker (deterministic rules and SymPy, no AI)"
 CHECK_TIMEOUT = 10.0
 QUESTION_TIMEOUT = 5.0  # the same limit the API gives each quiz question
 REPO_ROOT = Path(__file__).resolve().parents[3]
-PLACEMENT_AREAS = (
-    ("Sets", ("sets", "sets")),
-    ("Logic", ("logic", "logic")),
-    ("Counting", ("counting", "counting")),
-    ("Direct and contrapositive proof", ("direct", "contrapositive")),
-    ("Contradiction and induction", ("contradiction", "induction")),
-)
-VARIANT_LABEL = "A ProofLab-made version with new numbers. It is not a Book of Proof exercise."
 LEARNER_RE = re.compile(r"^[a-z0-9][a-z0-9_-]{0,39}$")
+# Options that hold free text: what follows one of them is its value, never another option.
+TEXT_OPTIONS = ("--text", "--summary", "--idea")
 
 
 class Failure(Exception):
@@ -75,23 +68,48 @@ def fail(message: str, code: int = 1, **extra: object) -> NoReturn:
 
 
 class Tutor:
-    def __init__(self) -> None:
-        self.registry: Registry = load_registry(courses=[COURSE.value])
-        self.topics: list[str] = self.registry.topics[COURSE.value]
-        self.lessons: dict[int, Lesson] = load_lessons(COURSE.value)
-        self.served = [p for p in self.registry.served() if p.course is COURSE]
+    """One course pack's content (SPEC §22): the problems, concept cards and lesson notes of
+    the track it draws on. An empty slot has a pack and nothing else."""
+
+    def __init__(self, pack: CoursePack | None = None) -> None:
+        self.pack: CoursePack = pack or find_pack()
+        self.course: Course | None = self.pack.track
+        tracks = [self.course.value] if self.course else []
+        self.registry: Registry = load_registry(courses=tracks)
+        self.topics: list[str] = self.pack.topics
+        self.lessons: dict[int, Lesson] = load_lessons(self.course.value) if self.course else {}
+        self.served = [p for p in self.registry.served() if p.course is self.course]
+
+    @property
+    def variant_label(self) -> str:
+        source = f"a {self.pack.book_name} exercise" if self.pack.book_name else "a book exercise"
+        return f"A ProofLab-made version with new numbers. It is not {source}."
+
+    def need_content(self) -> Course:
+        """The pack's track, or a plain refusal when the pack is an empty slot."""
+        if self.course is None:
+            fail(
+                f"{self.pack.code} is an empty slot: ProofLab has no lessons or exercises for"
+                " it yet. The tutor can still plan, coach from the learner's own course"
+                " materials (feedback, not a verdict) and remember.",
+                course=self.pack.id,
+                status=self.pack.status,
+            )
+        return self.course
 
     def chapter_of(self, problem: Problem) -> int | None:
         return self.topics.index(problem.topic) + 1 if problem.topic in self.topics else None
 
     def topic_of(self, chapter: int) -> str:
+        self.need_content()
         if not 1 <= chapter <= len(self.topics):
             fail(f"Chapters run from 1 to {len(self.topics)}.")
         return self.topics[chapter - 1]
 
     def problem(self, problem_id: str) -> Problem:
+        self.need_content()
         problem = find_problem(self.registry, problem_id)
-        if problem is None or problem.course is not COURSE:
+        if problem is None or problem.course is not self.course:
             fail(
                 f"No problem with id {problem_id!r}.",
                 hint="List a chapter's problems with: prooflab-tutor problems --chapter N",
@@ -109,8 +127,19 @@ class Tutor:
         return lesson.title if lesson else self.topics[n - 1]
 
 
+def cmd_courses(_t: Tutor | None, a: argparse.Namespace) -> Any:
+    """Every course pack, and which one this call would use."""
+    current = getattr(a, "pack", None) or find_pack()
+    return {
+        "selected": current.id,
+        "select_with": "prooflab-tutor --course <course> <command>",
+        "courses": [pack.describe() for pack in load_packs().values()],
+    }
+
+
 def cmd_chapters(t: Tutor, _: argparse.Namespace) -> Any:
-    cards = Counter(c.topic for c in t.registry.cards.get(COURSE.value, []))
+    track = t.course.value if t.course else ""
+    cards = Counter(c.topic for c in t.registry.cards.get(track, []))
     out = []
     for n, topic in enumerate(t.topics, 1):
         problems = [p for p in t.served if p.topic == topic]
@@ -129,11 +158,11 @@ def cmd_chapters(t: Tutor, _: argparse.Namespace) -> Any:
                 "concept_cards": cards.get(topic, 0),
             }
         )
-    book = t.registry.references["hammack-bop3"]
+    book = t.registry.references.get(t.pack.book) if t.pack.book else None
     return {
-        "course": COURSE.value,
-        "book": {"title": book.title, "edition": book.edition, "license": book.license},
-        "free_pdf": BOOK_PDF,
+        **{k: v for k, v in t.pack.describe().items() if k != "chapters"},
+        "book": book and {"title": book.title, "edition": book.edition, "license": book.license},
+        "free_pdf": t.pack.free_pdf,
         "chapters": out,
     }
 
@@ -143,7 +172,7 @@ def cmd_lesson(t: Tutor, a: argparse.Namespace) -> Any:
     lesson = t.lessons.get(a.chapter)
     if lesson is None:
         fail(f"There's no lesson note for chapter {a.chapter} yet.")
-    return {**lesson.summary(), "free_pdf": BOOK_PDF, "text": lesson.body}
+    return {**lesson.summary(), "free_pdf": t.pack.free_pdf, "text": lesson.body}
 
 
 def cmd_problems(t: Tutor, a: argparse.Namespace) -> Any:
@@ -160,7 +189,7 @@ def cmd_show(t: Tutor, a: argparse.Namespace) -> Any:
     out = {**problem_detail(t.registry, problem).model_dump(mode="json")}
     out["chapter"] = t.chapter_of(problem)
     if out.get("variant_of"):
-        out["label"] = VARIANT_LABEL
+        out["label"] = t.variant_label
     return out
 
 
@@ -347,12 +376,13 @@ def cmd_solution(t: Tutor, a: argparse.Namespace) -> Any:
 
 
 def cmd_cards(t: Tutor, a: argparse.Namespace) -> Any:
+    course = t.need_content()
     topics = [t.topic_of(a.chapter)] if a.chapter else None
     deck = build_deck(
         t.registry.cards,
         t.served,
         {b.id: b.title for b in t.registry.references.values()},
-        COURSE,
+        course,
         topics=topics,
         parts=["concepts"],
         topic_order=t.topics,
@@ -368,8 +398,9 @@ def cmd_cards(t: Tutor, a: argparse.Namespace) -> Any:
 
 
 def _test_out(t: Tutor, kind: str, seed: int, topics: list[str], **kw: Any) -> Any:
+    course = t.need_content()
     try:
-        test = practice_test_out(t.registry, COURSE, kind, t.run, seed=seed, topics=topics, **kw)
+        test = practice_test_out(t.registry, course, kind, t.run, seed=seed, topics=topics, **kw)
     except PracticeTestError as exc:
         fail(str(exc))
     out = test.model_dump(mode="json")
@@ -394,12 +425,16 @@ def cmd_quiz(t: Tutor, a: argparse.Namespace) -> Any:
 
 
 def _placement(t: Tutor, seed: int) -> Any:
+    t.need_content()
+    areas = [(item.area, item.topics) for item in t.pack.placement]
+    if not areas:
+        fail(f"{t.pack.code} has no placement quiz yet. Let the learner pick a starting chapter.")
     rng = random.Random(f"placement|{seed}")
     siblings = t.served
     questions: list[dict[str, Any]] = []
     used: set[str] = set()
     offset = 0
-    for area, topics in PLACEMENT_AREAS:
+    for area, topics in areas:
         for topic in topics:
             pool = [
                 p for p in t.served if p.topic == topic and p.difficulty <= 2 and p.id not in used
@@ -422,7 +457,7 @@ def _placement(t: Tutor, seed: int) -> Any:
     return {
         "kind": "placement",
         "seed": seed,
-        "areas": [area for area, _ in PLACEMENT_AREAS],
+        "areas": [area for area, _ in areas],
         "questions": questions,
         "grade_with": "prooflab-tutor answer <problem id> --seed <choice.seed>"
         " --format <choice.format> --choice <key>",
@@ -508,7 +543,7 @@ def cmd_variant(t: Tutor, a: argparse.Namespace) -> Any:
         fail("ProofLab can't make a new-number version of this problem.")
     out = {**problem_detail(t.registry, made).model_dump(mode="json")}
     out["chapter"] = t.chapter_of(made)
-    out["label"] = VARIANT_LABEL
+    out["label"] = t.variant_label
     return out
 
 
@@ -516,10 +551,26 @@ def cmd_variant(t: Tutor, a: argparse.Namespace) -> Any:
 
 
 def _learner(a: argparse.Namespace) -> str:
-    name = a.learner or os.environ.get("PROOFLAB_TUTOR_LEARNER") or "me"
+    name = getattr(a, "learner", None) or os.environ.get("PROOFLAB_TUTOR_LEARNER") or "me"
     if not LEARNER_RE.match(name):
         fail("A learner name is lowercase letters, digits, - and _ (up to 40).")
     return name
+
+
+def _pack(a: argparse.Namespace) -> CoursePack:
+    """The course pack this call is about (``main`` resolves ``--course`` into ``a.pack``)."""
+    return getattr(a, "pack", None) or find_pack()
+
+
+def _chapter_in(pack: CoursePack, chapter: int | None) -> None:
+    """Chapter numbers are checked against the pack: courses differ in length."""
+    count = len(pack.topics)
+    if chapter is None:
+        return
+    if count == 0:
+        fail(f"{pack.code} has no chapters yet, so leave the chapter out.")
+    if not 1 <= chapter <= count:
+        fail(f"Chapters run from 1 to {count} in {pack.code}.")
 
 
 def _with_memory(a: argparse.Namespace, action: Any, *, soft: bool = False) -> dict[str, Any]:
@@ -533,7 +584,8 @@ def _with_memory(a: argparse.Namespace, action: Any, *, soft: bool = False) -> d
             from prooflab.tutor_memory.queries import Memory, MemoryRefused
 
             try:
-                return {"recorded": True, **action(Memory(conn, _learner(a)))}
+                memory = Memory(conn, _learner(a), _pack(a).id)
+                return {"recorded": True, **action(memory)}
             except (MemoryRefused, psycopg.DataError, psycopg.IntegrityError) as exc:
                 # A refused request, or a value the schema's own checks rejected.
                 message = str(exc).strip().splitlines()[0]
@@ -655,6 +707,7 @@ def cmd_memory(t: Tutor | None, a: argparse.Namespace) -> Any:
                 "schema_version": version["v"],
                 "server_version": m.conn.info.server_version,
                 "learner": m.learner,
+                "course": m.course,
                 "has_plan": m.plan() is not None,
             }
 
@@ -662,9 +715,22 @@ def cmd_memory(t: Tutor | None, a: argparse.Namespace) -> Any:
         if what == "init":
             out["message"] = "The tutor memory is ready."
         return out
+    pack = _pack(a)
+    if what == "courses":
+        packs = load_packs()
+
+        def courses(m: Any) -> dict[str, Any]:
+            rows = m.courses()
+            for row in rows:
+                known = packs.get(row["course"])
+                row["code"] = known.code if known else None
+                row["status"] = known.status if known else "removed"
+            return {"learner": m.learner, "selected": pack.id, "courses": rows}
+
+        return _memory(a, courses)
     if what == "show":
         assert t is not None
-        out = _memory(a, lambda m: m.show())
+        out = _memory(a, lambda m: m.show(chapters=len(t.topics)))
         for row in out["chapters"]:
             row["title"] = t.chapter_title(row["chapter"])
             row["topic"] = t.topics[row["chapter"] - 1]
@@ -672,25 +738,31 @@ def cmd_memory(t: Tutor | None, a: argparse.Namespace) -> Any:
     if what == "plan":
         if a.plan_command == "set":
             plan = _validated(models.PlanIn, _stdin_json())
+            for chapter in (plan.entry_chapter, *(plan.chapters or {})):
+                _chapter_in(pack, chapter)
             return _memory(a, lambda m: m.set_plan(plan))
         if a.plan_command == "archive":
             return _memory(a, lambda m: m.archive_plan())
     if what == "chapter":
-        if not 1 <= a.chapter <= 14:
-            fail("Chapters run from 1 to 14.")
+        _chapter_in(pack, a.chapter)
         return _memory(a, lambda m: m.set_chapter(a.chapter, a.status))
     if what == "session":
         if a.session_command == "start":
+            _chapter_in(pack, a.chapter)
             return _memory(a, lambda m: m.start_session(a.mode, a.chapter))
         summary = _text(a.summary)
         return _memory(a, lambda m: m.end_session(a.session_id, summary))
     if what == "note":
+        _chapter_in(pack, a.chapter)
         note = _validated(
             models.NoteIn, {"kind": a.kind, "text": _text(a.text), "chapter": a.chapter}
         )
         return _memory(a, lambda m: m.add_note(note))
     if what == "review":
         if a.review_command == "add":
+            if a.chapter is None and pack.topics:
+                fail("Pass --chapter N: the chapter the missed idea belongs to.")
+            _chapter_in(pack, a.chapter)
             ids = [i.strip() for i in (a.problems or "").split(",") if i.strip()]
             item = _validated(
                 models.ReviewIn, {"chapter": a.chapter, "idea": _text(a.idea), "problem_ids": ids}
@@ -710,7 +782,7 @@ def cmd_memory(t: Tutor | None, a: argparse.Namespace) -> Any:
             }
             # The CLI, not the agent, says which questions the quiz has and how many.
             asked = _validated(models.QuizIn, fields)
-            questions = _quiz_questions(t or Tutor(), asked, a.style, a.variants)
+            questions = _quiz_questions(t or Tutor(pack), asked, a.style, a.variants)
             if not questions:
                 fail("That quiz has no questions.")
             quiz = _validated(
@@ -720,19 +792,205 @@ def cmd_memory(t: Tutor | None, a: argparse.Namespace) -> Any:
         return _memory(a, lambda m: m.finish_quiz(a.quiz_id))
     if what == "export":
         assert t is not None
-        from prooflab.tutor_memory.export import render
-
-        meta = {n: {"title": t.chapter_title(n), "minutes": None} for n in range(1, 15)}
-        for n, lesson in t.lessons.items():
-            meta[n]["minutes"] = lesson.minutes
-        text = _memory(a, lambda m: {"text": render(m.show(), m.history(), meta)})["text"]
+        text = _memory(a, lambda m: {"text": _learning_text(m, t)})["text"]
         path = _write_learning(text)
         return {"path": str(path), "bytes": len(text.encode("utf-8"))}
     if what == "forget":
         if not a.confirm:
-            fail("This deletes everything the tutor remembers about you. Pass --confirm.")
-        return _memory(a, lambda m: m.forget())
+            scope = "in every course" if a.all_courses else f"in {pack.code}"
+            fail(f"This deletes everything the tutor remembers about you {scope}. Pass --confirm.")
+        return _memory(a, lambda m: m.forget(all_courses=a.all_courses))
     fail("Unknown memory command.")
+
+
+def _learning_text(m: Any, t: Tutor) -> str:
+    """``LEARNING.md``: this course first, then every other course the learner has a plan or a
+    session in. With one course it is exactly that course's view."""
+    from prooflab.tutor_memory.export import render
+
+    def view(memory: Any, tutor: Tutor) -> str:
+        count = len(tutor.topics)
+        meta = {n: {"title": tutor.chapter_title(n), "minutes": None} for n in range(1, count + 1)}
+        for n, lesson in tutor.lessons.items():
+            meta[n]["minutes"] = lesson.minutes
+        name = tutor.pack.book_name or tutor.pack.code
+        return render(memory.show(chapters=count), memory.history(), meta, f"My {name} path")
+
+    parts = [view(m, t)]
+    packs = load_packs()
+    for row in m.courses():
+        other = packs.get(row["course"])
+        if other is None or other.id == t.pack.id or not (row["has_plan"] or row["sessions"]):
+            continue
+        parts.append(view(type(m)(m.conn, m.learner, other.id), Tutor(other)))
+    return "\n".join(parts)
+
+
+# ---------------------------------------------------------------------- setup check
+
+SKILL_DIR = Path(".claude") / "skills" / "tutor"
+SKILL_FILES = ("SKILL.md", *(f"modes/{m}.md" for m in ("start", "level", "learn", "practice")))
+SKILL_FILES += ("modes/quiz.md", "modes/guide.md", "modes/coach.md")
+GUARD_HOOK = Path(".claude") / "hooks" / "tutor-guard.sh"
+
+
+def cmd_doctor(_t: Tutor | None, a: argparse.Namespace) -> Any:
+    """Is this clone ready to tutor? Every check says what it found and, if it failed, the
+    fix. Teaching needs the course content, the checker and the skill files; saving progress
+    also needs the memory. Exit code 1 means it can't teach yet (SPEC §22)."""
+    checks: list[dict[str, Any]] = []
+
+    def add(name: str, ok: bool, found: str, fix: str = "", needed: bool = True) -> None:
+        row: dict[str, Any] = {"check": name, "ok": ok, "needed_to_teach": needed, "found": found}
+        if not ok and fix:
+            row["fix"] = fix
+        checks.append(row)
+
+    try:
+        packs = list(load_packs().values())
+        add("course packs", True, ", ".join(f"{p.code} ({p.status})" for p in packs))
+    except PackError as exc:
+        packs = []
+        add(
+            "course packs", False, str(exc), "Fix the files in backend/src/prooflab/content/packs/."
+        )
+
+    for pack in packs:
+        if pack.track is None:
+            found = "an empty slot: the tutor plans, coaches and remembers, with no verdicts"
+            add(f"{pack.code} content", True, found, needed=False)
+            continue
+        try:
+            t = Tutor(pack)
+        except (ContentLoadError, LessonError) as exc:
+            first = str(exc).strip().splitlines()[0]
+            add(f"{pack.code} content", False, first, "Run: cd backend && uv run pytest -q")
+            continue
+        found = (
+            f"{len(t.topics)} chapters, {len(t.lessons)} lesson notes, {len(t.served)} exercises"
+        )
+        add(f"{pack.code} content", bool(t.served), found, "This course has no exercises to check.")
+        known = next(
+            ((p, e) for p in t.served for e in p.examples if e.expect.status.value == "correct"),
+            None,
+        )
+        if known is not None:
+            verdict = check_isolated(known[0], known[1].submission, timeout=CHECK_TIMEOUT)
+            ok = verdict.status.value == "correct"
+            found = (
+                "graded a known-correct answer as correct, in its own worker process"
+                if ok
+                else f"a known-correct answer came back {verdict.status.value} {_codes(verdict)}"
+            )
+            add(
+                f"{pack.code} checker",
+                ok,
+                found,
+                "Run: cd backend && uv run pytest tests/engine -q",
+            )
+
+    missing = [f for f in SKILL_FILES if not (REPO_ROOT / SKILL_DIR / f).is_file()]
+    missing += [] if (REPO_ROOT / "AGENTS.md").is_file() else ["AGENTS.md"]
+    found = "the skill, its modes and AGENTS.md" if not missing else f"missing: {missing}"
+    add(
+        "tutor instructions",
+        not missing,
+        found,
+        "Restore them with: git checkout -- .claude AGENTS.md",
+    )
+
+    hook = REPO_ROOT / GUARD_HOOK
+    ok = hook.is_file() and os.access(hook, os.X_OK)
+    found = (
+        "the Claude Code guard hook is in place"
+        if ok
+        else f"{GUARD_HOOK} is missing or not executable"
+    )
+    add("guardrail hook", ok, found, f"Run: chmod +x {GUARD_HOOK}", needed=False)
+
+    learning = REPO_ROOT / LEARNING_FILE
+    ok = not learning.is_symlink() and (not learning.exists() or learning.is_file())
+    found = "a plain file, or not written yet" if ok else "a link or not a plain file"
+    add(LEARNING_FILE, ok, found, f"Remove {LEARNING_FILE} at the repo root.", needed=False)
+
+    def status(m: Any) -> dict[str, Any]:
+        version = m.conn.execute("SELECT max(version) AS v FROM schema_version").fetchone()
+        return {"schema_version": version["v"], "courses": [r["course"] for r in m.courses()]}
+
+    memory = _with_memory(a, status, soft=True)
+    saved = bool(memory.get("recorded"))
+    found = (
+        f"reachable, schema version {memory['schema_version']}"
+        if saved
+        else str(memory.get("memory_error"))
+    )
+    add("memory (Postgres)", saved, found, "Run: docker compose up -d tutor-db", needed=False)
+
+    result = {
+        "ready_to_teach": all(c["ok"] for c in checks if c["needed_to_teach"]),
+        "can_save_progress": saved,
+        "checks": checks,
+    }
+    if not result["ready_to_teach"]:
+        fail("This clone can't tutor yet. See the checks that failed.", **result)
+    return result
+
+
+# ---------------------------------------------------------------------- rule evals
+
+
+def cmd_scenarios(_t: Tutor | None, _a: argparse.Namespace) -> Any:
+    from prooflab.tutor_evals import load_scenarios
+
+    return [
+        {k: s.get(k) for k in ("id", "title", "course", "tests")} | {"turns": len(s["turns"])}
+        for s in load_scenarios().values()
+    ]
+
+
+def _scenario(name: str) -> dict[str, Any]:
+    from prooflab.tutor_evals import load_scenarios
+
+    scenarios = load_scenarios()
+    if name not in scenarios:
+        fail(f"No scenario {name!r}. They are: {', '.join(scenarios)}.")
+    return scenarios[name]
+
+
+def _audit(path: Path, scenario: dict[str, Any] | None) -> Any:
+    from prooflab.tutor_evals import EvalError, audit, read_trace
+
+    try:
+        events = read_trace(path.read_text(encoding="utf-8").splitlines())
+    except (OSError, UnicodeDecodeError, EvalError) as exc:
+        fail(f"Couldn't read that trace ({exc}).")
+    report = audit(events, (scenario or {}).get("expect"))
+    if scenario is not None:
+        report = {"scenario": scenario["id"], **report}
+    if not report["passed"]:
+        fail("This session broke a rule. See violations and expectations.", **report)
+    return report
+
+
+def cmd_audit(_t: Tutor | None, a: argparse.Namespace) -> Any:
+    """Grade a recorded session against the tutor's rules (exit code 1 when one was broken)."""
+    return _audit(Path(a.trace), _scenario(a.scenario) if a.scenario else None)
+
+
+def cmd_eval(_t: Tutor | None, a: argparse.Namespace) -> Any:
+    """Play a scripted learner against an agent, then grade what the agent did. This starts
+    the agent named by --agent and costs what that agent costs."""
+    import shlex
+
+    from prooflab.tutor_evals import EvalError, run_scenario
+
+    scenario = _scenario(a.scenario)
+    out = Path(a.out)
+    try:
+        run_scenario(scenario, shlex.split(a.agent), out, cwd=REPO_ROOT)
+    except EvalError as exc:
+        fail(str(exc), trace=str(out))
+    return {"trace": str(out), **_audit(out, scenario)}
 
 
 # ---------------------------------------------------------------------- arguments
@@ -745,9 +1003,24 @@ def _parser() -> argparse.ArgumentParser:
         " Prints JSON.",
     )
     p.add_argument("--learner", help="memory profile (default: PROOFLAB_TUTOR_LEARNER or 'me')")
+    p.add_argument(
+        "--course",
+        help="course pack, like math123 or 'MATH 223' (default: PROOFLAB_TUTOR_COURSE or"
+        " math123). Both options may also follow the command.",
+    )
     sub = p.add_subparsers(dest="command", required=True)
 
-    sub.add_parser("chapters", help="the 14 chapters, their lessons and problem counts")
+    sub.add_parser("courses", help="the course packs the tutor can teach")
+    sub.add_parser("doctor", help="check that this clone is set up to tutor")
+    sub.add_parser("scenarios", help="the scripted learners used to test an agent")
+    s = sub.add_parser("audit", help="grade a recorded session against the tutor's rules")
+    s.add_argument("trace", help="a JSONL trace, or Claude Code stream-json output")
+    s.add_argument("--scenario", help="also check this scenario's own expectations")
+    s = sub.add_parser("eval", help="play a scripted learner against an agent, then audit it")
+    s.add_argument("scenario")
+    s.add_argument("--agent", required=True, help="the agent's command line, for example: claude")
+    s.add_argument("--out", required=True, help="where to write the trace")
+    sub.add_parser("chapters", help="the course's chapters, their lessons and problem counts")
     s = sub.add_parser("lesson", help="a chapter's lesson note")
     s.add_argument("chapter", type=int)
     s = sub.add_parser("problems", help="a chapter's problems (never solutions)")
@@ -799,7 +1072,8 @@ def _parser() -> argparse.ArgumentParser:
     ms = mem.add_subparsers(dest="memory_command", required=True)
     ms.add_parser("status", help="is the memory reachable?")
     ms.add_parser("init", help="create or update the memory's tables")
-    ms.add_parser("show", help="everything a session needs")
+    ms.add_parser("courses", help="the courses this learner has memory in")
+    ms.add_parser("show", help="everything a session needs, for the selected course")
     plan = ms.add_parser("plan", help="the study plan")
     ps = plan.add_subparsers(dest="plan_command", required=True)
     ps.add_parser("set", help="set plan fields (JSON on stdin)")
@@ -810,7 +1084,9 @@ def _parser() -> argparse.ArgumentParser:
     sess = ms.add_parser("session", help="tutoring sessions")
     ss = sess.add_subparsers(dest="session_command", required=True)
     s = ss.add_parser("start")
-    s.add_argument("mode", choices=["start", "level", "learn", "practice", "quiz", "guide"])
+    s.add_argument(
+        "mode", choices=["start", "level", "learn", "practice", "quiz", "guide", "coach"]
+    )
     s.add_argument("--chapter", type=int)
     s = ss.add_parser("end")
     s.add_argument("session_id", type=int)
@@ -826,7 +1102,7 @@ def _parser() -> argparse.ArgumentParser:
     rev = ms.add_parser("review", help="the review queue")
     rs = rev.add_subparsers(dest="review_command", required=True)
     s = rs.add_parser("add")
-    s.add_argument("--chapter", type=int, required=True)
+    s.add_argument("--chapter", type=int, help="needed when the course has chapters")
     s.add_argument("--idea", required=True, help="the missed idea ('-' reads it from stdin)")
     s.add_argument("--problems", help="problem ids to retry, comma-separated")
     s = rs.add_parser("clear")
@@ -854,12 +1130,18 @@ def _parser() -> argparse.ArgumentParser:
     s = qs.add_parser("finish")
     s.add_argument("quiz_id", type=int)
     ms.add_parser("export", help="write the readable view to LEARNING.md at the repo root")
-    s = ms.add_parser("forget", help="delete this learner's memory")
+    s = ms.add_parser("forget", help="delete this learner's memory of the selected course")
     s.add_argument("--confirm", action="store_true")
+    s.add_argument("--all-courses", action="store_true", help="every course, not just this one")
     return p
 
 
 COMMANDS = {
+    "courses": cmd_courses,
+    "doctor": cmd_doctor,
+    "scenarios": cmd_scenarios,
+    "audit": cmd_audit,
+    "eval": cmd_eval,
     "chapters": cmd_chapters,
     "lesson": cmd_lesson,
     "problems": cmd_problems,
@@ -875,17 +1157,46 @@ COMMANDS = {
     "memory": cmd_memory,
 }
 _NO_CONTENT = {("memory", c) for c in ("status", "init", "plan", "chapter", "session", "note")} | {
-    ("memory", c) for c in ("review", "card", "quiz", "forget")
+    ("memory", c) for c in ("review", "card", "quiz", "forget", "courses")
 }
+_NO_CONTENT |= {(c, None) for c in ("courses", "doctor", "scenarios", "audit", "eval")}
+
+
+def _pop_option(argv: list[str], name: str) -> str | None:
+    """Take ``name VALUE`` or ``name=VALUE`` out of ``argv``, wherever it stands, so agents can
+    write ``--course`` before or after the command. The value of a free-text option is left
+    alone, even when it happens to read ``--course``."""
+    value = None
+    i = 0
+    while i < len(argv):
+        token = argv[i]
+        if i > 0 and argv[i - 1] in TEXT_OPTIONS:
+            i += 1
+        elif token == name and i + 1 < len(argv):
+            value = argv[i + 1]
+            del argv[i : i + 2]
+        elif token.startswith(name + "="):
+            value = token[len(name) + 1 :]
+            del argv[i]
+        else:
+            i += 1
+    return value
 
 
 def main(argv: list[str] | None = None) -> int:
+    argv = list(sys.argv[1:] if argv is None else argv)
+    course, learner = _pop_option(argv, "--course"), _pop_option(argv, "--learner")
     args = _parser().parse_args(argv)
+    args.learner = learner
     try:
+        try:
+            args.pack = find_pack(course)
+        except PackError as exc:
+            fail(str(exc))
         key = (args.command, getattr(args, "memory_command", None))
         # Starting a quiz rebuilds its questions, so it needs the content like `quiz` does.
         starts_quiz = getattr(args, "quiz_command", None) == "start"
-        tutor = None if key in _NO_CONTENT and not starts_quiz else Tutor()
+        tutor = None if key in _NO_CONTENT and not starts_quiz else Tutor(args.pack)
         emit(COMMANDS[args.command](tutor, args))
         return 0
     except Failure as exc:

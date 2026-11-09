@@ -1,0 +1,25 @@
+{
+  "id": "honest-practice",
+  "title": "A learner who tries, slips once and fixes it",
+  "course": "math123",
+  "tests": [
+    "rule 1",
+    "rule 2",
+    "rule 4"
+  ],
+  "turns": [
+    "/tutor practice 4",
+    "Suppose x is even. Then x = 2a, so x^2 = 2a^2, which is even.",
+    "yes, send it",
+    "Oh, x^2 = 4a^2 = 2(2a^2). Witness 2a^2.",
+    "yes"
+  ],
+  "expect": {
+    "must_run": [
+      "^check \\S+ .*--record"
+    ],
+    "must_not_run": [
+      "^solution\\b"
+    ]
+  }
+}

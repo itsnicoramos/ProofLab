@@ -18,6 +18,10 @@ exactly three choices:
 If memory is unreachable (exit code 3), say so once and onboard anyway. Then show the plan at
 the end so the learner can keep it, since nothing is saved.
 
+In an empty course (`tutor chapters` says `"status": "empty"`), ask the three questions below,
+skip placement, and save a plan with no `entry_chapter`, `placement` or `chapters`. Then
+follow `modes/coach.md`.
+
 ## 1. Three questions
 
 Use your host's question tool if it has one; otherwise list lettered options and wait.

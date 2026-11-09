@@ -8,9 +8,10 @@ from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, field_validator
 
-Chapter = Annotated[int, Field(ge=1, le=14)]
+# The course pack decides how many chapters there are; the CLI checks against it (SPEC §22).
+Chapter = Annotated[int, Field(ge=1, le=99)]
 ChapterStatus = Literal["skip", "review", "do", "done"]
-Mode = Literal["start", "level", "learn", "practice", "quiz", "guide"]
+Mode = Literal["start", "level", "learn", "practice", "quiz", "guide", "coach"]
 NoteKind = Literal["struggle", "misconception", "preference", "goal"]
 QuizKind = Literal["placement", "chapter", "quiz", "midterm", "final"]
 ItemId = Annotated[str, StringConstraints(pattern=r"^[a-z0-9][a-z0-9._-]{0,119}$")]
@@ -49,7 +50,7 @@ class NoteIn(_Strict):
 
 
 class ReviewIn(_Strict):
-    chapter: Chapter
+    chapter: Chapter | None = None  # None in a course that has no chapters yet
     idea: Annotated[str, StringConstraints(min_length=1, max_length=500)]
     problem_ids: list[ItemId] = Field(default_factory=list, max_length=20)
 
@@ -64,7 +65,7 @@ class QuizQuestion(_Strict):
 
 class QuizIn(_Strict):
     kind: QuizKind
-    chapters: list[Chapter] = Field(default_factory=list, max_length=14)
+    chapters: list[Chapter] = Field(default_factory=list, max_length=99)
     seed: Annotated[int, Field(ge=0, le=2**31 - 1)]
     total: Annotated[int, Field(ge=1, le=60)]
     session_id: int | None = None

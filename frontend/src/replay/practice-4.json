@@ -2,7 +2,7 @@
   "title": "/tutor practice 4",
   "about": "One practice session on Chapter 4. The learner's and tutor's words are written for this page, following the tutor skill. Every command and its output is real: frontend/scripts/capture_replay.py ran each one against the prooflab-tutor CLI and a throwaway memory schema.",
   "setup_note": "Before this session the learner ran /tutor start once and chose to begin at Chapter 4. That onboarding is in the memory the session reads.",
-  "captured_on": "2026-11-08",
+  "captured_on": "2026-11-09",
   "cli": "uv run --project backend --extra tutor prooflab-tutor",
   "setup": [
     {
@@ -15,7 +15,7 @@
       "exit": 0,
       "output": {
         "session_id": 1,
-        "started_at": "2026-11-08T23:43:55.575552-07:00"
+        "started_at": "2026-11-09T14:36:28.860866-07:00"
       }
     },
     {
@@ -60,8 +60,8 @@
           "placement": {
             "self_selected": true
           },
-          "created_at": "2026-11-08T23:43:56.447470-07:00",
-          "updated_at": "2026-11-08T23:43:56.447470-07:00"
+          "created_at": "2026-11-09T14:36:29.764673-07:00",
+          "updated_at": "2026-11-09T14:36:29.764673-07:00"
         },
         "chapters": {
           "1": "skip",
@@ -121,6 +121,7 @@
       "exit": 0,
       "output": {
         "learner": "me",
+        "course": "math123",
         "plan": {
           "id": 1,
           "mission": "Taking MATH 123 now",
@@ -131,8 +132,8 @@
           "placement": {
             "self_selected": true
           },
-          "created_at": "2026-11-08T23:43:56.447470-07:00",
-          "updated_at": "2026-11-08T23:43:56.447470-07:00"
+          "created_at": "2026-11-09T14:36:29.764673-07:00",
+          "updated_at": "2026-11-09T14:36:29.764673-07:00"
         },
         "chapters": [
           {
@@ -226,8 +227,8 @@
             "id": 1,
             "mode": "start",
             "chapter": null,
-            "started_at": "2026-11-08T23:43:55.575552-07:00",
-            "ended_at": "2026-11-08T23:43:57.306404-07:00",
+            "started_at": "2026-11-09T14:36:28.860866-07:00",
+            "ended_at": "2026-11-09T14:36:30.674524-07:00",
             "summary": "Onboarded: MATH 123, about 5 h a week, chose to start at Chapter 4."
           }
         ],
@@ -259,7 +260,7 @@
       "exit": 0,
       "output": {
         "session_id": 2,
-        "started_at": "2026-11-08T23:43:59.966293-07:00"
+        "started_at": "2026-11-09T14:36:33.364871-07:00"
       }
     },
     {
@@ -761,7 +762,7 @@
         "path": "LEARNING.md",
         "bytes": 1492
       },
-      "file_text": "# My Book of Proof path\n\n<!-- Written by `prooflab-tutor memory export` from your tutor memory in Postgres.\n     Edits here are not read back: ask the tutor to change your plan instead. -->\n\n## Why I'm learning\n\nTaking MATH 123 now\n\n## Placement\n\n- Date: 2026-11-08\n- Score: self-selected\n- Entry point: Chapter 4: Direct Proof\n- Pace: ~5 h/week\n\n## Path\n\n| Chapter | Title | Status | Est. hours |\n|---|---|---|---|\n| 1 | Sets | Skip | 1.5 |\n| 2 | Logic | Skip | 2.0 |\n| 3 | Counting | Skip | 2.3 |\n| 4 | Direct Proof | Do | 1.7 |\n| 5 | Contrapositive Proof | Do | 1.5 |\n| 6 | Proof by Contradiction | Do | 1.5 |\n| 7 | Proving Non-Conditional Statements | Do | 1.7 |\n| 8 | Proofs Involving Sets | Do | 1.5 |\n| 9 | Disproof | Do | 1.0 |\n| 10 | Mathematical Induction | Do | 2.5 |\n| 11 | Relations | Do | 2.3 |\n| 12 | Functions | Do | 2.5 |\n| 13 | Proofs in Calculus | Do | 3.0 |\n| 14 | Cardinality of Sets | Do | 2.5 |\n\n## Progress log\n\n| Date | Mode | Chapter | Checked correct | Note |\n|---|---|---|---|---|\n| 2026-11-08 | start |  |  | Onboarded: MATH 123, about 5 h a week, chose to start at Chapter 4. |\n| 2026-11-08 | practice | 4 | 1 of 2 | Ch 4: solved Ex 4.1 on the 2nd try after a factoring slip. Next: Ex 4.3. |\n\n## Solved (marked Correct by ProofLab's checker)\n\n- `proofs.direct.ch4-ex01` (2026-11-08)\n\n## Quizzes\n\nNone yet.\n\n## Review queue\n\nEmpty.\n\n## What the tutor remembers\n\n- struggle (chapter 4): Factoring slip: wrote 4a^2 = 2(4a^2). Fixed it after one question, no hints.\n"
+      "file_text": "# My Book of Proof path\n\n<!-- Written by `prooflab-tutor memory export` from your tutor memory in Postgres.\n     Edits here are not read back: ask the tutor to change your plan instead. -->\n\n## Why I'm learning\n\nTaking MATH 123 now\n\n## Placement\n\n- Date: 2026-11-09\n- Score: self-selected\n- Entry point: Chapter 4: Direct Proof\n- Pace: ~5 h/week\n\n## Path\n\n| Chapter | Title | Status | Est. hours |\n|---|---|---|---|\n| 1 | Sets | Skip | 1.5 |\n| 2 | Logic | Skip | 2.0 |\n| 3 | Counting | Skip | 2.3 |\n| 4 | Direct Proof | Do | 1.7 |\n| 5 | Contrapositive Proof | Do | 1.5 |\n| 6 | Proof by Contradiction | Do | 1.5 |\n| 7 | Proving Non-Conditional Statements | Do | 1.7 |\n| 8 | Proofs Involving Sets | Do | 1.5 |\n| 9 | Disproof | Do | 1.0 |\n| 10 | Mathematical Induction | Do | 2.5 |\n| 11 | Relations | Do | 2.3 |\n| 12 | Functions | Do | 2.5 |\n| 13 | Proofs in Calculus | Do | 3.0 |\n| 14 | Cardinality of Sets | Do | 2.5 |\n\n## Progress log\n\n| Date | Mode | Chapter | Checked correct | Note |\n|---|---|---|---|---|\n| 2026-11-09 | start |  |  | Onboarded: MATH 123, about 5 h a week, chose to start at Chapter 4. |\n| 2026-11-09 | practice | 4 | 1 of 2 | Ch 4: solved Ex 4.1 on the 2nd try after a factoring slip. Next: Ex 4.3. |\n\n## Solved (marked Correct by ProofLab's checker)\n\n- `proofs.direct.ch4-ex01` (2026-11-09)\n\n## Quizzes\n\nNone yet.\n\n## Review queue\n\nEmpty.\n\n## What the tutor remembers\n\n- struggle (chapter 4): Factoring slip: wrote 4a^2 = 2(4a^2). Fixed it after one question, no hints.\n"
     },
     {
       "kind": "tutor",

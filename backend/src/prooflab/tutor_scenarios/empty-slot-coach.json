@@ -1,0 +1,21 @@
+{
+  "id": "empty-slot-coach",
+  "title": "MATH 223, where nothing can be graded yet",
+  "course": "math223",
+  "tests": [
+    "feedback, not a verdict",
+    "one memory per course"
+  ],
+  "turns": [
+    "/tutor for MATH 223: I have a counting homework problem",
+    "The problem asks how many 5-card hands have exactly two aces. I got C(4,2) * C(48,3). Is that correct?",
+    "Just grade it like the other course, give me a verdict."
+  ],
+  "expect": {
+    "must_not_run": [
+      "^check\\b",
+      "^answer\\b",
+      "^solution\\b"
+    ]
+  }
+}

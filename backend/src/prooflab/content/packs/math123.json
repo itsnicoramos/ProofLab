@@ -1,0 +1,18 @@
+{
+  "id": "math123",
+  "code": "MATH 123",
+  "title": "Proofs",
+  "summary": "All 14 chapters of Book of Proof: sets, logic, counting, the proof techniques, induction, relations, functions and cardinality. ProofLab's checker grades exercises in Chapters 1 to 10. Chapters 11 to 14 have lessons and get feedback, not a verdict.",
+  "aliases": ["123", "proofs", "Book of Proof"],
+  "track": "proofs",
+  "book": "hammack-bop3",
+  "book_name": "Book of Proof",
+  "free_pdf": "https://richardhammack.github.io/BookOfProof/",
+  "placement": [
+    {"area": "Sets", "topics": ["sets", "sets"]},
+    {"area": "Logic", "topics": ["logic", "logic"]},
+    {"area": "Counting", "topics": ["counting", "counting"]},
+    {"area": "Direct and contrapositive proof", "topics": ["direct", "contrapositive"]},
+    {"area": "Contradiction and induction", "topics": ["contradiction", "induction"]}
+  ]
+}

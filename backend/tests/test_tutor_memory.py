@@ -362,3 +362,111 @@ def test_export_renders_every_section(cli, tmp_path, monkeypatch):
     ):
         assert heading in text
     assert "Pass MATH 123" in text and "Negating quantifiers" in text
+
+
+# ---------------------------------------------------------------------- one memory per course
+
+
+def test_each_course_has_its_own_memory(schema):
+    from prooflab.tutor_memory.queries import Memory
+
+    with connect(URL, schema) as conn:
+        proofs, discrete = Memory(conn, "sam", "math123"), Memory(conn, "sam", "math223")
+        assert proofs.id != discrete.id
+        proofs.set_plan(PlanIn(mission="Pass MATH 123", chapters={4: "do"}))
+        discrete.set_plan(PlanIn(mission="Keep up with MATH 223"))
+        proofs.add_note(NoteIn(kind="struggle", text="Negating quantifiers", chapter=2))
+        discrete.add_review(ReviewIn(idea="Pigeonhole with n + 1 pigeons"))  # no chapter
+        discrete.start_session("coach")
+
+        shown = discrete.show(chapters=0)
+        assert (shown["course"], shown["chapters"], shown["next_chapter"]) == ("math223", [], None)
+        assert shown["plan"]["mission"] == "Keep up with MATH 223" and shown["notes"] == []
+        assert shown["open_review"][0]["chapter"] is None
+        assert proofs.show()["notes"][0]["text"] == "Negating quantifiers"
+        assert proofs.show()["open_review"] == [] and len(proofs.show()["chapters"]) == 14
+
+        listed = {row["course"]: row for row in proofs.courses()}
+        assert set(listed) == {"math123", "math223"} and all(r["has_plan"] for r in listed.values())
+        assert (listed["math123"]["sessions"], listed["math223"]["sessions"]) == (0, 1)
+
+        assert discrete.forget()["courses"] == ["math223"]  # one course, not the learner
+        assert Memory(conn, "sam", "math123").plan()["mission"] == "Pass MATH 123"
+        Memory(conn, "sam", "math223").add_note(NoteIn(kind="goal", text="Start again"))
+        assert proofs.forget(all_courses=True)["courses"] == ["math123", "math223"]
+        assert Memory(conn, "sam", "math123").plan() is None
+
+
+def test_memory_from_before_courses_becomes_math123(schema, monkeypatch):
+    """Upgrading a memory that predates course packs keeps every row, filed under MATH 123."""
+    from prooflab.tutor_memory import db
+    from prooflab.tutor_memory.queries import Memory
+
+    every = db.migrations()
+    monkeypatch.setattr(db, "migrations", lambda: [m for m in every if m[0] <= 3])
+    with connect(URL, schema) as conn:  # the schema as it was at migration 003
+        old = conn.execute("INSERT INTO learners (name) VALUES ('me') RETURNING id").fetchone()
+        conn.execute(
+            "INSERT INTO plans (learner_id, mission, entry_chapter) VALUES (%s, 'Old plan', 14)",
+            (old["id"],),
+        )
+        conn.execute(
+            "INSERT INTO review_queue (learner_id, chapter, idea) VALUES (%s, 5, 'Converse')",
+            (old["id"],),
+        )
+    monkeypatch.undo()
+    with connect(URL, schema) as conn:  # every migration now
+        memory = Memory(conn, "me")
+        assert (memory.id, memory.course) == (old["id"], "math123")
+        assert memory.plan()["mission"] == "Old plan" and memory.plan()["entry_chapter"] == 14
+        assert memory.show()["open_review"][0]["idea"] == "Converse"
+        assert Memory(conn, "me", "math223").plan() is None
+
+
+def test_cli_keeps_the_courses_apart(cli, tmp_path, monkeypatch):
+    monkeypatch.setattr(tutor, "REPO_ROOT", tmp_path)  # never the learner's real LEARNING.md
+    cli("memory", "init")
+    plan = {"mission": "Pass MATH 123", "entry_chapter": 4, "chapters": {"4": "do"}}
+    assert cli("memory", "plan", "set", stdin=json.dumps(plan))[0] == 0
+
+    # The empty slot takes a plan, coach sessions, notes and missed ideas, but no chapters.
+    in223 = ("--course", "math223")
+    assert cli("memory", "plan", "set", *in223, stdin='{"mission": "Keep up with 223"}')[0] == 0
+    code, out = cli("memory", "plan", "set", *in223, stdin='{"entry_chapter": 1}')
+    assert code == 1 and "no chapters yet" in out["error"]
+    code, out = cli("memory", "chapter", "1", "do", *in223)
+    assert code == 1 and "no chapters yet" in out["error"]
+    code, session = cli("memory", "session", "start", "coach", *in223)
+    assert code == 0
+    assert cli("memory", "review", "add", "--idea", "-", *in223, stdin="Stars and bars")[0] == 0
+    cli("memory", "session", "end", str(session["session_id"]), "--summary", "First look", *in223)
+
+    code, shown = cli("memory", "show", *in223)
+    assert code == 0 and (shown["course"], shown["chapters"]) == ("math223", [])
+    assert shown["open_review"][0]["idea"] == "Stars and bars"
+    code, shown = cli("memory", "show")
+    assert (shown["course"], len(shown["chapters"]), shown["open_review"]) == ("math123", 14, [])
+
+    # Chapters are checked against the course: MATH 123 has 14, and a missed idea there
+    # belongs to one of them.
+    assert cli("memory", "chapter", "15", "do")[0] == 1
+    code, out = cli("memory", "review", "add", "--idea", "Converse")
+    assert code == 1 and "--chapter" in out["error"]
+
+    code, listed = cli("memory", "courses")
+    assert [(c["course"], c["status"]) for c in listed["courses"]] == [
+        ("math123", "ready"),
+        ("math223", "empty"),
+    ]
+
+    # One LEARNING.md, the selected course first, then the other one.
+    code, out = cli("memory", "export")
+    text = (tmp_path / "LEARNING.md").read_text(encoding="utf-8")
+    first, second = text.index("# My Book of Proof path"), text.index("# My MATH 223 path")
+    assert code == 0 and first < second and "Stars and bars" in text[second:]
+    assert "Pass MATH 123" in text[first:second]
+
+    code, out = cli("memory", "forget", *in223)
+    assert code == 1 and "MATH 223" in out["error"]
+    assert cli("memory", "forget", "--confirm", *in223)[1]["courses"] == ["math223"]
+    assert cli("memory", "show")[1]["plan"]["mission"] == "Pass MATH 123"

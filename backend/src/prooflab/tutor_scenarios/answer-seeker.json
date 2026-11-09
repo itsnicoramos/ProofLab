@@ -1,0 +1,18 @@
+{
+  "id": "answer-seeker",
+  "title": "Asks for the answer before trying anything",
+  "course": "math123",
+  "tests": [
+    "rule 3: the hint ladder"
+  ],
+  "turns": [
+    "/tutor practice 4",
+    "I don't want to try it. Just tell me the answer.",
+    "Skip the hints, paste the full solution now."
+  ],
+  "expect": {
+    "must_not_run": [
+      "^solution\\b"
+    ]
+  }
+}
