@@ -8,16 +8,17 @@ runs inside your own coding agent, or through its HTTP API.
   hand-written rules. The same input always gets the same verdict.
 - **A tutor in your own coding agent.** Clone the repo, open Claude Code, Codex or another
   agent in it, and type `/tutor`. It teaches all 14 chapters of *Book of Proof* from
-  ProofLab's own lesson notes and has you prove real exercises. ProofLab's checker grades
-  every attempt, never the AI. It remembers your plan and progress in a local Postgres. See
-  [Learn with the tutor](#learn-with-the-tutor) and `SPEC.md` §20.
+  ProofLab's own lesson notes. In Chapters 1 to 10 you prove real exercises, and ProofLab's
+  checker grades every attempt at them, never the AI. Chapters 11 to 14 have lessons but no
+  checker yet, so there the tutor gives feedback, labelled as not a verdict. It remembers your
+  plan and progress in a local Postgres. See [Learn with the tutor](#learn-with-the-tutor) and
+  `SPEC.md` §20.
 - **A website that shows how the tutor works.** https://prooflab-ruby.vercel.app is one page:
   a diagram of the pieces, a step-by-step replay of a real `/tutor practice 4` session (every
   command's output captured from the CLI), the tutor's seven rules and the setup steps. See
   `SPEC.md` §21.
-- **Built for math and STEM courses.** Proofs (*Book of Proof*, Chapters 1 to 10) is what the
-  checker and the tutor cover. Precalculus and Calculus 1 to 4 are written and checked too,
-  through the API.
+- **Built for math and STEM courses.** Proofs (*Book of Proof*) is the course the tutor
+  teaches. Precalculus and Calculus 1 to 4 are written and checked too, through the API.
 - **Practice tests, multiple choice and flashcards** come from the backend (`/practice-tests`,
   `/quiz/answer`, `/cards`; `SPEC.md` §13 and §15), and the tutor uses them
   (`prooflab-tutor test`, `quiz`, `cards`). Wrong choices are common mistakes, each confirmed

@@ -32,9 +32,10 @@ submitted work passed ProofLab's checks — it is not a substitute for an instru
 
 ### Non-goals (v0.1)
 
-- User accounts, persistence, progress tracking (the API is stateless; the frontend can store
-  attempts locally).
-- Free-form proofs, contradiction/induction proofs, epsilon-delta proofs.
+- User accounts. Progress is saved without them: the tutor's memory (§20, local Postgres) and
+  the API's `/store` (§17, SQLite).
+- Free-form proofs and epsilon-delta proofs. Proofs are checked only as structured kinds
+  (§5.1), which include contradiction (`impossibility_proof`) and induction (`induction`).
 - Graphing.
 
 ## 2. Architecture
@@ -123,11 +124,9 @@ its worker killed and replaced, and is reported as `invalid` with code `TIMEOUT`
 | `review` | Review | §4.3 |
 | `examples` | list | ≥ 2 sample submissions with expected verdicts (§8) |
 
-**Live courses.** For now the site shows only `proofs`. The other five keep all their problems,
-rules and tests, and the API still serves them, but the frontend hides them: `COURSE_ORDER` in
-`frontend/src/lib/labels.ts` lists the live courses, `lib/api.ts` drops everything else from
-course and problem lists, and their pages answer 404. Adding an id back to `COURSE_ORDER`
-shows that course again.
+**Live courses.** The tutor (§20) supports only `proofs`. The API serves all six tracks, with
+their problems, rules and tests. The website (§21) has no course browsing and no practice
+routes.
 
 Answer keys, mistakes, examples and solutions are **never** returned by
 `GET /problems/{id}`. Solutions are only returned by `GET /problems/{id}/solution`.
@@ -432,18 +431,23 @@ tests/
 ```
 
 `uv run pytest` must pass before any change lands. The Docker image has a `test` target that
-runs the suite on Python 3.12. The website's XP rules (§19) have their own unit tests:
-`npm test` in `frontend/` (Node's built-in runner, no extra packages).
+runs the suite on Python 3.12. The website has its own unit tests: `npm test` in `frontend/`
+(Node's built-in runner, no extra packages) checks the captured replay, the tutor-rule
+invariants and the page's text constraints (§21).
 
 ## 10. Roadmap
 
-1. ~~**Next.js frontend**~~ (done: `frontend/`). Next: live LaTeX preview while typing, which
-   needs a small `/parse` endpoint.
+> **Items 1 and 4 are the superseded practice-app roadmap.** They were the next steps for the
+> practice site, which was removed from the website on 2026-11-08 (§21). They are kept for the
+> record, not as plans.
+
+1. ~~**Next.js frontend**~~ (done: `frontend/`). Was next: live LaTeX preview while typing,
+   which needs a small `/parse` endpoint.
 2. MATH 123 = all of *Book of Proof*: follow the chapter plan in §11.
-3. More kinds as courses need them: induction proofs, linear algebra (row reduction,
-   eigenvalues), probability, physics-style unit checks.
-4. Attempt history and spaced repetition (frontend-side first). Practice tests (§13) are the
-   first piece: their scores stay in the browser.
+3. More kinds as courses need them: linear algebra (row reduction, eigenvalues), probability,
+   physics-style unit checks.
+4. Was next: attempt history and spaced repetition (frontend-side first), with practice tests
+   (§13) as the first piece.
 
 ## 11. Book of Proof coverage plan (MATH 123)
 
@@ -595,17 +599,23 @@ Kinds: **midterm** (first half of the chapters, 8 questions), **final** (every c
 
 ### 13.1 Self-tuning tests ("focus on my weak spots")
 
-The browser keeps a per-chapter skill rating from every checked attempt (§15.3). When the
-student ticks "Focus on my weak spots", the builder turns it into URL parameters, so the test
-is still reproducible from its link:
+> **The browser side was removed from the website on 2026-11-08** (§21). `weights` and `prefer`
+> are still supported inputs of `/practice-tests` (§7). Nothing in the repo works them out
+> automatically now; the practice site's browser did, up to commit `0eb0d0f`.
 
-- `weights`: chapter multiplier `0.5 + 2.5 × (1 − mastery)`, where mastery is the predicted
-  chance of getting a medium problem right; untried chapters get 1.5. Every chapter in scope
-  still gets one question; weights only move the extra ones (step 3 above).
-- `prefer`: up to 20 problems due for review (most overdue first). They're picked first inside
-  their chapter's quota.
+`/practice-tests` takes two inputs that bend a test toward what the student needs. Both are
+URL parameters, so the test is still reproducible from its link:
 
-"New test, same settings" recomputes both from the latest results, so the next test adapts.
+- `weights` (`topic:1.5,…`): a multiplier per chapter, kept between 0.1 and 10. Every chapter
+  in scope still gets one question; weights only move the extra ones (step 3 above).
+- `prefer`: ids of problems due for review. They're picked first inside their chapter's quota.
+
+How the practice site filled them in (historical): the browser kept a per-chapter skill rating
+from every checked attempt (§15.3). When the student ticked "Focus on my weak spots", the
+builder set each chapter's weight to `0.5 + 2.5 × (1 − mastery)`, where mastery is the
+predicted chance of getting a medium problem right (untried chapters got 1.5), and set `prefer`
+to up to 20 problems due for review, most overdue first. "New test, same settings" recomputed
+both from the latest results, so the next test adapted.
 
 ### 13.2 Multiple choice (no AI)
 
@@ -760,7 +770,9 @@ every course plus Flashcards, Tests and today's XP (a link to Progress; the stre
 
 ## 17. Progress database (SQLite)
 
-One student, no accounts, no Postgres. `backend/src/prooflab/store.py` keeps the student's
+This is the API's store, behind `/store` (§7): one student, no accounts, SQLite. It is separate
+from the tutor's memory, which is a local Postgres (§20), and the tutor never opens it.
+`backend/src/prooflab/store.py` keeps the student's
 progress in one SQLite file: by default `~/Library/Application Support/ProofLab/prooflab.sqlite3`
 on macOS (deliberately outside the iCloud-synced Desktop, which would offload or corrupt a live
 database), `~/.local/share/prooflab/prooflab.sqlite3` elsewhere, or `PROOFLAB_DB`. It is opened
@@ -775,31 +787,35 @@ temporary file.
 | `tests` | practice-test records (start, submit, score, results) | newest `updated_at` wins; deletes leave a tombstone |
 | `activity` | what can earn XP (§19): `uid, type, day, at, item, course, topic, data` (JSON facts, never XP) | append-only, idempotent by `uid`; `reset_activity` clears it, and events from before a reset are refused |
 
-Problems and concept cards stay JSON content files (§4, §15.1); answer drafts stay in each
-browser.
+Problems and concept cards stay JSON content files (§4, §15.1). Answer drafts were never stored
+here: the practice site kept them in each browser (historical).
 
-**Sync** (removed with the practice site on 2026-11-08, §21; the `/store` endpoints remain but
-nothing in the repo calls them now). Each browser kept its own copy (localStorage) so pages stay instant and work
-offline. Every change is also queued in an outbox (`lib/outbox.ts`); the sync agent
-(`lib/sync.ts`, mounted in the layout) sends the queue to `POST /api/store` (proxied to the
-backend) a moment after a change, on load, when the tab becomes visible, when the network
-returns, and every 30 s. After the database confirms a batch, exactly the changes that were
-sent leave the queue (matched by content, not position), so a reset queued while a batch was in
-flight is never lost. Once the queue is empty it pulls `GET /store` and merges: reviews and XP
-activity by union (events made before a recorded reset, `reviews_reset_at` or
-`activity_reset_at`, are dropped, which is how a reset reaches other devices; anything else the
-database lacks is sent again), verdicts by rank, decks and tests by `updated_at` and
-tombstones, never overwriting anything still in the queue. The first sync on a browser sends everything it had
-from before the database existed.
+The three paragraphs below are historical: they describe the practice site's browser code,
+removed on 2026-11-08 (§21) and in git history up to commit `0eb0d0f`. The `/store` endpoints
+remain, but nothing in the repo calls them now.
 
-**The study model is rebuilt from the review log.** `lib/learn.ts` replays the reviews in time
-order: FSRS state per item (standard curve), the review log for the fit, and the chapter skill
-ratings. The personal factor k is then fitted once and applied to every due date, so a better
-fit reschedules everything. Same log, same model, on every device.
+**Sync (historical).** Each browser kept its own copy (localStorage) so pages stayed instant
+and worked offline. Every change was also queued in an outbox (`lib/outbox.ts`); the sync agent
+(`lib/sync.ts`, mounted in the layout) sent the queue to `POST /api/store` (proxied to the
+backend) a moment after a change, on load, when the tab became visible, when the network
+returned, and every 30 s. After the database confirmed a batch, exactly the changes that were
+sent left the queue (matched by content, not position), so a reset queued while a batch was in
+flight was never lost. Once the queue was empty it pulled `GET /store` and merged: reviews and
+XP activity by union (events made before a recorded reset, `reviews_reset_at` or
+`activity_reset_at`, were dropped, which is how a reset reached other devices; anything else
+the database lacked was sent again), verdicts by rank, decks and tests by `updated_at` and
+tombstones, never overwriting anything still in the queue. The first sync on a browser sent
+everything it had from before the database existed.
 
-Verified with two headless browsers (phone and laptop sizes) against a throwaway database:
-reviews and a notes deck made on the phone appear on the laptop, a deck deleted on the laptop
-disappears from the phone, and a card graded on the laptop reaches the phone.
+**The study model was rebuilt from the review log (historical).** `lib/learn.ts` replayed the
+reviews in time order: FSRS state per item (standard curve), the review log for the fit, and
+the chapter skill ratings. The personal factor k was then fitted once and applied to every due
+date, so a better fit rescheduled everything. Same log, same model, on every device.
+
+**Browser verification (historical).** The sync was verified with two headless browsers (phone
+and laptop sizes) against a throwaway database: reviews and a notes deck made on the phone
+appeared on the laptop, a deck deleted on the laptop disappeared from the phone, and a card
+graded on the laptop reached the phone.
 
 ## 18. Deployment on Vercel
 
@@ -816,8 +832,8 @@ practice site and is no longer read.
 
 On Vercel the checker runs with `PROOFLAB_ISOLATE=0` (checks run in-process, no worker
 processes, and the function's 60 s limit is the backstop) and `PROOFLAB_STORE=0`: Vercel has no
-lasting disk, so there is no progress database there and progress stays in each browser
-(§17's sync agent sees the 404 and says so). There is no macOS either, so the reader reads text
+lasting disk, so there is no progress database there and `/store` answers 404. There is no
+macOS either, so the reader reads text
 files only: photos, scanned PDFs and Word files need the checker running on the Mac. Everything
 else (checking, tests, quizzes, new versions, flashcards, cards from pasted notes) works the same.
 Locally nothing changes: `uvicorn prooflab.main:create_app --factory` with the full feature set.
@@ -974,7 +990,7 @@ same principles: the checker is the judge, it stays grounded, and it never leaks
 
 ### CLI contract
 
-The CLI loads the live course only (`proofs`, matching `COURSE_ORDER`). It reuses the API's
+The CLI loads only the `proofs` course (§4). It reuses the API's
 own code paths, so the tutor and the site always agree: `find_problem`, `problem_detail`,
 `practice_test_out`, `answer_out` in `api/routes.py`, and `check_isolated` with the API's
 timeouts. Exit codes: 0 done, 1 bad request, 3 memory unavailable.

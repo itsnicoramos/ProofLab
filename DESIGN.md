@@ -37,7 +37,10 @@ One column, in this order. Each section has a serif heading over a hairline rule
   - The current step gets the accent ring ("you are here").
   - A check's verdict is a bordered card. Per step: its kind in mono, the step typeset, then
     "Checks out" in status green or "Flagged" in status red with the message and hint code.
-    Full JSON, piped input and `LEARNING.md` sit in closed `<details>`.
+  - A command's output sits in closed `<details>`: the piped input, the selected exercise and
+    lesson fields (the ones the tutor uses), the lesson's practice route, and the memory excerpt
+    (`LEARNING.md` from its second section). Other commands show their full JSON. The capture
+    file keeps every command's full output.
   - From `lg` up, a sticky side panel lists the seven pieces and marks the ones the current
     step uses with the accent ring and tint.
 - **Seven rules it keeps:** bordered cards, two columns from `md`, the number in the serif like
@@ -51,7 +54,7 @@ One column, in this order. Each section has a serif heading over a hairline rule
 - One sticky bar, solid (no blur): the Σ mark and name, then from `md` the section links (How it
   works, Session, Rules, Set up), and **GitHub** as a bordered button. Below `md` the section
   links give way to a single **Set up** link. A one-page site needs no menu.
-- The footer: the MIT line, the *Book of Proof* credit, and links to the source and the free PDF.
+- The footer contains the MIT line and source link.
 - Every link and button is at least 44 px tall, including the footer's and the rule links.
 
 ## Palette (tokens in `frontend/src/app/globals.css`)
