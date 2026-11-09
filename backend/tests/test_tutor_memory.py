@@ -178,6 +178,112 @@ def test_quiz_scores_come_from_recorded_answers(memory):
         memory.record_answer(quiz, "proofs.a.w", 5, "answer", "a", True)  # already finished
 
 
+ATTEMPT = {
+    "chapter": 6,
+    "status": "correct",
+    "score": 1.0,
+    "hint_codes": [],
+    "hints_shown": 0,
+    "steps": {"steps": []},
+}
+
+
+def test_a_finished_quiz_is_final(memory):
+    from prooflab.tutor_memory.queries import MemoryRefused
+
+    quiz = memory.start_quiz(QuizIn(kind="chapter", chapters=[6], seed=3, total=2))["quiz_id"]
+    memory.record_answer(quiz, "proofs.a.x", 3, "answer", "b", False)
+    first = memory.finish_quiz(quiz)
+    assert (first["score"], first["missed"], first["unanswered"]) == (0, ["proofs.a.x"], 1)
+
+    # A written check can't be attached once the quiz is over, and nothing is stored.
+    with pytest.raises(MemoryRefused):
+        memory.record_attempt(**ATTEMPT, problem_id="proofs.a.y", quiz_id=quiz)
+    assert memory.conn.execute("SELECT count(*) AS n FROM attempts").fetchone()["n"] == 0
+
+    # Even a row that got in some other way (before this rule) can't change the saved result.
+    memory.conn.execute(
+        "INSERT INTO attempts"
+        " (learner_id, quiz_id, problem_id, chapter, status, score, first_try, steps)"
+        " VALUES (%s, %s, 'proofs.a.y', 6, 'correct', 1, true, '{}')",
+        (memory.id, quiz),
+    )
+    assert memory.finish_quiz(quiz) == first
+    assert memory.quizzes()[0]["score"] == 0
+
+
+def test_a_bound_quiz_counts_only_its_own_questions(memory):
+    from prooflab.tutor_memory.models import QuizQuestion
+    from prooflab.tutor_memory.queries import MemoryRefused
+
+    questions = [
+        QuizQuestion(problem_id="proofs.a.choice", format="answer", seed=7),
+        QuizQuestion(problem_id="proofs.a.written", format="written"),
+    ]
+    quiz = memory.start_quiz(
+        QuizIn(kind="quiz", chapters=[6], seed=7, total=2, questions=questions)
+    )["quiz_id"]
+    refused = [
+        # not a question of this quiz
+        lambda: memory.record_answer(quiz, "proofs.a.other", 7, "answer", "a", True),
+        lambda: memory.record_attempt(**ATTEMPT, problem_id="proofs.a.other", quiz_id=quiz),
+        # the same problem rebuilt with another seed or format is a different question
+        lambda: memory.record_answer(quiz, "proofs.a.choice", 8, "answer", "a", True),
+        lambda: memory.record_answer(quiz, "proofs.a.choice", 7, "spot", "a", True),
+        # a choice question can't be settled by a written check, or the other way round
+        lambda: memory.record_attempt(**ATTEMPT, problem_id="proofs.a.choice", quiz_id=quiz),
+        lambda: memory.record_answer(quiz, "proofs.a.written", 7, "answer", "a", True),
+    ]
+    for call in refused:
+        with pytest.raises(MemoryRefused):
+            call()
+    assert memory.record_answer(quiz, "proofs.a.choice", 7, "answer", "a", False)["counted"]
+    memory.record_attempt(**ATTEMPT, problem_id="proofs.a.written", quiz_id=quiz)
+    result = memory.finish_quiz(quiz)
+    assert (result["score"], result["missed"], result["unanswered"]) == (1, ["proofs.a.choice"], 0)
+
+
+def test_cli_binds_a_quiz_to_the_questions_it_builds(cli):
+    cli("memory", "init")
+    args = ("--chapters", "4", "--total", "3", "--seed", "5")
+    code, started = cli("memory", "quiz", "start", "--kind", "chapter", *args)
+    assert code == 0 and started["total"] == 3
+    quiz_id = str(started["quiz_id"])
+    _, quiz = cli("quiz", "--chapter", "4", "--count", "3", "--seed", "5")
+    asked = {q["problem"]["id"] for q in quiz["questions"]}
+
+    for q in quiz["questions"]:  # every question the learner is shown can be recorded
+        if q["format"] == "choice":
+            choice = q["choice"]
+            flags = ("--seed", str(choice["seed"]), "--format", choice["format"], "--choice", "a")
+            code, out = cli("answer", q["problem"]["id"], *flags, "--record", "--quiz", quiz_id)
+        else:
+            flags = ("--record", "--quiz", quiz_id)
+            code, out = cli("check", q["problem"]["id"], *flags, stdin='{"steps": []}')
+        assert code == 0 and out["recorded"] is True, out
+
+    # Another exercise, however well it goes, can't be counted toward this quiz.
+    _, problems = cli("problems", "--chapter", "4")
+    outsider = next(p["id"] for p in problems if p["id"] not in asked)
+    code, out = cli("check", outsider, "--record", "--quiz", quiz_id, stdin='{"steps": []}')
+    assert code == 0 and out["recorded"] is False and "no written question" in out["memory_error"]
+
+    code, result = cli("memory", "quiz", "finish", quiz_id)
+    assert code == 0 and result["total"] == 3 and result["unanswered"] == 0
+    code, again = cli("memory", "quiz", "finish", quiz_id)
+    assert again == result  # asking again returns the saved result
+
+
+def test_cli_takes_learner_text_on_stdin(cli):
+    cli("memory", "init")
+    typed = "said \"x\"; $(touch pwned) `id` 'q'"
+    flags = ("--kind", "struggle", "--text", "-")
+    code, _ = cli("memory", "note", "add", *flags, stdin=typed + "\n")
+    assert code == 0
+    _, shown = cli("memory", "show")
+    assert shown["notes"][0]["text"] == typed
+
+
 def test_review_notes_and_cards(memory):
     rid = memory.add_review(ReviewIn(chapter=5, idea="Converse vs contrapositive"))["review_id"]
     memory.add_note(NoteIn(kind="preference", text="Short explanations, then an example."))
@@ -235,13 +341,14 @@ def test_cli_records_the_checkers_own_verdict(cli):
     assert shown["chapters"][3]["title"]  # titles come from the lesson notes or topics
 
 
-def test_export_renders_every_section(cli, tmp_path):
+def test_export_renders_every_section(cli, tmp_path, monkeypatch):
+    monkeypatch.setattr(tutor, "REPO_ROOT", tmp_path)  # never the learner's real LEARNING.md
     cli("memory", "plan", "set", stdin=json.dumps({"mission": "Pass MATH 123", "entry_chapter": 2}))
     cli("memory", "note", "add", "--kind", "struggle", "--text", "Negating quantifiers")
     cli("memory", "review", "add", "--chapter", "2", "--idea", "Negations")
     path = tmp_path / "LEARNING.md"
-    code, out = cli("memory", "export", "--path", str(path))
-    assert code == 0
+    code, out = cli("memory", "export")
+    assert code == 0 and out["path"] == str(path)
     text = path.read_text(encoding="utf-8")
     for heading in (
         "## Why I'm learning",

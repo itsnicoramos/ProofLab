@@ -76,11 +76,14 @@ Don't recite the file, and don't paste whole sections.
   - If the exit check is at least 70% and the checker marked their exercise correct, run
     `tutor memory chapter N done`.
   - If it's below 70%, set it to `review` and add the missed idea:
-    `tutor memory review add --chapter N --idea "<what they missed>" --problems <ids>`.
+    `tutor memory review add --chapter N --idea - --problems <ids>`, with what they missed on
+    stdin.
   - For Chapters 11 to 14, the learner decides when it's `done`.
 - **Notes:** at most two `memory note add` entries for what you noticed.
-- **End:** run `tutor memory session end <id> --summary "<one line: what they did and what
-  tripped them up>"`, then `tutor memory export`.
+- **End:** run `tutor memory session end <id> --summary -`, with one line on stdin (what they
+  did and what tripped them up), then `tutor memory export`.
+
+Notes, ideas and summaries go in on stdin, as `SKILL.md` shows under "Text goes in on stdin".
 
 ## 6. Close
 

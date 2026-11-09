@@ -5,6 +5,7 @@ from __future__ import annotations
 import io
 import json
 from argparse import Namespace
+from pathlib import Path
 from typing import Any
 
 import pytest
@@ -198,11 +199,153 @@ def test_memory_without_psycopg(monkeypatch, capsys) -> None:
     assert code == 3 and "uv sync --extra tutor" in out["error"]
 
 
+def test_export_writes_only_learning_md(tmp_path, monkeypatch) -> None:
+    """`memory export` has one destination, and a link sitting there is never followed."""
+    monkeypatch.setattr(tutor, "REPO_ROOT", tmp_path)
+    target = tmp_path / "LEARNING.md"
+    assert tutor._write_learning("first\n") == target
+    tutor._write_learning("second\n")  # a plain file is replaced
+    assert target.read_text(encoding="utf-8") == "second\n"
+
+    victim = tmp_path / "victim.txt"
+    victim.write_text("keep me", encoding="utf-8")
+    target.unlink()
+    target.symlink_to(victim)
+    with pytest.raises(Failure):
+        tutor._write_learning("overwritten")
+    assert victim.read_text(encoding="utf-8") == "keep me" and target.is_symlink()
+
+    target.unlink()
+    target.symlink_to(tmp_path / "missing.txt")  # a dangling link would create its target
+    with pytest.raises(Failure):
+        tutor._write_learning("created")
+    assert not (tmp_path / "missing.txt").exists()
+
+    target.unlink()
+    target.mkdir()  # not a plain file
+    with pytest.raises(Failure):
+        tutor._write_learning("x")
+
+
+def test_export_open_refuses_a_link_that_appears_late(tmp_path, monkeypatch) -> None:
+    """If a link shows up after the look (a race), the open itself still won't follow it."""
+    monkeypatch.setattr(tutor, "REPO_ROOT", tmp_path)
+    victim = tmp_path / "victim.txt"
+    victim.write_text("keep me", encoding="utf-8")
+    (tmp_path / "LEARNING.md").symlink_to(victim)
+    monkeypatch.setattr(Path, "is_symlink", lambda _self: False)  # the look saw no link
+    with pytest.raises(Failure):
+        tutor._write_learning("overwritten")
+    assert victim.read_text(encoding="utf-8") == "keep me"
+
+
+def test_export_takes_no_destination() -> None:
+    with pytest.raises(SystemExit):
+        tutor.main(["memory", "export", "--path", "elsewhere.md"])
+
+
+SECRET = "hunter2zz"
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        f"postgresql://prooflab:{SECRET}@db.example:5433/prooflab_tutor",
+        f"postgresql://:{SECRET}@db.example/prooflab_tutor",
+        f"postgresql://prooflab@db.example:5433/prooflab_tutor?password={SECRET}",
+        f"postgresql://prooflab@db.example/prooflab_tutor?sslmode=require&sslpassword={SECRET}",
+        f"postgresql://prooflab:pw@db.example/prooflab_tutor#{SECRET}",
+        f"postgresql://prooflab:{SECRET}/more@db.example/prooflab_tutor",  # unescaped slash
+        f"postgresql://prooflab:left@{SECRET}@db.example/prooflab_tutor",  # unescaped @
+        f"postgresql://prooflab:{SECRET}@[::1]:5433/prooflab_tutor",
+        f"postgresql://prooflab:{SECRET}@db1.example:5432,db2.example:5433/prooflab_tutor",
+        f"host=db.example port=5433 dbname=prooflab_tutor user=prooflab password={SECRET}",
+        f"host=db.example password='{SECRET} host=more'",
+    ],
+)
+def test_printed_database_locations_never_carry_a_password(url: str) -> None:
+    from prooflab.tutor_memory.db import redact
+
+    assert SECRET not in redact(url)
+
+
+def test_redact_keeps_the_safe_parts() -> None:
+    from prooflab.tutor_memory.db import redact
+
+    url = "postgresql://prooflab:prooflab-local@127.0.0.1:5433/prooflab_tutor?sslmode=disable"
+    assert redact(url) == "postgresql://prooflab:***@127.0.0.1:5433/prooflab_tutor"
+    assert (
+        redact("postgresql://prooflab@db.example/tutor") == "postgresql://prooflab@db.example/tutor"
+    )
+
+
+def test_connection_errors_never_quote_the_connection_string(monkeypatch, capsys) -> None:
+    psycopg = pytest.importorskip("psycopg")
+    from prooflab.tutor_memory import db
+
+    # A connection string psycopg can't parse: its own message quotes the string back.
+    monkeypatch.setenv("PROOFLAB_TUTOR_DATABASE_URL", f"host=127.0.0.1 password={SECRET} oops")
+    code, out = run_cli(capsys, "memory", "status")
+    assert code == 3 and SECRET not in json.dumps(out) and db.START_HINT in out["error"]
+
+    # A server (or libpq) message that repeats part of the URL is not passed on either.
+    def refuse(*_a: object, **_k: object) -> None:
+        raise psycopg.OperationalError(f'invalid value "{SECRET}" for connection option')
+
+    monkeypatch.setattr(psycopg, "connect", refuse)
+    url = f"postgresql://prooflab@127.0.0.1:9/none?password={SECRET}"
+    with pytest.raises(db.MemoryUnavailable) as caught, db.connect(url, "never_used"):
+        pass
+    assert SECRET not in str(caught.value) and "prooflab@127.0.0.1:9/none" in str(caught.value)
+
+
+def test_text_arguments_can_come_from_stdin(monkeypatch) -> None:
+    import sys
+
+    typed = '  It\'s "P => Q"; $(rm -rf ~) `id`\n  and a second line \n'
+    monkeypatch.setattr(sys, "stdin", io.StringIO(typed))
+    assert tutor._text("-") == 'It\'s "P => Q"; $(rm -rf ~) `id` and a second line'
+    assert tutor._text("plain words") == "plain words" and tutor._text(None) is None
+
+
 def test_bad_work_is_explained(capsys) -> None:
     code, out = run_cli(capsys, "check", "proofs.direct.ch4-ex01", stdin='{"lines": []}')
     assert code == 1 and "expected" in out
     code, out = run_cli(capsys, "memory", "forget")
     assert code == 1 and "--confirm" in out["error"]
+
+
+def test_shape_errors_say_where_never_what(tmp_path, capsys) -> None:
+    """A file that isn't the learner's work is turned down without printing what is in it."""
+    problem = "proofs.direct.ch4-ex01"
+    # JSON, like a service-account key: values and unknown field names both stay out.
+    key = tmp_path / "key.json"
+    body = {"private_key": SECRET, "steps": [{"kind": SECRET.upper(), "content": 5}]}
+    key.write_text(json.dumps(body), encoding="utf-8")
+    code, out = run_cli(capsys, "check", problem, "--file", str(key))
+    printed = json.dumps(out)
+    assert code == 1 and SECRET not in printed.lower() and "private_key" not in printed
+    # It still says where the shape is wrong, for the fields work does have.
+    assert ["steps", 0, "content"] in [e["loc"] for e in out["errors"]] and "expected" in out
+
+    # Not JSON at all, like a .env file.
+    env = tmp_path / "secrets.env"
+    env.write_text(f"TOKEN={SECRET}\n", encoding="utf-8")
+    code, out = run_cli(capsys, "check", problem, "--file", str(env))
+    assert code == 1 and SECRET not in json.dumps(out)
+
+    # The same JSON piped into a memory command.
+    code, out = run_cli(capsys, "memory", "plan", "set", stdin=key.read_text(encoding="utf-8"))
+    printed = json.dumps(out)
+    assert code == 1 and SECRET not in printed.lower() and "private_key" not in printed
+
+    # A file that can't be read is a plain error, not a traceback.
+    code, out = run_cli(capsys, "check", problem, "--file", str(tmp_path / "missing.json"))
+    assert code == 1 and "error" in out
+    blob = tmp_path / "blob"
+    blob.write_bytes(b"\xff\xfe" + SECRET.encode())
+    code, out = run_cli(capsys, "check", problem, "--file", str(blob))
+    assert code == 1 and SECRET not in json.dumps(out)
 
 
 def test_format_slips_are_not_counted(t: Tutor) -> None:

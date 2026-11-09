@@ -28,7 +28,19 @@ DEFAULT_SCHEMA = "tutor"
 START_HINT = "Start it from the repo root with: docker compose up -d tutor-db"
 INSTALL_HINT = "Install the tutor extra: cd backend && uv sync --extra tutor"
 _SCHEMA_RE = re.compile(r"^[a-z_][a-z0-9_]{0,40}$")
+_DBNAME_RE = re.compile(r"^/[A-Za-z0-9_.-]*$")
 _LOCK_KEY = 48_211_907  # pg_advisory_xact_lock key: one migration at a time
+HIDDEN_CONNINFO = "a Postgres connection string (details hidden)"
+_REASONS = (
+    ("password authentication failed", "the password was rejected"),
+    ("no password supplied", "it asked for a password and none was set"),
+    ("connection refused", "nothing is listening there"),
+    ("timeout expired", "it timed out"),
+    ("timed out", "it timed out"),
+    ("could not translate host name", "the host name wasn't found"),
+    ("name or service not known", "the host name wasn't found"),
+    ("nodename nor servname", "the host name wasn't found"),
+)
 
 
 class MemoryUnavailable(RuntimeError):
@@ -71,15 +83,47 @@ def schema_name() -> str:
 
 
 def redact(url: str) -> str:
-    """The URL with any password replaced, safe to print."""
-    parts = urlsplit(url)
-    if parts.password is None:
-        return url
-    host = parts.hostname or ""
-    if parts.port:
-        host = f"{host}:{parts.port}"
-    user = f"{parts.username}:***@" if parts.username else "***@"
-    return urlunsplit((parts.scheme, user + host, parts.path, parts.query, parts.fragment))
+    """Where the memory lives, safe to print: scheme, user, host, port and database name.
+
+    Nothing else from the setting is shown. A password never is, wherever it was written:
+    before the host, in the query (``?password=``, ``?sslpassword=``), or in a ``key=value``
+    connection string, which is hidden whole.
+    """
+    if "://" not in url:
+        return HIDDEN_CONNINFO
+    try:
+        parts = urlsplit(url)
+        host = parts.hostname or ""
+        try:
+            port = parts.port
+        except ValueError:  # several hosts, or a password that broke the URL apart
+            port = None
+    except ValueError:
+        return HIDDEN_CONNINFO
+    if ":" in host:
+        host = f"[{host}]"
+    if port:
+        host = f"{host}:{port}"
+    user = parts.username or ""
+    if parts.password is not None:
+        user += ":***"
+    if user:
+        user += "@"
+    # An unescaped "/" in a password would land in the path, so only a plain name is shown.
+    path = parts.path if _DBNAME_RE.match(parts.path) else ""
+    return urlunsplit((parts.scheme, user + host, path, "", ""))
+
+
+def _reason(exc: Exception, operational: type[Exception]) -> str:
+    """Why a connection failed, from a fixed list. The driver's own message is never printed:
+    it can quote parts of the connection string, the password included."""
+    if not isinstance(exc, operational):
+        return "the connection settings aren't valid"
+    text = str(exc).lower()
+    for needle, reason in _REASONS:
+        if needle in text:
+            return reason
+    return "the connection failed"
 
 
 def migrations() -> list[tuple[int, str]]:
@@ -130,10 +174,10 @@ def connect(url: str | None = None, schema: str | None = None) -> Iterator[Any]:
     schema = schema or schema_name()
     try:
         conn = psycopg.connect(url, connect_timeout=3, row_factory=dict_row, autocommit=True)
-    except psycopg.OperationalError as exc:
-        first = str(exc).strip().splitlines()[0] if str(exc).strip() else type(exc).__name__
+    except psycopg.Error as exc:  # unreachable, or a connection string psycopg can't parse
+        why = _reason(exc, psycopg.OperationalError)
         raise MemoryUnavailable(
-            f"Can't reach the tutor memory at {redact(url)} ({first}). {START_HINT}"
+            f"Can't reach the tutor memory at {redact(url)} ({why}). {START_HINT}"
         ) from None
     try:
         migrate(conn, schema)

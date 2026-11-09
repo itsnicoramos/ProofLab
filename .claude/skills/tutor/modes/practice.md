@@ -73,7 +73,8 @@ first move away.
      up" or a second request.
    - Then run `tutor solution <id>`, walk through it briefly, and offer the same idea with new
      numbers (`tutor variant <id> --seed S`).
-   Before that, run `tutor memory review add --chapter N --idea "<the idea they missed>" --problems <id>`.
+   Before that, run `tutor memory review add --chapter N --idea - --problems <id>`, with the
+   idea they missed on stdin (`SKILL.md`, "Text goes in on stdin").
 
 ## 5. After each exercise
 

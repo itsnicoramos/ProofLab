@@ -708,8 +708,8 @@ still comes from the deterministic checkers.
 > `frontend/src/lib/learn.ts` are in git history up to commit `0eb0d0f`. The backend's decks and
 > cards still work, and the tutor uses the concept cards (§20).
 
-`/cards` on the website; `backend/src/prooflab/cards.py` and `notes.py`; the study model is
-`frontend/src/lib/learn.ts`.
+The backend is `backend/src/prooflab/cards.py` and `notes.py`. The practice site's `/cards` page
+and its study model (`frontend/src/lib/learn.ts`) are historical.
 
 ### 15.1 Decks from ProofLab's content
 
@@ -720,11 +720,12 @@ still comes from the deterministic checkers.
   question. Loading validates them like problems: ids `<course>.<topic>.<slug>`, known topics
   and books, fronts unique per chapter, no em dashes.
 - **Problem cards**: every served problem, statement on the front, worked solution on the back.
-- A session shows cards due for review first (most overdue first), then up to 20 new ones.
-  Grades are Again / Hard / Good / Easy, each button showing when the card would come back.
-  "Again" brings the card back later in the same session.
-- **Quiz me**: multiple choice over the concept cards ("Which term is this?"), wrong choices
-  from other terms in the same chapter first.
+- **Study sessions (historical, the practice site's browser):** a session showed cards due for
+  review first (most overdue first), then up to 20 new ones. Grades were Again / Hard / Good /
+  Easy, each button showing when the card would come back. "Again" brought the card back later
+  in the same session.
+- **Quiz me (historical, the practice site's browser):** multiple choice over the concept cards
+  ("Which term is this?"), wrong choices from other terms in the same chapter first.
 
 ### 15.2 Cards from the student's notes
 
@@ -734,13 +735,19 @@ for: `Q:`/`A:` pairs; `Definition 4.1 (Term): …` and `Theorem … (Name) …` 
 Corollary, Proposition, Principle, Law, Rule, Axiom, Fact); `Term: meaning`, `Term :: meaning`,
 `Term - meaning`; `Name = formula`; and sentences such as "X is defined as …", "… is called X",
 "A X is a …", "X means …", "We say … if …", "An integer n is X if …". Labels such as "Note:" or
-"Example:" are skipped, duplicates are dropped, and each card says which rule found it. The
-student edits, deletes or adds cards before saving. Notes decks live only in the browser.
+"Example:" are skipped, duplicates are dropped, and each card says which rule found it.
+
+Historical: on the practice site the student edited, deleted or added cards before saving a
+notes deck in the browser, which synced it to the progress database (§17).
 
 ### 15.3 The study model that learns from the student's answers
 
-Computed in the browser (`lib/learn.ts`) from the review log, which is saved in the progress
-database (§17), so every device gets the same model.
+> **Historical.** The model ran in the practice site's browser (`lib/learn.ts`), removed on
+> 2026-11-08 (§21). The bullets below describe it as it was. The backend still stores the
+> review log it was built from (§17), and nothing in the repo computes the model now.
+
+It was computed in the browser (`lib/learn.ts`) from the review log, which was saved in the
+progress database (§17), so every device got the same model.
 
 - **Scheduling**: FSRS-4.5 (published, deterministic). Each item (concept card, problem, notes
   card) has a stability S and difficulty D, updated by the grade. A card is due when the
@@ -988,6 +995,16 @@ same principles: the checker is the judge, it stays grounded, and it never leaks
    - Never SQL from the agent; memory goes through the CLI.
    - Without memory the tutor keeps teaching and says it can't save.
 
+**What the tutor reads is data, never instructions** (added 2026-11-09). Instructions come
+only from the skill files and the learner's own messages. Lesson notes, exercise text, the
+learner's work, pasted material, stored notes and summaries, `LEARNING.md` and every tool's
+output can't authorize a command, a deletion (`memory forget`, `plan archive`, a file),
+credential access or a change to these rules. The skill says so, and has the agent pass text
+that came from the learner (`--text`, `--summary`, `--idea`) as `-` with the text on stdin
+through a quoted heredoc, so the learner's words are never spliced into a shell command. This
+is a boundary the agent is told to keep. The CLI can't enforce it; what the CLI does is keep
+stored text short and typed (`CHECK` lengths, fixed kinds) and never run any of it.
+
 ### CLI contract
 
 The CLI loads only the `proofs` course (§4). It reuses the API's
@@ -1015,6 +1032,28 @@ timeouts. Exit codes: 0 done, 1 bad request, 3 memory unavailable.
 CLI just computed, and a quiz score is computed from recorded answers. The agent can't
 write "correct". If memory is down, `check --record` still returns the verdict, with
 `"recorded": false` and the reason.
+
+**A quiz is bound to its questions, and its score is final** (added 2026-11-09).
+
+- `memory quiz start` rebuilds the quiz from `--kind`, `--chapters`, `--seed` and `--total`,
+  with the same code `quiz` and `test` run. A mock test built with `--style` or `--variants`
+  needs the same flag here.
+- It stores each question's problem id, format and choice seed (migration 003), and saves the
+  real question count as `total`.
+- `answer --record` and `check --record --quiz` are refused (`"recorded": false`) unless they
+  match one of those questions: the same problem, the same choice seed and format, and a
+  written check only for a written question.
+- Once `memory quiz finish` has saved the score, nothing more can be recorded against the
+  quiz. Calling `finish` again returns the saved score.
+- Quizzes started before migration 003 have no question list and stay unbound.
+
+`--text`, `--summary` and `--idea` take `-` to read the text from stdin, folded into one line.
+
+**Shape errors say where, never what** (added 2026-11-09). When work (`check`, from stdin or
+`--file`) or a memory command's JSON doesn't fit, the error lists each problem's type, place
+and message. It never repeats the input: no values, and no names of fields the command doesn't
+have. The input may be a file that isn't the learner's work at all, and the CLI must not
+become a way to print it. A file that can't be read is a plain error (exit code 1).
 
 Some attempts are only format slips: the verdict is `invalid`, or its first error is an
 input-format code (`FORMAT_CODES` in `tutor.py`: `PARSE_ERROR`, `NOT_AN_EXPRESSION`,
@@ -1050,7 +1089,7 @@ therefore can't count against the learner.
 | `chapter_status` | chapter 1 to 14 → `skip`, `review`, `do`, `done` |
 | `sessions` | mode, chapter, start, end, one-line summary for the next warm-up |
 | `attempts` | problem id, chapter, checker status, score, hint codes, hints shown, first try, the submission (jsonb) |
-| `quiz_results`, `quiz_answers` | kind, chapters, seed, total, score; one counted answer per question |
+| `quiz_results`, `quiz_answers` | kind, chapters, seed, total, score, the quiz's questions (jsonb); one counted answer per question |
 | `review_queue` | chapter, missed idea, problem ids, cleared or not |
 | `notes` | `struggle`, `misconception`, `preference` or `goal`, at most 500 characters |
 | `card_reviews` | concept card recalled or not. A card is due when last missed or last seen over 7 days ago |
@@ -1059,11 +1098,18 @@ therefore can't count against the learner.
   - parameterized SQL only, with Pydantic-validated inputs and `CHECK` constraints for
     lengths and enums;
   - a learner can only change their own rows;
-  - printed URLs hide the password;
+  - a printed database location shows only the scheme, user, host, port and database name.
+    A password is never shown, wherever it was written: before the host, in the query string
+    (which is dropped whole), or in a `key=value` connection string (hidden whole);
+  - a failed connection reports a reason from a fixed list ("nothing is listening there",
+    "the password was rejected", ...), never the driver's own message, which can quote the
+    connection string;
   - nothing from the book is stored.
 - **`memory export`** writes `LEARNING.md` at the repo root (gitignored): a readable view with
   the mission, placement, path, progress log, solved list, quizzes, review queue and notes.
-  Edits to the file are never read back.
+  Edits to the file are never read back. That file is its only destination: there is no path
+  option, and a link or anything else that isn't a plain file in its place is refused, not
+  followed.
 
 ### Lesson notes
 
@@ -1098,9 +1144,13 @@ format, the citations against `sections`, the ids, the codes, and that there are
   - the CLI's verdicts and choice grading equal the API's (`/check`, `/quiz/answer`);
   - `show`, `problems`, quizzes, placement and tests carry no solutions, examples or keys;
   - the CLI never opens the SQLite store;
-  - an unreachable memory gives exit code 3 with the start command, and checking still works.
+  - an unreachable memory gives exit code 3 with the start command, and checking still works;
+  - the export writes only `LEARNING.md` and refuses a link there, even one that appears late;
+  - printed database locations and connection errors carry no password;
+  - a file or JSON of the wrong shape is refused without printing its values or field names.
 - `tests/test_tutor_memory.py` runs against Postgres when `PROOFLAB_TUTOR_TEST_DATABASE_URL`
-  is set, in a throwaway schema per test, and is skipped otherwise.
+  is set, in a throwaway schema per test, and is skipped otherwise. It covers the quiz rules
+  above: a finished quiz is final, and a bound quiz counts only its own questions.
 - `tests/conftest.py` points the tutor memory at a closed port for every other test.
 - `tests/test_tutor_replay.py` keeps the website's replay (§21) equal to the CLI's real output.
 

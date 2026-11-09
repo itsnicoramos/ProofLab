@@ -318,9 +318,16 @@ class Memory:
             raise MemoryRefused(f"Unknown verdict status {status!r}.")
         if session_id is not None:
             self._own("sessions", session_id)
-        if quiz_id is not None:
-            self._own("quiz_results", quiz_id)
         with self.conn.transaction():
+            if quiz_id is not None:
+                questions = self._open_quiz(quiz_id)
+                if questions is not None and not any(
+                    q["problem_id"] == problem_id and q["format"] == "written" for q in questions
+                ):
+                    raise MemoryRefused(
+                        f"Quiz {quiz_id} has no written question {problem_id},"
+                        " so this check can't count toward it."
+                    )
             earlier = self.conn.execute(
                 "SELECT 1 FROM attempts"
                 " WHERE learner_id = %s AND problem_id = %s AND counted LIMIT 1",
@@ -351,56 +358,101 @@ class Memory:
     def start_quiz(self, quiz: QuizIn) -> dict[str, Any]:
         if quiz.session_id is not None:
             self._own("sessions", quiz.session_id)
+        questions = (
+            None if quiz.questions is None else Jsonb([q.model_dump() for q in quiz.questions])
+        )
         row = self.conn.execute(
-            "INSERT INTO quiz_results (learner_id, session_id, kind, chapters, seed, total)"
-            " VALUES (%s, %s, %s, %s, %s, %s) RETURNING id",
-            (self.id, quiz.session_id, quiz.kind, quiz.chapters, quiz.seed, quiz.total),
+            "INSERT INTO quiz_results"
+            " (learner_id, session_id, kind, chapters, seed, total, questions)"
+            " VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id",
+            (
+                self.id,
+                quiz.session_id,
+                quiz.kind,
+                quiz.chapters,
+                quiz.seed,
+                quiz.total,
+                questions,
+            ),
         ).fetchone()
-        return {"quiz_id": row["id"]}
+        return {"quiz_id": row["id"], "total": quiz.total}
+
+    def _open_quiz(self, quiz_id: int) -> list[dict[str, Any]] | None:
+        """Lock the learner's quiz for a new result and return its question list (None when it
+        has none on record). A finished quiz is refused: its score is final. Call this inside
+        a transaction, so ``finish_quiz`` can't slip in between the check and the insert."""
+        self._own("quiz_results", quiz_id)
+        row = self.conn.execute(
+            "SELECT finished_at, questions FROM quiz_results WHERE id = %s FOR SHARE", (quiz_id,)
+        ).fetchone()
+        if row["finished_at"] is not None:
+            raise MemoryRefused(
+                f"Quiz {quiz_id} is already finished, so nothing more can count toward it."
+            )
+        return row["questions"]
 
     def record_answer(
         self, quiz_id: int, problem_id: str, seed: int, fmt: str | None, choice: str, correct: bool
     ) -> dict[str, Any]:
         """Store one graded choice. The first answer to a question is the one that counts."""
-        self._own("quiz_results", quiz_id)
-        finished = self.conn.execute(
-            "SELECT finished_at FROM quiz_results WHERE id = %s", (quiz_id,)
-        ).fetchone()["finished_at"]
-        if finished is not None:
-            raise MemoryRefused(f"Quiz {quiz_id} is already finished.")
-        row = self.conn.execute(
-            "INSERT INTO quiz_answers (quiz_id, problem_id, seed, format, choice, correct)"
-            " VALUES (%s, %s, %s, %s, %s, %s)"
-            " ON CONFLICT (quiz_id, problem_id, seed) DO NOTHING RETURNING id",
-            (quiz_id, problem_id, seed, fmt, choice, correct),
-        ).fetchone()
+        with self.conn.transaction():
+            questions = self._open_quiz(quiz_id)
+            if questions is not None and not any(
+                q["problem_id"] == problem_id
+                and q["format"] != "written"
+                and q["seed"] == seed
+                and fmt in (None, q["format"])
+                for q in questions
+            ):
+                raise MemoryRefused(
+                    f"Quiz {quiz_id} has no choice question {problem_id} with that seed and"
+                    " format, so this answer can't count toward it."
+                )
+            row = self.conn.execute(
+                "INSERT INTO quiz_answers (quiz_id, problem_id, seed, format, choice, correct)"
+                " VALUES (%s, %s, %s, %s, %s, %s)"
+                " ON CONFLICT (quiz_id, problem_id, seed) DO NOTHING RETURNING id",
+                (quiz_id, problem_id, seed, fmt, choice, correct),
+            ).fetchone()
         return {"answer_id": row["id"] if row else None, "counted": row is not None}
 
     def finish_quiz(self, quiz_id: int) -> dict[str, Any]:
-        """Score = right choices + written questions whose last check in this quiz was correct."""
+        """Score = right choices + written questions whose last check in this quiz was correct.
+
+        The first call saves the score. Later calls return that saved score, and look only at
+        what was recorded up to the moment the quiz was finished."""
         self._own("quiz_results", quiz_id)
         with self.conn.transaction():
             quiz = self.conn.execute(
-                "SELECT total, finished_at FROM quiz_results WHERE id = %s FOR UPDATE",
+                "SELECT total, score, finished_at FROM quiz_results WHERE id = %s FOR UPDATE",
                 (quiz_id,),
             ).fetchone()
+            done = quiz["finished_at"]
             choices = self.conn.execute(
-                "SELECT problem_id, correct FROM quiz_answers WHERE quiz_id = %s", (quiz_id,)
+                "SELECT problem_id, correct FROM quiz_answers WHERE quiz_id = %s"
+                " AND (%s::timestamptz IS NULL OR answered_at <= %s)",
+                (quiz_id, done, done),
             ).fetchall()
             written = self.conn.execute(
                 "SELECT DISTINCT ON (problem_id) problem_id, status = 'correct' AS correct"
-                " FROM attempts WHERE quiz_id = %s ORDER BY problem_id, checked_at DESC, id DESC",
-                (quiz_id,),
+                " FROM attempts WHERE quiz_id = %s"
+                " AND (%s::timestamptz IS NULL OR checked_at <= %s)"
+                " ORDER BY problem_id, checked_at DESC, id DESC",
+                (quiz_id, done, done),
             ).fetchall()
             results: dict[str, bool] = {}
             for r in [*choices, *written]:
                 results[r["problem_id"]] = results.get(r["problem_id"], False) or r["correct"]
-            score = min(sum(results.values()), quiz["total"])
-            if quiz["finished_at"] is None:
+            if done is None:
+                score = min(sum(results.values()), quiz["total"])
+                # clock_timestamp(), not now(): later than every result counted above.
                 self.conn.execute(
-                    "UPDATE quiz_results SET score = %s, finished_at = now() WHERE id = %s",
+                    "UPDATE quiz_results SET score = %s, finished_at = clock_timestamp()"
+                    " WHERE id = %s",
                     (score, quiz_id),
                 )
+            else:
+                score = quiz["score"]
         return {
             "quiz_id": quiz_id,
             "score": score,

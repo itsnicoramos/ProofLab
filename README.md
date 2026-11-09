@@ -268,7 +268,10 @@ step is echoed back as LaTeX so you can see how ProofLab read it. Full table: `S
 1. Create `backend/src/prooflab/content/problems/<course>/<slug>.json` (calc4 uses
    `calc4/vector_calc/` and `calc4/diff_eq/`). Copy an existing problem of the same `kind`.
 2. Write an **original** problem and cite the open-textbook section that teaches it
-   (`references.json` lists the books; see `REFERENCES.md`).
+   (`references.json` lists the books; see `REFERENCES.md`). The `proofs` course is the
+   exception: never invent a problem there. Each one restates one existing *Book of Proof*
+   exercise in ProofLab's own words and cites it by chapter, exercise number and page
+   (`SPEC.md` §4.4 and §8).
 3. Add at least one correct example and one wrong one with the verdict you expect.
 4. `uv run pytest tests/test_content.py`: it validates the file, re-derives the answer key with
    SymPy, and runs your examples.

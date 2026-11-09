@@ -3,6 +3,13 @@
 Every score comes from the checker. Memory computes the score itself from the answers the CLI
 recorded, never from a number you send.
 
+`tutor memory quiz start` rebuilds the quiz from the values you give it and keeps its list of
+questions. So give it exactly what you give `tutor quiz` or `tutor test`: the same chapters,
+seed and number of questions. Only answers to those questions count, each recorded the way
+its format says (`answer` for a choice question, `check` for a written one), and nothing
+counts after `finish`. If `--record` comes back with `"recorded": false`, read `memory_error`
+and tell the learner the result wasn't saved.
+
 ## 1. Build it
 
 - **Chapter check.** Pick a fresh seed S, then run:
@@ -14,6 +21,7 @@ recorded, never from a number you send.
     Add `--variants` only if they want new-number versions, and say which questions are
     versions.
   - Then run `tutor memory quiz start --kind midterm --chapters 1-6 --total <number of questions> --seed S`.
+    If you built the test with `--style` or `--variants`, pass the same flag here.
   - Tell them `suggested_minutes` and ask whether they want to be timed.
   - If `skipped_chapters` is present, say those chapters have no checked problems yet.
 
@@ -47,7 +55,8 @@ answers, grade them all, then report.
    - which chapters the misses came from;
    - for each miss, one line on the idea behind it. Use the `explanation` from `answer` or the
      flagged step from `check`.
-3. For each missed idea, run `tutor memory review add --chapter N --idea "..." --problems <ids>`.
+3. For each missed idea, run `tutor memory review add --chapter N --idea - --problems <ids>`,
+   with the idea on stdin (`SKILL.md`, "Text goes in on stdin").
 4. Set any chapter where they scored under 70% to `review` with `tutor memory chapter N review`.
 5. Offer a next step: practise the review queue (`modes/practice.md`), or retake later with a
    new seed.

@@ -54,9 +54,19 @@ class ReviewIn(_Strict):
     problem_ids: list[ItemId] = Field(default_factory=list, max_length=20)
 
 
+class QuizQuestion(_Strict):
+    """One question of a quiz as the CLI built it: what an answer must match to count."""
+
+    problem_id: ItemId
+    format: Literal["answer", "spot", "written"]
+    seed: Annotated[int, Field(ge=0)] | None = None  # a choice question's own seed
+
+
 class QuizIn(_Strict):
     kind: QuizKind
     chapters: list[Chapter] = Field(default_factory=list, max_length=14)
     seed: Annotated[int, Field(ge=0, le=2**31 - 1)]
     total: Annotated[int, Field(ge=1, le=60)]
     session_id: int | None = None
+    # Set by `memory quiz start` from the quiz it rebuilds. None leaves the quiz unbound.
+    questions: list[QuizQuestion] | None = Field(default=None, max_length=60)

@@ -39,7 +39,7 @@ from prooflab.lessons import Lesson, load_lessons
 from prooflab.practice import PracticeTestError
 from prooflab.quiz import build_question
 
-COURSE = Course("proofs")  # the live course, same as COURSE_ORDER in frontend/src/lib/labels.ts
+COURSE = Course("proofs")  # the only course the tutor teaches (SPEC §4)
 BOOK_PDF = "https://richardhammack.github.io/BookOfProof/"
 CHECKED_BY = "ProofLab's checker (deterministic rules and SymPy, no AI)"
 CHECK_TIMEOUT = 10.0
@@ -164,9 +164,51 @@ def cmd_show(t: Tutor, a: argparse.Namespace) -> Any:
     return out
 
 
+UNKNOWN_FIELD = "(a field that isn't expected)"
+
+
+def _field_names(model: Any) -> set[str]:
+    names: set[str] = set()
+
+    def walk(node: Any) -> None:
+        if isinstance(node, dict):
+            names.update(node.get("properties", {}))
+            for value in node.values():
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    walk(model.model_json_schema())
+    return names
+
+
+def _shape_errors(exc: ValidationError, model: Any) -> list[dict[str, Any]]:
+    """What is wrong with some input's shape, without repeating any of the input.
+
+    The input can be a file (``check --file``, or a file redirected into stdin), and that file
+    may not be the learner's work at all. So an error says where and why, never what was
+    there: no values, and no names of fields the model doesn't have (SPEC §20).
+    """
+    known = _field_names(model)
+    out = []
+    for error in exc.errors(include_url=False, include_context=False, include_input=False):
+        loc = [
+            part if isinstance(part, int) or part in known or part.isdigit() else UNKNOWN_FIELD
+            for part in error["loc"]
+        ]
+        out.append({"type": error["type"], "loc": loc, "msg": error["msg"]})
+    return out
+
+
 def _read_submission(a: argparse.Namespace) -> Submission:
     if a.file:
-        raw = Path(a.file).read_text(encoding="utf-8")
+        try:
+            raw = Path(a.file).read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            fail("That file isn't UTF-8 text. Pass the work as JSON.")
+        except OSError as exc:
+            fail(f"Couldn't read the work file ({exc.strerror}).")
     elif sys.stdin.isatty():
         fail(
             "Pipe the work in as JSON on stdin, or pass --file.",
@@ -180,7 +222,7 @@ def _read_submission(a: argparse.Namespace) -> Submission:
         fail(
             "The work isn't in the expected shape.",
             expected={"steps": [{"kind": "expr", "content": "..."}], "answer": "... or null"},
-            errors=json.loads(exc.json(include_url=False)),
+            errors=_shape_errors(exc, Submission),
         )
 
 
@@ -325,9 +367,9 @@ def cmd_cards(t: Tutor, a: argparse.Namespace) -> Any:
     return [c.model_dump(mode="json") for c in deck]
 
 
-def _test_out(t: Tutor, kind: str, a: argparse.Namespace, topics: list[str], **kw: Any) -> Any:
+def _test_out(t: Tutor, kind: str, seed: int, topics: list[str], **kw: Any) -> Any:
     try:
-        test = practice_test_out(t.registry, COURSE, kind, t.run, seed=a.seed, topics=topics, **kw)
+        test = practice_test_out(t.registry, COURSE, kind, t.run, seed=seed, topics=topics, **kw)
     except PracticeTestError as exc:
         fail(str(exc))
     out = test.model_dump(mode="json")
@@ -336,15 +378,19 @@ def _test_out(t: Tutor, kind: str, a: argparse.Namespace, topics: list[str], **k
     return out
 
 
+def _chapter_quiz(t: Tutor, chapter: int, count: int, seed: int) -> Any:
+    topic = t.topic_of(chapter)
+    if not any(p.topic == topic for p in t.served):
+        fail(f"ProofLab has no checked problems for chapter {chapter} yet.")
+    return _test_out(t, "quiz", seed, [topic], length=count, style="choice")
+
+
 def cmd_quiz(t: Tutor, a: argparse.Namespace) -> Any:
     if a.placement:
         return _placement(t, a.seed)
     if not a.chapter:
         fail("Give --chapter N, or --placement.")
-    topic = t.topic_of(a.chapter)
-    if not any(p.topic == topic for p in t.served):
-        fail(f"ProofLab has no checked problems for chapter {a.chapter} yet.")
-    return _test_out(t, "quiz", a, [topic], length=a.count, style="choice")
+    return _chapter_quiz(t, a.chapter, a.count, a.seed)
 
 
 def _placement(t: Tutor, seed: int) -> Any:
@@ -418,17 +464,37 @@ def _chapter_list(text: str) -> list[int]:
     return sorted(set(out))
 
 
-def cmd_test(t: Tutor, a: argparse.Namespace) -> Any:
-    chapters = _chapter_list(a.chapters)
+def _mock_test(
+    t: Tutor,
+    kind: str,
+    chapters: list[int],
+    seed: int,
+    *,
+    length: int | None,
+    style: str,
+    variants: bool,
+) -> Any:
     topics = [t.topic_of(n) for n in chapters]
     usable = [x for x in topics if any(p.topic == x for p in t.served)]
     if not usable:
         fail("None of those chapters has checked problems yet.")
-    out = _test_out(t, a.kind, a, usable, length=a.length, style=a.style, variants=a.variants)
+    out = _test_out(t, kind, seed, usable, length=length, style=style, variants=variants)
     skipped = [n for n, x in zip(chapters, topics, strict=True) if x not in usable]
     if skipped:
         out["skipped_chapters"] = skipped
     return out
+
+
+def cmd_test(t: Tutor, a: argparse.Namespace) -> Any:
+    return _mock_test(
+        t,
+        a.kind,
+        _chapter_list(a.chapters),
+        a.seed,
+        length=a.length,
+        style=a.style,
+        variants=a.variants,
+    )
 
 
 def cmd_variant(t: Tutor, a: argparse.Namespace) -> Any:
@@ -495,11 +561,82 @@ def _stdin_json() -> Any:
         fail(f"That isn't JSON: {exc}")
 
 
+def _text(value: str | None) -> str | None:
+    """A text argument. ``-`` means "read it from stdin" (as one line), so words that came
+    from the learner never have to be quoted into a shell command (SPEC §20)."""
+    if value != "-":
+        return value
+    if sys.stdin.isatty():
+        fail("Pipe the text in on stdin, or pass it as the argument.")
+    return " ".join(sys.stdin.read().split())
+
+
+LEARNING_FILE = "LEARNING.md"
+
+
+def _write_learning(text: str) -> Path:
+    """Write the export to ``LEARNING.md`` at the repo root, the only place it may go.
+
+    The destination is fixed, so no tutor command can be pointed at another file. A link (or
+    anything else that isn't a plain file) sitting there is refused instead of followed, and
+    the open itself doesn't follow links either (SPEC §20).
+    """
+    path = REPO_ROOT / LEARNING_FILE
+    if path.is_symlink() or (path.exists() and not path.is_file()):
+        fail(
+            f"{LEARNING_FILE} at the repo root is a link or not a plain file, so the export"
+            " won't write to it. Remove it, then export again."
+        )
+    flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        fd = os.open(path, flags, 0o644)
+    except OSError as exc:
+        fail(f"Couldn't write {LEARNING_FILE} at the repo root ({exc.strerror}).")
+    with os.fdopen(fd, "w", encoding="utf-8") as handle:
+        handle.write(text)
+    return path
+
+
+def _quiz_questions(t: Tutor, quiz: Any, style: str, variants: bool) -> list[dict[str, Any]]:
+    """The questions of the quiz a memory row is for: rebuilt from its kind, chapters, seed and
+    length by the same code that ``quiz`` and ``test`` run. Memory keeps them, so only answers
+    to these questions can count toward the score (SPEC §20)."""
+    if quiz.kind == "placement":
+        built = _placement(t, quiz.seed)
+    elif quiz.kind == "chapter":
+        if len(quiz.chapters) != 1:
+            fail("A chapter check covers one chapter: pass --chapters N.")
+        built = _chapter_quiz(t, quiz.chapters[0], quiz.total, quiz.seed)
+    else:
+        if not quiz.chapters:
+            fail("Pass the test's chapters, like --chapters 1-6.")
+        built = _mock_test(
+            t,
+            quiz.kind,
+            quiz.chapters,
+            quiz.seed,
+            length=quiz.total,
+            style=style,
+            variants=variants,
+        )
+    out = []
+    for q in built["questions"]:
+        choice = q.get("choice")
+        out.append(
+            {
+                "problem_id": q["problem"]["id"],
+                "format": choice["format"] if choice else "written",
+                "seed": choice["seed"] if choice else None,
+            }
+        )
+    return out
+
+
 def _validated(model: Any, data: Any) -> Any:
     try:
         return model.model_validate(data)
     except ValidationError as exc:
-        fail("Invalid input.", errors=json.loads(exc.json(include_url=False)))
+        fail("Invalid input.", errors=_shape_errors(exc, model))
 
 
 def cmd_memory(t: Tutor | None, a: argparse.Namespace) -> Any:
@@ -545,15 +682,18 @@ def cmd_memory(t: Tutor | None, a: argparse.Namespace) -> Any:
     if what == "session":
         if a.session_command == "start":
             return _memory(a, lambda m: m.start_session(a.mode, a.chapter))
-        return _memory(a, lambda m: m.end_session(a.session_id, a.summary))
+        summary = _text(a.summary)
+        return _memory(a, lambda m: m.end_session(a.session_id, summary))
     if what == "note":
-        note = _validated(models.NoteIn, {"kind": a.kind, "text": a.text, "chapter": a.chapter})
+        note = _validated(
+            models.NoteIn, {"kind": a.kind, "text": _text(a.text), "chapter": a.chapter}
+        )
         return _memory(a, lambda m: m.add_note(note))
     if what == "review":
         if a.review_command == "add":
             ids = [i.strip() for i in (a.problems or "").split(",") if i.strip()]
             item = _validated(
-                models.ReviewIn, {"chapter": a.chapter, "idea": a.idea, "problem_ids": ids}
+                models.ReviewIn, {"chapter": a.chapter, "idea": _text(a.idea), "problem_ids": ids}
             )
             return _memory(a, lambda m: m.add_review(item))
         return _memory(a, lambda m: m.clear_review(a.review_id))
@@ -561,15 +701,20 @@ def cmd_memory(t: Tutor | None, a: argparse.Namespace) -> Any:
         return _memory(a, lambda m: m.review_card(a.card_id, a.recalled == "yes"))
     if what == "quiz":
         if a.quiz_command == "start":
+            fields = {
+                "kind": a.kind,
+                "chapters": _chapter_list(a.chapters or ""),
+                "seed": a.seed,
+                "total": a.total,
+                "session_id": a.session,
+            }
+            # The CLI, not the agent, says which questions the quiz has and how many.
+            asked = _validated(models.QuizIn, fields)
+            questions = _quiz_questions(t or Tutor(), asked, a.style, a.variants)
+            if not questions:
+                fail("That quiz has no questions.")
             quiz = _validated(
-                models.QuizIn,
-                {
-                    "kind": a.kind,
-                    "chapters": _chapter_list(a.chapters or ""),
-                    "seed": a.seed,
-                    "total": a.total,
-                    "session_id": a.session,
-                },
+                models.QuizIn, {**fields, "total": len(questions), "questions": questions}
             )
             return _memory(a, lambda m: m.start_quiz(quiz))
         return _memory(a, lambda m: m.finish_quiz(a.quiz_id))
@@ -577,12 +722,11 @@ def cmd_memory(t: Tutor | None, a: argparse.Namespace) -> Any:
         assert t is not None
         from prooflab.tutor_memory.export import render
 
-        path = Path(a.path) if a.path else REPO_ROOT / "LEARNING.md"
         meta = {n: {"title": t.chapter_title(n), "minutes": None} for n in range(1, 15)}
         for n, lesson in t.lessons.items():
             meta[n]["minutes"] = lesson.minutes
         text = _memory(a, lambda m: {"text": render(m.show(), m.history(), meta)})["text"]
-        path.write_text(text, encoding="utf-8")
+        path = _write_learning(text)
         return {"path": str(path), "bytes": len(text.encode("utf-8"))}
     if what == "forget":
         if not a.confirm:
@@ -670,20 +814,20 @@ def _parser() -> argparse.ArgumentParser:
     s.add_argument("--chapter", type=int)
     s = ss.add_parser("end")
     s.add_argument("session_id", type=int)
-    s.add_argument("--summary", help="one line for the next warm-up")
+    s.add_argument("--summary", help="one line for the next warm-up ('-' reads it from stdin)")
     note = ms.add_parser("note", help="remember something about the learner")
     ns = note.add_subparsers(dest="note_command", required=True)
     s = ns.add_parser("add")
     s.add_argument(
         "--kind", required=True, choices=["struggle", "misconception", "preference", "goal"]
     )
-    s.add_argument("--text", required=True)
+    s.add_argument("--text", required=True, help="the note ('-' reads it from stdin)")
     s.add_argument("--chapter", type=int)
     rev = ms.add_parser("review", help="the review queue")
     rs = rev.add_subparsers(dest="review_command", required=True)
     s = rs.add_parser("add")
     s.add_argument("--chapter", type=int, required=True)
-    s.add_argument("--idea", required=True)
+    s.add_argument("--idea", required=True, help="the missed idea ('-' reads it from stdin)")
     s.add_argument("--problems", help="problem ids to retry, comma-separated")
     s = rs.add_parser("clear")
     s.add_argument("review_id", type=int)
@@ -700,10 +844,16 @@ def _parser() -> argparse.ArgumentParser:
     s.add_argument("--seed", type=int, required=True)
     s.add_argument("--chapters", help="like 1-5 or 1,2,4")
     s.add_argument("--session", type=int)
+    s.add_argument(
+        "--style",
+        choices=["written", "mixed", "choice"],
+        default="mixed",
+        help="the --style the mock test was built with",
+    )
+    s.add_argument("--variants", action="store_true", help="the mock test used --variants")
     s = qs.add_parser("finish")
     s.add_argument("quiz_id", type=int)
-    s = ms.add_parser("export", help="write the readable LEARNING.md view")
-    s.add_argument("--path", help="default: LEARNING.md at the repo root")
+    ms.add_parser("export", help="write the readable view to LEARNING.md at the repo root")
     s = ms.add_parser("forget", help="delete this learner's memory")
     s.add_argument("--confirm", action="store_true")
     return p
@@ -733,7 +883,9 @@ def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     try:
         key = (args.command, getattr(args, "memory_command", None))
-        tutor = None if key in _NO_CONTENT else Tutor()
+        # Starting a quiz rebuilds its questions, so it needs the content like `quiz` does.
+        starts_quiz = getattr(args, "quiz_command", None) == "start"
+        tutor = None if key in _NO_CONTENT and not starts_quiz else Tutor()
         emit(COMMANDS[args.command](tutor, args))
         return 0
     except Failure as exc:
