@@ -126,6 +126,25 @@ def _reason(exc: Exception, operational: type[Exception]) -> str:
     return "the connection failed"
 
 
+def drop_eval_schema(name: str) -> bool:
+    """Drop the throwaway schema an eval run used (SPEC §22). Only names that start with
+    ``eval_`` are accepted, so this can never drop a learner's memory. False when the memory
+    isn't reachable."""
+    if not re.fullmatch(r"eval_[a-z0-9]{1,30}", name):
+        raise ValueError(f"{name!r} isn't an eval schema")
+    try:
+        psycopg = _psycopg()
+    except MemoryUnavailable:
+        return False
+    try:
+        with psycopg.connect(database_url(), autocommit=True, connect_timeout=3) as conn:
+            statement = psycopg.sql.SQL("DROP SCHEMA IF EXISTS {} CASCADE")
+            conn.execute(statement.format(psycopg.sql.Identifier(name)))
+    except psycopg.Error:
+        return False
+    return True
+
+
 def migrations() -> list[tuple[int, str]]:
     out = []
     for path in sorted(SCHEMA_DIR.glob("[0-9][0-9][0-9]_*.sql")):

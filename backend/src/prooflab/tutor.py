@@ -979,18 +979,38 @@ def cmd_audit(_t: Tutor | None, a: argparse.Namespace) -> Any:
 
 def cmd_eval(_t: Tutor | None, a: argparse.Namespace) -> Any:
     """Play a scripted learner against an agent, then grade what the agent did. This starts
-    the agent named by --agent and costs what that agent costs."""
+    the agent named by --agent and costs what that agent costs.
+
+    The run never touches a learner's own memory or LEARNING.md: the agent's tutor commands
+    get a fresh throwaway memory schema, dropped afterwards, and LEARNING.md is put back."""
     import shlex
+    import uuid
 
     from prooflab.tutor_evals import EvalError, run_scenario
+    from prooflab.tutor_memory.db import drop_eval_schema
 
     scenario = _scenario(a.scenario)
     out = Path(a.out)
+    schema = f"eval_{uuid.uuid4().hex[:12]}"
+    env = {**os.environ, "PROOFLAB_TUTOR_DB_SCHEMA": schema, "PROOFLAB_TUTOR_LEARNER": "eval"}
+    learning = REPO_ROOT / LEARNING_FILE
+    kept = learning.read_bytes() if learning.is_file() and not learning.is_symlink() else None
     try:
-        run_scenario(scenario, shlex.split(a.agent), out, cwd=REPO_ROOT)
+        run_scenario(scenario, shlex.split(a.agent), out, cwd=REPO_ROOT, env=env)
     except EvalError as exc:
         fail(str(exc), trace=str(out))
-    return {"trace": str(out), **_audit(out, scenario)}
+    finally:
+        drop_eval_schema(schema)
+        if not learning.is_symlink():
+            if kept is not None:
+                learning.write_bytes(kept)
+            elif learning.is_file():
+                learning.unlink()
+    return {
+        "trace": str(out),
+        "memory": f"throwaway schema {schema}, dropped",
+        **_audit(out, scenario),
+    }
 
 
 # ---------------------------------------------------------------------- arguments

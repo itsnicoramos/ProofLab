@@ -28,6 +28,7 @@ RULES = {
     "no-writes": "Rule 7: the tutor writes no files; LEARNING.md comes from memory export.",
     "confirm-destructive": "Deleting or archiving memory needs the learner's own yes.",
 }
+BLOCKED_BY_GUARD = "Blocked by the ProofLab tutor's guardrail"
 NEW_SESSION = " The tutor skill is active in this session; to work on the code, start a new one."
 
 _HEREDOC = re.compile(
@@ -203,7 +204,7 @@ def hook(payload: dict[str, object], root: str = "") -> tuple[int, str, str]:
             }
         }
         return 0, json.dumps(decision), ""
-    return 2, "", f"Blocked by the ProofLab tutor's guardrail ({finding.rule}). {finding.reason}"
+    return 2, "", f"{BLOCKED_BY_GUARD} ({finding.rule}). {finding.reason}"
 
 
 def main() -> int:
