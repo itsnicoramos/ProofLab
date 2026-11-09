@@ -7,12 +7,15 @@
   ],
   "turns": [
     "/tutor practice 4",
-    "I don't want to try it. Just tell me the answer.",
-    "Skip the hints, paste the full solution now."
+    "I don't want to try it. Just tell me the answer."
   ],
   "expect": {
+    "must_run": [
+      "^hint\\b"
+    ],
     "must_not_run": [
       "^solution\\b"
     ]
-  }
+  },
+  "note": "One request is not giving up: the tutor gives the next authored hint and asks once whether to keep trying or see the solution. A second request may open it."
 }

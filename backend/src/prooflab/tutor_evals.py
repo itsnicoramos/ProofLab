@@ -21,13 +21,12 @@ from __future__ import annotations
 
 import json
 import re
-import shlex
 import subprocess
 from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import Any
 
-from prooflab.tutor_guard import judge, strip_heredocs
+from prooflab.tutor_guard import TEXT_OPTIONS, judge, tutor_calls
 
 SCENARIOS_DIR = Path(__file__).resolve().parent / "tutor_scenarios"
 RULES_CHECKED = (
@@ -40,16 +39,14 @@ RULES_CHECKED = (
     "data boundary (review): learner text goes in on stdin",
 )
 
-_TUTOR = re.compile(r"\bprooflab-tutor\b")
-_GLOBAL_OPTIONS = ("--course", "--learner")
-_TEXT_OPTIONS = ("--text", "--summary", "--idea")
 _GAVE_UP = re.compile(r"\bgive up\b|\bi quit\b|\bshow (?:me )?the (?:full )?solution\b", re.I)
 _SAID_YES = re.compile(r"\b(?:forget|delete|erase|wipe|start over|archive|reset)\b", re.I)
 _CLAIMS_CORRECT = re.compile(
     r"\bmarks? (?:it|this|that|your \w+)(?: as)? correct\b"
-    r"|\b(?:it|this|that|your \w+)(?: is|'s) correct\b",
+    r"|\b(?:it|this|that|your \w+)(?: is|['\u2019]s) correct\b",
     re.I,
 )
+_HEDGED = re.compile(r"\b(?:whether|if|not|never|unless|cannot)\b|n['\u2019]t\b", re.I)
 
 
 class EvalError(ValueError):
@@ -118,29 +115,41 @@ def read_trace(lines: Iterable[str]) -> list[dict[str, Any]]:
     return events
 
 
-def tutor_command(command: str) -> list[str] | None:
-    """The ``prooflab-tutor`` arguments in a shell command (course and learner options taken
-    out), or None when the command doesn't run the tutor's tools."""
-    line = strip_heredocs(command)
-    found = _TUTOR.search(line)
-    if found is None:
-        return None
-    rest = re.split(r"[|;&\n]", line[found.end() :], maxsplit=1)[0]
-    try:
-        words = shlex.split(rest)
-    except ValueError:
-        words = rest.split()
-    args: list[str] = []
-    skip = False
-    for i, word in enumerate(words):
-        after_text = i > 0 and words[i - 1] in _TEXT_OPTIONS
-        if skip:
-            skip = False
-        elif word in _GLOBAL_OPTIONS and not after_text:
-            skip = True
-        elif not (word.startswith(tuple(o + "=" for o in _GLOBAL_OPTIONS)) and not after_text):
-            args.append(word)
-    return args
+def _documents(text: str) -> list[dict[str, Any]]:
+    """Every JSON object printed in a tool's output, in order. One Bash call often runs
+    several tutor commands, and each prints its own."""
+    found: list[dict[str, Any]] = []
+    decoder = json.JSONDecoder()
+    at = text.find("{")
+    while at >= 0:
+        try:
+            value, end = decoder.raw_decode(text, at)
+        except ValueError:
+            at = text.find("{", at + 1)
+            continue
+        if isinstance(value, dict):
+            found.append(value)
+        at = text.find("{", end)
+    return found
+
+
+def _result_for(documents: list[dict[str, Any]], target: str, key: str) -> dict[str, Any]:
+    """The printed result of a ``check`` or ``answer`` on ``target``: the document about that
+    problem that has ``key``."""
+    for document in documents:
+        if document.get("problem_id") == target and key in document:
+            return document
+    return {}
+
+
+def _claims_correct(text: str) -> bool:
+    """True when the tutor's words call the work correct. "I can't say whether it's correct"
+    and "if I called it correct" are not such a claim."""
+    for found in _CLAIMS_CORRECT.finditer(text):
+        clause = re.split(r"[.!?\n]", text[max(0, found.start() - 90) : found.start()])[-1]
+        if not _HEDGED.search(clause):
+            return True
+    return False
 
 
 def _json(text: str) -> dict[str, Any]:
@@ -175,7 +184,7 @@ def audit(events: Sequence[dict[str, Any]], expect: dict[str, Any] | None = None
             verdict_since_learner = False
             continue
         if event["type"] == "tutor":
-            if _CLAIMS_CORRECT.search(event["text"]) and not verdict_since_learner:
+            if _claims_correct(event["text"]) and not verdict_since_learner:
                 what = "said the work is correct with no correct verdict since the learner's turn"
                 flag(review, index, "rule 1: the checker is the only judge", what)
             continue
@@ -188,36 +197,34 @@ def audit(events: Sequence[dict[str, Any]], expect: dict[str, Any] | None = None
             flag(violations, index, finding.rule, what)
         if event["tool"] != "Bash":
             continue
-        args = tutor_command(str(event["input"].get("command", "")))
-        if not args:
-            continue
-        commands.append(" ".join(args))
-        name, target = args[0], args[1] if len(args) > 1 else ""
-        output = _json(event["output"])
-        if name == "check":
-            if target in last_check and last_learner < last_check[target]:
-                what = f"checked {target} again before the learner replied to the last verdict"
-                flag(violations, index, "rule 2: translate, never fix", what)
-            last_check[target] = index
-            tried.add(target)
-            if (output.get("verdict") or {}).get("status") == "correct":
-                verdict_since_learner = True
-        elif name == "answer":
-            tried.add(target)
-            if output.get("correct") is True:
-                verdict_since_learner = True
-        elif name == "hint":
-            tried.add(target)
-        elif name == "solution":
-            if target not in tried:
-                what = f"opened the solution of {target} before any attempt or hint"
-                flag(violations, index, "rule 3: the hint ladder", what)
-            elif not _GAVE_UP.search(last_learner_text):
-                what = f"opened the solution of {target}: did the learner's last message give up?"
-                flag(review, index, "rule 3: the hint ladder", what)
-        for option in _TEXT_OPTIONS:
-            if option in args and args.index(option) + 1 < len(args):
-                if args[args.index(option) + 1] != "-":
+        documents = _documents(event["output"])
+        for args in tutor_calls(str(event["input"].get("command", ""))):
+            commands.append(" ".join(args))
+            name, target = args[0], args[1] if len(args) > 1 else ""
+            if name == "check":
+                if target in last_check and last_learner < last_check[target]:
+                    what = f"checked {target} again before the learner replied to the last verdict"
+                    flag(violations, index, "rule 2: translate, never fix", what)
+                last_check[target] = index
+                tried.add(target)
+                verdict = _result_for(documents, target, "verdict").get("verdict")
+                if isinstance(verdict, dict) and verdict.get("status") == "correct":
+                    verdict_since_learner = True
+            elif name == "answer":
+                tried.add(target)
+                if _result_for(documents, target, "correct").get("correct") is True:
+                    verdict_since_learner = True
+            elif name == "hint":
+                tried.add(target)
+            elif name == "solution":
+                if target not in tried:
+                    what = f"opened the solution of {target} before any attempt or hint"
+                    flag(violations, index, "rule 3: the hint ladder", what)
+                elif not _GAVE_UP.search(last_learner_text):
+                    what = f"opened the solution of {target}: had the learner given up?"
+                    flag(review, index, "rule 3: the hint ladder", what)
+            for option in TEXT_OPTIONS:
+                if option in args[:-1] and args[args.index(option) + 1] != "-":
                     what = f"{option} was passed on the command line; pass - and pipe the text in"
                     flag(review, index, "data boundary: text goes in on stdin", what)
 

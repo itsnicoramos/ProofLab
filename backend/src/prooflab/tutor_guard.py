@@ -14,6 +14,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import shlex
 import sys
 from dataclasses import dataclass
 
@@ -41,7 +42,13 @@ _RECURSIVE_SEARCH = re.compile(
     r"\bgrep\s+(?:-[A-Za-z]*[rR][A-Za-z]*|--recursive)\b|(?:^|[\s;&|(])(?:rg|ag)\s|\bgit\s+grep\b"
 )
 _SAFE_SEARCH_ROOTS = ("content/lessons", ".claude/skills")
-_DESTRUCTIVE = re.compile(r"prooflab-tutor\b[^|;&]*\bmemory\s+(?:forget\b|plan\s+archive\b)")
+_TUTOR = re.compile(r"\bprooflab-tutor\b")
+_ASSIGNMENT = re.compile(
+    r"(?:^|(?<=[\s;&|(]))([A-Za-z_][A-Za-z0-9_]*)=(\"[^\"]*\"|'[^']*'|[^\s;&|]+)"
+)
+_BETWEEN_COMMANDS = re.compile(r"\|\||&&|[;\n|&]")
+GLOBAL_OPTIONS = ("--course", "--learner")
+TEXT_OPTIONS = ("--text", "--summary", "--idea")
 
 
 @dataclass(frozen=True)
@@ -62,6 +69,48 @@ def strip_heredocs(command: str) -> str:
     """The command without its here-document bodies: work and notes piped into the tools are
     data (they may say anything), so only the command line itself is judged."""
     return _HEREDOC.sub(" ", command)
+
+
+def tutor_calls(command: str) -> list[list[str]]:
+    """Every ``prooflab-tutor`` invocation in a shell command, as its arguments (the course
+    and learner options taken out).
+
+    Agents chain several in one call and often keep the long command line in a variable
+    (``T="uv run ... prooflab-tutor"; $T show x; $T memory show``), so a variable that holds
+    the tutor's command line counts as the tutor. Here-document bodies are not looked at.
+    """
+    line = strip_heredocs(command)
+    names = [name for name, value in _ASSIGNMENT.findall(line) if _TUTOR.search(value)]
+    line = _ASSIGNMENT.sub(lambda m: " " if m.group(1) in names else m.group(0), line)
+    for name in names:
+        line = re.sub(r"\$\{?" + re.escape(name) + r"\}?(?![A-Za-z0-9_])", "prooflab-tutor", line)
+    calls: list[list[str]] = []
+    for part in _BETWEEN_COMMANDS.split(line):
+        found = _TUTOR.search(part)
+        if found is None:
+            continue
+        rest = part[found.end() :]
+        try:
+            words = shlex.split(rest)
+        except ValueError:
+            words = rest.split()
+        args: list[str] = []
+        skip = False
+        for i, word in enumerate(words):
+            is_text = i > 0 and words[i - 1] in TEXT_OPTIONS  # a text option's own value
+            if skip:
+                skip = False
+            elif word in GLOBAL_OPTIONS and not is_text:
+                skip = True
+            elif is_text or not word.startswith(tuple(o + "=" for o in GLOBAL_OPTIONS)):
+                args.append(word)
+        if args:
+            calls.append(args)
+    return calls
+
+
+def _destructive(args: list[str]) -> bool:
+    return args[:2] == ["memory", "forget"] or args[:3] == ["memory", "plan", "archive"]
 
 
 def _inside_problems(path: str, cwd: str) -> bool:
@@ -121,7 +170,7 @@ def judge(
         return _deny(
             "exercises-through-tools", "A search across the repo reaches the exercise files." + hint
         )
-    if _DESTRUCTIVE.search(command):
+    if any(_destructive(args) for args in tutor_calls(str(tool_input.get("command") or ""))):
         reason = (
             "This deletes or archives what the tutor remembers. Run it only if the learner"
             " asked for exactly this, in their own words, in this conversation."

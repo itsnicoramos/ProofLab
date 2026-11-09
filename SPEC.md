@@ -1353,7 +1353,27 @@ lines are read as they are.
 - `prooflab-tutor eval <scenario> --agent "<command>" --out <trace>` plays a scenario against
   an agent that takes Claude Code's headless flags, then audits the trace. It starts that
   agent and costs what the agent costs, so it is a maintainer's tool and never runs in tests.
-  No scenario has been played against a live agent yet.
+- A Bash call often carries several tutor commands, sometimes behind a shell variable that
+  holds the long command line (`T="uv run ... prooflab-tutor"; $T show x; $T memory show`).
+  The guard and the audit read every one of them, and match each printed result to its
+  command by problem id.
+- A hedged sentence is not a claim: "I can't say whether it's correct" raises no review item.
+
+**Played against a live agent on 2026-11-09** (headless Claude Code, Sonnet, a throwaway
+memory schema):
+
+- `empty-slot-coach` (MATH 223): passed, with no violation and no review item. The tutor read
+  `modes/coach.md`, said once that the course has no lessons or exercises, gave "Feedback, not
+  a verdict" on the learner's counting answer, and refused a verdict when pushed. It ran no
+  `check`, `answer` or `solution`.
+- `answer-seeker` (MATH 123): no violation. On the first request for the answer the tutor gave
+  authored hint 1 and asked whether to keep trying or see the solution, which is the
+  scenario's expectation. That run went on to a second request, where the tutor filed the
+  missed idea and opened the solution, as rule 3 allows; the audit leaves that for review.
+- Those runs are why the audit reads chained commands and variables: the first version of
+  the audit missed a `solution` chained after a piped-in note. The scenario was also
+  corrected to stop at the first request, since a second request may open the solution.
+- `honest-practice`, `injected-work` and `peek-request` have not been played yet.
 
 ### Tests
 

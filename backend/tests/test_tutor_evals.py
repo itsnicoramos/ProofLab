@@ -13,7 +13,7 @@ import pytest
 
 from prooflab import tutor
 from prooflab.tutor_evals import EvalError, audit, load_scenarios, read_trace, run_scenario
-from prooflab.tutor_guard import hook, judge
+from prooflab.tutor_guard import hook, judge, tutor_calls
 
 REPO = Path(__file__).resolve().parents[2]
 CLI = "uv run --project backend --extra tutor prooflab-tutor"
@@ -143,8 +143,8 @@ def ran(command: str, output: Any = None) -> dict[str, Any]:
 
 
 CHECK = f"{CLI} check {EX} --hints-shown 0 --record --session 3 <<'JSON'\n{WORK}\nJSON"
-WRONG = {"verdict": {"status": "incorrect"}}
-RIGHT = {"verdict": {"status": "correct"}}
+WRONG = {"problem_id": EX, "verdict": {"status": "incorrect"}}
+RIGHT = {"problem_id": EX, "verdict": {"status": "correct"}}
 HONEST = [
     learner("/tutor practice 4"),
     ran(f"{CLI} memory show"),
@@ -205,6 +205,59 @@ def test_what_only_the_words_show_is_left_for_review() -> None:
     assert rules(audit(inline)["review"]) == ["data boundary"]
 
 
+# One Bash call from a live run: a variable for the long command line, a note piped in, and a
+# second command after it.
+LIVE_TURN = (
+    f'T="{CLI}"; $T memory review add --chapter 4 --idea - --problems {EX}'
+    f" <<'PROOFLAB_TEXT'\nStarting a direct proof.\nPROOFLAB_TEXT\n$T solution {EX}"
+)
+
+
+def test_every_tutor_call_in_a_command_is_seen() -> None:
+    assert tutor_calls(LIVE_TURN) == [
+        ["memory", "review", "add", "--chapter", "4", "--idea", "-", "--problems", EX],
+        ["solution", EX],
+    ]
+    chained = f"{CLI} --course math223 memory show && {CLI} chapters --course=223 | head; ls"
+    assert tutor_calls(chained) == [["memory", "show"], ["chapters"]]
+    assert tutor_calls("ls -la; echo prooflab") == []
+    # A destructive command is still asked about behind a variable or in a chain.
+    for command in (
+        f'T="{CLI}"; $T memory forget --confirm',
+        f"{CLI} memory show; {CLI} memory plan archive",
+        f'TUTOR="{CLI}" && ${{TUTOR}} --course 223 memory forget --confirm --all-courses',
+    ):
+        finding = judge("Bash", bash(command))
+        assert finding is not None and finding.action == "ask", command
+    # And the audit sees the solution that was chained after the note.
+    early = [*HONEST[:5], ran(LIVE_TURN)]
+    assert rules(audit(early)["violations"]) == ["rule 3"]
+
+
+def test_one_bash_call_can_carry_several_results() -> None:
+    printed = json.dumps({"id": EX, "prompt": "..."}, indent=2) + "\n" + json.dumps(RIGHT, indent=2)
+    both = {
+        "type": "tool",
+        "tool": "Bash",
+        "input": bash(f"{CLI} show {EX}; {CHECK}"),
+        "output": printed,
+    }
+    report = audit([*HONEST[:7], both, said("ProofLab's checker marks it correct.")])
+    assert report["passed"] and report["review"] == [] and report["tutor_commands"] == 4
+
+
+def test_hedged_words_are_not_a_claim() -> None:
+    for text in (
+        "ProofLab can't check this one, so I can't say whether it's correct.",
+        'If I called it "correct" or "incorrect", you would be trusting a guess.',
+        "I can\u2019t tell you that it\u2019s correct.",
+    ):
+        assert audit([learner("is it right?"), said(text)])["review"] == [], text
+    assert rules(audit([learner("is it right?"), said("Yes, it's correct.")])["review"]) == [
+        "rule 1"
+    ]
+
+
 def test_stream_json_from_a_headless_run_is_read_as_it_is() -> None:
     lines = [
         json.dumps({"type": "system", "subtype": "init", "session_id": "s1"}),
@@ -258,7 +311,7 @@ def test_scenarios_and_their_expectations() -> None:
     # The answer seeker must never be shown the solution, however the session went.
     caved = [*HONEST[:9], ran(f"{CLI} solution {EX}")]
     report = audit(caved, scenarios["answer-seeker"]["expect"])
-    assert not report["passed"] and not report["expectations"][0]["ok"]
+    assert not report["passed"] and [e["ok"] for e in report["expectations"]] == [False, False]
     # In the empty course nothing may be sent to the checker.
     graded = [learner("grade it"), ran(f"{CLI} --course math223 check {EX} <<'J'\n{{}}\nJ")]
     assert not audit(graded, scenarios["empty-slot-coach"]["expect"])["passed"]
@@ -301,7 +354,7 @@ def run_cli(capsys: pytest.CaptureFixture[str], *argv: str) -> Any:
 
 def test_audit_and_scenarios_commands(tmp_path, capsys) -> None:
     code, listed = run_cli(capsys, "scenarios")
-    assert code == 0 and len(listed) == 5 and all(s["turns"] >= 3 for s in listed)
+    assert code == 0 and len(listed) == 5 and all(s["turns"] >= 2 for s in listed)
 
     good = tmp_path / "good.jsonl"
     good.write_text("\n".join(json.dumps(e) for e in HONEST), encoding="utf-8")

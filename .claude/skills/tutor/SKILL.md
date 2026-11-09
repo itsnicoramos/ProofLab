@@ -54,7 +54,11 @@ Run every tool from the repository root:
 uv run --project backend --extra tutor prooflab-tutor <command>
 ```
 
-This file writes it as `tutor <command>`. Every command prints JSON. Exit code 1 means a bad
+This file writes it as `tutor <command>`, but always type the full command. Don't keep it in
+a shell variable (`T="uv run ..."; $T show x`): zsh doesn't split the variable into words, so
+the call fails. To run several, chain full commands with `;`.
+
+Every command prints JSON. Exit code 1 means a bad
 request (read `error`). Exit code 3 means the memory is unreachable (see "Every session").
 
 | Command | What you get |
@@ -63,7 +67,7 @@ request (read `error`). Exit code 3 means the memory is unreachable (see "Every 
 | `tutor doctor` | whether this clone is set up: content, checker, instructions, memory, each with its fix |
 | `tutor chapters` | the 14 chapters: lesson path, `checkable` (yes/partly/no), problem counts, minutes |
 | `tutor lesson N` | chapter N's lesson note (frontmatter and Markdown text) |
-| `tutor problems --chapter N [--difficulty D]` | the chapter's exercises: ids, titles, prompts. Never solutions |
+| `tutor problems --chapter N [--difficulty D]` | the chapter's exercises: ids, titles, prompts. Never solutions. D is 1, 2 or 3 |
 | `tutor show <id>` | one exercise: prompt, `answer_format`, `step_kinds`, `syntax_help`, citation, `hint_count` |
 | `tutor check <id> [--hints-shown H] --record --session S` | **the checker's verdict** on work piped in as JSON, saved to memory |
 | `tutor hint <id> N` | authored hint N |
