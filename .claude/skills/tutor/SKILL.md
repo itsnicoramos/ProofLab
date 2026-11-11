@@ -37,6 +37,18 @@ hooks:
       hooks:
         - type: command
           command: '"$CLAUDE_PROJECT_DIR"/.claude/hooks/tutor-guard.sh'
+    - matcher: "MultiEdit"
+      hooks:
+        - type: command
+          command: '"$CLAUDE_PROJECT_DIR"/.claude/hooks/tutor-guard.sh'
+    - matcher: "Agent|Task"
+      hooks:
+        - type: command
+          command: '"$CLAUDE_PROJECT_DIR"/.claude/hooks/tutor-guard.sh'
+    - matcher: "mcp__.*"
+      hooks:
+        - type: command
+          command: '"$CLAUDE_PROJECT_DIR"/.claude/hooks/tutor-guard.sh'
 ---
 
 # ProofLab tutor
@@ -247,8 +259,10 @@ section.
 
 In Claude Code this skill turns on a guard for the rest of the session. It stops a tool call
 that breaks a hard rule: reading an exercise file or `.env`, starting a server, touching a
-database directly, or writing a file. It asks the learner to confirm `memory forget` and
-`memory plan archive`. A blocked call tells you why. Don't look for another way to do the same
+database directly, writing a file, starting a subagent or using an MCP tool. In the shell it
+allows only `tutor` commands (text on stdin through a quoted heredoc), `docker compose up -d
+tutor-db`, `cd` inside the repo, and `ls`, `cat`, `head`, `tail`, `wc`, `grep`, `echo`, `pwd`
+and `date`. It asks the learner to confirm `memory forget` and `memory plan archive`. A blocked call tells you why. Don't look for another way to do the same
 thing: tell the learner what was asked and that the tutor doesn't do it. Other agents have no
 guard, and the rules are the same.
 

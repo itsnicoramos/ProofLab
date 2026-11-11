@@ -1318,18 +1318,40 @@ rule a tool call breaks:
 | Rule | Stops |
 |---|---|
 | `exercises-through-tools` | reading or searching the exercise files (rule 5) |
-| `no-credentials` | reading `.env` or printing the database password |
-| `stay-local` | the API server, the website, `sqlite3`, `psql`, `docker exec` (rule 7) |
-| `no-writes` | the Write and Edit tools (rule 7) |
+| `no-credentials` | reading `.env`, printing the environment or the database password |
+| `stay-local` | the API server, the website, `sqlite3`, `psql`, `psycopg`, `docker exec` (rule 7) |
+| `no-writes` | the Write, Edit, MultiEdit and NotebookEdit tools (rule 7) |
+| `tutor-commands-only` | any shell command outside the allowlist below, redirects, subshells, `prooflab-tutor eval` and `audit` |
+| `text-on-stdin` | `$`, backticks, braces, here-strings and unquoted heredocs on a command line, and a heredoc fed to anything but `prooflab-tutor` |
+| `tutor-tools-only` | subagents (Agent, Task) and MCP tools |
 | `confirm-destructive` | `memory forget` and `memory plan archive`, unless the learner confirms |
+
+The shell rule is an **allowlist**. A Bash call is split into simple commands, and each one
+must be:
+- `prooflab-tutor` (bare, `backend/.venv/bin/prooflab-tutor`, or behind `uv run` with only
+  `--project backend`, `--extra`, `-q`, `--frozen`, `--locked`, `--offline`, `--no-sync`);
+- `docker compose up -d [tutor-db]`, `docker compose start tutor-db` or `docker compose ps`;
+- `cd` to a folder inside the repository;
+- `ls`, `pwd`, `cat`, `head`, `tail`, `wc`, `grep`, `echo`, `date` or `true`. A recursive
+  `grep` may only search the lesson notes or `.claude/skills`.
+
+Output may go to `/dev/null` and `2>&1`, and nothing else. A variable that holds the tutor's
+command line (`T="uv run ... prooflab-tutor"; $T show x`) is judged as what it runs.
+
+Paths are judged by where they lead: each word on the command line, and the path of a Read or
+Grep, is resolved with links followed and case folded (macOS file names ignore case), and
+globs are expanded first. A Grep that reaches the exercise files is allowed only when it is
+limited to one other file type (`glob: "*.md"` or a `type` other than `json`).
 
 - **In Claude Code** the skill's frontmatter registers `.claude/hooks/tutor-guard.sh` as a
   `PreToolUse` hook. It is active from the moment `/tutor` is used until the session ends. A
   denied call is blocked with its reason, and a destructive one makes Claude Code ask the
   learner. To work on the code afterwards, start a new session.
-- Text piped into the tools (work, notes) is data and is never judged.
-- The checks are narrow on purpose, so a lesson is never blocked by a guess. They are a floor
-  under the rules of §20, not a replacement.
+- Text piped into the tools (work, notes) through a quoted heredoc is data and is never judged.
+- The guard fails closed: if it crashes on a call, the call is blocked (`guard-error`). With
+  no Python at all there is no guard, and the rules of §20 still apply.
+- The guard is a floor under the rules of §20, not a replacement, and not a sandbox: the
+  host's permission mode is still the outer boundary.
 - Other agents have no hook. For them the rules are instructions, and the audit below is the
   check.
 - Checked on 2026-11-09 in a headless Claude Code session: after the skill was invoked, a
