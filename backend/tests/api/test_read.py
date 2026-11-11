@@ -47,6 +47,22 @@ def test_read_endpoint_text(client):
     assert body["text"] == "a = 1\nb = 2" and len(body["lines"]) == 2
 
 
+def test_read_endpoint_keeps_the_limit_without_a_length(client):
+    # A chunked upload has no Content-Length, so the limit has to hold while the body is read.
+    def chunks():
+        for _ in range(16):
+            yield b"x" * (1024 * 1024)
+
+    r = client.post("/read", content=chunks(), headers={"content-type": "text/plain"})
+    assert r.status_code == 413 and "15 MB" in r.json()["detail"]
+
+
+def test_read_endpoint_refuses_a_bad_length(client):
+    headers = {"content-type": "text/plain", "content-length": "lots"}
+    r = client.post("/read", content=b"a = 1\n", headers=headers)
+    assert r.status_code == 400
+
+
 def test_capabilities_endpoint(client):
     caps = client.get("/read").json()
     assert caps == capabilities() and caps["text"] is True

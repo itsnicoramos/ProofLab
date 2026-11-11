@@ -460,10 +460,21 @@ async def read_upload(request: Request) -> ReadOut:
     Send the file bytes as the body. Optional ``X-Filename`` header helps with documents.
     The text is for the student to review; nothing here decides right or wrong.
     """
-    length = int(request.headers.get("content-length") or 0)
+    too_big = HTTPException(status_code=413, detail="That file is too big (the limit is 15 MB).")
+    try:
+        length = int(request.headers.get("content-length") or 0)
+    except ValueError:
+        detail = "The Content-Length header isn't a number."
+        raise HTTPException(status_code=400, detail=detail) from None
     if length > MAX_BYTES:
-        raise HTTPException(status_code=413, detail="That file is too big (the limit is 15 MB).")
-    data = await request.body()
+        raise too_big
+    # The header is only a claim (a chunked upload has none), so the limit is kept while reading.
+    body = bytearray()
+    async for chunk in request.stream():
+        body += chunk
+        if len(body) > MAX_BYTES:
+            raise too_big
+    data = bytes(body)
     try:
         result = await run_in_threadpool(
             read_document,
