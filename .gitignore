@@ -31,6 +31,8 @@ next-env.d.ts
 
 # The repo tutor (SPEC §20): the readable export of your tutor memory stays yours.
 LEARNING.md
+# prooflab-agent's event logs (SPEC §23)
+logs/
 # Claude Code runtime files (the tutor skill in .claude/skills/ is tracked)
 .claude/scheduled_tasks.lock
 .claude/settings.local.json

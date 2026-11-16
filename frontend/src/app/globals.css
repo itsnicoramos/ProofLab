@@ -2,6 +2,7 @@
 
 /* ProofLab design tokens. Light by default, dark via the system setting. */
 :root {
+  color-scheme: light dark;
   --bg: #f6f6f3;
   --surface: #ffffff;
   --surface-2: #fbfbf9;
@@ -17,7 +18,7 @@
   --warn-soft: #fcf1de;
   --bad: #b42318;
   --bad-soft: #fdebe9;
-  --idle: #6f706a;
+  --idle: #62635d;
   --idle-soft: #efefea;
 }
 
@@ -64,6 +65,16 @@
   --font-sans: var(--font-geist-sans);
   --font-serif: var(--font-source-serif);
   --font-mono: var(--font-geist-mono);
+  /* Commands and typed text: between text-xs and text-sm, so long commands fit a phone. */
+  --text-code: 0.8125rem;
+  --text-code--line-height: 1.25rem;
+  /* The wordmark beside the Σ. */
+  --text-brand: 1.0625rem;
+}
+
+/* Focus never lands under the sticky header and replay bar (WCAG 2.4.11). */
+html {
+  scroll-padding-top: 8rem;
 }
 
 body {
@@ -76,7 +87,7 @@ body {
   h1,
   h2,
   h3 {
-    font-family: var(--font-source-serif);
+    font-family: var(--font-serif);
     font-weight: 600;
     letter-spacing: -0.01em;
   }
@@ -98,8 +109,38 @@ body {
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
-    border-radius: 4px;
   }
+}
+
+/* The page's few building blocks, so every card, button and command looks the same. */
+@layer components {
+  .card {
+    @apply rounded-lg border border-line bg-surface px-4 py-3;
+  }
+  .btn {
+    @apply inline-flex h-11 shrink-0 items-center justify-center rounded-lg px-4 text-sm font-semibold disabled:opacity-50 aria-disabled:opacity-50;
+  }
+  /* DESIGN.md: one accent button per view, for the primary action. */
+  .btn-primary {
+    @apply bg-accent text-accent-ink;
+  }
+  .btn-secondary {
+    @apply border border-line bg-surface;
+  }
+  /* A command to copy: mono on the idle tint, wrapping instead of scrolling. */
+  .cmd {
+    @apply min-w-0 flex-1 rounded-md bg-idle-soft px-3 py-2.5 font-mono text-code break-words;
+  }
+  /* Links are underlined, so colour is never the only cue (WCAG 1.4.1). */
+  .link {
+    @apply text-accent underline underline-offset-2 hover:decoration-2;
+  }
+}
+
+.code-inline,
+.rich code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
 }
 
 /* Rendered text: tutor lines and checker messages. */
@@ -119,11 +160,9 @@ body {
   padding-left: 1.25rem;
 }
 .rich code {
-  font-family: var(--font-geist-mono);
-  font-size: 0.9em;
   background: var(--idle-soft);
   padding: 0.05em 0.3em;
-  border-radius: 0.25rem;
+  @apply rounded-sm;
 }
 .rich .katex-display {
   margin: 0.6rem 0;

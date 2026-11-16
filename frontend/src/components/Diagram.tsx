@@ -1,30 +1,14 @@
+import { FlowArrow as Arrow, FlowCard } from "@/components/Flow";
 import type { Piece } from "@/lib/replay";
 import { PIECE_ORDER, PIECES } from "@/lib/site";
 
-/** One piece of the tutor. The checker gets the ink border: it is the only judge. */
+/** One piece of the tutor. */
 function Node({ piece }: { piece: Piece }) {
   const info = PIECES[piece];
-  const judge = piece === "checker";
   return (
-    <div
-      className={`h-full rounded-lg border bg-surface px-4 py-3 ${judge ? "border-ink" : "border-line"}`}
-    >
-      <p className="font-semibold">{info.name}</p>
-      {info.where && <p className="mt-0.5 break-words font-mono text-xs text-muted">{info.where}</p>}
-      <p className="mt-2 text-sm text-muted">{info.text}</p>
-    </div>
-  );
-}
-
-/** A labelled arrow between rows. The label names both ends, so it reads right at any width. */
-function Arrow({ text }: { text: string }) {
-  return (
-    <p className="flex items-center gap-2 py-2 pl-4 text-sm text-muted">
-      <span aria-hidden className="text-base text-ink">
-        ↓
-      </span>
-      {text}
-    </p>
+    <FlowCard title={info.name} where={info.where} judge={piece === "checker"}>
+      {info.text}
+    </FlowCard>
   );
 }
 
@@ -62,7 +46,7 @@ export function Diagram() {
 /** The replay's side panel: which pieces the current step uses ("you are here"). */
 export function PieceTrail({ active }: { active: Piece[] }) {
   return (
-    <div className="rounded-lg border border-line bg-surface p-4">
+    <div className="card">
       <p className="text-sm font-semibold">Working in this step</p>
       <ol className="mt-3 space-y-1.5">
         {PIECE_ORDER.map((id) => {

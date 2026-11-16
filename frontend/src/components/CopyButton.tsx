@@ -1,9 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+/** A command (or prompt) to copy, with its Copy button beside it. */
+export function CommandRow({ text, label, what }: { text: string; label: string; what?: string }) {
+  return (
+    <div className="mt-2 flex items-start gap-2">
+      <code className="cmd">{text}</code>
+      <CopyButton text={text} label={label} what={what} />
+    </div>
+  );
+}
+
+const WORD ={ idle: "Copy", copied: "Copied", failed: "Select and copy" } as const;
 
 /** Copies one command (or, with `what`, something else). Says "Copied" for a moment, and
- * tells screen readers too. */
+ * tells screen readers through a status region beside the button. */
 export function CopyButton({
   text,
   label,
@@ -13,7 +25,9 @@ export function CopyButton({
   label: string;
   what?: string;
 }) {
-  const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
+  const [state, setState] = useState<keyof typeof WORD>("idle");
+  const timer = useRef<number | undefined>(undefined);
+  useEffect(() => () => window.clearTimeout(timer.current), []);
 
   async function copy() {
     try {
@@ -22,19 +36,23 @@ export function CopyButton({
     } catch {
       setState("failed");
     }
-    window.setTimeout(() => setState("idle"), 2000);
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setState("idle"), 2000);
   }
 
   return (
-    <button
-      type="button"
-      onClick={copy}
-      aria-label={`Copy ${what}: ${label}`}
-      className="h-11 shrink-0 rounded-lg border border-line bg-surface px-3 text-sm font-semibold"
-    >
-      <span aria-live="polite">
-        {state === "copied" ? "Copied" : state === "failed" ? "Select and copy" : "Copy"}
+    <>
+      <button
+        type="button"
+        onClick={copy}
+        aria-label={`Copy ${what}: ${label}`}
+        className="btn btn-secondary"
+      >
+        {WORD[state]}
+      </button>
+      <span role="status" className="sr-only">
+        {state === "idle" ? "" : WORD[state]}
       </span>
-    </button>
+    </>
   );
 }

@@ -15,9 +15,12 @@ dependencies = [
 [project.optional-dependencies]
 # The repo tutor's memory in Postgres (SPEC §20): uv sync --extra tutor
 tutor = ["psycopg[binary]>=3.2"]
+# ProofLab's own agent, prooflab-agent (SPEC §23): uv sync --extra agent
+agent = ["anthropic>=2.9.0"]
 
 [project.scripts]
 prooflab-tutor = "prooflab.tutor:main"
+prooflab-agent = "prooflab.agent:main"
 
 [dependency-groups]
 dev = [

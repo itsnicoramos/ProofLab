@@ -48,14 +48,33 @@ One column, in this order. Each section has a serif heading over a hairline rule
 - **Set it up:** first one card for someone who has never used a terminal. It says to ask any
   AI assistant they like to walk them through the setup, and holds a prompt in mono on the
   idle tint with its own **Copy** button. Then numbered cards with the command in mono on the
-  idle tint and a bordered **Copy** button. "Which agents work" is three cards (never a wide table, so nothing scrolls
-  sideways on a phone).
+  idle tint and a bordered **Copy** button.
+- **How to use the skill:** three agent cards (Claude Code, Codex, other agents), each a list of
+  what to say: start, next lesson, practise, quiz. Never a wide table, so nothing scrolls
+  sideways on a phone. Then two cards: what a session looks like, and the `doctor` command
+  with **Copy**.
+- **Now building:** the visual of ProofLab's own agent, the README's flowchart drawn like the
+  first diagram, with bordered cards and labelled arrows:
+  - learner, then runtime beside the model (↕), guard, `prooflab-tutor`, then checker beside
+    memory;
+  - the runtime card holds the loop's three stages as mono chips on the idle tint;
+  - the checker keeps the ink border.
+
+  Then the four parts (model, tools, loop, controls) as cards, a **Run it** card with the
+  command and **Copy**, and the milestones as numbered cards. The milestone being built next
+  gets the accent ring ("you are here" on the roadmap). Done and Planned are plain text, never
+  status colours, because status colours are for verdicts.
 
 ## Navigation
 
 - One sticky bar, solid (no blur): the Σ mark and name, then from `md` the section links (How it
-  works, Session, Rules, Set up), and **GitHub** as a bordered button. Below `md` the section
-  links give way to a single **Set up** link. A one-page site needs no menu.
+  works, Session, Rules, Set up, Use it, Now building), and **GitHub** as a bordered button. Below `md` the section
+  links give way to a single **Set up** link, and the hero ends with an "On this page" list of
+  the same links (one list, `SECTIONS` in `site.ts`). A one-page site needs no menu.
+- A **Skip to content** link is the first thing Tab reaches.
+- Links in text are underlined, so colour is never the only cue.
+- Cards, buttons and copyable commands use the shared `.card`, `.btn` and `.cmd` classes in
+  `globals.css`, and commands use the `text-code` size, never a one-off value.
 - The footer contains the MIT line and source link.
 - Every link and button is at least 44 px tall, including the footer's and the rule links.
 

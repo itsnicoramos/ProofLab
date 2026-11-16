@@ -1188,6 +1188,18 @@ One page, `/`, prerendered at build time. It calls no API and stores nothing.
   terminal: it says to ask any AI assistant they like to walk them through the setup one step
   at a time, with a prompt to copy (`HELP_PROMPT` in `frontend/src/lib/site.ts`). The page
   names no assistant.
+- **How to use the skill:** what to say to Claude Code, Codex or another agent to start, get
+  the next lesson, practise a chapter and take a quiz or mock test. Also what a session looks
+  like, and the `doctor` command with a copy button. (Added 2026-11-16; these agent cards used
+  to sit at the end of Set it up.)
+- **Now building** (added 2026-11-16): the visual representation of ProofLab's own agent
+  (§23).
+  - The README's flowchart drawn as labelled cards (`AgentFlow` in
+    `frontend/src/components/AgentFlow.tsx`).
+  - The four parts (model, tools, loop, controls).
+  - The command to run it.
+  - The seven roadmap milestones (`MILESTONES` in `site.ts`), with the one being built next
+    marked by the accent ring.
 
 ### Real output only
 
@@ -1225,7 +1237,9 @@ Re-capture after changing the checker, Chapter 4's content or the CLI's output:
   - no machine paths, and no em or en dashes in page text;
   - no page text or rendered output names the book, its author or a page citation;
   - the setup section has the card for people new to the terminal, and its prompt names the
-    repository and asks for one step at a time.
+    repository and asks for one step at a time;
+  - the page has the How to use the skill and Now building sections, the flowchart, the four
+    agent parts in order, milestones 1 to 7, and exactly one marked as next.
 - `backend/tests/test_tutor_replay.py` re-runs the replay's `show`, `lesson` and `check`
   commands and requires the same output, so the page can't drift from the CLI. It is skipped
   where the frontend isn't checked out (the backend Docker image).
@@ -1451,3 +1465,94 @@ unless the learner's agent runs a local model.
 - `tests/test_tutor_evals.py`: denied and allowed tool calls, the hook's protocol and script,
   an honest session, each violation and review item, stream-json, scenarios, a scenario
   played against a stand-in agent, `audit`, `scenarios` and `doctor`.
+
+## 23. prooflab-agent: ProofLab's own agent
+
+Decided with the user on 2026-11-16 (milestone 4 of the roadmap, `docs/agent-harness-plan.md`).
+Besides running inside someone else's coding agent (§20), ProofLab ships its own agent: a
+Python program that owns the loop, so the harness, not the model, decides what happens next.
+
+```bash
+uv run --project backend --extra tutor --extra agent prooflab-agent run
+```
+
+Options: `--model` (default `claude-opus-5-5`), `--max-steps` (default 12, at most 50),
+`--course`. It needs an Anthropic credential (an `ANTHROPIC_API_KEY`, or a profile from
+`ant auth login`). `PROOFLAB_AGENT_LOG_DIR` moves the logs (default `<repo>/logs/`, ignored by
+git).
+
+An agent is four parts, one module each in `backend/src/prooflab/agent/`:
+
+- **Model** (`model.py`): Claude through the Anthropic SDK (`agent` extra), behind a one-method
+  interface, `complete(system, messages, tools)`, so tests use a scripted model. It sends
+  server-side refusal fallbacks (`fallbacks: "default"`). The model translates and teaches and
+  never grades. A short system prompt restates the rules of §20.
+- **Tools** (`tools.py`): nine typed tools, each one `prooflab-tutor` command run in a child
+  process. Arguments are checked with Pydantic before anything runs (exercise ids must start
+  with a letter, so nothing reaches the command line as an option). Learner text, meaning
+  proof steps and notes, goes on stdin, never on the command line. Output is capped at 12,000
+  characters, and each call gets 60 seconds.
+
+  | Tool | Command | Risk |
+  |---|---|---|
+  | `list_chapters`, `read_lesson`, `list_problems`, `show_problem`, `get_hint`, `show_memory` | `chapters`, `lesson`, `problems`, `show`, `hint`, `memory show` | read |
+  | `check_work` | `check` (not recorded to memory) | read |
+  | `remember_note` | `memory note add` | write |
+  | `show_solution` | `solution` | destructive |
+
+  There is no tool to delete or archive memory. That stays a command the learner runs.
+- **Loop** (`loop.py`): one learner turn is `for step in range(1, max_steps + 1)`, never
+  `while True`. It stops when:
+  - the model answers with no tool call (`end_turn`);
+  - it has made `max_steps` model calls (`step_limit`);
+  - three rounds in a row had every tool call fail or be refused (`too_many_errors`);
+  - the model call fails (`model_error`; on the first step the learner's message is dropped, so
+    they can say it again);
+  - the reply ends another way (`refusal`, `max_tokens`).
+
+  A reply cut off mid-call still gets an error result for every call, so the conversation stays
+  valid.
+- **Controls** (`loop.py` with `controls.py`). Each tool call goes through these steps in order:
+  1. The arguments are checked.
+  2. The tutor guard (§22) judges the exact command. A deny is final: no prompt is shown, and a
+     yes can't override it. If the guard asks for a go-ahead, the call is treated as
+     destructive.
+  3. The learner approves. Reads run freely. A write asks `[y/N]` (the default is no). A
+     destructive call needs a typed `yes`. With no terminal (a pipe, CI) only reads run, and a
+     closed input counts as no.
+  4. The command runs inside `try/except Exception`.
+
+  A failure comes back to the model as a `tool_result` with `is_error: true` and a short
+  message it can act on: a bad field and why (never its value), a guard rule, a refusal, a CLI
+  error's JSON, or `ToolError: <type>: <message>`. The harness never crashes on a tool, and
+  Ctrl-C (`KeyboardInterrupt`) is not caught.
+
+### The event log
+
+One JSON object per line, flushed as it happens: `run_id`, `ts`, `event`, and per event
+`step`, `tool`, `args_sha` (16 hex characters of a SHA-256 of the arguments), `risk`, `rule`,
+`stop_reason`, `error_kind`. The events are `run_start`, `llm_call`, `tool_requested`,
+`guard_denied`, `human_denied`, `human_approved`, `tool_ok`, `tool_error`, `model_error`,
+`run_stopped` and `run_end`. No argument value, proof text or credential is ever logged.
+Saving these events to Postgres (`agent_events`) is milestone 3.
+
+### Tests
+
+`backend/tests/test_agent.py` uses a scripted model, with no network and no API key:
+- the step limit;
+- an answer ending the turn;
+- a raising tool returned as an error;
+- bad arguments and unknown tools;
+- three failed rounds stopping the turn;
+- Ctrl-C passing through;
+- a failed model call;
+- a cut-off reply;
+- y/N for writes and a typed yes for the solution;
+- no terminal, and closed input;
+- a guard deny beating a yes, and a guard ask raising the bar;
+- the real guard allowing every tool;
+- JSON log lines with no proof text;
+- learner text on stdin;
+- the real CLI's success and error output.
+
+No test calls the model API. A live session costs money and is run by hand.

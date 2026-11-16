@@ -14,7 +14,7 @@ import {
   type ReplayStep,
   type TutorStep,
 } from "./replay.ts";
-import { GITHUB_URL, HELP_PROMPT, RULES } from "./site.ts";
+import { AGENT_PARTS, GITHUB_URL, HELP_PROMPT, MILESTONES, RULES } from "./site.ts";
 
 const SRC = join(import.meta.dirname, "..");
 const read = (path: string) => readFileSync(join(SRC, path), "utf8");
@@ -177,5 +177,23 @@ test("the setup section gives people new to the terminal a way in", () => {
   const page = read("app/page.tsx");
   assert.match(page, /Never used a terminal\?/);
   assert.match(page, /Ask any AI assistant you like/);
-  assert.match(page, /<CopyButton text=\{HELP_PROMPT\}/);
+  assert.match(page, /<CommandRow text=\{HELP_PROMPT\}/);
+});
+
+// The skill gets its own section, and "Now building" shows the agent itself (SPEC §21, §23):
+// the flowchart, its four parts, and the roadmap with exactly one milestone being built next.
+test("the page shows how to use the skill and what is being built", () => {
+  const page = read("app/page.tsx");
+  assert.match(page, /<Section id="use" title="How to use the skill">/);
+  assert.match(page, /<Section id="building" title="Now building">/);
+  assert.match(page, /<AgentFlow \/>/);
+  assert.deepEqual(
+    AGENT_PARTS.map((p) => p.name),
+    ["Model", "Tools", "Loop", "Controls"],
+  );
+  assert.deepEqual(
+    MILESTONES.map((m) => m.n),
+    [1, 2, 3, 4, 5, 6, 7],
+  );
+  assert.equal(MILESTONES.filter((m) => m.status === "next").length, 1);
 });

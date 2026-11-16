@@ -1,7 +1,7 @@
 # ProofLab as a Linux, macOS and Windows agent harness: architecture plan
 
-Status (2026-11-16): milestone 1 (macOS and Linux foundations) is done. Milestones 2 to 7 are
-planned, with Windows last.
+Status (2026-11-16): milestones 1 (macOS and Linux foundations) and 4 (the agent runtime,
+`prooflab-agent`, SPEC §23) are done. The others are planned, with Windows last.
 The README's [Roadmap](../README.md#roadmap-prooflab-as-an-agent-harness) has the summary.
 
 ## Context

@@ -8,7 +8,7 @@ export default function ErrorPage({ reset }: { error: Error & { digest?: string 
       <button
         type="button"
         onClick={reset}
-        className="h-11 rounded-lg bg-accent px-4 text-sm font-semibold text-accent-ink"
+        className="btn btn-primary"
       >
         Try again
       </button>

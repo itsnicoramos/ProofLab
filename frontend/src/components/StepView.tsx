@@ -37,13 +37,13 @@ function Body({ step }: { step: ReplayStep }) {
   switch (step.kind) {
     case "learner":
       return (
-        <p className="rounded-lg border border-line bg-surface px-4 py-3 font-mono text-sm whitespace-pre-wrap break-words">
+        <p className="card font-mono text-sm whitespace-pre-wrap break-words">
           {step.text}
         </p>
       );
     case "tutor":
       return (
-        <div className="space-y-3 rounded-lg border border-line bg-surface px-4 py-3">
+        <div className="card space-y-3">
           <Rich text={step.text} />
           {step.proposal && (
             <ol className="space-y-1 rounded-md border border-line bg-surface-2 p-2">
@@ -63,7 +63,7 @@ function Body({ step }: { step: ReplayStep }) {
     case "read":
       return (
         <div className="space-y-2 rounded-lg bg-idle-soft px-4 py-3 text-sm">
-          <ul className="space-y-0.5 font-mono text-[13px] break-words">
+          <ul className="space-y-0.5 font-mono text-code break-words">
             {step.files.map((f) => (
               <li key={f}>{f}</li>
             ))}
@@ -80,13 +80,13 @@ function RunBody({ step }: { step: RunStep }) {
   return (
     <div className="space-y-3 rounded-lg bg-idle-soft px-4 py-3 text-sm">
       <div className="flex flex-wrap items-start justify-between gap-2">
-        <code className="min-w-0 flex-1 font-mono text-[13px] break-words">
+        <code className="min-w-0 flex-1 font-mono text-code break-words">
           <span aria-hidden className="text-muted">
             ${" "}
           </span>
           {command(step)}
         </code>
-        <span className="shrink-0 rounded border border-line bg-surface px-2 py-0.5 text-xs text-muted">
+        <span className="shrink-0 rounded-md border border-line bg-surface px-2 py-0.5 text-xs text-muted">
           {TOUCHES[step.touches]}
         </span>
       </div>
@@ -103,7 +103,11 @@ function Output({ label, text }: { label: string; text: string }) {
   return (
     <details className="group rounded-md border border-line bg-surface">
       <summary className="flex min-h-11 items-center px-3 text-sm text-ink">{label}</summary>
-      <pre className="max-h-80 overflow-auto border-t border-line px-3 py-2 font-mono text-xs whitespace-pre-wrap break-words">
+      <pre
+        tabIndex={0}
+        role="region"
+        aria-label={label}
+        className="max-h-80 overflow-auto border-t border-line px-3 py-2 font-mono text-xs whitespace-pre-wrap break-words">
         {text}
       </pre>
     </details>
@@ -135,7 +139,7 @@ function VerdictView({ output }: { output: CheckOutput }) {
     <div className="rounded-lg border border-line bg-surface">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-2">
         <p className="font-semibold">ProofLab&apos;s checker</p>
-        <p className={`rounded px-2 py-0.5 text-sm font-semibold ${overall.tone}`}>{overall.word}</p>
+        <p className={`rounded-md px-2 py-0.5 text-sm font-semibold ${overall.tone}`}>{overall.word}</p>
       </div>
       <ol className="divide-y divide-line">
         {verdict.steps.map((s) => {
@@ -146,19 +150,26 @@ function VerdictView({ output }: { output: CheckOutput }) {
               <div className="grid grid-cols-[1.25rem_4rem_minmax(0,1fr)] items-baseline gap-2 sm:grid-cols-[1.25rem_4.5rem_minmax(0,1fr)_auto]">
                 <span className="text-right text-muted tabular-nums">{s.index + 1}</span>
                 <span className="font-mono text-xs text-muted">{s.kind}</span>
-                <span className="min-w-0 overflow-x-auto">
+                <span
+                  tabIndex={0}
+                  role="group"
+                  aria-label={`Step ${s.index + 1} as the checker read it`}
+                  className="min-w-0 overflow-x-auto"
+                >
                   {s.latex ? <Tex latex={s.latex} /> : <span className="text-muted">none</span>}
                 </span>
                 <span className={`col-start-3 text-sm font-semibold sm:col-start-auto ${status.tone}`}>
                   {status.word}
                 </span>
+                {note && (
+                  <p
+                    className={`col-span-full text-sm sm:col-span-2 sm:col-start-3 ${s.status === "error" ? "text-bad" : "text-muted"}`}
+                  >
+                    <Rich text={note} inline />
+                    {s.code && <code className="ml-2 font-mono text-xs">{s.code}</code>}
+                  </p>
+                )}
               </div>
-              {note && (
-                <p className={`mt-1 text-sm sm:pl-[6.75rem] ${s.status === "error" ? "text-bad" : "text-muted"}`}>
-                  <Rich text={note} inline />
-                  {s.code && <code className="ml-2 font-mono text-xs">{s.code}</code>}
-                </p>
-              )}
             </li>
           );
         })}
@@ -190,7 +201,7 @@ function RuleLinks({ rules }: { rules: number[] }) {
       {rules.map((n) => {
         const rule = RULES.find((r) => r.n === n);
         return (
-          <a key={n} href={`#rule-${n}`} className="inline-flex min-h-11 items-center text-accent hover:underline">
+          <a key={n} href={`#rule-${n}`} className="link inline-flex min-h-11 items-center">
             Rule {n}{rule ? `: ${rule.title}` : ""}
           </a>
         );

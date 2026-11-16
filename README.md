@@ -99,7 +99,7 @@ behind a Python entry point that every platform runs the same way.
 | 1 | **macOS and Linux foundations:** `scripts/setup.sh`, `scripts/ci.sh`, a guard that fails closed, a portable Python lookup, and GitHub Actions on Ubuntu (with Postgres) and macOS | Done |
 | 2 | **Honest verdicts:** `verified` / `refuted` / `cannot_verify`, plus `prooflab-tutor verify-all`, a self-test that every problem's correct examples pass and wrong ones fail | Planned |
 | 3 | **Proof-shaped memory:** migration 005 adds `checker_version`, `step_verdicts`, `skill_mastery` and `agent_events`. Before a verdict counts, you confirm how the AI translated your proof | Planned |
-| 4 | **Agent runtime:** `prooflab-agent run` with the bounded loop, error trapping, Y/N approval and JSON logs, tested against a fake model with no network | Planned |
+| 4 | **Agent runtime:** `prooflab-agent run` with the bounded loop, error trapping, Y/N approval and JSON logs, tested against a fake model with no network | Done |
 | 5 | **Every chapter checked:** handlers for Chapters 11 to 14 (relations, functions, cardinality, calculus proofs) | Planned |
 | 6 | **Every agent:** thin Codex and Cursor adapters that point at `AGENTS.md` and the guard, then a replay of the rule evals | Planned |
 | 7 | **Windows:** `scripts/setup.ps1` and `scripts/ci.ps1`, the guard run as `prooflab-tutor guard` (no shell wrapper), Windows paths in the guard, a checker sandbox without Unix limits, and a `windows-latest` CI job | Planned |
@@ -290,6 +290,30 @@ List them with `prooflab-tutor courses`. Every command takes `--course math223`.
 Adding a course means adding data, not code: a pack file in
 `backend/src/prooflab/content/packs/`, a track of problems, and lesson notes if there are any
 (`SPEC.md` §22).
+
+### ProofLab's own agent
+
+ProofLab also runs as an agent of its own in your terminal, with no coding agent needed. It
+is four parts, one module each in `backend/src/prooflab/agent/`:
+
+| Part | What it is |
+|---|---|
+| **Model** | Claude (`claude-opus-5-5` by default). It teaches and translates, and never grades |
+| **Tools** | Nine typed `prooflab-tutor` commands: lessons, exercises, hints, `check_work`, memory, the solution |
+| **Loop** | A `for` loop with a step limit (12 by default). It stops after 3 failed rounds in a row, and a tool error goes back to the model instead of crashing it |
+| **Controls** | The guard (a deny is final), `[y/N]` before a write, a typed `yes` before the solution, and a JSON log with no proof text |
+
+It needs an Anthropic API key (or `ant auth login`):
+
+```bash
+cd backend && uv sync --extra tutor --extra agent && cd ..
+```
+
+```bash
+uv run --project backend --extra tutor --extra agent prooflab-agent run
+```
+
+Each run writes `logs/agent-<id>.jsonl`. See `SPEC.md` §23.
 
 ### Guardrails and evals
 

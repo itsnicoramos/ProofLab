@@ -6,7 +6,7 @@ import { Geist, Geist_Mono, Source_Serif_4 } from "next/font/google";
 import Link from "next/link";
 
 import { SigmaMark } from "@/components/Logo";
-import { GITHUB_URL } from "@/lib/site";
+import { GITHUB_URL, SECTIONS } from "@/lib/site";
 
 // DESIGN.md: serif for headings (textbook voice beside KaTeX), Geist for UI, mono for commands.
 const sourceSerif = Source_Serif_4({ variable: "--font-source-serif", subsets: ["latin"] });
@@ -20,18 +20,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  // Mirrors --bg in globals.css: metadata can't read CSS variables, so keep the two in step.
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#f6f6f3" },
     { media: "(prefers-color-scheme: dark)", color: "#111210" },
   ],
 };
-
-const SECTIONS = [
-  { href: "/#how", label: "How it works" },
-  { href: "/#session", label: "Session" },
-  { href: "/#rules", label: "Rules" },
-  { href: "/#setup", label: "Set up" },
-];
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -40,11 +34,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${sourceSerif.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans">
+        <a
+          href="#main"
+          className="btn btn-secondary sr-only focus:not-sr-only focus:h-11 focus:px-4 focus:fixed focus:top-2 focus:left-2 focus:z-50"
+        >
+          Skip to content
+        </a>
         <header className="sticky top-0 z-30 border-b border-line bg-bg">
           <div className="mx-auto flex h-14 max-w-6xl items-center gap-2 px-4 sm:gap-6 sm:px-6">
             <Link
               href="/"
-              className="flex h-11 shrink-0 items-center gap-2 font-serif text-[17px] font-semibold"
+              className="flex h-11 shrink-0 items-center gap-2 font-serif text-brand font-semibold"
             >
               <SigmaMark className="h-5 w-5 text-accent" />
               ProofLab
@@ -53,7 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               {SECTIONS.map((s) => (
                 <Link
                   key={s.href}
-                  href={s.href}
+                  href={`/${s.href}`}
                   className="flex h-11 items-center rounded-md px-3 text-sm text-muted hover:text-ink"
                 >
                   {s.label}
@@ -69,14 +69,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               </Link>
               <a
                 href={GITHUB_URL}
-                className="flex h-11 items-center rounded-lg border border-line bg-surface px-3 text-sm font-semibold"
+                className="btn btn-secondary px-3"
               >
                 GitHub
               </a>
             </div>
           </div>
         </header>
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6 sm:py-14">{children}</main>
+        <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6 sm:py-14">{children}</main>
         <footer className="border-t border-line">
           <div className="mx-auto max-w-6xl space-y-2 px-4 py-5 text-sm text-muted sm:px-6">
             <p>ProofLab is MIT licensed. Copyright 2026 itsnicoramos.</p>

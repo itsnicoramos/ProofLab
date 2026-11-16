@@ -57,16 +57,16 @@ export function Replay({ items }: { items: ReplayItem[] }) {
             <button
               type="button"
               onClick={() => go(current - 1)}
-              disabled={current === 1}
-              className="h-11 rounded-lg border border-line bg-surface px-4 text-sm font-semibold disabled:opacity-50"
+              aria-disabled={current === 1}
+              className="btn btn-secondary"
             >
               Back
             </button>
             <button
               type="button"
               onClick={() => go(current + 1)}
-              disabled={current === total}
-              className="h-11 rounded-lg bg-accent px-5 text-sm font-semibold text-accent-ink disabled:opacity-50"
+              aria-disabled={current === total}
+              className="btn btn-primary"
             >
               Next
             </button>
@@ -76,7 +76,7 @@ export function Replay({ items }: { items: ReplayItem[] }) {
             <button
               type="button"
               onClick={() => (current === total ? go(1, "start") : go(total))}
-              className="ml-auto h-11 px-2 text-sm text-accent hover:underline"
+              className="link ml-auto h-11 px-2 text-sm"
             >
               {current === total ? "Start over" : "Show all"}
             </button>
@@ -93,7 +93,7 @@ export function Replay({ items }: { items: ReplayItem[] }) {
                 key={i}
                 id={`step-${i + 1}`}
                 aria-current={here ? "step" : undefined}
-                className={`scroll-mt-32 rounded-xl p-2 sm:p-3 ${here ? "ring-2 ring-accent" : ""}`}
+                className={`scroll-mt-32 rounded-lg p-2 sm:p-3 ${here ? "ring-2 ring-accent outline-2 outline-transparent" : ""}`}
               >
                 {item.node}
               </li>

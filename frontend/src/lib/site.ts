@@ -5,6 +5,16 @@ import type { Piece } from "./replay.ts";
 
 export const GITHUB_URL = "https://github.com/itsnicoramos/ProofLab";
 
+/** The page's sections, for the header (from md) and the contents list (below md). */
+export const SECTIONS = [
+  { href: "#how", label: "How it works" },
+  { href: "#session", label: "Session" },
+  { href: "#rules", label: "Rules" },
+  { href: "#setup", label: "Set up" },
+  { href: "#use", label: "Use it" },
+  { href: "#building", label: "Now building" },
+] as const;
+
 export type Rule = { n: number; title: string; text: string; step: number };
 
 /** `step` is the 0-based replay step that shows the rule at work. */
@@ -131,25 +141,139 @@ export const HELP_PROMPT =
   "running the setup commands from its README. Give me one step, wait until I say it worked, " +
   "and explain any error I paste back before going on.";
 
-export type AgentRow = { agent: string; start: string; practise: string; how: string };
+export type AgentRow = {
+  agent: string;
+  start: string;
+  next: string;
+  practise: string;
+  quiz: string;
+  how: string;
+};
 
 export const AGENTS: AgentRow[] = [
   {
     agent: "Claude Code",
     start: "/tutor",
+    next: "/tutor next",
     practise: "/tutor practice 4",
+    quiz: "/tutor quiz 6",
     how: "Loads .claude/skills/tutor as the /tutor skill.",
   },
   {
     agent: "Codex",
     start: "use the tutor skill to start",
+    next: "next lesson",
     practise: "practise chapter 4",
+    quiz: "quiz me on chapter 6",
     how: "Reads AGENTS.md, which points it to the skill.",
   },
   {
     agent: "Other agents",
     start: "Read AGENTS.md and be my tutor",
+    next: "next lesson",
     practise: "practise chapter 4",
+    quiz: "give me a mock midterm on chapters 1 to 6",
     how: "Follow AGENTS.md, then the skill file, in plain words.",
+  },
+];
+
+/** What one tutoring session looks like, in order (README, "Learn with the tutor"). */
+export const SESSION_SHAPE: string[] = [
+  "A warm-up from your last session.",
+  "A chapter taught a few ideas at a time, with questions for you.",
+  "A worked example.",
+  "An exercise you prove yourself. The checker marks it, and you try again until it's right.",
+  "A short exit check.",
+];
+
+export const DOCTOR_COMMAND = "uv run --project backend --extra tutor prooflab-tutor doctor";
+
+// ---------------------------------------------------------------------- Now building
+
+export const AGENT_COMMAND = "uv run --project backend --extra tutor --extra agent prooflab-agent run";
+
+export type AgentPart = { name: string; where: string; points: string[] };
+
+/** ProofLab's own agent (SPEC §23): model, tools, loop and controls, one module each. */
+export const AGENT_PARTS: AgentPart[] = [
+  {
+    name: "Model",
+    where: "agent/model.py",
+    points: [
+      "Claude, claude-opus-5-5 by default, behind one method so tests use a scripted model.",
+      "It teaches and turns your words into steps. It never grades.",
+    ],
+  },
+  {
+    name: "Tools",
+    where: "agent/tools.py",
+    points: [
+      "Nine typed prooflab-tutor commands: lessons, exercises, hints, check_work, memory, the solution.",
+      "Arguments are checked before anything runs, and your proof goes in on stdin.",
+    ],
+  },
+  {
+    name: "Loop",
+    where: "agent/loop.py",
+    points: [
+      "A for loop with a step limit, 12 by default. Never while True.",
+      "A tool error goes back to the model as a message, so the harness never crashes. Three failed rounds in a row end the turn.",
+    ],
+  },
+  {
+    name: "Controls",
+    where: "agent/controls.py",
+    points: [
+      "The guard judges every command, and a deny is final.",
+      "A write asks [y/N], the solution needs a typed yes, and every event is a JSON log line with no proof text.",
+    ],
+  },
+];
+
+export type Milestone = { n: number; title: string; text: string; status: "done" | "next" | "planned" };
+
+/** The roadmap (README, docs/agent-harness-plan.md). Exactly one milestone is "next". */
+export const MILESTONES: Milestone[] = [
+  {
+    n: 1,
+    title: "macOS and Linux foundations",
+    text: "Setup and CI scripts, a guard that fails closed, and CI on Ubuntu and macOS.",
+    status: "done",
+  },
+  {
+    n: 2,
+    title: "Honest verdicts",
+    text: "verified, refuted or cannot_verify, and a self-test of every problem's examples.",
+    status: "next",
+  },
+  {
+    n: 3,
+    title: "Proof-shaped memory",
+    text: "Step verdicts, skill mastery and agent events in Postgres, and you confirm each translation.",
+    status: "planned",
+  },
+  {
+    n: 4,
+    title: "The agent runtime",
+    text: "prooflab-agent: model, tools, a bounded loop and controls, tested with no network.",
+    status: "done",
+  },
+  {
+    n: 5,
+    title: "Every chapter checked",
+    text: "Checkers for Chapters 11 to 14: relations, functions, cardinality and calculus proofs.",
+    status: "planned",
+  },
+  {
+    n: 6,
+    title: "Every agent",
+    text: "Thin Codex and Cursor adapters that point at AGENTS.md and the guard.",
+    status: "planned",
+  },
+  {
+    n: 7,
+    title: "Windows",
+    text: "PowerShell scripts, the guard as a Python command, and CI on Windows.",
+    status: "planned",
   },
 ];
