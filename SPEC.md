@@ -1348,8 +1348,10 @@ limited to one other file type (`glob: "*.md"` or a `type` other than `json`).
   denied call is blocked with its reason, and a destructive one makes Claude Code ask the
   learner. To work on the code afterwards, start a new session.
 - Text piped into the tools (work, notes) through a quoted heredoc is data and is never judged.
-- The guard fails closed: if it crashes on a call, the call is blocked (`guard-error`). With
-  no Python at all there is no guard, and the rules of §20 still apply.
+- The guard fails closed: if it crashes on a call, or can't run at all (its file is missing,
+  or there is no Python: it tries `backend/.venv`, then `python3`, `python`, then a
+  uv-managed Python), the call is blocked (`guard-error`) with the fix. It needs only the
+  standard library, so any Python 3 runs it.
 - The guard is a floor under the rules of §20, not a replacement, and not a sandbox: the
   host's permission mode is still the outer boundary.
 - Other agents have no hook. For them the rules are instructions, and the audit below is the

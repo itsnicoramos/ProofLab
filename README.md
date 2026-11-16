@@ -1,5 +1,7 @@
 # ProofLab
 
+[![CI](https://github.com/itsnicoramos/ProofLab/actions/workflows/ci.yml/badge.svg)](https://github.com/itsnicoramos/ProofLab/actions/workflows/ci.yml)
+
 ProofLab checks university math work **one step at a time**: it tells you which step went
 wrong and why, with hints written as rules, not generated text. You use it through a tutor that
 runs inside your own coding agent, or through its HTTP API.
@@ -35,6 +37,75 @@ scanning, flashcard study, tests, XP and streaks) was removed on 2026-11-08. Its
 history up to commit `0eb0d0f`, and `SPEC.md` §13 to §19 still describe it.
 
 `SPEC.md` is the source of truth for behaviour. This README covers getting it running.
+
+## Roadmap: ProofLab as an agent harness
+
+ProofLab is becoming a full **agent harness for proofs**, built with Python, uv and plain
+shell commands. It targets **Linux, macOS and Windows**: macOS and Linux come first, with the
+same POSIX shell commands, and Windows follows. It checks every *Book of Proof* proof
+deterministically and keeps its memory in Postgres. The rule behind every piece:
+
+> **The model translates. Code judges. Postgres remembers. The shell is the only door between
+> them.**
+
+The AI never decides whether a proof is right. It turns your work into steps and teaches.
+ProofLab's checker gives the verdict, and the harness decides what the AI is allowed to do.
+
+```mermaid
+flowchart TD
+    L["Learner<br/>terminal, Y/N prompts"] --> R
+    R["Agent runtime: prooflab-agent run<br/>bounded loop, error trapping,<br/>human approval, JSON logs"] --> M
+    M["LLM adapter<br/>Claude by default, swappable<br/>translates and teaches, never judges"] --> R
+    R --> G["Guard<br/>allowlist, fails closed<br/>a deny is final"]
+    X["Any outside agent<br/>Claude Code, Codex, Cursor<br/>via AGENTS.md"] --> G
+    G --> S["Shell contract: prooflab-tutor<br/>JSON out, exit codes, learner text on stdin"]
+    S --> C["Checker<br/>SymPy + written rules<br/>isolated worker, timeout"]
+    S --> P[("Postgres memory<br/>attempts, step verdicts,<br/>mastery, agent events")]
+```
+
+### How each part works
+
+| Part | What it does | Why it is built this way |
+|---|---|---|
+| **Agent runtime** | A Python loop, `for step in range(MAX_STEPS)` (default 12). It asks the model, runs its tool calls and stops when the model is done or the limit is hit. It also stops after 3 tool errors in a row | A model can loop forever on a bad argument. A hard bound caps cost and time, and every run records why it stopped |
+| **Error trapping** | Every tool call runs inside `try/except Exception`. On failure the model gets a short error message and can fix its arguments. Ctrl-C still stops the run | A tool never crashes the harness. A crash becomes something the model can learn from, and a Postgres outage never ends a lesson |
+| **Human in the loop** | Reads run freely. Anything that writes to memory asks `[y/N]`. Deleting memory or revealing a solution needs a typed `yes`. The default is no, and with no terminal every write is denied | You stay in control of your memory and your answers. A guard deny is final, and `y` cannot override it |
+| **Structured logs** | One JSON line per event (`run_id`, `step`, `tool`, `decision`, `status`, `duration_ms`). Logs hold a hash of the arguments, never your proof text | Any run can be replayed and counted, and nothing private is logged |
+| **Guard** | An allowlist on every tool call. Paths are resolved before they are judged. If it can't run, it blocks | The agent is untrusted input. An allowlist fails safe, and a denylist does not |
+| **Shell contract** | `prooflab-tutor <cmd>` prints one JSON object and returns an exit code: 0 done, 1 bad request, 3 memory down | Every agent can run a shell command. JSON means the agent quotes the verdict instead of paraphrasing it |
+| **Checker** | One handler per problem kind gives step-by-step statuses and hint codes. It uses a hand-written parser, never `eval` | The tutor can point at the first wrong step, and the same input always gets the same verdict |
+| **Postgres memory** | Forward-only migrations, one memory per course. A failed save still returns the verdict | Memory never blocks a verdict, and every version can be rebuilt from the SQL files |
+
+Three verdicts keep this honest: `verified`, `refuted` and `cannot_verify`. The tutor may call
+work correct only on `verified`. Anything ProofLab can't model yet gets `cannot_verify`,
+never a guess.
+
+### Platforms
+
+| Platform | Commands | Status |
+|---|---|---|
+| **macOS** | POSIX `sh` scripts (`scripts/setup.sh`, `scripts/ci.sh`), Docker Desktop or Colima for Postgres | Supported; CI runs the backend checks on `macos-latest` |
+| **Linux** | The same POSIX `sh` scripts, Docker or a native Postgres | Supported; CI runs every check, the memory tests included, on Ubuntu |
+| **Windows** | PowerShell versions of the scripts, or the `sh` scripts unchanged inside WSL | Planned (milestone 7) |
+
+macOS and Linux share one set of commands, so a script is written once and tested on both.
+Windows can't run `sh` natively, so it gets the same steps in PowerShell, and the guard moves
+behind a Python entry point that every platform runs the same way.
+
+### Milestones
+
+| # | Milestone | Status |
+|---|---|---|
+| 1 | **macOS and Linux foundations:** `scripts/setup.sh`, `scripts/ci.sh`, a guard that fails closed, a portable Python lookup, and GitHub Actions on Ubuntu (with Postgres) and macOS | Done |
+| 2 | **Honest verdicts:** `verified` / `refuted` / `cannot_verify`, plus `prooflab-tutor verify-all`, a self-test that every problem's correct examples pass and wrong ones fail | Planned |
+| 3 | **Proof-shaped memory:** migration 005 adds `checker_version`, `step_verdicts`, `skill_mastery` and `agent_events`. Before a verdict counts, you confirm how the AI translated your proof | Planned |
+| 4 | **Agent runtime:** `prooflab-agent run` with the bounded loop, error trapping, Y/N approval and JSON logs, tested against a fake model with no network | Planned |
+| 5 | **Every chapter checked:** handlers for Chapters 11 to 14 (relations, functions, cardinality, calculus proofs) | Planned |
+| 6 | **Every agent:** thin Codex and Cursor adapters that point at `AGENTS.md` and the guard, then a replay of the rule evals | Planned |
+| 7 | **Windows:** `scripts/setup.ps1` and `scripts/ci.ps1`, the guard run as `prooflab-tutor guard` (no shell wrapper), Windows paths in the guard, a checker sandbox without Unix limits, and a `windows-latest` CI job | Planned |
+
+The full plan, with the reasoning behind each part, is in
+[docs/agent-harness-plan.md](docs/agent-harness-plan.md).
 
 ## Scope disclaimer
 
@@ -98,7 +169,13 @@ npm run dev
 
 Then open http://localhost:3000.
 
-Run the tests. In the backend terminal:
+Run every check a pull request must pass (the same as CI) from the repo root:
+
+```bash
+scripts/ci.sh
+```
+
+Or run the tests one part at a time. In the backend terminal:
 
 ```bash
 uv run pytest
@@ -153,11 +230,19 @@ spirit of *AI Engineering from Scratch*, but for proofs.
   API's progress database.
 
 You need [uv](https://docs.astral.sh/uv/), Docker (Docker Desktop, or Colima on a Mac), and a
-coding agent such as Claude Code or Codex.
+coding agent such as Claude Code or Codex. It works on Linux and macOS.
 
 ```bash
 git clone https://github.com/itsnicoramos/ProofLab.git && cd ProofLab
 ```
+
+```bash
+scripts/setup.sh
+```
+
+The setup script installs the tools, starts the memory, creates its tables and runs
+`doctor`. Without Docker it skips the memory, and the tutor still teaches and checks. To do the
+same steps by hand:
 
 ```bash
 docker compose up -d tutor-db
@@ -210,8 +295,9 @@ Adding a course means adding data, not code: a pack file in
 
 - **In Claude Code** the skill turns on a guard for the session. It blocks reading exercise
   files or `.env`, starting servers, touching a database directly and writing files, and it
-  asks you before the tutor deletes or archives your memory. To work on the code afterwards,
-  start a new session.
+  asks you before the tutor deletes or archives your memory. If the guard can't run (no
+  Python), it blocks every call and says how to fix it. To work on the code afterwards, start
+  a new session.
 - **For any agent,** a recorded session can be graded against the rules:
   `prooflab-tutor audit <trace.jsonl>`. `prooflab-tutor scenarios` lists nine scripted
   learners to play against an agent. Each one answers a question about the harness:
@@ -336,6 +422,9 @@ prooflab/
 ├── CONTRIBUTING.md  how to report bugs and send changes
 ├── AGENTS.md        instructions for AI agents, the tutor's rules (CLAUDE.md imports it)
 ├── docker-compose.yml   the tutor's memory: Postgres on 127.0.0.1:5433
+├── scripts/         setup.sh (one-step tutor setup), ci.sh (every PR check)
+├── docs/            agent-harness-plan.md, the roadmap in full
+├── .github/workflows/ci.yml   CI on Ubuntu, with a throwaway Postgres
 ├── .claude/skills/tutor/   the tutor skill: SKILL.md + modes/ (SPEC §20)
 ├── frontend/        Next.js explainer page (SPEC §21, see frontend/README.md)
 │   ├── src/replay/          the captured /tutor session the page replays

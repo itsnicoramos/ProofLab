@@ -269,6 +269,31 @@ def test_the_hook_script_runs_as_a_plain_file() -> None:
     assert (done.returncode, done.stdout, done.stderr) == (0, "", "")
 
 
+@pytest.mark.parametrize("has_guard", [True, False])
+def test_the_hook_script_fails_closed_when_it_cant_run(tmp_path: Path, has_guard: bool) -> None:
+    # A project with no Python, no uv and (in one case) no guard file: every call is blocked.
+    script = REPO / ".claude" / "hooks" / "tutor-guard.sh"
+    if not script.is_file():
+        pytest.skip("the repo's .claude folder isn't checked out here")
+    guard = tmp_path / "backend" / "src" / "prooflab" / "tutor_guard.py"
+    guard.parent.mkdir(parents=True)
+    if has_guard:
+        guard.write_text("raise SystemExit(0)\n")
+    empty_path = tmp_path / "bin"
+    empty_path.mkdir()
+    payload = {"tool_name": "Bash", "tool_input": bash(f"{CLI} chapters")}
+    done = subprocess.run(  # noqa: S603 - the repo's own hook script, run by /bin/sh
+        ["/bin/sh", str(script)],
+        input=json.dumps(payload),
+        capture_output=True,
+        text=True,
+        check=False,
+        env={"PATH": str(empty_path), "CLAUDE_PROJECT_DIR": str(tmp_path)},
+    )
+    assert done.returncode == 2 and "guard-error" in done.stderr
+    assert ("No Python 3" if has_guard else "missing") in done.stderr
+
+
 # ---------------------------------------------------------------------- grading a session
 
 
